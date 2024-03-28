@@ -1,9 +1,16 @@
 import Image from "next/image";
+import Header from "./components/Header";
+import Call from "./components/Call";
+import Plan from "./components/Plan";
+import WhatWeDo from "./components/WhatWeDo";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <h1>Teste</h1>
-    </main>
+    <>
+      <Header />
+      <Call />
+      <Plan />
+      <WhatWeDo />
+    </>
   );
 }
