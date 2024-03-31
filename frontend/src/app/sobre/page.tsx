@@ -7,7 +7,7 @@ const Page = () => {
   return (
     <div className='flex flex-col'>
       <Header /> 
-      <h1 className='mt-12 uppercase font-bold text-6xl mx-auto font-montserrat text-center max-w-[1200px]'>Estamos aqui para fazer o seu evento se tornar algo simples</h1>
+      <h1 className='mt-40 uppercase font-bold text-6xl mx-auto font-montserrat text-center max-w-[1200px]'>Estamos aqui para fazer o seu evento se tornar algo simples</h1>
       <Image className='mt-12 mb-40 mx-auto' src={foto} alt='foto' />
       <h1 className='mt-14 font-bold text-5xl mx-auto font-montserrat uppercase text-center'>Nossa história</h1>
       <div className='justify-around flex mx-20 my-20'>

@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "@kinde-oss/kinde-auth-nextjs": "^2.2.2"
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@kinde-oss/kinde-auth-nextjs": "^2.2.2",
+    "@mui/material": "^5.15.14",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "styled-components": "^6.1.8"
   }
 }
