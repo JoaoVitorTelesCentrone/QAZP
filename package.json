@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@kinde-oss/kinde-auth-nextjs": "^2.2.2"
+  }
+}

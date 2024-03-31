@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
+import {RegisterLink, LoginLink} from "@kinde-oss/kinde-auth-nextjs/components";
+
 
 const LoginPage = () => {
 
@@ -16,6 +18,10 @@ const LoginPage = () => {
         <button type="submit">Login</button>
       </form>
       <Link className='mx-auto my-8' href='/'>Voltar pra Home</Link>
+
+
+      <LoginLink>Sign in</LoginLink>
+      <RegisterLink>Sign up</RegisterLink>
     </div>
   );
 };
