@@ -13,17 +13,17 @@ const WhatWeDo = () => {
         <div className='py-24 flex mx-auto'>
             <div className='mx-14'>
                 <div className='bg-custom-secondary rounded-xl p-3 mb-8'>
-                    <h1 className='font-montserrat font-bold text-2xl text-custom-primary uppercase text-center'>Desing</h1>
+                    <h1 className='font-montserrat font-bold text-2xl text-custom-primary uppercase text-center'>design</h1>
                     <p className='font-montserrat max-w-[350px] my-2 text-custom-primary text-center'>Criamos experiências únicas e emocionantes para casais apaixonados, cuidando de todos os aspectos do planejamento para que seu dia especial seja perfeito.</p>
                 </div>
 
                 <div className='mb-8'>
-                    <h1 className='font-montserrat font-bold text-2xl text-custom-secondary uppercase text-center'>Desing</h1>
+                    <h1 className='font-montserrat font-bold text-2xl text-custom-secondary uppercase text-center'>design</h1>
                     <p className='font-montserrat max-w-[350px] my-2 text-center'>Criamos experiências únicas e emocionantes para casais apaixonados, cuidando de todos os aspectos do planejamento para que seu dia especial seja perfeito.</p>
                 </div>
 
                 <div className='mb-8'>
-                    <h1 className='font-montserrat font-bold text-2xl text-custom-secondary uppercase text-center'>Desing</h1>
+                    <h1 className='font-montserrat font-bold text-2xl text-custom-secondary uppercase text-center'>design</h1>
                     <p className='font-montserrat max-w-[350px] my-2 text-center'>Criamos experiências únicas e emocionantes para casais apaixonados, cuidando de todos os aspectos do planejamento para que seu dia especial seja perfeito.</p>
                 </div>
             </div>
