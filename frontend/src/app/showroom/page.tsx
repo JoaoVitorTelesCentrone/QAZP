@@ -1,9 +1,20 @@
+"use client"
+
 import Image from 'next/image'
 import React from 'react'
 import Header from '../components/Header'
 import foto from '../../assets/foto-1.png'
+import { useAtom } from 'jotai'
+import { authAtom } from '../atoms/authAtom'
+import { redirect } from 'next/navigation'
 
 const page = () => {
+  const [isLogged, setIsLogged] = useAtom(authAtom)
+
+  if(!isLogged) { 
+    redirect('/login')
+  }
+
   return (
     <div className=''>
       <Header />
