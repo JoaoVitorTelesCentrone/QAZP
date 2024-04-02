@@ -15,7 +15,6 @@ const UserHeader = () => {
   
     return (
     <div className=' flex p-8 bg-custom-secondary justify-around'>
-        <Link href='/' className='text-2xl text-custom-primary font-extrabold font-montserrat'>Zventos</Link>
         <ul className='flex justify-center mx-auto'>
             <Link href='/clients' className='mx-6 text-custom-primary font-montserrat font-medium'>Clientes</Link>
             <Link href='/showroom' className='mx-6 text-custom-primary font-montserrat font-medium'>Eventos</Link>
