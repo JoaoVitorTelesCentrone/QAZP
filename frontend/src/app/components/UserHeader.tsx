@@ -14,12 +14,14 @@ const UserHeader = () => {
     }
   
     return (
-    <div className=' flex p-8 bg-custom-secondary justify-around'>
+    <div className=' flex p-8 bg-secondary justify-around'>
         <ul className='flex justify-center mx-auto'>
-            <Link href='/clients' className='mx-6 text-custom-primary font-montserrat font-medium'>Clientes</Link>
-            <Link href='/showroom' className='mx-6 text-custom-primary font-montserrat font-medium'>Eventos</Link>
-            <Link href='/orcamento' className='mx-6 text-custom-primary font-montserrat font-medium'>Criar usuário</Link>
-            <h1 className='mx-6 text-custom-primary font-montserrat font-medium'>{user.username}</h1>
+            <h1 className='mx-6 text-primary font-montserrat font-bold text-2xl uppercase'>ZVENTOS</h1>
+            <Link href='/dashboard' className='mx-6 text-primary font-montserrat font-medium'>Dashboard</Link>
+            <Link href='/clients' className='mx-6 text-primary font-montserrat font-medium'>Clientes</Link>
+            <Link href='/showroom' className='mx-6 text-primary font-montserrat font-medium'>Eventos</Link>
+            <Link href='/orcamento' className='mx-6 text-primary font-montserrat font-medium'>Criar usuário</Link>
+            <h1 className='mx-6 text-primary font-montserrat font-medium'>{user.username}</h1>
             <button className='bg-white px-4 py-1 rounded-xl mx-4' onClick={() => setIsLogged(false)}>Logout</button>
         </ul>
         
