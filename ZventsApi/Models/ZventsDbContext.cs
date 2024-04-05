@@ -8,6 +8,7 @@ namespace ZventsApi.Models
         {
         }
         public DbSet<Quote> Quotes { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
