@@ -1,6 +1,0 @@
-@ZventsApi_HostAddress = http://localhost:5196
-
-GET {{ZventsApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
