@@ -3,9 +3,10 @@ import React from 'react'
 
 interface InputProps {
     value: string
+    type: string
 }
 
-const Input:  React.FC<InputProps> = ({value}) => {
+const Input:  React.FC<InputProps> = ({value, type}) => {
   return (
     <div>
         <p>{value}</p>
@@ -14,6 +15,7 @@ const Input:  React.FC<InputProps> = ({value}) => {
           required
           id={value}
           defaultValue={`Digite ${value}`}
+          type={type}
         />
     </div>
   )

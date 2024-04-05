@@ -2,7 +2,8 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown } from 'lucide-react'
+import { ArrowUp, ArrowDown, ArrowUpDown, ArrowBigLeft, ArrowBigRight } from 'lucide-react'
+import { useState } from 'react';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -41,13 +42,14 @@ export const columns: ColumnDef<Events>[] = [
     accessorKey: "name",
     header: ({ column }) => {
         return (
+            
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Nome
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
+
+            {column.getIsSorted() === 'asc' ? <ArrowDown className="ml-2 h-4 w-4" /> : column.getIsSorted() === 'desc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowUpDown className="ml-2 h-4 w-4" />}          </Button>
         )
       },
   },
@@ -59,15 +61,16 @@ export const columns: ColumnDef<Events>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Número de pessoas
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            Convidados
+            {column.getIsSorted() === 'asc' ? <ArrowDown className="ml-2 h-4 w-4" /> : column.getIsSorted() === 'desc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowUpDown className="ml-2 h-4 w-4" />}          
+            
           </Button>
         )
       },
   },
   {
     accessorKey: "type",
-    header: "Tipo do evento",
+    header: "Tipo",
   },
   {
     accessorKey: "date",
@@ -77,8 +80,8 @@ export const columns: ColumnDef<Events>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Número de pessoas
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            Data
+            <ArrowUp className="ml-2 h-4 w-4" />
           </Button>
         )
       },

@@ -18,6 +18,8 @@ const Dashboard = () => {
     <div>
         <UserHeader />
         <NextEvents />
+        <NextEvents />
+        <NextEvents />
     </div>
   )
 }
