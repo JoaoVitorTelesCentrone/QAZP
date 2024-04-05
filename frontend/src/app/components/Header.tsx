@@ -13,7 +13,7 @@ const Header = () => {
 
   return (
     <div className=' flex p-8 bg-secondary justify-around'>
-      <Link href='/' className='text-2xl text-primary font-extrabold font-montserrat'>Zventos</Link>
+      <Link href='/' className='text-2xl text-primary font-extrabold font-montserrat'>Eventos</Link>
         {isLogged ? ( 
               <UserHeader />
             ) : ( 

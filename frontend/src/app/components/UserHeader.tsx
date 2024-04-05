@@ -16,7 +16,7 @@ const UserHeader = () => {
     return (
     <div className=' flex p-8 bg-secondary justify-around'>
         <ul className='flex justify-center mx-auto'>
-            <h1 className='mx-6 text-primary font-montserrat font-bold text-2xl uppercase'>ZVENTOS</h1>
+            <h1 className='mx-6 text-primary font-montserrat font-bold text-2xl uppercase'>Eventos</h1>
             <Link href='/dashboard' className='mx-6 text-primary font-montserrat font-medium'>Dashboard</Link>
             <Link href='/clients' className='mx-6 text-primary font-montserrat font-medium'>Clientes</Link>
             <Link href='/showroom' className='mx-6 text-primary font-montserrat font-medium'>Eventos</Link>
