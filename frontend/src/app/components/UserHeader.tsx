@@ -1,3 +1,4 @@
+'use client'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
 import React from 'react'
@@ -20,11 +21,10 @@ const UserHeader = () => {
             <Link href='/dashboard' className='mx-6 text-primary font-montserrat font-medium'>Dashboard</Link>
             <Link href='/clients' className='mx-6 text-primary font-montserrat font-medium'>Clientes</Link>
             <Link href='/showroom' className='mx-6 text-primary font-montserrat font-medium'>Eventos</Link>
-            <Link href='/orcamento' className='mx-6 text-primary font-montserrat font-medium'>Criar usuário</Link>
+            <Link href='/Users' className='mx-6 text-primary font-montserrat font-medium'>Usuários</Link>
             <h1 className='mx-6 text-primary font-montserrat font-medium'>{user.username}</h1>
             <button className='bg-white px-4 py-1 rounded-xl mx-4' onClick={() => setIsLogged(false)}>Logout</button>
         </ul>
-        
     </div>
   )
 }
