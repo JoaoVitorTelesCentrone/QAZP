@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import UserHeader from '../components/UserHeader'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
@@ -30,6 +30,7 @@ const mockData: Users[] = [
   ];
 
 const Users = () => {
+  
   return (
     <div className=''>
         <UserHeader />
