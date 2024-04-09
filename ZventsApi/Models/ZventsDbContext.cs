@@ -2,11 +2,8 @@
 
 namespace ZventsApi.Models
 {
-    public class ZventsDbContext : DbContext
+    public class ZventsDbContext(DbContextOptions<ZventsDbContext> options) : DbContext(options)
     {
-        public ZventsDbContext(DbContextOptions<ZventsDbContext> options) : base(options)
-        {
-        }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<User> Users { get; set; }
 
