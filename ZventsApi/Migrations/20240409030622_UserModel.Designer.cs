@@ -11,7 +11,7 @@ using ZventsApi.Models;
 namespace ZventsApi.Migrations
 {
     [DbContext(typeof(ZventsDbContext))]
-    [Migration("20240405034222_UserModel")]
+    [Migration("20240409030622_UserModel")]
     partial class UserModel
     {
         /// <inheritdoc />
@@ -27,7 +27,6 @@ namespace ZventsApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("EstimatedAudience")
@@ -46,7 +45,6 @@ namespace ZventsApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -60,27 +58,15 @@ namespace ZventsApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("LastUpdated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastUpdatedBy")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

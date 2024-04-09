@@ -13,14 +13,12 @@ namespace ZventsApi.Controllers
     {
         private readonly ZventsDbContext _context = context;
 
-        // GET: api/User
         [HttpGet]
         public ActionResult<IEnumerable<User>> GetUser()
         {
             return _context.Users.ToList();
         }
 
-        // POST: api/User
         [HttpPost]
         public ActionResult<User> PostUser(User user)
         {
@@ -30,7 +28,6 @@ namespace ZventsApi.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserById(Guid id)
         {
@@ -44,7 +41,19 @@ namespace ZventsApi.Controllers
             return user;
         }
 
-        // PUT: api/Users/5
+        [HttpGet("{username}&{password}")]
+        public ActionResult<User> GetUserByCredentials(string username, string password)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
+
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            return Ok(new { message = "Login successful"});
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(Guid id, User user)
         {
@@ -60,12 +69,9 @@ namespace ZventsApi.Controllers
             }
 
             existingUser.Name = user.Name;
-            existingUser.Email = user.Email;
+            existingUser.Password = user.Password;
             existingUser.UserName = user.UserName;
-            existingUser.IsActive = user.IsActive;
-            existingUser.LastUpdated = DateTime.UtcNow;
-            existingUser.LastUpdatedBy = "System";
-
+            existingUser.Role = user.Role;
             try
             {
                 await _context.SaveChangesAsync();
@@ -90,7 +96,6 @@ namespace ZventsApi.Controllers
             return _context.Users.Any(e => e.Id == id);
         }
 
-        // DELETE: api/Users/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
