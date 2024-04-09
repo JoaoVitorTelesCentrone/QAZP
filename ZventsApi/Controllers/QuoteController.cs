@@ -12,14 +12,12 @@ namespace ZventsApi.Controllers
     {
         private readonly ZventsDbContext _context = context;
 
-        // GET: api/Quote
         [HttpGet]
         public ActionResult<IEnumerable<Quote>> GetQuote()
         {
             return _context.Quotes.ToList();
         }
 
-        // POST: api/Quote
         [HttpPost]
         public ActionResult<Quote> PostQuote(Quote quote)
         {
