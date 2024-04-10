@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Usuario\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj": {}
+    "C:\\Users\\João Vitor\\Desktop\\projects\\Cypress-project\\ZventsApi\\ZventsApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Usuario\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj": {
+    "C:\\Users\\João Vitor\\Desktop\\projects\\Cypress-project\\ZventsApi\\ZventsApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj",
+        "projectUniqueName": "C:\\Users\\João Vitor\\Desktop\\projects\\Cypress-project\\ZventsApi\\ZventsApi.csproj",
         "projectName": "ZventsApi",
-        "projectPath": "C:\\Users\\Usuario\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Desktop\\Cypress-project\\ZventsApi\\obj\\",
+        "projectPath": "C:\\Users\\João Vitor\\Desktop\\projects\\Cypress-project\\ZventsApi\\ZventsApi.csproj",
+        "packagesPath": "C:\\Users\\João Vitor\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\João Vitor\\Desktop\\projects\\Cypress-project\\ZventsApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\João Vitor\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,6 +43,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Cors": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
@@ -85,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
