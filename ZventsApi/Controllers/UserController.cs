@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using ZventsApi.Models;
 
 namespace ZventsApi.Controllers
@@ -22,16 +23,38 @@ namespace ZventsApi.Controllers
         [HttpPost]
         public ActionResult<User> PostUser(User user)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            bool userExists = _context.Users.Any(u => u.UserName == user.UserName);
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            if (!userExists)
+            {
+                _context.Users.Add(user);
+                _context.SaveChanges();
+
+                return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            }
+
+            return Conflict(new { message = "User already exists" });
+
+            
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserById(Guid id)
+        [HttpGet("name/{name}")]
+        public ActionResult<User> GetUserByName(string name)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = _context.Users.FirstOrDefault(u => u.Name == name);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
+        [HttpGet("userName/{userName}")]
+        public ActionResult<User> GetUserByUserName(string userName)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.UserName == userName);
 
             if (user == null)
             {
@@ -55,58 +78,58 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, User user)
+        public IActionResult Edit(Guid id, User updatedUser)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
+            var userToUpdate = _context.Users.Find(id);
 
-            var existingUser = await _context.Users.FindAsync(id);
-            if (existingUser == null)
+            if (userToUpdate == null)
             {
                 return NotFound();
             }
 
-            existingUser.Name = user.Name;
-            existingUser.Password = user.Password;
-            existingUser.UserName = user.UserName;
-            existingUser.Role = user.Role;
-            try
+            if (userToUpdate.Role == UserRole.Admin && updatedUser.Role != UserRole.Admin)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
+                bool isAdminExists = _context.Users.Any(u => u.Role == UserRole.Admin && u.Id != id);
+
+                if (!isAdminExists)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    return Conflict(new { message = "Cannot change the role of the last admin user" });
                 }
             }
 
-            return NoContent();
-        }
+            userToUpdate.Name = updatedUser.Name;
+            userToUpdate.Password = updatedUser.Password;
+            userToUpdate.UserName = updatedUser.UserName;
+            userToUpdate.Role = updatedUser.Role;
 
-        private bool UserExists(Guid id)
-        {
-            return _context.Users.Any(e => e.Id == id);
+            _context.SaveChanges();
+
+            return Ok(userToUpdate);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(Guid id)
+        public IActionResult DeleteUser(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+
+            var userToDelete = _context.Users.Find(id);
+
+            if (userToDelete == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            if (userToDelete.Role == UserRole.Admin)
+            {
+                bool isAdminExists = _context.Users.Any(u => u.Role == UserRole.Admin && u.Id != id);
+
+                if (!isAdminExists)
+                {
+                    return Conflict(new { message = "Cannot delete the last admin user" });
+                }
+            }
+
+            _context.Users.Remove(userToDelete);
+            _context.SaveChanges();
 
             return NoContent();
         }

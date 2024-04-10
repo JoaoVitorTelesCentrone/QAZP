@@ -11,7 +11,7 @@ using ZventsApi.Models;
 namespace ZventsApi.Migrations
 {
     [DbContext(typeof(ZventsDbContext))]
-    [Migration("20240409030622_UserModel")]
+    [Migration("20240410031927_UserModel")]
     partial class UserModel
     {
         /// <inheritdoc />
@@ -66,9 +66,8 @@ namespace ZventsApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Role")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UserName")
                         .IsRequired()
