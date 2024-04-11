@@ -10,7 +10,8 @@ function MeuComponente() {
   useEffect(() => {
     async function fetchQuote() {
       try {
-        const response = await axios.get('http://localhost:5196/api/Quote'); // Chama o handler através da rota /api/quote
+        const response = await axios.get('https://cors-anywhere.herokuapp.com/http://localhost:5196/api/Quote');
+
         if (response.status === 200) {
           setQuote(response.data); // Define o estado com os dados da resposta
         } else {
