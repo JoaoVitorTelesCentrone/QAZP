@@ -10,10 +10,10 @@ function MeuComponente() {
   useEffect(() => {
     async function fetchQuote() {
       try {
-        const response = await axios.get('https://cors-anywhere.herokuapp.com/http://localhost:5196/api/Quote');
+        const response = await axios.get('http://localhost:5196/api/Quote');
 
         if (response.status === 200) {
-          setQuote(response.data); // Define o estado com os dados da resposta
+          console.log(response.data); // Define o estado com os dados da resposta
         } else {
           throw new Error('Erro ao obter a citação');
         }
