@@ -10,8 +10,8 @@ import Header from '../components/Header'
 import { redirect, useRouter } from 'next/navigation'
 
 
-const mockedUser = 'Admin'
-const mockedPassword = '12345'
+const mockedUser = 'a'
+const mockedPassword = '1'
 
 
 const LoginPage = () => {
@@ -27,7 +27,6 @@ const LoginPage = () => {
     if (username === mockedUser && password === mockedPassword) {
       setError(false)
       setUserAuth(true)
-      setUserInfo({ username, password })
       router.push('/dashboard')
     } else {
       setError(true)

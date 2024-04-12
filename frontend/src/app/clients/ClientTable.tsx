@@ -21,16 +21,16 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useState } from "react"
-import { Input } from "./input"
-import { Button } from "./button"
 import { ArrowBigLeft, ArrowBigRight } from 'lucide-react'
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({
+export function ClientTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -53,24 +53,32 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md border">
-        <div className="flex items-center mx-4 py-4">
+    <div className="rounded-md  border-[1px] pt-10">
+        <div className="flex items-center justify-around mx-4 py-4">
         <Input
           placeholder="Filtrar por nome"
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("firstName")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("firstName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
+        <Input
+          placeholder="Filtrar por CPF"
+          value={(table.getColumn("cpf")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("cpf")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm my-10" 
+        />
       </div>
-      <Table>
+      <Table className="border-2 border-secondary">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className=" py-2 text-secondary-foreground text-center">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -91,7 +99,7 @@ export function DataTable<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell className="text-center" key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

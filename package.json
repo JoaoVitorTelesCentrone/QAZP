@@ -5,6 +5,7 @@
     "@kinde-oss/kinde-auth-nextjs": "^2.2.2",
     "@mui/material": "^5.15.14",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "node-fetch": "^3.3.2",
     "shadcn-ui": "^0.8.0",
     "styled-components": "^6.1.8"
   }
