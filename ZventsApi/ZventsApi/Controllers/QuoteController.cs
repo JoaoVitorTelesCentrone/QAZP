@@ -19,6 +19,7 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost]
+        [Consumes("application/json")]
         public ActionResult<Quote> PostQuote(Quote quote)
         {
             _context.Quotes.Add(quote);
