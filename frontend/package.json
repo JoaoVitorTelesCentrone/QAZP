@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start:dev": "concurrently \"npm run npm-install\" \"npm run start-frontend\" \"npm run start-backend\" \"npm run open-browser\"",
+    "npm-install": "npm install",
+    "start-frontend": "npm run dev",
+    "start-backend": "cd ..\\ZventsApi\\ && dotnet ef database update && dotnet run",
+    "open-browser": "ping 127.0.0.1 -n 11 > nul && start chrome http://localhost:3000",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -34,11 +39,14 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
     "postcss": "^8",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wait-on": "^7.2.0"
   },
   "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
   "main": "postcss.config.js",

@@ -22,10 +22,17 @@ namespace ZventsApi.Controllers
         [Consumes("application/json")]
         public ActionResult<Quote> PostQuote(Quote quote)
         {
-            _context.Quotes.Add(quote);
-            _context.SaveChanges();
+            bool quoteExists = _context.Quotes.Any(q => (q.Email == quote.Email || q.PhoneNumber == quote.PhoneNumber) && q.EventType == quote.EventType && q.IsActive == true);
 
-            return CreatedAtAction("GetQuote", new { id = quote.Id }, quote);
+            if (!quoteExists) {
+                _context.Quotes.Add(quote);
+                _context.SaveChanges();
+
+                return CreatedAtAction("GetQuote", new { id = quote.Id }, quote);
+            }
+
+            return Conflict(new { message = "There is already a quote in progress" });
+
         }
     }
 }
