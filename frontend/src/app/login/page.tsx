@@ -2,17 +2,14 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import Header from '../components/Header'
 import { redirect, useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
-
-
-const mockedUser = 'a'
-const mockedPassword = '1'
+import axios from 'axios'
 
 
 const LoginPage = () => {
@@ -22,16 +19,30 @@ const LoginPage = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(false)
+  const [logged, isLogged] = useState(false)
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-    if (username === mockedUser && password === mockedPassword) {
-      setError(false)
+  async function verifyLogin(username: string, password: string) { 
+    try {
+      const response = await axios.get(`http://localhost:5196/api/User/${username}&${password}`);
+      const userData = response.data
+      console.log(userData)
+      if (response.status === 200) {
+        console.log(response.data);
+        isLogged(true)
+        setError(false)
+        // setUserInfo()
       setUserAuth(true)
       router.push('/dashboard')
-    } else {
+      }
+    } catch (error) {
+      console.error('Erro ao fazer a requisição:', error);
       setError(true)
     }
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    await verifyLogin(username, password)
   }
 
   return (
@@ -39,7 +50,7 @@ const LoginPage = () => {
       <Header />
       <div className='flex flex-col mx-auto py-14'>
         <h1 className='mx-auto text-5xl text-secondary-foreground my-8 font-bold uppercase'>Faça seu login</h1>
-        <form className='flex flex-col mx-auto rounded-xl bg-slate-400 p-6 bg-opacity-20 shadow-md shadow-slate-500' onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='flex flex-col mx-auto rounded-xl bg-slate-400 p-6 bg-opacity-20 shadow-md shadow-slate-500'>
           <label className='text-lg font-bold '>Usuário</label>
           <Input placeholder='Digite o usuário' onChange={(e) => setUsername(e.target.value)} className='p-2 border-slate-500 bg-white mb-8' type='text' id='email' />
 

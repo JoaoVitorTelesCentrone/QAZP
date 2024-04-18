@@ -17,7 +17,6 @@ const UserSideMenu = () => {
     return (
     <div className=' flex h-full p-8 bg-secondary justify-around'>
         <ul className='flex  justify-around mx-auto'>
-            <h1 className='mx-6 text-primary font-montserrat font-bold text-2xl uppercase'>Eventos</h1>
             <Link href='/dashboard' className='mx-6 text-primary font-montserrat font-medium'>Dashboard</Link>
             <Link href='/clients' className='mx-6 text-primary font-montserrat font-medium'>Clientes</Link>
             <Link href='/Events' className='mx-6 text-primary font-montserrat font-medium'>Eventos</Link>

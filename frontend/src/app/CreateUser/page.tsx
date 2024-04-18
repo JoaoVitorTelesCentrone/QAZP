@@ -15,6 +15,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
+import axios from 'axios'
   
 
 const CreateUserForm = () => {
@@ -25,14 +26,35 @@ const CreateUserForm = () => {
         redirect('/login')
     }
 
-    const handleSubmit = () => { 
-        setUserInfo({name, username, password})
-        alert('clicou')
-    }
-
     const [name, setName] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmedPassword, setConfirmPassword] = useState('')
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
+      e.preventDefault()
+      const data = {
+        name: name,
+        username: username,
+        password: password,
+        role: 0
+      };
+      
+      // Envia o pedido POST usando o Axios
+      axios.post('http://localhost:5196/api/User', data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(function (response) {
+        console.log('Resposta da API:', response.data);
+      })
+      .catch(function (error) {
+        console.error('Erro ao enviar pedido:', error);
+      });
+    }
+
+    
   return (
     <div>
       <UserHeader />
@@ -75,7 +97,7 @@ const CreateUserForm = () => {
                 </div>
             </div>
             
-            <Button variant='outline' className='bg-secondary-foreground mt-2 text-white' onClick={handleSubmit}>Criar usuário</Button>
+            <Button variant='outline' className='bg-secondary-foreground mt-2 text-white' onClick={() => handleSubmit}>Criar usuário</Button>
         </form>
       </div>
 

@@ -19,7 +19,6 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost]
-        [Consumes("application/json")]
         public ActionResult<Quote> PostQuote(Quote quote)
         {
             bool quoteExists = _context.Quotes.Any(q => (q.Email == quote.Email || q.PhoneNumber == quote.PhoneNumber) && q.EventType == quote.EventType && q.IsActive == true);
