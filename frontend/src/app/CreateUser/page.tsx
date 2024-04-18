@@ -7,7 +7,7 @@ import UserHeader from '../components/UserHeader'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Eye, Info } from 'lucide-react'
+import { ArrowLeft, Eye, Info } from 'lucide-react'
 
 import {
     Tooltip,
@@ -16,6 +16,7 @@ import {
     TooltipTrigger,
   } from "@/components/ui/tooltip"
 import axios from 'axios'
+import Link from 'next/link'
   
 
 const CreateUserForm = () => {
@@ -58,8 +59,12 @@ const CreateUserForm = () => {
   return (
     <div>
       <UserHeader />
-      <div className='flex my-8 flex-col'> 
-        <h1 className='text-4xl font-bold uppercase mx-auto text-primary mb-6'>Criar usuário</h1>
+      <div className='flex my-8 m-32 flex-col'> 
+        <div className="flex w-full">
+          <h1 className='text-4xl font-bold uppercase mx-auto text-primary mb-6'>Criar usuário</h1>
+          <Link href='/Users'><ArrowLeft /></Link>
+        </div>
+
         <form className='flex-col flex p-8 rounded-xl bg-slate-400 bg-opacity-30 max-w-[400px] mx-auto shadow-lg shadow-slate-500'>
             <div className='mx-auto mb-1 w-full'>
                 <p>Nome</p>
