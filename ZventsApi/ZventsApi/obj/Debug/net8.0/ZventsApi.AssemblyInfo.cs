@@ -10,13 +10,5 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("ZventsApi")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5cb2ac4024da41efeff98ab265638e8f2cf11e94")]
-[assembly: System.Reflection.AssemblyProductAttribute("ZventsApi")]
-[assembly: System.Reflection.AssemblyTitleAttribute("ZventsApi")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
-
 // Gerado pela classe WriteCodeFragment do MSBuild.
 
