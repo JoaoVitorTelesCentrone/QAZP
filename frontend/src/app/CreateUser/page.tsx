@@ -7,7 +7,7 @@ import UserHeader from '../components/UserHeader'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Info } from 'lucide-react'
+import { Eye, Info } from 'lucide-react'
 
 import {
     Tooltip,
@@ -36,15 +36,15 @@ const CreateUserForm = () => {
   return (
     <div>
       <UserHeader />
-      <div className='flex m-32 flex-col'> 
+      <div className='flex my-8 flex-col'> 
         <h1 className='text-4xl font-bold uppercase mx-auto text-primary mb-6'>Criar usuário</h1>
-        <form className='flex-col flex'>
-            <div className='flex flex-col mx-auto mb-3'>
+        <form className='flex-col flex p-8 rounded-xl bg-slate-400 bg-opacity-30 max-w-[400px] mx-auto shadow-lg shadow-slate-500'>
+            <div className='mx-auto mb-1 w-full'>
                 <p>Nome</p>
-                <Input onChange={(e) => setName(e.target.value) } required placeholder='Digite o nome completo' className='mx-auto my-2' />
+                <Input onChange={(e) => setName(e.target.value) } required placeholder='Digite o nome completo' className='bg-white border-slate-500 mx-auto my-2' />
             </div>
 
-            <div className='flex flex-col mx-auto my-3 '>
+            <div className='mx-auto my-1 w-full '>
                 <div className='flex justify-between'>
                     <p>Usuário</p>
                     <TooltipProvider>
@@ -56,15 +56,26 @@ const CreateUserForm = () => {
                         </Tooltip>
                     </TooltipProvider>
                 </div>
-                <Input onChange={(e) => setUsername(e.target.value) } required placeholder='Digite o nome do usuário' className='mx-auto my-2' />
+                <Input onChange={(e) => setUsername(e.target.value) } required placeholder='Digite o nome do usuário' className='bg-white border-slate-500 mx-auto my-2' />
             </div>
 
-            <div className='flex flex-col mx-auto my-3 '>
+            <div className='mx-auto my-1 w-full '>
                 <p>Senha</p>
-                <Input onChange={(e) => setPassword(e.target.value) } required placeholder='Digite a senha' className='mx-auto my-2' />
+                <div className='flex'>
+                  <Input onChange={(e) => setPassword(e.target.value) } required placeholder='Digite senha' className='bg-white border-slate-500 mx-auto my-2' />
+                  <Eye className='mt-3 ml-2 cursor-pointer' />
+                </div>
+            </div>
+
+            <div className='mx-auto my-1 w-full '>
+                <p>Confirme a senha</p>
+                <div className='flex'>
+                  <Input onChange={(e) => setPassword(e.target.value) } required placeholder='Confirme a senha' className='bg-white border-slate-500 mx-auto my-2' />
+                  <Eye className='mt-3 ml-2 cursor-pointer' />
+                </div>
             </div>
             
-            <Button variant='link' onClick={handleSubmit}>Criar usuário</Button>
+            <Button variant='outline' className='bg-secondary-foreground mt-2 text-white' onClick={handleSubmit}>Criar usuário</Button>
         </form>
       </div>
 

@@ -1,0 +1,8 @@
+C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\obj\Debug\net8.0\ZventsApi.csproj.AssemblyReference.cache
+C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\obj\Debug\net8.0\ZventsApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\obj\Debug\net8.0\ZventsApi.AssemblyInfoInputs.cache
+C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\obj\Debug\net8.0\ZventsApi.AssemblyInfo.cs
+C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\obj\Debug\net8.0\ZventsApi.csproj.CoreCompileInputs.cache
+C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\obj\Debug\net8.0\ZventsApi.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\obj\Debug\net8.0\ZventsApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\obj\Debug\net8.0\ZventsApi.sourcelink.json

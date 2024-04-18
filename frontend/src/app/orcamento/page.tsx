@@ -7,7 +7,6 @@ import {Input} from '../../components/ui/input'
 import { useAtom } from 'jotai'
 import { getQuoteAtom } from '../atoms/getQuoteAtom'
 import axios from 'axios'
-import { v4 as uuidv4 } from "uuid";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +18,6 @@ import {
 import { ArrowDown,  ArrowDownIcon, ChevronDown } from 'lucide-react'
 
 type Quote = {
-  "id": string
   "firstName": string, 
   "lastName": string,
   "email": string,
@@ -28,10 +26,9 @@ type Quote = {
   "estimatedAudience": number
 }
 
-const id = uuidv4()
 const Page = () => {
 
-  const [quote, setQuote] = useState<Quote>({"id": id, "firstName": "","lastName": "" ,"email": "","phoneNumber": "","type": "","estimatedAudience": 0})
+  const [quote, setQuote] = useState<Quote>({"firstName": "","lastName": "" ,"email": "","phoneNumber": "","type": "","estimatedAudience": 0})
   const[firstName, setFirstname] = useState("")
   const[lastName, setLastname] = useState("")
   const[email, setEmail] = useState("")
@@ -44,7 +41,7 @@ const Page = () => {
   }, [quote]);
 
   async function handleSubmit () {
-    setQuote({id : id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, eventType: type, estimatedAudience: estimatedAaudience}) 
+    setQuote({firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, eventType: type, estimatedAudience: estimatedAaudience}) 
     const response = await axios.post('http://localhost:5196/api/Quote', quote, 
     {headers: {
       'Content-Type': 'application/json'
