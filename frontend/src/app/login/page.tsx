@@ -10,6 +10,7 @@ import Header from '../components/Header'
 import { redirect, useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import axios from 'axios'
+import { Toaster, toast } from 'sonner'
 
 
 const LoginPage = () => {
@@ -32,10 +33,14 @@ const LoginPage = () => {
         setError(false)
         // setUserInfo()
       setUserAuth(true)
-      router.push('/dashboard')
+      toast.success('Bem vindo')
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 2000);
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error);
+      toast.error('Usuário ou senha incorretos')
       setError(true)
     }
   }
@@ -48,6 +53,7 @@ const LoginPage = () => {
   return (
     <>
       <Header />
+      <Toaster richColors />
       <div className='flex flex-col mx-auto py-14'>
         <h1 className='mx-auto text-5xl text-secondary-foreground my-8 font-bold uppercase'>Faça seu login</h1>
         <form onSubmit={handleSubmit} className='flex flex-col mx-auto rounded-xl bg-slate-400 p-6 bg-opacity-20 shadow-md shadow-slate-500'>
@@ -56,12 +62,6 @@ const LoginPage = () => {
 
           <label className='text-lg font-bold' htmlFor='password'>Senha</label>
           <Input placeholder='Digite a senha' onChange={(e) => setPassword(e.target.value)} className='p-2 border-slate-500 bg-white mb-8' type='password' id='password' />
-          {error && (
-            <h1 className='text-xl mx-auto text-red-700 my-3 '>Usuário ou senha inseridos é incorreto</h1>
-          )}
-          {userAuth && (
-            <h1 className='text-xl mx-auto text-green-900 my-3'>Logado</h1>
-          )}
           <div className='flex flex-col'>
             <button data-testid='login-button' className='bg-secondary-foreground rounded-xl px-6 py-3 text-white max-w-[150px] mx-auto' type='submit'>Entrar</button>
           </div>
