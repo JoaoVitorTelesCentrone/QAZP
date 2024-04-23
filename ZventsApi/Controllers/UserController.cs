@@ -15,9 +15,9 @@ namespace ZventsApi.Controllers
         private readonly ZventsDbContext _context = context;
 
         [HttpGet]
-        public ActionResult<IEnumerable<User>> GetUser()
+        public async Task<ActionResult<IEnumerable<User>>> GetUserAsync()
         {
-            return _context.Users.ToList();
+            return await _context.Users.OrderByDescending(x => x.CreatedDate).ToArrayAsync();
         }
 
         [HttpPost]

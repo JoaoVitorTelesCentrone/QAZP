@@ -1,4 +1,5 @@
 ﻿﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace ZventsApi.Controllers
         private readonly ZventsDbContext _context = context;
 
         [HttpGet]
-        public ActionResult<IEnumerable<Quote>> GetQuote()
+        public async Task<ActionResult<IEnumerable<Quote>>> GetUserAsync()
         {
-            return _context.Quotes.ToList();
+            return await _context.Quotes.OrderByDescending(x => x.CreatedDate).ToArrayAsync();
         }
 
         [HttpPost]
@@ -23,15 +24,16 @@ namespace ZventsApi.Controllers
         {
             bool quoteExists = _context.Quotes.Any(q => (q.Email == quote.Email || q.PhoneNumber == quote.PhoneNumber) && q.EventType == quote.EventType && q.IsActive == true);
 
-            if (!quoteExists) {
+            if (!quoteExists)
+            {
                 _context.Quotes.Add(quote);
                 _context.SaveChanges();
 
-                return CreatedAtAction("GetQuote", new { id = quote.Id }, quote);
+                return CreatedAtAction(nameof(PostQuote), new { id = quote.Id }, quote);
             }
 
             return Conflict(new { message = "There is already a quote in progress" });
-
         }
+
     }
 }
