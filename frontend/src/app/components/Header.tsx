@@ -21,7 +21,6 @@ const Header = () => {
                 <ul className='flex justify-center mx-auto'>
                     <Link href='/' className='mx-6 text-primary font-montserrat font-medium'>Home</Link>
                     <Link href='/sobre' className='mx-6 text-primary font-montserrat font-medium'>Sobre</Link>
-                    <Link href='/showroom' className='mx-6 text-primary font-montserrat font-medium'>Showroom</Link>
                     <Link href='/orcamento' className='mx-6 text-primary font-montserrat font-medium'>Solicite um orçamento</Link>        
                 </ul>
                 <Link href='/login' className='text-primary'>Login</Link>
