@@ -27,10 +27,10 @@ const CreateClientForm = () => {
     const handleSearchClick = async () => {
         try {
           const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-          // Aqui você pode lidar com a resposta da API, como atualizar o estado do endereço com os dados retornados
+          
           console.log(response.data);
         } catch (error) {
-          // Lidar com erros, como exibir uma mensagem de erro para o usuário
+          
           console.error('Erro ao buscar o CEP:', error);
         }
       };
