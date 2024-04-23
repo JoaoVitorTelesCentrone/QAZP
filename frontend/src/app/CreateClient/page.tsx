@@ -8,6 +8,7 @@ import { userInfoAtom } from '../atoms/userInfoAtom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Info, Search, SearchIcon } from 'lucide-react';
+import axios from 'axios';
 
 import {
     Tooltip,
@@ -15,12 +16,25 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const CreateClientForm = () => {
     const [isLogged, setIsLogged] = useAtom(authAtom);
     const [userInfo, setUserInfo] = useAtom(userInfoAtom);
     const [cep, setCEP] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const handleSearchClick = async () => {
+        try {
+          const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+          // Aqui você pode lidar com a resposta da API, como atualizar o estado do endereço com os dados retornados
+          console.log(response.data);
+        } catch (error) {
+          // Lidar com erros, como exibir uma mensagem de erro para o usuário
+          console.error('Erro ao buscar o CEP:', error);
+        }
+      };
+    
 
     if (!isLogged) {
         redirect('/login');
@@ -63,7 +77,8 @@ const CreateClientForm = () => {
                             <h1>CEP</h1>
                             <div className='flex'>
                                 <Input className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o CEP' />
-                                <SearchIcon className='p-2 h-10 w-10' />
+                                <SearchIcon className='p-2 h-10 w-10'
+                                onClick={handleSearchClick}/>
                             </div>
                         </div>
                         <div className='mx-1 w-[60%]'>
