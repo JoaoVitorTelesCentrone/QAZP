@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
+using ZventsApi.Controllers;
 
 namespace ZventsApi.Models
 
