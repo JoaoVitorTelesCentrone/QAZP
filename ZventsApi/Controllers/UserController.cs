@@ -51,6 +51,19 @@ namespace ZventsApi.Controllers
             return user;
         }
 
+        [HttpGet("id/{id}")]
+        public ActionResult<User> GetUserById(Guid id)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
         [HttpGet("userName/{userName}")]
         public ActionResult<User> GetUserByUserName(string userName)
         {
