@@ -32,7 +32,7 @@ namespace ZventsApi.Controllers
                 return CreatedAtAction(nameof(PostClient), new { id = Client.Id }, Client);
             }
 
-            return Conflict(new { message = "There is already a Client with same DocumentId" });
+            return Conflict(new { message = "There is already a Client with the same DocumentId" });
         }
 
         [HttpGet("id/{id}")]
