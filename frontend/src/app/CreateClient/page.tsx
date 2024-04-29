@@ -91,7 +91,7 @@ const CreateClientForm = () => {
                                     placeholder='Digite o CEP'
                                     value={cep}
                                     onChange={(e) => setCEP(e.target.value)} />
-                                <SearchIcon className='p-2 h-10 w-10'
+                                <SearchIcon className='p-2 h-10 w-10 cursor-pointer'
                                     onClick={handleSearchClick} />
                             </div>
                         </div>

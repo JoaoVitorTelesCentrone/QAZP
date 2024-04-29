@@ -9,7 +9,8 @@ import { useState } from 'react';
 // You can use a Zod schema here if you want.
 
 export type Quotes =  {
-    name: string
+    firstName: string
+    lastName: string
     email: string
     phoneNumber: string
     eventType: string
@@ -40,7 +41,7 @@ export const quoteColumns: ColumnDef<Quotes>[] = [
         enableHiding: false,
       },
   {
-    accessorKey: "name",
+    accessorKey: "firstName",
     header: ({ column }) => {
         return (
             
