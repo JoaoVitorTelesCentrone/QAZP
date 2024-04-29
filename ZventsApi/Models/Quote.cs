@@ -18,6 +18,13 @@ namespace ZventsApi.Models
         public string EventType { get; set; }
         [Required(ErrorMessage = "Estimated audience is required")]
         public int EstimatedAudience { get; set; }
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; }
+        public DateTime CreatedDate { get; set; }
+
+        public Quote()
+        {
+            IsActive = true;
+            CreatedDate = DateTime.Now;
+        }
     }
 }

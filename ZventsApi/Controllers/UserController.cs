@@ -15,9 +15,9 @@ namespace ZventsApi.Controllers
         private readonly ZventsDbContext _context = context;
 
         [HttpGet]
-        public ActionResult<IEnumerable<User>> GetUser()
+        public async Task<ActionResult<IEnumerable<User>>> GetUserAsync()
         {
-            return _context.Users.ToList();
+            return await _context.Users.OrderByDescending(x => x.CreatedDate).ToArrayAsync();
         }
 
         [HttpPost]
@@ -42,6 +42,19 @@ namespace ZventsApi.Controllers
         public ActionResult<User> GetUserByName(string name)
         {
             var user = _context.Users.FirstOrDefault(u => u.Name == name);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
+        [HttpGet("id/{id}")]
+        public ActionResult<User> GetUserById(Guid id)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
 
             if (user == null)
             {

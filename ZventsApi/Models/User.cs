@@ -20,6 +20,11 @@ namespace ZventsApi.Models
         [Required(ErrorMessage = "User name is required")]
         public string UserName { get; set; }
         public UserRole? Role {  get; set; }
+        public DateTime CreatedDate { get; set; }
 
+        public User()
+        {
+            CreatedDate = DateTime.Now;
+        }
     }
 }
