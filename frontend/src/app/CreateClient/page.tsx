@@ -16,29 +16,40 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { NextApiRequest, NextApiResponse } from 'next';
 
 const CreateClientForm = () => {
     const [isLogged, setIsLogged] = useAtom(authAtom);
     const [userInfo, setUserInfo] = useAtom(userInfoAtom);
     const [cep, setCEP] = useState('');
+    const [rua, setRua] = useState('');
+    const [bairro, setBairro] = useState('');
+    const [estado, setEstado] = useState('');
+    const [cidade, setCidade] = useState('');
+
+
     const [loading, setLoading] = useState(false);
 
-    const handleSearchClick = async () => {
-        try {
-          const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-          
-          console.log(response.data);
-        } catch (error) {
-          
-          console.error('Erro ao buscar o CEP:', error);
-        }
-      };
-    
 
     if (!isLogged) {
         redirect('/login');
     }
+
+    const handleSearchClick: React.MouseEventHandler<SVGSVGElement> = async (event) => {
+        try {
+            event.preventDefault();
+            const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+
+            console.log(response.data);
+            const cepData = response.data;
+            setRua(cepData.logradouro);
+            setBairro(cepData.bairro);
+            setCidade(cepData.localidade);
+            setEstado(cepData.uf);
+        } catch (error) {
+
+            console.error('Erro ao buscar o CEP:', error);
+        }
+    };
 
     return (
         <div className='flex flex-col'>
@@ -63,12 +74,12 @@ const CreateClientForm = () => {
                             <Input className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o rg ' />
                         </div>
                         <div>
-                            <h1>Celular</h1>         
-                            <Input className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o celular' />               
+                            <h1>Celular</h1>
+                            <Input className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o celular' />
                         </div>
                     </div>
                     <h1>Email</h1>
-                    <Input className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o email ' />      
+                    <Input className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o email ' />
                 </div>
                 <h1 className='text-2xl font-bold my-2'>Localização</h1>
                 <div>
@@ -76,38 +87,42 @@ const CreateClientForm = () => {
                         <div className='flex flex-col w-[40%]'>
                             <h1>CEP</h1>
                             <div className='flex'>
-                                <Input className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o CEP' />
+                                <Input className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o CEP' value={cep}
+                                    onChange={(e) => setCEP(e.target.value)} />
                                 <SearchIcon className='p-2 h-10 w-10'
-                                onClick={handleSearchClick}/>
+                                    onClick={handleSearchClick} />
                             </div>
                         </div>
                         <div className='mx-1 w-[60%]'>
                             <h1>Rua</h1>
-                            <Input disabled placeholder='Rua' className='p-2 border-slate-500 bg-white mb-4' />
+                            <Input placeholder='Rua' className='p-2 border-slate-500 bg-white mb-4' 
+                            value={rua} onChange={(e) => setRua(e.target.value)}/>
                         </div>
                     </div>
                     <div className='w-full flex justify-around'>
                         <div className='mx-1'>
                             <h1>Número</h1>
-                            <Input disabled placeholder='Número' className='p-2 border-slate-500 bg-white mb-4' />
+                            <Input placeholder='Número' className='p-2 border-slate-500 bg-white mb-4' />
                         </div>
                         <div className='mx-1'>
                             <h1>Complemento</h1>
-                            <Input disabled placeholder='Complemento' className='p-2 border-slate-500 bg-white mb-4' />
+                            <Input placeholder='Complemento' className='p-2 border-slate-500 bg-white mb-4' />
                         </div>
                     </div>
                     <div className='w-full flex justify-around'>
                         <div className='mx-1'>
                             <h1>Bairro</h1>
-                            <Input disabled placeholder='Digite o Bairro' className='p-2 border-slate-500 bg-white mb-4' />
+                            <Input placeholder='Digite o Bairro' className='p-2 border-slate-500 bg-white mb-4' value={bairro}
+                            onChange={(e) => setBairro(e.target.value)} />
                         </div>
                         <div className='mx-1'>
                             <h1>Estado</h1>
-                            <Input disabled placeholder='Estado' className='p-2 border-slate-500 bg-white mb-4' />
+                            <Input placeholder='Estado' className='p-2 border-slate-500 bg-white mb-4' value={estado}
+                            onChange={(e) => setEstado(e.target.value)}/>
                         </div>
                         <div className='mx-1'>
                             <h1>Cidade</h1>
-                            <Input disabled placeholder='Cidade' className='p-2 border-slate-500 bg-white mb-4' />
+                            <Input placeholder='Cidade' className='p-2 border-slate-500 bg-white mb-4' value ={cidade}onChange={(e) => setCidade(e.target.value)} />
                         </div>
                     </div>
                 </div>
