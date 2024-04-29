@@ -98,7 +98,7 @@ const CreateClientForm = () => {
                         <div className='mx-1 w-[60%]'>
                             <h1>Rua</h1>
                             <Input placeholder='Rua'
-                                className='p-2 border-slate-500 bg-white mb-4'
+                                className='p-2 border-slate-500 bg-neutral-300 mb-4'
                                 value={rua}
                                 onChange={(e) => setRua(e.target.value)}
                                 readOnly={true} />
@@ -118,7 +118,7 @@ const CreateClientForm = () => {
                         <div className='mx-1'>
                             <h1>Bairro</h1>
                             <Input placeholder='Digite o Bairro'
-                                className='p-2 border-slate-500 bg-white mb-4'
+                                className='p-2 border-slate-500 bg-neutral-300 mb-4'
                                 value={bairro}
                                 onChange={(e) => setBairro(e.target.value)}
                                 readOnly={true} />
@@ -126,14 +126,14 @@ const CreateClientForm = () => {
                         <div className='mx-1'>
                             <h1>Estado</h1>
                             <Input placeholder='Estado'
-                                className='p-2 border-slate-500 bg-white mb-4'
+                                className='p-2 border-slate-500 bg-neutral-300 mb-4'
                                 value={estado}
                                 onChange={(e) => setEstado(e.target.value)} readOnly={true} />
                         </div>
                         <div className='mx-1'>
                             <h1>Cidade</h1>
                             <Input placeholder='Cidade'
-                                className='p-2 border-slate-500 bg-white mb-4'
+                                className='p-2 border-slate-500 bg-neutral-300 mb-4'
                                 value={cidade}
                                 onChange={(e) => setCidade(e.target.value)}
                                 readOnly={true} />
