@@ -54,7 +54,7 @@ export function UsersTable<TData, TValue>({
 
   return (
     <div className="rounded-md  border-[1px] pt-10">
-        <div className="flex mx-64 justify-between py-4">
+        {/* <div className="flex mx-64 justify-between py-4">
             <Input
             placeholder="Filtrar por nome"
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -72,7 +72,7 @@ export function UsersTable<TData, TValue>({
             }
             className="text-secondary-foreground text-center font-bold  mx-32"
             />
-        </div>
+        </div> */}
       <Table className="border-2 border-secondary">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

@@ -4,6 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUp, ArrowDown, ArrowUpDown, ArrowBigLeft, ArrowBigRight } from 'lucide-react'
 import { useState } from 'react';
+import DataTabelRowActions from './DataTabelRowActions';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -14,7 +15,12 @@ export type Users =  {
     password: string
 }
 
-export const columns: ColumnDef<Users>[] = [
+interface ColumnsProps { 
+  onEdit: (user: Users) => void,
+  onDelete: (user: Users) => void
+}
+
+export const userColumns = ({onEdit, onDelete}: ColumnsProps): ColumnDef<Users>[] => [
     {
         id: "select",
         header: ({ table }) => (
@@ -67,4 +73,8 @@ export const columns: ColumnDef<Users>[] = [
         )
       },
   },
+  {
+    id:'actions',
+    cell: ({row}) => <DataTabelRowActions row={row} onEdit={onEdit} onDelete={onDelete} />
+  }
 ]

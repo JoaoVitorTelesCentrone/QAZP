@@ -1,12 +1,13 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import UserHeader from '../components/UserHeader'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
-import { columns, type Users } from './columns';
+import { userColumns, type Users } from './columns';
 import { DataTable } from '@/components/ui/data-table';
 import { UsersTable } from './UsersTable';
 import axios from 'axios';
+import { ColumnDef } from '@tanstack/react-table'
 
 
 
@@ -28,7 +29,9 @@ const Users = () => {
     fetchUserData()
   }, [])
   
-  
+  const onDelete = useCallback((user: Users) => alert(`deletado ${user.name}`), [])
+  const onEdit = useCallback((user: Users) => alert(`Editado ${user.name}`), [])
+  const columns = useMemo(() => userColumns({ onEdit, onDelete }), []);
   return (
     <div className=''>
         <UserHeader />

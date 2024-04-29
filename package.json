@@ -5,6 +5,7 @@
     "@kinde-oss/kinde-auth-nextjs": "^2.2.2",
     "@mui/material": "^5.15.14",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@tanstack/react-table": "^8.16.0",
     "node-fetch": "^3.3.2",
     "shadcn-ui": "^0.2.3",
     "styled-components": "^6.1.8"
