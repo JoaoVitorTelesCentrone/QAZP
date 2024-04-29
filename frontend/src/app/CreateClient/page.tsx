@@ -54,7 +54,7 @@ const CreateClientForm = () => {
     return (
         <div className='flex flex-col'>
             <UserHeader />
-            <h1 className='mx-auto my-4 text-5xl font-bold text-ceter'>Criar cliente</h1>
+            <h1 className='mx-auto my-4 text-5xl font-bold text-center'>Criar cliente</h1>
             <form className='mt-5 mb-8 flex-col flex mx-auto border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-slate-600 bg-opacity-10 p-10 max-w-[500px]'>
                 <div>
                     <h1 className='text-2xl font-bold mb-2'>Informações pessoais</h1>
