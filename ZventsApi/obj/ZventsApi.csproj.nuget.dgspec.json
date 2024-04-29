@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Usuario\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj": {}
+    "C:\\Users\\JoaoCentrone\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Usuario\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj": {
+    "C:\\Users\\JoaoCentrone\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj",
+        "projectUniqueName": "C:\\Users\\JoaoCentrone\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj",
         "projectName": "ZventsApi",
-        "projectPath": "C:\\Users\\Usuario\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\Desktop\\Cypress-project\\ZventsApi\\obj\\",
+        "projectPath": "C:\\Users\\JoaoCentrone\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj",
+        "packagesPath": "C:\\Users\\JoaoCentrone\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\JoaoCentrone\\Desktop\\Cypress-project\\ZventsApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\JoaoCentrone\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -97,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.104/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
