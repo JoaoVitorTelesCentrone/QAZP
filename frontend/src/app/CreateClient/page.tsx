@@ -87,7 +87,9 @@ const CreateClientForm = () => {
                         <div className='flex flex-col w-[40%]'>
                             <h1>CEP</h1>
                             <div className='flex'>
-                                <Input className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o CEP' value={cep}
+                                <Input className='p-2 border-slate-500 bg-white mb-4'
+                                    placeholder='Digite o CEP'
+                                    value={cep}
                                     onChange={(e) => setCEP(e.target.value)} />
                                 <SearchIcon className='p-2 h-10 w-10'
                                     onClick={handleSearchClick} />
@@ -95,8 +97,11 @@ const CreateClientForm = () => {
                         </div>
                         <div className='mx-1 w-[60%]'>
                             <h1>Rua</h1>
-                            <Input placeholder='Rua' className='p-2 border-slate-500 bg-white mb-4' 
-                            value={rua} onChange={(e) => setRua(e.target.value)}/>
+                            <Input placeholder='Rua'
+                                className='p-2 border-slate-500 bg-white mb-4'
+                                value={rua}
+                                onChange={(e) => setRua(e.target.value)}
+                                readOnly={true} />
                         </div>
                     </div>
                     <div className='w-full flex justify-around'>
@@ -112,17 +117,26 @@ const CreateClientForm = () => {
                     <div className='w-full flex justify-around'>
                         <div className='mx-1'>
                             <h1>Bairro</h1>
-                            <Input placeholder='Digite o Bairro' className='p-2 border-slate-500 bg-white mb-4' value={bairro}
-                            onChange={(e) => setBairro(e.target.value)} />
+                            <Input placeholder='Digite o Bairro'
+                                className='p-2 border-slate-500 bg-white mb-4'
+                                value={bairro}
+                                onChange={(e) => setBairro(e.target.value)}
+                                readOnly={true} />
                         </div>
                         <div className='mx-1'>
                             <h1>Estado</h1>
-                            <Input placeholder='Estado' className='p-2 border-slate-500 bg-white mb-4' value={estado}
-                            onChange={(e) => setEstado(e.target.value)}/>
+                            <Input placeholder='Estado'
+                                className='p-2 border-slate-500 bg-white mb-4'
+                                value={estado}
+                                onChange={(e) => setEstado(e.target.value)} readOnly={true} />
                         </div>
                         <div className='mx-1'>
                             <h1>Cidade</h1>
-                            <Input placeholder='Cidade' className='p-2 border-slate-500 bg-white mb-4' value ={cidade}onChange={(e) => setCidade(e.target.value)} />
+                            <Input placeholder='Cidade'
+                                className='p-2 border-slate-500 bg-white mb-4'
+                                value={cidade}
+                                onChange={(e) => setCidade(e.target.value)}
+                                readOnly={true} />
                         </div>
                     </div>
                 </div>
