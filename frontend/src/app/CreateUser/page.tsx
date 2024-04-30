@@ -43,6 +43,7 @@ const CreateUserForm = () => {
       console.log(response.status);
       if (response.status === 201) {
         console.log(response.data)
+        console.log(data)
         toast.success('Usuário criado')
       }
     } catch (error) {

@@ -25,7 +25,7 @@ const LoginPage = () => {
   async function verifyLogin(username: string, password: string) { 
     try {
       const response = await axios.get(`http://localhost:5196/api/User/${username}&${password}`);
-      const userData = response.data
+      const userData = response.data.username
       console.log(userData)
       if (response.status === 200) {
         console.log(response.data);
@@ -33,7 +33,7 @@ const LoginPage = () => {
         setError(false)
         // setUserInfo()
       setUserAuth(true)
-      toast.success('Bem vindo')
+      toast.success(`Bem vindo ${username}`)
       setTimeout(() => {
         router.push('/dashboard');
       }, 2000);

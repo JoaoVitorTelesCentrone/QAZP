@@ -57,9 +57,9 @@ export function QuoteTable<TData, TValue>({
         <div className="flex mx-64 justify-between py-4">
             <Input
             placeholder="Filtrar por nome"
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            value={(table.getColumn("firstName")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-                table.getColumn("name")?.setFilterValue(event.target.value)
+                table.getColumn("firstName")?.setFilterValue(event.target.value)
             }
             className="text-secondary-foreground text-center font-bold  mx-32"
             />
