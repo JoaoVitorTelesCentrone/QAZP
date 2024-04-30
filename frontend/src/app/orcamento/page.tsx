@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ArrowDown,  ArrowDownIcon, ChevronDown } from 'lucide-react'
+import { Toaster, toast } from 'sonner'
 
 type Quote = {
   "firstName": string, 
@@ -28,52 +29,42 @@ type Quote = {
 
 const Page = () => {
 
-  const [quote, setQuote] = useState<Quote>({"firstName": "","lastName": "" ,"email": "","phoneNumber": "","eventType": "","estimatedAudience": 0})
   const[firstName, setFirstname] = useState("")
   const[lastName, setLastname] = useState("")
   const[email, setEmail] = useState("")
   const[phoneNumber, setPhoneNumber] = useState("")
-  const[type, setType] = useState("")
-  const[estimatedAaudience, setAudience] = useState(0)
-
-  useEffect(() => {
-    console.log(quote);
-  }, [quote]);
+  const[eventType, setType] = useState("")
+  const[estimatedAudience, setAudience] = useState(0)
 
   async function handleSubmit () {
-    setQuote({firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, eventType: type, estimatedAudience: estimatedAaudience}) 
+
+    const quote = {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      eventType,
+      estimatedAudience,
+    }
+
     const response = await axios.post('http://localhost:5196/api/Quote', quote, 
     {headers: {
       'Content-Type': 'application/json'
     }})
     .then((response) => {
       console.log('Resposta:', response.data);
+      toast.success('Orçamento enviado')
     })
     .catch(error => {
       console.error('Erro:', error);
+      console.log(quote)
+      toast.error('Evento não foi criado')
     });
-    fetchQuote()
-    console.log('editar')
-  } 
-
-    async function fetchQuote() {
-      try {
-        const response = await axios.get('http://localhost:5196/api/Quote');
-
-        if (response.status === 200) {
-          console.log(response.data);
-          setQuote(response.data[1])
-        } else {
-          throw new Error('erro');
-        }
-      } catch (error) {
-        console.error('Erro', error);
-      }
-    }
-
+  }
   return (
     <div>
       <Header /> 
+      <Toaster richColors />
       <div className='p-20'>
         <h1 className='text-6xl mx-auto font-montserrat font-bold uppercase text-center text-secondary-foreground '>Solicite um orçamento</h1>
         <div className='my-10 bg-slate-500 shadow-md shadow-slate-500 mx-auto bg-opacity-15 max-w-[500px] justify-between py-10 flex flex-col border-2 rounded-2xl'>
@@ -91,10 +82,10 @@ const Page = () => {
 
           <div className='py-4 mx-10  border-2shadow-slate-400 rounded-xl flex flex-col'>
             <h1 className='text-2xl font-bold hover:transition duration-400 hover:scale-105'>Informações do evento</h1>
-            <Input className='my-2 bg-white border-slate-400 text-slate-400'  onChange={(e) => setAudience(100)} placeholder='Digite a Audiência estimada' />
+            <Input className='my-2 bg-white border-slate-400 text-slate-400' type='number'  onChange={(e) => setAudience(parseInt(e.target.value))} placeholder='Digite a Audiência estimada' />
             <DropdownMenu >
               <DropdownMenuTrigger className="border-slate-400 my-2 bg-white flex h-9 w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 justify-between focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
-                {type ? type : 'Selecione o Tipo do evento'} <ChevronDown/>
+                {eventType ? eventType : 'Selecione o Tipo do evento'} <ChevronDown/>
                 </DropdownMenuTrigger>
               <DropdownMenuContent >
                 <DropdownMenuItem onClick={() => setType('Casamento')}>Casamento</DropdownMenuItem>

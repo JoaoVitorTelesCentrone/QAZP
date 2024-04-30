@@ -65,9 +65,9 @@ export function ClientTable<TData, TValue>({
         />
         <Input
           placeholder="Filtrar por CPF"
-          value={(table.getColumn("cpf")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("documentId")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("cpf")?.setFilterValue(event.target.value)
+            table.getColumn("documentId")?.setFilterValue(event.target.value)
           }
           className="max-w-sm my-10" 
         />

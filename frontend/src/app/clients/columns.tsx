@@ -11,7 +11,7 @@ import { useState } from 'react';
 export type Client =  {
     firstName: string
     lastName: string
-    cpf: string
+    documentId: string
     email: string
     phoneNumber: string
 }
@@ -70,14 +70,14 @@ export const clientColumns: ColumnDef<Client>[] = [
       },
   },
   {
-    accessorKey: "cpf",
+    accessorKey: "documentId",
     header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            CPF
+            CPF/CNPJ
             {column.getIsSorted() === 'asc' ? <ArrowDown className="ml-2 h-4 w-4" /> : column.getIsSorted() === 'desc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowUpDown className="ml-2 h-4 w-4" />}          
             
           </Button>
