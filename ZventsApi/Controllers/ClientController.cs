@@ -78,8 +78,7 @@ namespace ZventsApi.Controllers
                 return Conflict("There is already a Client with same DocumentId");
             }
 
-            clientToUpdate.FirstName = updatedClient.FirstName;
-            clientToUpdate.LastName = updatedClient.LastName;
+            clientToUpdate.FullName = updatedClient.FullName;
             clientToUpdate.DocumentId = updatedClient.DocumentId;
             clientToUpdate.PhoneNumber = updatedClient.PhoneNumber;
             clientToUpdate.Email = updatedClient.Email;
