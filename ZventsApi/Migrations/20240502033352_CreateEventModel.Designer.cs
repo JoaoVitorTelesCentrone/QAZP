@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZventsApi.Models;
 
@@ -10,9 +11,11 @@ using ZventsApi.Models;
 namespace ZventsApi.Migrations
 {
     [DbContext(typeof(ZventsDbContext))]
-    partial class ZventsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240502033352_CreateEventModel")]
+    partial class CreateEventModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -136,6 +139,8 @@ namespace ZventsApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientId");
+
                     b.ToTable("Events");
                 });
 
@@ -228,6 +233,17 @@ namespace ZventsApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ZventsApi.Models.Event", b =>
+                {
+                    b.HasOne("ZventsApi.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
                 });
 #pragma warning restore 612, 618
         }
