@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
+import { intl } from '../../i18n'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -46,7 +47,7 @@ export const clientColumns: ColumnDef<Client>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nome Completo
+          {intl.formatMessage({ id: 'client.page.datagrid.fullName.label' })}
 
           {column.getIsSorted() === 'asc' ? <ArrowDown className="ml-2 h-4 w-4" /> : column.getIsSorted() === 'desc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowUpDown className="ml-2 h-4 w-4" />}
         </Button>
@@ -61,7 +62,7 @@ export const clientColumns: ColumnDef<Client>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          CPF/CNPJ
+          {intl.formatMessage({ id: 'client.page.datagrid.document.label' })}
           {column.getIsSorted() === 'asc' ? <ArrowDown className="ml-2 h-4 w-4" /> : column.getIsSorted() === 'desc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowUpDown className="ml-2 h-4 w-4" />}
 
         </Button>
@@ -77,7 +78,7 @@ export const clientColumns: ColumnDef<Client>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          {intl.formatMessage({ id: 'client.page.datagrid.email.label' })}
           {column.getIsSorted() === 'asc' ? <ArrowDown className="ml-2 h-4 w-4" /> : column.getIsSorted() === 'desc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowUpDown className="ml-2 h-4 w-4" />}
 
         </Button>
@@ -93,7 +94,7 @@ export const clientColumns: ColumnDef<Client>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Telefone
+          {intl.formatMessage({ id: 'client.page.datagrid.phoneNumber.label' })}
           {column.getIsSorted() === 'asc' ? <ArrowDown className="ml-2 h-4 w-4" /> : column.getIsSorted() === 'desc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowUpDown className="ml-2 h-4 w-4" />}
 
         </Button>
