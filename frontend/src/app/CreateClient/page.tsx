@@ -7,25 +7,18 @@ import UserHeader from '../components/UserHeader';
 import { userInfoAtom } from '../atoms/userInfoAtom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Info, Search, SearchIcon } from 'lucide-react';
+import { SearchIcon } from 'lucide-react';
 import axios, { isAxiosError } from 'axios';
 
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Toaster, toast } from 'sonner';
 
 const CreateClientForm = () => {
     const [isLogged, setIsLogged] = useAtom(authAtom);
     const [userInfo, setUserInfo] = useAtom(userInfoAtom);
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
+    const [fullName, setFullName] = useState("")
     const [documentId, setDocumentId] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
-    const [email, setEmail] = useState("")   
+    const [email, setEmail] = useState("")
     const [zipCode, setZipCode] = useState("");
     const [addressName, setAddressName] = useState("")
     const [addressNumber, setAddressNumber] = useState("")
@@ -61,37 +54,36 @@ const CreateClientForm = () => {
 
     async function createClient() {
         const data = {
-          firstName,
-          lastName,
-          documentId,
-          phoneNumber,
-          email,
-          zipCode,
-          addressName,
-          addressNumber,
-          addressComplement,
-          district,
-          state,
-          city,
+            fullName,
+            documentId,
+            phoneNumber,
+            email,
+            zipCode,
+            addressName,
+            addressNumber,
+            addressComplement,
+            district,
+            state,
+            city,
         }
         try {
-          const response = await axios.post('http://localhost:5196/api/Client', data);
-          const userData = response.data
-          console.log(response.status);
-          if (response.status === 201) {
-            console.log(response.data)
-            console.log(data)
-            toast.success('Cliente criado')
-          }
-          if (response.status === 409) {
-            console.log(response.data)
-            console.log(data)
-            toast.error('Cliente criado')
-          }
+            const response = await axios.post('http://localhost:5196/api/Client', data);
+            const userData = response.data
+            console.log(response.status);
+            if (response.status === 201) {
+                console.log(response.data)
+                console.log(data)
+                toast.success('Cliente criado')
+            }
+            if (response.status === 409) {
+                console.log(response.data)
+                console.log(data)
+                toast.error('Cliente criado')
+            }
         } catch (error: unknown) {
-            if(isAxiosError(error)){
+            if (isAxiosError(error)) {
                 console.error('Erro ao fazer a requisição:', error)
-                if(error.response){
+                if (error.response) {
                     console.error('Código de status:', error.response.status);
                     if (error.response.status === 409) {
                         toast.error('Esse cliente já existe!');
@@ -103,13 +95,13 @@ const CreateClientForm = () => {
                 }
             }
             console.log(data)
-            }
-      }
+        }
+    }
 
-      const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         await createClient()
-      };
+    };
 
     return (
         <div className='flex flex-col'>
@@ -120,19 +112,15 @@ const CreateClientForm = () => {
                 <div>
                     <h1 className='text-2xl font-bold mb-2'>Informações pessoais</h1>
                     <div className='flex w-full justify-between'>
-                        <div className='mr-4'>
-                            <h1>Nome</h1>
-                            <Input onChange={(e) => setFirstName(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o nome ' />
-                        </div>
-                        <div>
-                            <h1>Sobrenome</h1>
-                            <Input onChange={(e) => setLastName(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o sobrenome ' />
+                        <div className='w-full'>
+                            <h1>Nome Completo</h1>
+                            <Input onChange={(e) => setFullName(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o nome completo' />
                         </div>
                     </div>
                     <div className='w-full justify-between flex'>
                         <div className='mr-2'>
                             <h1>Documento</h1>
-                            <Input onChange={(e) => setDocumentId(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o rg ' />
+                            <Input onChange={(e) => setDocumentId(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder='Digite o CPF ou CNPJ ' />
                         </div>
                         <div>
                             <h1>Celular</h1>

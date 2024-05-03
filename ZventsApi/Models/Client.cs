@@ -10,10 +10,9 @@ namespace ZventsApi.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        [Required(ErrorMessage = "FirstName is required")]
-        public string FirstName { get; set; }
-        [Required(ErrorMessage = "LastName is required")]
-        public string LastName { get; set; }
+        [Required(ErrorMessage = "FullName is required")]
+        public string FullName { get; set; }
+        
         [Required(ErrorMessage = "DocumentId is required")]
         [RegularExpression(@"^\d{11}$|^\d{14}$", ErrorMessage = "Invalid DocumentId")]
         [ValidDocument(ErrorMessage = "Invalid DocumentId")]
