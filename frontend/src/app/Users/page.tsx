@@ -29,9 +29,7 @@ const Users = () => {
     fetchUserData()
   }, [])
   
-  const onDelete = useCallback((user: Users) => alert(`deletado ${user.name}`), [])
-  const onEdit = useCallback((user: Users) => alert(`Editado ${user.name}`), [])
-  const columns = useMemo(() => userColumns({ onEdit, onDelete }), []);
+  const columns = useMemo(() => userColumns(), []);
   return (
     <div className=''>
         <UserHeader />

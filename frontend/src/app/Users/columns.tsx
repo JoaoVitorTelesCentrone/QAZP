@@ -2,9 +2,10 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUp, ArrowDown, ArrowUpDown, ArrowBigLeft, ArrowBigRight } from 'lucide-react'
+import { ArrowUp, ArrowDown, ArrowUpDown, ArrowBigLeft, ArrowBigRight, EditIcon, Edit2Icon, Edit3Icon } from 'lucide-react'
 import { useState } from 'react';
-import DataTabelRowActions from './DataTabelRowActions';
+import EditUser from './EditUser';
+import DeleteUser from './DeleteUser';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -12,37 +13,12 @@ import DataTabelRowActions from './DataTabelRowActions';
 export type Users =  {
     name: string
     username: string
-    password: string
+
 }
 
-interface ColumnsProps { 
-  onEdit: (user: Users) => void,
-  onDelete: (user: Users) => void
-}
 
-export const userColumns = ({onEdit, onDelete}: ColumnsProps): ColumnDef<Users>[] => [
-    {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
+
+export const userColumns = (): ColumnDef<Users>[] => [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -74,7 +50,11 @@ export const userColumns = ({onEdit, onDelete}: ColumnsProps): ColumnDef<Users>[
       },
   },
   {
-    id:'actions',
-    cell: ({row}) => <DataTabelRowActions row={row} onEdit={onEdit} onDelete={onDelete} />
+    id:'edit',
+    cell: ({column}) => <EditUser />
+  },
+  {
+    id:'delete',
+    cell: ({column}) => <DeleteUser />
   }
 ]
