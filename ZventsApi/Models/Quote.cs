@@ -8,10 +8,9 @@ namespace ZventsApi.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        [Required(ErrorMessage = "First name is required")]
-        public string FirstName { get; set; }
+        [Required(ErrorMessage = "Full name is required")]
+        public string FullName { get; set; }
         [Required(ErrorMessage = "Last name is required")]
-        public string LastName { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         [Required(ErrorMessage = "Event type is required")]
