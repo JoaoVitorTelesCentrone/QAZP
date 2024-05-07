@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZventsApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e10d45dc2a8b614dedb1d96f863fe5523498d9e6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f5ddac7e8cba8cbb72e7708f6adc900b2f373541")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZventsApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZventsApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

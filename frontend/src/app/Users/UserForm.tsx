@@ -15,9 +15,10 @@ import { tree } from 'next/dist/build/templates/app-page';
 
 interface UserFormProps {
     closeModal: () => void;
+    userData?: {name: string, userName: string, password:string}
 }
 
-const UserForm: React.FC<UserFormProps> = ({closeModal}) => {
+const UserForm: React.FC<UserFormProps> = ({closeModal, userData}) => {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -34,6 +35,12 @@ const UserForm: React.FC<UserFormProps> = ({closeModal}) => {
     setShowPassword2((prevState) => !prevState) 
   }
 
+  useEffect(() => {
+    if (userData) {
+      setName(userData.name || '');
+      setUsername(userData.userName || '');
+    }
+  }, [userData]);
 
   useEffect(() => {
     if(password !== confirmedPassword){
@@ -51,19 +58,19 @@ const UserForm: React.FC<UserFormProps> = ({closeModal}) => {
         <form className="">
           <div className="mx-auto mb-1 w-full">
             <p className='text-xl'>Nome</p>
-            <Input onChange={(e) => setName(e.target.value)} required placeholder="Digite o nome completo" className="bg-white border-slate-500 mx-auto my-2" />
+            <Input onChange={(e) => setName(e.target.value)} value={userData?.name} required placeholder="Digite o nome completo" className="bg-white border-slate-500 mx-auto my-2" />
           </div>
 
           <div className="mx-auto my-1 w-full">
             <p className='text-xl'>Usuário</p>
 
-            <Input onChange={(e) => setUsername(e.target.value)} required placeholder="Digite o nome do usuário" className="bg-white border-slate-500 mx-auto my-2" />
+            <Input onChange={(e) => setUsername(e.target.value)} value={userData?.userName} required placeholder="Digite o nome do usuário" className="bg-white border-slate-500 mx-auto my-2" />
           </div>
 
           <div className="mx-auto my-1 w-full">
             <p className='text-xl'>Senha</p>
             <div className="flex">
-              <Input type={showPassword1 ? 'text' : 'password'} onChange={(e) => setPassword(e.target.value)} required placeholder="Digite senha" className="bg-white border-slate-500 mx-auto my-2" />
+              <Input type={showPassword1 ? 'text' : 'password'} value={userData?.password} onChange={(e) => setPassword(e.target.value)} required placeholder="Digite senha" className="bg-white border-slate-500 mx-auto my-2" />
               {showPassword1 ? <EyeOff onClick={() => changeState1()} className="mt-3 ml-2 cursor-pointer"/> : <Eye onClick={() => changeState1()} className="mt-3 ml-2 cursor-pointer" />}
             </div>
           </div>
@@ -71,7 +78,7 @@ const UserForm: React.FC<UserFormProps> = ({closeModal}) => {
           <div className="mx-auto my-1 w-full">
             <p className='text-xl'>Confirme a senha</p>
             <div className="flex">
-              <Input type={showPassword2 ? 'text' : 'password'} onChange={(e) => setConfirmPassword(e.target.value)} required placeholder="Confirme a senha" className="bg-white border-slate-500 mx-auto my-2" />
+              <Input type={showPassword2 ? 'text' : 'password'} value={userData?.password} onChange={(e) => setConfirmPassword(e.target.value)} required placeholder="Confirme a senha" className="bg-white border-slate-500 mx-auto my-2" />
               {showPassword2 ? <EyeOff onClick={() => changeState2()} className="mt-3 ml-2 cursor-pointer"/> : <Eye onClick={() => changeState2()} className="mt-3 ml-2 cursor-pointer" />}
             </div>
           </div>

@@ -6,13 +6,15 @@ import { ArrowUp, ArrowDown, ArrowUpDown, ArrowBigLeft, ArrowBigRight, EditIcon,
 import { useState } from 'react';
 import EditUser from './EditUser';
 import DeleteUser from './DeleteUser';
+import { UUID } from 'crypto';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export type Users =  {
+    id: string
     name: string
-    username: string
+    userName: string
 
 }
 
@@ -49,12 +51,12 @@ export const userColumns = (): ColumnDef<Users>[] => [
         )
       },
   },
-  {
-    id:'edit',
-    cell: ({column}) => <EditUser />
-  },
+  // {
+  //   id:'edit',
+  //   cell: ({row}) => <EditUser userId={row.original.userName} />
+  // },
   {
     id:'delete',
-    cell: ({column}) => <DeleteUser />
+    cell: ({row}) => <DeleteUser userId={row.original.id} />
   }
 ]
