@@ -11,8 +11,8 @@ using ZventsApi.Models;
 namespace ZventsApi.Migrations
 {
     [DbContext(typeof(ZventsDbContext))]
-    [Migration("20240502040620_UpdateEventModel")]
-    partial class UpdateEventModel
+    [Migration("20240514014001_CreateEventModel")]
+    partial class CreateEventModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -139,6 +139,8 @@ namespace ZventsApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientId");
+
                     b.ToTable("Events");
                 });
 
@@ -231,6 +233,17 @@ namespace ZventsApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ZventsApi.Models.Event", b =>
+                {
+                    b.HasOne("ZventsApi.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
                 });
 #pragma warning restore 612, 618
         }

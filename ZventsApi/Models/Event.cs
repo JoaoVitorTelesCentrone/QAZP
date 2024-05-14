@@ -34,6 +34,8 @@ namespace ZventsApi.Models
         public EventType Type { get; set; }
         [Required(ErrorMessage = "ClientId is required")]
         public Guid ClientId { get; set; }
+        [JsonIgnore]
+        public Client? Client { get; set; }
         [Required(ErrorMessage = "StartAt is required")]
         public DateTime StartAt { get; set; }
         [Required(ErrorMessage = "EndAt is required")]
