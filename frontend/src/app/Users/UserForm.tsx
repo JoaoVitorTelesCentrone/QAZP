@@ -86,8 +86,8 @@ const UserForm: React.FC<UserFormProps> = ({closeModal, userData}) => {
             <h1 className='text-red-700 font-bold'>As senhas são diferentes</h1>
           )}
           <div className='flex'>
-            <Button variant="outline" className="mx-4 bg-secondary-foreground mt-2 text-white">Criar usuário</Button>
-            <Button onClick={() => closeModal()} variant="outline" className="mx-4 bg-secondary-foreground mt-2 text-white">Fechar</Button>
+            <Button variant="outline" className="mx-4 bg-primary mt-2 text-white">Criar usuário</Button>
+            <Button onClick={() => closeModal()} variant="outline" className="mx-4 bg-primary mt-2 text-white">Fechar</Button>
           </div>
         </form>
       </div>

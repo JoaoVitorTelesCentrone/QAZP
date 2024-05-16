@@ -117,7 +117,7 @@ const CreateUserForm = () => {
           {different && (
             <h1 className='text-red-700 font-bold'>As senhas são diferentes</h1>
           )}
-          <Button variant="outline" className="bg-secondary-foreground mt-2 text-white">Criar usuário</Button>
+          <Button variant="outline" className="bg-primary mt-2 text-white">Criar usuário</Button>
         </form>
       </div>
     </div>
