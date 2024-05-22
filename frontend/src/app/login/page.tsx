@@ -11,6 +11,7 @@ import { redirect, useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import axios from 'axios'
 import { Toaster, toast } from 'sonner'
+import Footer from '../components/Footer'
 
 
 const LoginPage = () => {
@@ -25,7 +26,9 @@ const LoginPage = () => {
   async function verifyLogin(username: string, password: string) { 
     try {
       const response = await axios.get(`http://localhost:5196/api/User/${username}&${password}`);
+      const userName = response.data.name
       const userData = response.data.username
+      const userPassword = response.data.password
       console.log(userData)
       if (response.status === 200) {
         console.log(response.data);
@@ -34,6 +37,7 @@ const LoginPage = () => {
         // setUserInfo()
       setUserAuth(true)
       toast.success(`Bem vindo ${username}`)
+      setUserInfo({name: userName, username: username, password: userPassword})
       setTimeout(() => {
         router.push('/dashboard');
       }, 2000);
@@ -67,6 +71,7 @@ const LoginPage = () => {
           </div>
         </form>
       </div>
+      <Footer />
     </>
   )
 }

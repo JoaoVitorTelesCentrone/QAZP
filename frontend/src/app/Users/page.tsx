@@ -31,15 +31,17 @@ const Users = () => {
   
   const columns = useMemo(() => userColumns(), []);
   return (
-    <div className=''>
+    <div className='flex flex-col bg-primary'>
         <UserHeader />
         <div className='flex my-20 mx-10 justify-between'>
             <h1 className='text-4xl font-bold uppercase text-secondary-foreground'>Usuários</h1>
             <Link className='flex bg-primary hover:transition delay-100 hover:scale-125 p-4 rounded-xl text-white' href='/CreateUser'>Criar usuário<Plus className='h-4 w-4 mt-1 ml-2' /> </Link>
         </div>
-        <div className='mx-10 mb-40'>
-            <UsersTable data={userData} columns={columns} />
+        <div className='mx-auto h-screen'>
+
+          <UsersTable data={userData} columns={columns} />
         </div>
+
     </div>
   )
 }
