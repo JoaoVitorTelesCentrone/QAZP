@@ -5,6 +5,7 @@ import React from 'react'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
+import { LogOut, TreePalm } from 'lucide-react'
 
 const UserSideMenu = () => {
     const[loggedIn, setIsLogged] = useAtom(authAtom)
@@ -19,7 +20,7 @@ const UserSideMenu = () => {
     return (
     <div className=' flex h-full p-8 bg-primary justify-between '>
         <div className='flex justify-between'>
-            <h1 className='text-secondary mr-10'>Logo</h1>
+            <h1 className='text-secondary mr-10'><TreePalm /></h1>
             <h1 className='text-secondary font-bold'>{` Bem vindo, ${user.username}`}</h1>
         </div>
         <ul className='flex justify-around mx-auto'>
@@ -29,7 +30,7 @@ const UserSideMenu = () => {
             <Link href='/quote' className='mx-6 text-secondary font-montserrat font-medium hover:transition delay-100 hover:scale-125'>Orçamentos</Link>
             <Link href='/Users' className='mx-6 text-secondary font-montserrat font-medium hover:transition delay-100 hover:scale-125'>Usuários</Link>
         </ul>
-            <button className='bg-white px-4 py-1 rounded-xl mx-4 hover:transition delay-100 hover:scale-125' onClick={() => setIsLogged(false)}>Logout</button>
+        <button className='text-white px-4 py-1 rounded-xl mx-4 hover:transition delay-100 hover:scale-125' onClick={() => setIsLogged(false)}><LogOut /></button>
     </div>
   )
 }

@@ -45,10 +45,8 @@ const EditClient: React.FC<EditClientProps> = ({userId}) => {
       <Edit3Icon className='h-4 w-4 cursor-pointer' onClick={() => setOpenModal(true)} />
       {openModal && ( 
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
-        <div className="bg-white shadow-lg shadow-slate-600 rounded-lg " >
-            <ClientForm clientData={clientData} closeModal={() => setOpenModal(false)} />
+            <ClientForm clientData={clientData} closeModal={() => setOpenModal(false)} />       
         </div>
-    </div>
       )}
     </div>
   )

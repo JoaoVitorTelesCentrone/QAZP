@@ -129,7 +129,7 @@ const CreateClientForm = () => {
                         </div>
                     </div>
                     <h1>{intl.formatMessage({ id: 'create.client.page.email.field.label' })}</h1>
-                    <Input onChange={(e) => setEmail(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder={intl.formatMessage({ id: 'create.client.page.email.field.placeholder' })} />
+                    <Input type='email' onChange={(e) => setEmail(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder={intl.formatMessage({ id: 'create.client.page.email.field.placeholder' })} />
                 </div>
                 <h1 className='text-2xl font-bold my-2'>{intl.formatMessage({ id: 'create.client.page.localization.information.section' })}</h1>
                 <div>

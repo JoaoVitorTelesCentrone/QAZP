@@ -96,7 +96,7 @@ const ClientForm: React.FC<ClientFormProps> = ({clientData, closeModal}) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className='mt-5 mb-8 flex-col flex mx-auto border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-slate-600 bg-opacity-10 p-10 max-w-[500px]'>
+      <form onSubmit={handleSubmit} className='mt-5 mb-8 flex-col flex mx-auto border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-white p-10 max-w-[500px]'>
                 <div>
                     <X className='cursor-pointer' onClick={closeModal} />
                     <h1 className='text-2xl font-bold mb-2'>{intl.formatMessage({ id: 'create.client.page.personal.information.section' })}</h1>
@@ -177,7 +177,10 @@ const ClientForm: React.FC<ClientFormProps> = ({clientData, closeModal}) => {
                         </div>
                     </div>
                 </div>
-                <Button className='text-secondary' variant='default'>{intl.formatMessage({ id: 'create.client.page.create.client.button' })}</Button>
+                <div className="flex justify-between">
+                    <Button className='text-secondary' variant='default'>{intl.formatMessage({ id: 'create.client.page.create.client.button' })}</Button>
+                    <Button className='text-secondary' onClick={closeModal} variant='default'>Fechar</Button>
+                </div>
             </form>
     </div>
   )
