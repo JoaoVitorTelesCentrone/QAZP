@@ -11,6 +11,7 @@ namespace ZventsApi.Models
         public DbSet<Client> Clients { get; set; }
         public DbSet<Material> Materials { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<EventMaterial> EventMaterials { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=Zvents.db");
