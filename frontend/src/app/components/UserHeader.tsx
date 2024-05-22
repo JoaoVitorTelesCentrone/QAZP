@@ -27,6 +27,7 @@ const UserSideMenu = () => {
             <Link href='/dashboard' className='mx-6 text-secondary font-montserrat font-medium hover:transition delay-100 hover:scale-125'>Dashboard</Link>
             <Link href='/clients' className='mx-6 text-secondary font-montserrat font-medium hover:transition delay-100 hover:scale-125'>Clientes</Link>
             <Link href='/Events' className='mx-6 text-secondary font-montserrat font-medium hover:transition delay-100 hover:scale-125'>Eventos</Link>
+            <Link href='/Materials' className='mx-6 text-secondary font-montserrat font-medium hover:transition delay-100 hover:scale-125'>Materiais</Link>
             <Link href='/quote' className='mx-6 text-secondary font-montserrat font-medium hover:transition delay-100 hover:scale-125'>Orçamentos</Link>
             <Link href='/Users' className='mx-6 text-secondary font-montserrat font-medium hover:transition delay-100 hover:scale-125'>Usuários</Link>
         </ul>
