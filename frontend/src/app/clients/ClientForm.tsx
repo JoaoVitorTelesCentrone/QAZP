@@ -1,58 +1,48 @@
 'use client'
+import { Input } from '@/components/ui/input'
+import { intl } from '@/i18n'
 import { useAtom } from 'jotai';
-import React, { useState } from 'react';
-import { authAtom } from '../atoms/authAtom';
-import { redirect } from 'next/navigation';
-import UserHeader from '../components/UserHeader';
+import React, { useState } from 'react'
 import { userInfoAtom } from '../atoms/userInfoAtom';
-import { Input } from '@/components/ui/input';
+import { authAtom } from '../atoms/authAtom';
+import { SearchIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { SearchIcon } from 'lucide-react';
+import { EyeClosedIcon } from '@radix-ui/react-icons';
 import axios, { isAxiosError } from 'axios';
-import { Toaster, toast } from 'sonner';
-import { intl } from '../../i18n'
+import { toast } from 'sonner';
+import { redirect } from 'next/navigation';
 
-const CreateClientForm = () => {
-    const [isLogged, setIsLogged] = useAtom(authAtom);
-    const [userInfo, setUserInfo] = useAtom(userInfoAtom);
-    const [fullName, setFullName] = useState("")
-    const [documentId, setDocumentId] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("")
-    const [email, setEmail] = useState("")
-    const [zipCode, setZipCode] = useState("");
-    const [addressName, setAddressName] = useState("")
-    const [addressNumber, setAddressNumber] = useState("")
-    const [addressComplement, setAddressComplement] = useState("")
-    const [district, setDistrict] = useState("");
-    const [state, setState] = useState("");
-    const [city, setCity] = useState("");
+type ClientFormProps = { 
+    clientData?: {fullName: string,
+        documentId: string,
+        phoneNumber: string,
+        email: string,
+        zipCode: string,
+        addressName: string,
+        addressNumber: string,
+        addressComplement: string,
+        district: string,
+        state: string,
+        city: string,}
+    closeModal: () => void
+}
 
+const ClientForm: React.FC<ClientFormProps> = ({clientData, closeModal}) => {
+    const [isLogged, setIsLogged] = useAtom(authAtom)
+    const [userInfo, setUserInfo] = useAtom(userInfoAtom)
+    const [fullName, setFullName] = useState(clientData?.fullName)
+    const [documentId, setDocumentId] = useState(clientData?.documentId)
+    const [phoneNumber, setPhoneNumber] = useState(clientData?.phoneNumber)
+    const [email, setEmail] = useState(clientData?.email)
+    const [zipCode, setZipCode] = useState(clientData?.zipCode)
+    const [addressName, setAddressName] = useState(clientData?.addressName)
+    const [addressNumber, setAddressNumber] = useState(clientData?.addressNumber)
+    const [addressComplement, setAddressComplement] = useState(clientData?.addressComplement)
+    const [district, setDistrict] = useState(clientData?.district)
+    const [state, setState] = useState(clientData?.state)
+    const [city, setCity] = useState(clientData?.city)
 
-    const [loading, setLoading] = useState(false);
-
-
-    if (!isLogged) {
-        redirect('/login');
-    }
-
-    const handleSearchClick: React.MouseEventHandler<SVGSVGElement> = async (event) => {
-        try {
-            event.preventDefault();
-            const response = await axios.get(`https://viacep.com.br/ws/${zipCode}/json/`);
-
-            console.log(response.data);
-            const cepData = response.data;
-            setAddressName(cepData.logradouro);
-            setDistrict(cepData.bairro);
-            setCity(cepData.localidade);
-            setState(cepData.uf);
-        } catch (error) {
-
-            console.error('Erro ao buscar o CEP:', error);
-        }
-    }
-
-    async function createClient() {
+    async function editClient() {
         const data = {
             fullName,
             documentId,
@@ -67,7 +57,7 @@ const CreateClientForm = () => {
             city,
         }
         try {
-            const response = await axios.post('http://localhost:5196/api/Client', data);
+            const response = await axios.put('http://localhost:5196/api/Client', data);
             const userData = response.data
             console.log(response.status);
             if (response.status === 201) {
@@ -101,35 +91,33 @@ const CreateClientForm = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        await createClient()
-    };
+        await editClient()
+    }
 
-    return (
-        <div className='flex flex-col'>
-            <UserHeader />
-            <Toaster richColors />
-            <h1 className='mx-auto my-4 text-5xl font-bold text-center'>{intl.formatMessage({ id: 'create.client.page.title' })}</h1>
-            <form onSubmit={handleSubmit} className='mt-5 mb-8 flex-col flex mx-auto border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-slate-600 bg-opacity-10 p-10 max-w-[500px]'>
+  return (
+    <div>
+      <form onSubmit={handleSubmit} className='mt-5 mb-8 flex-col flex mx-auto border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-slate-600 bg-opacity-10 p-10 max-w-[500px]'>
                 <div>
+                    <X className='cursor-pointer' onClick={closeModal} />
                     <h1 className='text-2xl font-bold mb-2'>{intl.formatMessage({ id: 'create.client.page.personal.information.section' })}</h1>
                     <div className='flex w-full justify-between'>
                         <div className='w-full'>
                             <h1>{intl.formatMessage({ id: 'create.client.page.fullName.field.label' })}</h1>
-                            <Input onChange={(e) => setFullName(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder={intl.formatMessage({ id: 'create.client.page.fullName.field.placeholder' })} />
+                            <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder={intl.formatMessage({ id: 'create.client.page.fullName.field.placeholder' })} />
                         </div>
                     </div>
                     <div className='w-full justify-between flex'>
                         <div className='mr-2'>
                             <h1>{intl.formatMessage({ id: 'create.client.page.document.field.label' })}</h1>
-                            <Input onChange={(e) => setDocumentId(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder={intl.formatMessage({ id: 'create.client.page.document.field.placeholder' })} />
+                            <Input value={documentId} onChange={(e) => setDocumentId(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder={intl.formatMessage({ id: 'create.client.page.document.field.placeholder' })} />
                         </div>
                         <div>
                             <h1>{intl.formatMessage({ id: 'create.client.page.phoneNumber.field.label' })}</h1>
-                            <Input onChange={(e) => setPhoneNumber(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder={intl.formatMessage({ id: 'create.client.page.phoneNumber.field.placeholder' })} />
+                            <Input value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder={intl.formatMessage({ id: 'create.client.page.phoneNumber.field.placeholder' })} />
                         </div>
                     </div>
                     <h1>{intl.formatMessage({ id: 'create.client.page.email.field.label' })}</h1>
-                    <Input onChange={(e) => setEmail(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder={intl.formatMessage({ id: 'create.client.page.email.field.placeholder' })} />
+                    <Input value={email} onChange={(e) => setEmail(e.target.value)} className='p-2 border-slate-500 bg-white mb-4' placeholder={intl.formatMessage({ id: 'create.client.page.email.field.placeholder' })} />
                 </div>
                 <h1 className='text-2xl font-bold my-2'>{intl.formatMessage({ id: 'create.client.page.localization.information.section' })}</h1>
                 <div>
@@ -141,8 +129,7 @@ const CreateClientForm = () => {
                                     placeholder={intl.formatMessage({ id: 'create.client.page.zipCode.field.placeholder' })}
                                     value={zipCode}
                                     onChange={(e) => setZipCode(e.target.value)} />
-                                <SearchIcon className='p-2 h-10 w-10 cursor-pointer'
-                                    onClick={handleSearchClick} />
+                                <SearchIcon className='p-2 h-10 w-10 cursor-pointer'/>
                             </div>
                         </div>
                         <div className='mx-1 w-[60%]'>
@@ -157,11 +144,11 @@ const CreateClientForm = () => {
                     <div className='w-full flex justify-around'>
                         <div className='mx-1'>
                             <h1>{intl.formatMessage({ id: 'create.client.page.streetNumber.field.label' })}</h1>
-                            <Input onChange={(e) => setAddressNumber(e.target.value)} placeholder={intl.formatMessage({ id: 'create.client.page.streetNumber.field.placeholder' })} className='p-2 border-slate-500 bg-white mb-4' />
+                            <Input value={addressNumber} onChange={(e) => setAddressNumber(e.target.value)} placeholder={intl.formatMessage({ id: 'create.client.page.streetNumber.field.placeholder' })} className='p-2 border-slate-500 bg-white mb-4' />
                         </div>
                         <div className='mx-1'>
                             <h1>{intl.formatMessage({ id: 'create.client.page.streetComplement.field.label' })}</h1>
-                            <Input onChange={(e) => setAddressComplement(e.target.value)} placeholder={intl.formatMessage({ id: 'create.client.page.streetComplement.field.placeholder' })} className='p-2 border-slate-500 bg-white mb-4' />
+                            <Input value={addressComplement} onChange={(e) => setAddressComplement(e.target.value)} placeholder={intl.formatMessage({ id: 'create.client.page.streetComplement.field.placeholder' })} className='p-2 border-slate-500 bg-white mb-4' />
                         </div>
                     </div>
                     <div className='w-full flex justify-around'>
@@ -190,10 +177,10 @@ const CreateClientForm = () => {
                         </div>
                     </div>
                 </div>
-                <Button variant='default'>{intl.formatMessage({ id: 'create.client.page.create.client.button' })}</Button>
+                <Button className='text-secondary' variant='default'>{intl.formatMessage({ id: 'create.client.page.create.client.button' })}</Button>
             </form>
-        </div>
-    );
-};
+    </div>
+  )
+}
 
-export default CreateClientForm;
+export default ClientForm
