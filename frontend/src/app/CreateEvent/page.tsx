@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { LucideTrash2, PlusCircleIcon, RemoveFormattingIcon, Trash2, Trash2Icon } from 'lucide-react'
 import { materialProps } from '../Materials/page'
+import DeleteModal from '../components/DeleteModal'
 
 type ClientProps = {
   id: string
@@ -56,6 +57,7 @@ const CreateEvent = () => {
   const [materialQnt, setMaterialQnt] = useState(0)
   const [materials, setMaterials] = useState<MaterialType[]>([])
   const [insertedMaterial, setInsertedMaterial] = useState<insertMaterialProps[]>([])
+  const [deleteModal, setDeleteModal] = useState(false)
 
   const getClients = async () => {
     try {
@@ -115,6 +117,13 @@ const CreateEvent = () => {
 
   }
 
+  const removeMaterial = (index: number) => { 
+    console.log('1')
+    const newInsertedMaterial = [...insertedMaterial]
+    newInsertedMaterial.splice(index,1)
+    setInsertedMaterial(newInsertedMaterial)
+  }
+
   const totalAmount = 10
   return (
     <div>
@@ -125,7 +134,7 @@ const CreateEvent = () => {
           <h1 className="font-bold text-2xl ">Informações do cliente</h1>
           <div className='flex justify-between my-4 w-full'>
             <DropdownMenu>
-              <DropdownMenuTrigger className='border-[0.2px] w-[200px] h-[37px] mt-5 bg-white rounded-xl mr-4 font-bold'>{clientName? clientName : 'Selecione um cliente'}</DropdownMenuTrigger>
+              <DropdownMenuTrigger className='border-[0.2px] w-[200px] h-[50px] mt-5 bg-white rounded-xl mr-4 font-bold'>{clientName? clientName : 'Selecione um cliente'}</DropdownMenuTrigger>
               <DropdownMenuContent className='bg-white p-2 border-2 rounded-xl mr-72 '>
                 {clients.map((client, index) => (
                   <>
@@ -189,19 +198,20 @@ const CreateEvent = () => {
             </div>
           </div>
         </form>
-        <div>
+        <div className='py-8'>
           <h1 className='p-2 font-bold text-3xl mx-10 py-7 text-center text-tertiary'>Informações do seu evento</h1>
             <ul className='mx-32'>
             {insertedMaterial.map((material, index) => (
               <li className='bg-tertiary my-2 p-4 rounded-xl justify-between flex' key={index}>
               {`Nome: ${material.name} Quantidade: ${material.quantity} Preço: ${material.price}`}
-              <LucideTrash2 className='h-6 w-6 inline-block ml-2 text-secondary cursor-pointer' />
+                <LucideTrash2  onClick={() => removeMaterial(index)} className='h-6 w-6 inline-block ml-2 text-secondary cursor-pointer' />
               </li>
             ))}
             <li className='bg-tertiary  py-2 p-4 rounded-xl justify-between flex'>{`Valor final ${totalAmount}`}</li>
           </ul>
         </div>
       </div>
+      
     </div>
   )
 }
