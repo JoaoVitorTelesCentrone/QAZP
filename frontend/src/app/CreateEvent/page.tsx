@@ -37,22 +37,25 @@ const CreateEvent = () => {
   }, [])
 
 
-  const getCLienInputValues = (email: string, documentId:string, name:string ) => { 
+  const getCLienInputValues = (email: string, documentId:string, name:string, index:number ) => { 
     setCLientEmail(email)
     setCLientDocument(documentId)
     setCLientName(name)
+    clients.splice(index)
   }
   return (
     <div>
       <UserSideMenu />
       <div className=''>
         <h1 className='text-4xl font-bold mx-32 my-8'>Criar evento</h1>
-        <form action="" className='flex justify-around'>
+        <form action="" className='flex flex-col justify-around w-[800px] bg-slate-400 p-16 mx-auto'>
+          <div className='flex'>
+
           <DropdownMenu>
             <DropdownMenuTrigger>Selecione um cliente</DropdownMenuTrigger>
             <DropdownMenuContent>
               {clients.map((client, index) => (
-                <DropdownMenuItem onClick={() => getCLienInputValues(client.email, client.documentId, client.name)} key={index}>{client.name}</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => getCLienInputValues(client.email, client.documentId, client.name, index)} key={index}>{client.name}</DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -71,7 +74,27 @@ const CreateEvent = () => {
             <h1 className='p-2'>Documento</h1>
             <h1  className='p-2 border-2 rounded-xl'>{clientDocument}</h1>
           </div>
+          </div>
+          <h1 className="font-bold">Informações do cliente</h1>
+          <div className='my-4 flex-col'>
+            <Input /> 
+            <Input /> 
+            <Input /> 
+            <Input /> 
+            <Input /> 
+          </div>
+          <h1 className="font-bold">Materiais</h1>
+          <div className='flex my-4'>
+            <div className="flex justify-around">
+              <Input className='mx-8' /> 
+              <Input className='mx-8' /> 
+              <Input /> 
+            </div>
+          </div>
         </form>
+        <div>
+          <h1 className='p-16'>Informações do seu evento</h1>
+        </div>
       </div>
     </div>
   )
