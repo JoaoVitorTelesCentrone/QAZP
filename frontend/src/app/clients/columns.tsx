@@ -4,11 +4,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import { intl } from '../../i18n'
+import EditClient from './EditClient';
+import DeleteClient from './DeleteClient';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export type Client = {
+  id: string
   fullName: string
   documentId: string
   email: string
@@ -101,6 +104,14 @@ export const clientColumns: ColumnDef<Client>[] = [
       )
     },
   },
+    {
+    id:'edit',
+    cell: ({row}) => <EditClient userId={row.original.id} />
+  },
+  {
+    id:'delete',
+    cell: ({row}) => <DeleteClient userId={row.original.id} />
+  }
 
 
 

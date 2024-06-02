@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
 import { useAtom } from 'jotai'
@@ -10,26 +10,55 @@ import { ClientTable } from '../clients/ClientTable'
 import { clientColumns } from '../clients/columns'
 import { QuoteTable } from '../quote/QuoteTable'
 import { quoteColumns } from '../quote/column'
+import axios from 'axios'
 
 
 const Dashboard = () => {
     const [isLogged, setIsLogged] = useAtom(authAtom)
-
+    const[numberOfCLients, setNumberOfClients] = useState('')
+    const[numberOfUsers, setNumberOfUsers] = useState('')
     if(!isLogged){
         redirect('/login')
     }
+
+    const getClients = async () => { 
+      const response = await axios.get('http://localhost:5196/api/Client')
+      setNumberOfClients(response.data.length)
+      console.log(`Numero de clientes ${numberOfCLients}`)
+    }
+
+    const getUsers = async () => { 
+      const response = await axios.get('http://localhost:5196/api/User')
+      setNumberOfUsers(response.data.length)
+      console.log(`Numero de usuarios ${numberOfUsers}`)
+    }
+
+    useEffect(() => { 
+      getClients()
+      getUsers()
+    }, [])
+
   return (
     <div>
         <UserHeader />
+        <h1 className="text-4xl font-bold mx-36 my-10 uppercase">Dados</h1>
+        <div className="flex mx-4 justify-around">
+          <div className='rounded-xl border-2 border-primary p-8'>
+            <h1 className='text-3xl font-bold'>Número de Clientes</h1>
+            <h1 className='text-6xl font-extrabold uppercase'>{numberOfCLients}</h1>
+          </div>
+
+          <div className='rounded-xl border-2 border-primary p-8'>
+            <h1 className='text-3xl font-bold'>Número de Usuários</h1>
+            <h1 className='text-6xl font-extrabold uppercase'>{numberOfUsers}</h1>
+          </div>
+
+          <div className='rounded-xl border-2 border-primary p-8'>
+            <h1 className='text-3xl font-bold'>Número de Clientes</h1>
+            <h1 className='text-6xl font-extrabold uppercase'>{numberOfCLients}</h1>
+          </div>
+        </div>
         <NextEvents />
-        <div className='m-32'>
-          <h1 className='text-4xl uppercase font-bold text-secondary-foreground my-2'>Clientes</h1>
-          {/* <ClientTable data={mockedClientData} columns={clientColumns} /> */}
-        </div>
-        <div className='m-32'>
-          <h1 className='text-4xl uppercase font-bold text-secondary-foreground my-2'>Orçamentos</h1>
-          {/* <QuoteTable data={uotes} columns={quoteColumns} /> */}
-        </div>
     </div>
   )
 }

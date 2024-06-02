@@ -27,7 +27,7 @@ function MeuComponente() {
     <div>
       <h1>Citação:</h1>
       <p className='p-8 text-xl text-black'>{quote.firstName}</p>
-      <button className='bg-secondary-foreground rounded-xl text-white' onClick={fetchQuote}>Clicar</button>
+      <button className='bg-primary rounded-xl text-white' onClick={fetchQuote}>Clicar</button>
     </div>
   );
 }

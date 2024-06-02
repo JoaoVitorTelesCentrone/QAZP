@@ -39,7 +39,7 @@ const Clients = () => {
       <UserHeader />
       <div className='p-20 justify-between flex'>
         <h1 className='uppercase text-4xl font-bold text-secondary-foreground'>{intl.formatMessage({ id: 'client.page.title' })}</h1>
-        <Link className='flex bg-secondary-foreground p-4 rounded-xl text-white' href='/CreateClient'>{intl.formatMessage({ id: 'client.page.create.client.button.label' })}<Plus className='h-4 w-4 mt-1 ml-2' /> </Link>
+        <Link className='flex bg-primary p-4 rounded-xl text-white' href='/CreateClient'>{intl.formatMessage({ id: 'client.page.create.client.button.label' })}<Plus className='h-4 w-4 mt-1 ml-2' /> </Link>
       </div>
       <div className='mx-20 my-10'>
         <ClientTable columns={clientColumns} data={clients} />
