@@ -4,7 +4,11 @@ using ZventsApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // Preserve references to handle circular references
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+});
 builder.Services.AddDbContext<ZventsDbContext>(options =>
     options.UseSqlite("Data Source=Zvents.db"));
 

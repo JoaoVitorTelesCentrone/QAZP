@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ZventsApi.Models;
 
 namespace ZventsApi.Controllers
@@ -20,18 +17,52 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Event> PostEvent(Event @event)
+        public async Task<ActionResult<Event>> PostEvent(CreateEventDto createEventDto)
         {
-            bool eventExists = _context.Events.Any(e => (e.Name == @event.Name && e.Type == @event.Type && e.ClientId == @event.ClientId && e.IsActive == true));
+            bool eventExists = _context.Events.Any(e =>
+                (
+                    e.Name == createEventDto.Name
+                    && e.Type == createEventDto.Type
+                    && e.ClientId == createEventDto.ClientId
+                    && e.IsActive == true
+                )
+            );
 
             if (!eventExists)
             {
-                _context.Events.Add(@event);
-                _context.SaveChanges();
+                var eventEntity = new Event
+                {
+                    Name = createEventDto.Name,
+                    Type = createEventDto.Type,
+                    ClientId = createEventDto.ClientId,
+                    StartAt = createEventDto.StartAt,
+                    EndAt = createEventDto.EndAt,
+                    ZipCode = createEventDto.ZipCode,
+                    AddressName = createEventDto.AddressName,
+                    AddressNumber = createEventDto.AddressNumber,
+                    AddressComplement = createEventDto.AddressComplement,
+                    District = createEventDto.District,
+                    State = createEventDto.State,
+                    City = createEventDto.City,
+                    EstimatedAudience = createEventDto.EstimatedAudience,
+                    Materials = []
+                };
 
-                return CreatedAtAction(nameof(PostEvent), new { id = @event.Id }, @event);
+                foreach (var materialId in createEventDto.MaterialIds)
+                {
+                    var material = await _context.Materials.FindAsync(materialId);
+                    if (material == null)
+                    {
+                        return NotFound($"Material with ID {materialId} not found.");
+                    }
+                    eventEntity.Materials.Add(material);
+                }
+
+                _context.Events.Add(eventEntity);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(PostEvent), new { id = eventEntity.Id }, eventEntity);
             }
-
             return Conflict(new { message = "There is already a Event in progress" });
         }
 
@@ -52,7 +83,6 @@ namespace ZventsApi.Controllers
         public async Task<ActionResult<IEnumerable<Event>>> GetEventByClientIdy(Guid clientId)
         {
             return await _context.Events.Where(e => e.ClientId == clientId).ToArrayAsync();
-
         }
 
         [HttpPut("{id}")]
@@ -87,7 +117,6 @@ namespace ZventsApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteEvent(Guid id)
         {
-
             var eventToDelete = _context.Events.Find(id);
 
             if (eventToDelete == null)
@@ -100,6 +129,5 @@ namespace ZventsApi.Controllers
 
             return NoContent();
         }
-
     }
 }

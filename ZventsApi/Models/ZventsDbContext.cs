@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
-using System.Collections.Generic;
 
 namespace ZventsApi.Models
 {
@@ -11,10 +11,24 @@ namespace ZventsApi.Models
         public DbSet<Client> Clients { get; set; }
         public DbSet<Material> Materials { get; set; }
         public DbSet<Event> Events { get; set; }
-        public DbSet<EventMaterial> EventMaterials { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=Zvents.db");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder
+                .Entity<Event>()
+                .HasMany(e => e.Materials)
+                .WithMany(m => m.Events)
+                .UsingEntity<Dictionary<string, object>>(
+                    "MaterialEvent",
+                    j => j.HasOne<Material>().WithMany().HasForeignKey("MaterialId"),
+                    j => j.HasOne<Event>().WithMany().HasForeignKey("EventId")
+                );
         }
     }
 }

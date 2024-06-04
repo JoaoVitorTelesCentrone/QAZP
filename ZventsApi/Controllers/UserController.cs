@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
 using ZventsApi.Models;
 
 namespace ZventsApi.Controllers
@@ -34,8 +30,6 @@ namespace ZventsApi.Controllers
             }
 
             return Conflict(new { message = "User already exists" });
-
-            
         }
 
         [HttpGet("name/{name}")]
@@ -80,14 +74,16 @@ namespace ZventsApi.Controllers
         [HttpGet("{username}&{password}")]
         public ActionResult<User> GetUserByCredentials(string username, string password)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
+            var user = _context.Users.FirstOrDefault(u =>
+                u.UserName == username && u.Password == password
+            );
 
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });
             }
 
-            return Ok(new { message = "Login successful"});
+            return Ok(new { message = "Login successful" });
         }
 
         [HttpPut("{id}")]
@@ -102,11 +98,15 @@ namespace ZventsApi.Controllers
 
             if (userToUpdate.Role == UserRole.Admin && updatedUser.Role != UserRole.Admin)
             {
-                bool isAdminExists = _context.Users.Any(u => u.Role == UserRole.Admin && u.Id != id);
+                bool isAdminExists = _context.Users.Any(u =>
+                    u.Role == UserRole.Admin && u.Id != id
+                );
 
                 if (!isAdminExists)
                 {
-                    return Conflict(new { message = "Cannot change the role of the last admin user" });
+                    return Conflict(
+                        new { message = "Cannot change the role of the last admin user" }
+                    );
                 }
             }
 
@@ -123,7 +123,6 @@ namespace ZventsApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(Guid id)
         {
-
             var userToDelete = _context.Users.Find(id);
 
             if (userToDelete == null)
@@ -133,7 +132,9 @@ namespace ZventsApi.Controllers
 
             if (userToDelete.Role == UserRole.Admin)
             {
-                bool isAdminExists = _context.Users.Any(u => u.Role == UserRole.Admin && u.Id != id);
+                bool isAdminExists = _context.Users.Any(u =>
+                    u.Role == UserRole.Admin && u.Id != id
+                );
 
                 if (!isAdminExists)
                 {

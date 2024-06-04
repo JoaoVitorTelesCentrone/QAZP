@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ZventsApi.Models;
 
 namespace ZventsApi.Controllers
@@ -28,7 +24,9 @@ namespace ZventsApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Client>> PostClientAsync(Client client)
         {
-            bool clientExists = await _context.Clients.AnyAsync(q => q.DocumentId == client.DocumentId);
+            bool clientExists = await _context.Clients.AnyAsync(q =>
+                q.DocumentId == client.DocumentId
+            );
 
             if (!clientExists)
             {
@@ -57,7 +55,9 @@ namespace ZventsApi.Controllers
         [HttpGet("documentId/{documentId}")]
         public async Task<ActionResult<Client>> GetClientByDocumentId(string documentId)
         {
-            var client = await _context.Clients.FirstOrDefaultAsync(u => u.DocumentId == documentId);
+            var client = await _context.Clients.FirstOrDefaultAsync(u =>
+                u.DocumentId == documentId
+            );
 
             if (client == null)
             {
@@ -77,7 +77,9 @@ namespace ZventsApi.Controllers
                 return NotFound();
             }
 
-            var existingClient = await _context.Clients.FirstOrDefaultAsync(c => c.Id != id && c.DocumentId == updatedClient.DocumentId);
+            var existingClient = await _context.Clients.FirstOrDefaultAsync(c =>
+                c.Id != id && c.DocumentId == updatedClient.DocumentId
+            );
 
             if (existingClient != null)
             {
