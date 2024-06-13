@@ -29,7 +29,7 @@ const EditUser: React.FC<editUserProps> = ({userId}) => {
 
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5196/api/User/userName/${userId}`);
+        const response = await axios.get(`http://localhost:5196/api/User/${userId}`);
         setUserData(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);

@@ -13,7 +13,7 @@ const DeleteUser: React.FC<deleteUserProps> = ({userId}) => {
     const [deleteModal, setDeleteModal] = useState(false)
     const deleteData = async (): Promise<void> => {
       try {
-        await axios.delete(`http://localhost:5196/api/User/id/${userId}`);
+        await axios.delete(`http://localhost:5196/api/User/${userId}`);
         console.log('Dados deletados com sucesso.');
         setDeleteModal(false)
       } catch (error) {
