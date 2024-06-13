@@ -42,20 +42,20 @@ const Dashboard = () => {
     <div>
         <UserHeader />
         <h1 className="text-4xl font-bold mx-36 my-10 uppercase">Dados</h1>
-        <div className="flex mx-4 justify-around">
-          <div className='rounded-xl border-2 border-primary p-8'>
-            <h1 className='text-3xl font-bold'>Número de Clientes</h1>
-            <h1 className='text-6xl font-extrabold uppercase'>{numberOfCLients}</h1>
+        <div className="flex p-4 mx-auto my-10 rounded-xl bg-primary w-[1000px] border-2 border-black">
+          <div className='rounded-xl border-2 border-seconadry p-8'>
+            <h1 className='text-3xl font-bold text-secondary'>Número de Clientes</h1>
+            <h1 className='text-6xl text-secondary font-extrabold uppercase'>{numberOfCLients}</h1>
           </div>
 
-          <div className='rounded-xl border-2 border-primary p-8'>
-            <h1 className='text-3xl font-bold'>Número de Usuários</h1>
-            <h1 className='text-6xl font-extrabold uppercase'>{numberOfUsers}</h1>
+          <div className='rounded-xl mx-4 border-2 border-secondary p-8'>
+            <h1 className='text-3xl font-bold text-secondary'>Número de Usuários</h1>
+            <h1 className='text-6xl text-secondary font-extrabold uppercase'>{numberOfUsers}</h1>
           </div>
 
-          <div className='rounded-xl border-2 border-primary p-8'>
-            <h1 className='text-3xl font-bold'>Número de Clientes</h1>
-            <h1 className='text-6xl font-extrabold uppercase'>{numberOfCLients}</h1>
+          <div className='rounded-xl border-2 border-secondary p-8'>
+            <h1 className='text-3xl text-secondary font-bold'>Número de Clientes</h1>
+            <h1 className='text-6xl text-secondary font-extrabold uppercase'>{numberOfCLients}</h1>
           </div>
         </div>
         <NextEvents />

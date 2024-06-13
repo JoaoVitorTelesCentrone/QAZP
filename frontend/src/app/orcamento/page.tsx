@@ -86,10 +86,8 @@ const Page = () => {
             </DropdownMenu>
           </div>
         </div>
-
         <div className='my-10 text-center justify-center flex'>
-          <button onClick={handleSubmit} className='bg-primary border-[0.5px] border-white text-white p-4 rounded-xl font-bold uppercase mx-10 hover:bg-blue-950 hover:shadow-slate-500 shadow-lg hover:transition duration-400 hover:scale-125'>Enviar solicitação</button>
-          <button className='bg-white text-secondary-foreground border-2 border-secondary-foreground p-4 rounded-xl font-bold uppercase'>duvidas ?</button>
+          <button onClick={handleSubmit} className='bg-white border-[0.5px] border-white text-primary p-4 rounded-xl font-bold uppercase mx-10 hover:bg-blue-950 hover:shadow-slate-500 shadow-lg hover:transition duration-400 hover:scale-125'>Enviar solicitação</button>
         </div>
       </div>
 

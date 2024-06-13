@@ -197,7 +197,6 @@ const CreateEvent = () => {
               <Button onClick={(e) => insertMaterial(e, selectedMaterial, materialQnt, selectedMaterialINdex, selectedMaterialPrice)}  className='w-[10%] mx-2 mt-4 h-[50px] rounded-full bg-white'><PlusCircleIcon className='h-8 w-8' /></Button> 
             </div>
           </div>
-        </form>
         <div className='py-8'>
           <h1 className='p-2 font-bold text-3xl mx-10 py-7 text-center text-tertiary'>Informações do seu evento</h1>
             <ul className='mx-32'>
@@ -210,6 +209,7 @@ const CreateEvent = () => {
             <li className='bg-tertiary  py-2 p-4 rounded-xl justify-between flex'>{`Valor final ${totalAmount}`}</li>
           </ul>
         </div>
+            </form>
       </div>
       
     </div>
