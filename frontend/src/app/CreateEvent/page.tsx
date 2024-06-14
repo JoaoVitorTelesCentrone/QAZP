@@ -2,17 +2,9 @@
 import React, { useState, useEffect } from 'react'
 import UserSideMenu from '../components/UserHeader'
 import axios from 'axios'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-} from '@radix-ui/react-dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { LucideTrash2, PlusCircleIcon, Trash2Icon } from 'lucide-react'
-import { materialProps } from '../Materials/page'
-import DeleteModal from '../components/DeleteModal'
 import { Table } from 'antd'
 import {
   ClientProps,
@@ -21,8 +13,12 @@ import {
   insertMaterialProps,
   insertedColumns,
 } from './utils'
-import { ColumnDef } from '@tanstack/react-table'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 const CreateEvent = () => {
   const [clients, setClients] = useState<ClientProps[]>([])
@@ -158,6 +154,16 @@ const CreateEvent = () => {
       ),
     },
   ]
+
+  const postEvent = async () => {
+    const body = {}
+    try {
+      const res = await axios.post('', body)
+      console.log(res.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <div>

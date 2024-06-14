@@ -40,8 +40,12 @@ const Dashboard = () => {
   return (
     <div>
       <UserHeader />
-      <h1 className="text-4xl font-bold mx-36 my-10 uppercase">Dados</h1>
-      <div className="flex p-4 mx-auto my-10 rounded-xl bg-primary w-[1000px] border-2 border-black">
+      <h1 className="text-4xl font-bold ml-72  uppercase">Dados</h1>
+      <div
+        className={
+          'flex p-4 mx-auto ml-72 mt-2 rounded-xl bg-primary w-[1000px] border-2 border-black'
+        }
+      >
         <div className="rounded-xl border-2 border-seconadry p-8">
           <h1 className="text-3xl font-bold text-secondary">
             Número de Clientes
@@ -69,7 +73,9 @@ const Dashboard = () => {
           </h1>
         </div>
       </div>
-      <NextEvents />
+      <div className="ml-40">
+        <NextEvents />
+      </div>
     </div>
   )
 }
