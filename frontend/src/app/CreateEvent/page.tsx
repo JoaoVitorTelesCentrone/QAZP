@@ -121,7 +121,6 @@ const CreateEvent = () => {
   }
 
   const removeMaterial = (index: number) => {
-    console.log('1')
     const newInsertedMaterial = [...insertedMaterial]
     newInsertedMaterial.splice(index, 1)
     setInsertedMaterial(newInsertedMaterial)
