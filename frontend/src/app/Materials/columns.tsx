@@ -1,63 +1,80 @@
-"use client"
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUp, ArrowDown, ArrowUpDown, ArrowBigLeft, ArrowBigRight, EditIcon, Edit2Icon, Edit3Icon } from 'lucide-react'
-import { useState } from 'react';
+'use client'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { ColumnDef } from '@tanstack/react-table'
+import {
+  ArrowUp,
+  ArrowDown,
+  ArrowUpDown,
+  ArrowBigLeft,
+  ArrowBigRight,
+  EditIcon,
+  Edit2Icon,
+  Edit3Icon,
+} from 'lucide-react'
+import { useState } from 'react'
 
-import { UUID } from 'crypto';
-import EditUser from '../Users/EditUser';
-import DeleteUser from '../Users/DeleteUser';
-import { materialProps } from './page';
+import { UUID } from 'crypto'
+import EditUser from '../Users/EditUser'
+import DeleteUser from '../Users/DeleteUser'
+import { materialProps } from './page'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export type Materiais =  {
-    id: string
-    name: string
-    value: string
-
+export type Materiais = {
+  id: string
+  name: string
+  value: string
 }
-
 
 export const materialColumns = (): ColumnDef<materialProps>[] => [
   {
-    accessorKey: "name",
+    accessorKey: 'name',
     header: ({ column }) => {
-        return (
-            
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Nome do material
-
-            {column.getIsSorted() === 'asc' ? <ArrowDown className="ml-2 h-4 w-4" /> : column.getIsSorted() === 'desc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowUpDown className="ml-2 h-4 w-4" />}          </Button>
-        )
-      },
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Nome do material
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}{' '}
+        </Button>
+      )
+    },
   },
   {
-    accessorKey: "value",
+    accessorKey: 'value',
     header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Preço
-            {column.getIsSorted() === 'asc' ? <ArrowDown className="ml-2 h-4 w-4" /> : column.getIsSorted() === 'desc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowUpDown className="ml-2 h-4 w-4" />}          
-            
-          </Button>
-        )
-      },
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Preço
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      )
+    },
   },
   {
-    id:'edit',
-    cell: ({row}) => <EditUser userId={row.original.name} />
+    id: 'edit',
+    cell: ({ row }) => <EditUser userId={row.original.name} />,
   },
   {
-    id:'delete',
-    cell: ({row}) => <DeleteUser userId={row.original.id} />
-  }
+    id: 'delete',
+    cell: ({ row }) => <DeleteUser userId={row.original.id} />,
+  },
 ]

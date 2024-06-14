@@ -4,24 +4,25 @@ import { Toaster } from 'sonner'
 import DeleteModal from '../components/DeleteModal'
 
 type deleteClientProps = {
-    userId: string
+  userId: string
 }
 
-const DeleteClient: React.FC<deleteClientProps> = ({userId}) => {
-    const [openClientModal, setClientModal] = useState(false)
-    
-    const handleRequest = () => {
-        console.log('voce é brabo')
-    }
-    return (
+const DeleteClient: React.FC<deleteClientProps> = ({ userId }) => {
+  const [openClientModal, setClientModal] = useState(false)
+
+  const handleRequest = () => {
+    console.log('voce é brabo')
+  }
+  return (
     <div>
       <div>
-      <Toaster richColors />
-      <TrashIcon className='cursor-pointer h-4 w-4' onClick={() => setClientModal(true)} />
-      {openClientModal && (
-          <DeleteModal deleteRequest={() => handleRequest}  />
-      )}
-    </div>
+        <Toaster richColors />
+        <TrashIcon
+          className="cursor-pointer h-4 w-4"
+          onClick={() => setClientModal(true)}
+        />
+        {openClientModal && <DeleteModal deleteRequest={() => handleRequest} />}
+      </div>
     </div>
   )
 }

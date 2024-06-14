@@ -7,7 +7,7 @@ import axios from 'axios'
 import { MaterialTable } from './MaterialTable'
 import { materialColumns } from './columns'
 
-export type materialProps = { 
+export type materialProps = {
   id: string
   category: string
   value: string
@@ -17,28 +17,35 @@ export type materialProps = {
 const Materials = () => {
   const [materials, setMaterials] = useState<materialProps[]>([])
   const [materialsName, setMaterialsName] = useState('')
-  const getMaterial = async () => { 
+  const getMaterial = async () => {
     const response = await axios.get('http://localhost:5196/api/Material')
     setMaterialsName(response.data)
     // console.log(response.data)
-    const materialNames = response.data.map((material:any) => ({ 
-      name: material.name, value: material.value, category: material.category
+    const materialNames = response.data.map((material: any) => ({
+      name: material.name,
+      value: material.value,
+      category: material.category,
     }))
     setMaterials(materialNames)
     console.log(materials)
   }
 
-  useEffect(() => { 
+  useEffect(() => {
     getMaterial()
   }, [])
 
-  const columns = useMemo(() => materialColumns(), []);
+  const columns = useMemo(() => materialColumns(), [])
   return (
     <div>
       <UserSideMenu />
       <div className="flex justify-between m-10">
-        <h1 className='text-4xl font-bold'>Materiais</h1>
-        <Link href='/CreateMaterial' className='text-white bg-primary p-3 rounded-xl'>Criar Material</Link>
+        <h1 className="text-4xl font-bold">Materiais</h1>
+        <Link
+          href="/CreateMaterial"
+          className="text-white bg-primary p-3 rounded-xl"
+        >
+          Criar Material
+        </Link>
       </div>
       <MaterialTable columns={columns} data={materials} />
       {/* {materials.map((material, index) => (

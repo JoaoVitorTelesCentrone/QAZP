@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import {
   ColumnDef,
@@ -10,7 +10,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table'
 
 import {
   Table,
@@ -19,11 +19,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useState } from "react"
+} from '@/components/ui/table'
+import { useState } from 'react'
 import { ArrowBigLeft, ArrowBigRight } from 'lucide-react'
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { intl } from '../../i18n'
 
 interface DataTableProps<TData, TValue> {
@@ -35,56 +35,66 @@ export function ClientTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-
-    const [sorting, setSorting] = useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const table = useReactTable({
     data,
     columns,
     state: {
-        sorting,
-        columnFilters,
+      sorting,
+      columnFilters,
     },
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
+    getPaginationRowModel: getPaginationRowModel(),
   })
 
   return (
     <div className="rounded-md  border-[1px] pt-10">
-        <div className="flex items-center justify-around mx-4 py-4">
+      <div className="flex items-center justify-around mx-4 py-4">
         <Input
-          placeholder={intl.formatMessage({ id: 'client.page.filter.by.name.field.placeholder' })}
-          value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("fullName")?.setFilterValue(event.target.value)
+          placeholder={intl.formatMessage({
+            id: 'client.page.filter.by.name.field.placeholder',
+          })}
+          value={
+            (table.getColumn('fullName')?.getFilterValue() as string) ?? ''
+          }
+          onChange={event =>
+            table.getColumn('fullName')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <Input
-          placeholder={intl.formatMessage({ id: 'client.page.filter.by.document.field.placeholder' })}
-          value={(table.getColumn("documentId")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("documentId")?.setFilterValue(event.target.value)
+          placeholder={intl.formatMessage({
+            id: 'client.page.filter.by.document.field.placeholder',
+          })}
+          value={
+            (table.getColumn('documentId')?.getFilterValue() as string) ?? ''
           }
-          className="max-w-sm my-10" 
+          onChange={event =>
+            table.getColumn('documentId')?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm my-10"
         />
       </div>
       <Table className="border-2 border-secondary">
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
+          {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
+              {headerGroup.headers.map(header => {
                 return (
-                  <TableHead key={header.id} className=" py-2 text-secondary-foreground text-center">
+                  <TableHead
+                    key={header.id}
+                    className=" py-2 text-secondary-foreground text-center"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 )
@@ -94,12 +104,12 @@ export function ClientTable<TData, TValue>({
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+            table.getRowModel().rows.map(row => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                data-state={row.getIsSelected() && 'selected'}
               >
-                {row.getVisibleCells().map((cell) => (
+                {row.getVisibleCells().map(cell => (
                   <TableCell className="text-center" key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
@@ -108,8 +118,11 @@ export function ClientTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center text-2xl font-bold">
-              {intl.formatMessage({ id: 'datagrid.empty.message' })}
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center text-2xl font-bold"
+              >
+                {intl.formatMessage({ id: 'datagrid.empty.message' })}
               </TableCell>
             </TableRow>
           )}
@@ -134,6 +147,5 @@ export function ClientTable<TData, TValue>({
         </Button>
       </div>
     </div>
-    
   )
 }

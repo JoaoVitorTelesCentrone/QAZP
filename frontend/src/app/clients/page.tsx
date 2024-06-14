@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useEffect, useState } from 'react'
 import UserHeader from '../components/UserHeader'
@@ -19,12 +19,11 @@ const Clients = () => {
   useEffect(() => {
     async function fetchUserData() {
       try {
-        const response = await axios.get('http://localhost:5196/api/Client');
+        const response = await axios.get('http://localhost:5196/api/Client')
 
         setClients(response.data)
-
       } catch (error) {
-        console.error('Erro ao fazer a requisição:', error);
+        console.error('Erro ao fazer a requisição:', error)
         throw error
       }
     }
@@ -37,11 +36,19 @@ const Clients = () => {
   return (
     <div>
       <UserHeader />
-      <div className='p-20 justify-between flex'>
-        <h1 className='uppercase text-4xl font-bold text-secondary-foreground'>{intl.formatMessage({ id: 'client.page.title' })}</h1>
-        <Link className='flex bg-primary p-4 rounded-xl text-white' href='/CreateClient'>{intl.formatMessage({ id: 'client.page.create.client.button.label' })}<Plus className='h-4 w-4 mt-1 ml-2' /> </Link>
+      <div className="p-20 justify-between flex">
+        <h1 className="uppercase text-4xl font-bold text-secondary-foreground">
+          {intl.formatMessage({ id: 'client.page.title' })}
+        </h1>
+        <Link
+          className="flex bg-primary p-4 rounded-xl text-white"
+          href="/CreateClient"
+        >
+          {intl.formatMessage({ id: 'client.page.create.client.button.label' })}
+          <Plus className="h-4 w-4 mt-1 ml-2" />{' '}
+        </Link>
       </div>
-      <div className='mx-20 my-10'>
+      <div className="mx-20 my-10">
         <ClientTable columns={clientColumns} data={clients} />
       </div>
     </div>

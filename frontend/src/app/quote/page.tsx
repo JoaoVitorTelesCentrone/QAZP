@@ -8,7 +8,6 @@ import { quoteColumns } from './column'
 import { QuoteTable } from './QuoteTable'
 import axios from 'axios'
 
-
 const Page = () => {
   const [auth, isAuth] = useAtom(authAtom)
   const [quote, setQuote] = useState([])
@@ -20,12 +19,11 @@ const Page = () => {
   useEffect(() => {
     async function fetchUserData() {
       try {
-        const response = await axios.get('http://localhost:5196/api/Quote');
+        const response = await axios.get('http://localhost:5196/api/Quote')
 
         setQuote(response.data)
-
       } catch (error) {
-        console.error('Erro ao fazer a requisição:', error);
+        console.error('Erro ao fazer a requisição:', error)
         throw error
       }
     }
@@ -34,9 +32,8 @@ const Page = () => {
   return (
     <div>
       <UserSideMenu />
-      <div className='m-20'>
-
-        <h1 className='my-4 text-4xl font-bold uppercase'>Orçamentos</h1>
+      <div className="m-20">
+        <h1 className="my-4 text-4xl font-bold uppercase">Orçamentos</h1>
 
         <QuoteTable columns={quoteColumns} data={quote} />
       </div>

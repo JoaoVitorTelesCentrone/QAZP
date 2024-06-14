@@ -1,26 +1,26 @@
 import React from 'react'
-import 'react-toastify/dist/ReactToastify.css';
-import { Toaster, toast } from 'sonner';
+import 'react-toastify/dist/ReactToastify.css'
+import { Toaster, toast } from 'sonner'
 
 interface ToastProps {
-  type: 'success' | 'error';
-  message: string;
+  type: 'success' | 'error'
+  message: string
 }
 
 const Toast: React.FC<ToastProps> = ({ type, message }) => {
   React.useEffect(() => {
     if (type === 'success') {
-      toast.success(message);
+      toast.success(message)
     } else if (type === 'error') {
-      toast.error(message);
+      toast.error(message)
     }
-  }, [type, message]);
+  }, [type, message])
 
   return (
     <div>
-        <Toaster richColors />
+      <Toaster richColors />
     </div>
-  );
-};
+  )
+}
 
-export default Toast;
+export default Toast
