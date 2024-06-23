@@ -45,17 +45,23 @@ namespace ZventsApi.Controllers
                     State = createEventDto.State,
                     City = createEventDto.City,
                     EstimatedAudience = createEventDto.EstimatedAudience,
-                    Materials = []
+                    EventMaterials = [],
+                    TotalAmount = createEventDto.TotalAmount
                 };
 
-                foreach (var materialId in createEventDto.MaterialIds)
+                foreach (var materialDto in createEventDto.Materials)
                 {
-                    var material = await _context.Materials.FindAsync(materialId);
+                    var material = await _context.Materials.FindAsync(materialDto.MaterialId);
                     if (material == null)
                     {
-                        return NotFound($"Material with ID {materialId} not found.");
+                        return NotFound($"Material with ID {materialDto.MaterialId} not found.");
                     }
-                    eventEntity.Materials.Add(material);
+                    eventEntity.EventMaterials.Add(new EventMaterial
+                    {
+                        Event = eventEntity,
+                        Material = material,
+                        Quantity = materialDto.Quantity
+                    });
                 }
 
                 _context.Events.Add(eventEntity);
@@ -86,32 +92,74 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Edit(Guid id, Event updatedEvent)
+        public async Task<IActionResult> PutEvent(Guid id, UpdateEventDto updateEventDto)
         {
-            var eventToUpdate = _context.Events.Find(id);
+            var eventEntity = await _context.Events
+                .Include(e => e.EventMaterials)
+                .ThenInclude(em => em.Material)
+                .FirstOrDefaultAsync(e => e.Id == id);
 
-            if (eventToUpdate == null)
+            if (eventEntity == null)
             {
-                return NotFound();
+                return NotFound($"Event with ID {id} not found.");
             }
 
-            eventToUpdate.Name = updatedEvent.Name;
-            eventToUpdate.Type = updatedEvent.Type;
-            eventToUpdate.StartAt = updatedEvent.StartAt;
-            eventToUpdate.EndAt = updatedEvent.EndAt;
-            eventToUpdate.ZipCode = updatedEvent.ZipCode;
-            eventToUpdate.AddressName = updatedEvent.AddressName;
-            eventToUpdate.AddressNumber = updatedEvent.AddressNumber;
-            eventToUpdate.AddressComplement = updatedEvent.AddressComplement;
-            eventToUpdate.District = updatedEvent.District;
-            eventToUpdate.State = updatedEvent.State;
-            eventToUpdate.City = updatedEvent.City;
-            eventToUpdate.EstimatedAudience = updatedEvent.EstimatedAudience;
-            eventToUpdate.IsActive = updatedEvent.IsActive;
+            eventEntity.Name = updateEventDto.Name;
+            eventEntity.Type = updateEventDto.Type;
+            eventEntity.ClientId = updateEventDto.ClientId;
+            eventEntity.StartAt = updateEventDto.StartAt;
+            eventEntity.EndAt = updateEventDto.EndAt;
+            eventEntity.ZipCode = updateEventDto.ZipCode;
+            eventEntity.AddressName = updateEventDto.AddressName;
+            eventEntity.AddressNumber = updateEventDto.AddressNumber;
+            eventEntity.AddressComplement = updateEventDto.AddressComplement;
+            eventEntity.District = updateEventDto.District;
+            eventEntity.State = updateEventDto.State;
+            eventEntity.City = updateEventDto.City;
+            eventEntity.EstimatedAudience = updateEventDto.EstimatedAudience;
+            eventEntity.TotalAmount = updateEventDto.TotalAmount;
 
-            _context.SaveChanges();
+            eventEntity.EventMaterials.Clear();
+            foreach (var materialDto in updateEventDto.Materials)
+            {
+                var material = await _context.Materials.FindAsync(materialDto.MaterialId);
+                if (material == null)
+                {
+                    return NotFound($"Material with ID {materialDto.MaterialId} not found.");
+                }
 
-            return Ok(eventToUpdate);
+                eventEntity.EventMaterials.Add(new EventMaterial
+                {
+                    EventId = eventEntity.Id,
+                    MaterialId = material.Id,
+                    Quantity = materialDto.Quantity
+                });
+            }
+
+            _context.Entry(eventEntity).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!EventExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool EventExists(Guid id)
+        {
+            return _context.Events.Any(e => e.Id == id);
         }
 
         [HttpDelete("{id}")]

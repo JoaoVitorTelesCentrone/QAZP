@@ -11,6 +11,7 @@ namespace ZventsApi.Models
         public DbSet<Client> Clients { get; set; }
         public DbSet<Material> Materials { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<EventMaterial> EventMaterials { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=Zvents.db");
@@ -18,17 +19,18 @@ namespace ZventsApi.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<EventMaterial>()
+                .HasKey(em => new { em.EventId, em.MaterialId });
 
-            modelBuilder
-                .Entity<Event>()
-                .HasMany(e => e.Materials)
-                .WithMany(m => m.Events)
-                .UsingEntity<Dictionary<string, object>>(
-                    "MaterialEvent",
-                    j => j.HasOne<Material>().WithMany().HasForeignKey("MaterialId"),
-                    j => j.HasOne<Event>().WithMany().HasForeignKey("EventId")
-                );
+            modelBuilder.Entity<EventMaterial>()
+                .HasOne(em => em.Event)
+                .WithMany(e => e.EventMaterials)
+                .HasForeignKey(em => em.EventId);
+
+            modelBuilder.Entity<EventMaterial>()
+                .HasOne(em => em.Material)
+                .WithMany(m => m.EventMaterials)
+                .HasForeignKey(em => em.MaterialId);
         }
     }
 }

@@ -17,21 +17,6 @@ namespace ZventsApi.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
 
-            modelBuilder.Entity("MaterialEvent", b =>
-                {
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("MaterialId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("EventId", "MaterialId");
-
-                    b.HasIndex("MaterialId");
-
-                    b.ToTable("MaterialEvent");
-                });
-
             modelBuilder.Entity("ZventsApi.Models.Client", b =>
                 {
                     b.Property<Guid>("Id")
@@ -142,6 +127,9 @@ namespace ZventsApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal?>("TotalAmount")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
@@ -154,6 +142,24 @@ namespace ZventsApi.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("ZventsApi.Models.EventMaterial", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MaterialId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EventId", "MaterialId");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("EventMaterials");
                 });
 
             modelBuilder.Entity("ZventsApi.Models.Material", b =>
@@ -247,21 +253,6 @@ namespace ZventsApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("MaterialEvent", b =>
-                {
-                    b.HasOne("ZventsApi.Models.Event", null)
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ZventsApi.Models.Material", null)
-                        .WithMany()
-                        .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ZventsApi.Models.Event", b =>
                 {
                     b.HasOne("ZventsApi.Models.Client", "Client")
@@ -271,6 +262,35 @@ namespace ZventsApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("ZventsApi.Models.EventMaterial", b =>
+                {
+                    b.HasOne("ZventsApi.Models.Event", "Event")
+                        .WithMany("EventMaterials")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZventsApi.Models.Material", "Material")
+                        .WithMany("EventMaterials")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Material");
+                });
+
+            modelBuilder.Entity("ZventsApi.Models.Event", b =>
+                {
+                    b.Navigation("EventMaterials");
+                });
+
+            modelBuilder.Entity("ZventsApi.Models.Material", b =>
+                {
+                    b.Navigation("EventMaterials");
                 });
 #pragma warning restore 612, 618
         }

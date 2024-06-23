@@ -6,24 +6,33 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZventsApi.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateEventMaterialModel : Migration
+    public partial class UpdateEventMaterialRelationship : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.RenameColumn(
+                name: "Value",
+                table: "Materials",
+                newName: "Price");
+
+            migrationBuilder.AddColumn<decimal>(
+                name: "TotalAmount",
+                table: "Events",
+                type: "TEXT",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "EventMaterials",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     EventId = table.Column<Guid>(type: "TEXT", nullable: false),
                     MaterialId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventMaterials", x => x.Id);
+                    table.PrimaryKey("PK_EventMaterials", x => new { x.EventId, x.MaterialId });
                     table.ForeignKey(
                         name: "FK_EventMaterials_Events_EventId",
                         column: x => x.EventId,
@@ -39,11 +48,6 @@ namespace ZventsApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventMaterials_EventId",
-                table: "EventMaterials",
-                column: "EventId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_EventMaterials_MaterialId",
                 table: "EventMaterials",
                 column: "MaterialId");
@@ -54,6 +58,15 @@ namespace ZventsApi.Migrations
         {
             migrationBuilder.DropTable(
                 name: "EventMaterials");
+
+            migrationBuilder.DropColumn(
+                name: "TotalAmount",
+                table: "Events");
+
+            migrationBuilder.RenameColumn(
+                name: "Price",
+                table: "Materials",
+                newName: "Value");
         }
     }
 }

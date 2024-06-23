@@ -4,6 +4,12 @@ using System.Data.SqlTypes;
 
 namespace ZventsApi.Models
 {
+
+    public class MaterialDto
+    {
+        public Guid MaterialId { get; set; }
+        public int Quantity { get; set; }
+    }
     public enum MaterialCategory
     {
         Food,
@@ -30,7 +36,7 @@ namespace ZventsApi.Models
 
         [Required(ErrorMessage = "Price is required")]
         public decimal Price { get; set; }
-        public virtual ICollection<Event> Events { get; set; } = [];
+        public virtual ICollection<EventMaterial> EventMaterials { get; set; } = new List<EventMaterial>();
         public DateTime CreatedDate { get; set; }
         public bool? IsActive { get; set; }
 

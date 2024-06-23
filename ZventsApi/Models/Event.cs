@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
 
 namespace ZventsApi.Models
 {
@@ -19,7 +18,27 @@ namespace ZventsApi.Models
         public required string State { get; set; }
         public required string City { get; set; }
         public int? EstimatedAudience { get; set; }
-        public required List<Guid> MaterialIds { get; set; }
+        public List<MaterialDto> Materials { get; set; } = new List<MaterialDto>();
+        public decimal? TotalAmount { get; set; }
+    }
+
+    public class UpdateEventDto
+    {
+        public required string Name { get; set; }
+        public EventType Type { get; set; }
+        public Guid ClientId { get; set; }
+        public DateTime StartAt { get; set; }
+        public DateTime EndAt { get; set; }
+        public required string ZipCode { get; set; }
+        public required string AddressName { get; set; }
+        public required string AddressNumber { get; set; }
+        public string? AddressComplement { get; set; }
+        public required string District { get; set; }
+        public required string State { get; set; }
+        public required string City { get; set; }
+        public int? EstimatedAudience { get; set; }
+        public List<MaterialDto> Materials { get; set; } = [];
+        public decimal? TotalAmount { get; set; }
     }
 
     public enum EventType
@@ -56,7 +75,6 @@ namespace ZventsApi.Models
         [Required(ErrorMessage = "ClientId is required")]
         public Guid ClientId { get; set; }
 
-        [JsonIgnore]
         public Client? Client { get; set; }
 
         [Required(ErrorMessage = "StartAt is required")]
@@ -84,7 +102,8 @@ namespace ZventsApi.Models
         [Required(ErrorMessage = "City is required")]
         public string City { get; set; }
         public int? EstimatedAudience { get; set; }
-        public virtual ICollection<Material> Materials { get; set; } = [];
+        public virtual ICollection<EventMaterial> EventMaterials { get; set; } = [];
+        public decimal? TotalAmount { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool? IsActive { get; set; }
 
