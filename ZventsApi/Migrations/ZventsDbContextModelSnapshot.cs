@@ -127,6 +127,9 @@ namespace ZventsApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal?>("TotalAmount")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
@@ -143,13 +146,6 @@ namespace ZventsApi.Migrations
 
             modelBuilder.Entity("ZventsApi.Models.EventMaterial", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("EventId")
                         .HasColumnType("TEXT");
 
@@ -159,9 +155,7 @@ namespace ZventsApi.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
+                    b.HasKey("EventId", "MaterialId");
 
                     b.HasIndex("MaterialId");
 
@@ -187,7 +181,7 @@ namespace ZventsApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Value")
+                    b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -273,13 +267,13 @@ namespace ZventsApi.Migrations
             modelBuilder.Entity("ZventsApi.Models.EventMaterial", b =>
                 {
                     b.HasOne("ZventsApi.Models.Event", "Event")
-                        .WithMany()
+                        .WithMany("EventMaterials")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZventsApi.Models.Material", "Material")
-                        .WithMany()
+                        .WithMany("EventMaterials")
                         .HasForeignKey("MaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -287,6 +281,16 @@ namespace ZventsApi.Migrations
                     b.Navigation("Event");
 
                     b.Navigation("Material");
+                });
+
+            modelBuilder.Entity("ZventsApi.Models.Event", b =>
+                {
+                    b.Navigation("EventMaterials");
+                });
+
+            modelBuilder.Entity("ZventsApi.Models.Material", b =>
+                {
+                    b.Navigation("EventMaterials");
                 });
 #pragma warning restore 612, 618
         }

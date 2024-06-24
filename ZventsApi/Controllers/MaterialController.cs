@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ZventsApi.Models;
 
 namespace ZventsApi.Controllers
@@ -34,16 +30,19 @@ namespace ZventsApi.Controllers
         }
 
         [HttpGet("category/{category}")]
-        public async Task<ActionResult<IEnumerable<Material>>> GetMaterialByCategory(MaterialCategory category)
+        public async Task<ActionResult<IEnumerable<Material>>> GetMaterialByCategory(
+            MaterialCategory category
+        )
         {
             return await _context.Materials.Where(x => x.Category == category).ToArrayAsync();
-
         }
 
         [HttpPost]
         public ActionResult<Material> PostMaterial(Material material)
         {
-            bool materialExists = _context.Materials.Any(q => (q.Name == material.Name && q.Category == material.Category));
+            bool materialExists = _context.Materials.Any(q =>
+                q.Name == material.Name && q.Category == material.Category
+            );
 
             if (!materialExists)
             {
@@ -53,7 +52,9 @@ namespace ZventsApi.Controllers
                 return CreatedAtAction(nameof(PostMaterial), new { id = material.Id }, material);
             }
 
-            return Conflict(new { message = "There is already a Material with the same Name and Category" });
+            return Conflict(
+                new { message = "There is already a Material with the same Name and Category" }
+            );
         }
     }
 }
