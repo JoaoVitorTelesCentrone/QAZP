@@ -34,7 +34,7 @@ const UserSideMenu = () => {
           <h1 className="text-secondary">
             <TreePalm />
           </h1>
-          <h1 className="text-secondary font-bold my-3">{`Bem vindo, ${user.username}`}</h1>
+          <h1 className="text-secondary font-bold w-[100px] my-3">{`Bem vindo, ${user.username}`}</h1>
           <button className="text-white" onClick={() => closeMenu()}>
             {open ? <XIcon /> : 'Open'}
           </button>

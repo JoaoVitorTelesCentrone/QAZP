@@ -39,7 +39,7 @@ const Materials = () => {
     <div>
       <UserSideMenu />
       <div className="flex justify-between m-10">
-        <h1 className="text-4xl font-bold">Materiais</h1>
+        <h1 className="text-4xl font-bold ml-64">Materiais</h1>
         <Link
           href="/CreateMaterial"
           className="text-white bg-primary p-3 rounded-xl"
@@ -47,7 +47,9 @@ const Materials = () => {
           Criar Material
         </Link>
       </div>
-      <MaterialTable columns={columns} data={materials} />
+      <div className="ml-10">
+        <MaterialTable columns={columns} data={materials} />
+      </div>
       {/* {materials.map((material, index) => (
         <div key={index} className="flex justify-around w-full p-4">
           <h1 key={index}>{material.name}</h1>

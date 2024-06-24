@@ -37,7 +37,7 @@ const Clients = () => {
     <div>
       <UserHeader />
       <div className="p-20 justify-between flex">
-        <h1 className="uppercase text-4xl font-bold text-secondary-foreground">
+        <h1 className="ml-48 uppercase text-4xl font-bold text-secondary-foreground">
           {intl.formatMessage({ id: 'client.page.title' })}
         </h1>
         <Link
@@ -48,7 +48,7 @@ const Clients = () => {
           <Plus className="h-4 w-4 mt-1 ml-2" />{' '}
         </Link>
       </div>
-      <div className="mx-20 my-10">
+      <div className="ml-72 mr-10">
         <ClientTable columns={clientColumns} data={clients} />
       </div>
     </div>
