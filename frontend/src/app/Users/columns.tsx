@@ -2,41 +2,25 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUp, ArrowDown, ArrowUpDown, ArrowBigLeft, ArrowBigRight } from 'lucide-react'
+import { ArrowUp, ArrowDown, ArrowUpDown, ArrowBigLeft, ArrowBigRight, EditIcon, Edit2Icon, Edit3Icon } from 'lucide-react'
 import { useState } from 'react';
+import EditUser from './EditUser';
+import DeleteUser from './DeleteUser';
+import { UUID } from 'crypto';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export type Users =  {
+    id: string
     name: string
-    username: string
-    password: string
+    userName: string
+
 }
 
-export const columns: ColumnDef<Users>[] = [
-    {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
+
+
+export const userColumns = (): ColumnDef<Users>[] => [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -67,4 +51,12 @@ export const columns: ColumnDef<Users>[] = [
         )
       },
   },
+  {
+    id:'edit',
+    cell: ({row}) => <EditUser userId={row.original.userName} />
+  },
+  {
+    id:'delete',
+    cell: ({row}) => <DeleteUser userId={row.original.id} />
+  }
 ]

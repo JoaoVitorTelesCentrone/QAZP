@@ -1,8 +1,5 @@
 ﻿﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ZventsApi.Models;
 
 namespace ZventsApi.Controllers
@@ -22,7 +19,11 @@ namespace ZventsApi.Controllers
         [HttpPost]
         public ActionResult<Quote> PostQuote(Quote quote)
         {
-            bool quoteExists = _context.Quotes.Any(q => (q.Email == quote.Email || q.PhoneNumber == quote.PhoneNumber) && q.EventType == quote.EventType && q.IsActive == true);
+            bool quoteExists = _context.Quotes.Any(q =>
+                (q.Email == quote.Email || q.PhoneNumber == quote.PhoneNumber)
+                && q.EventType == quote.EventType
+                && q.IsActive == true
+            );
 
             if (!quoteExists)
             {
@@ -34,6 +35,5 @@ namespace ZventsApi.Controllers
 
             return Conflict(new { message = "There is already a quote in progress" });
         }
-
     }
 }

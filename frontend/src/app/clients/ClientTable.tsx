@@ -24,6 +24,7 @@ import { useState } from "react"
 import { ArrowBigLeft, ArrowBigRight } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { intl } from '../../i18n'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -56,15 +57,15 @@ export function ClientTable<TData, TValue>({
     <div className="rounded-md  border-[1px] pt-10">
         <div className="flex items-center justify-around mx-4 py-4">
         <Input
-          placeholder="Filtrar por nome"
-          value={(table.getColumn("firstName")?.getFilterValue() as string) ?? ""}
+          placeholder={intl.formatMessage({ id: 'client.page.filter.by.name.field.placeholder' })}
+          value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("firstName")?.setFilterValue(event.target.value)
+            table.getColumn("fullName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <Input
-          placeholder="Filtrar por CPF"
+          placeholder={intl.formatMessage({ id: 'client.page.filter.by.document.field.placeholder' })}
           value={(table.getColumn("documentId")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("documentId")?.setFilterValue(event.target.value)
@@ -108,7 +109,7 @@ export function ClientTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center text-2xl font-bold">
-                Nenhum resultado foi encontrado.
+              {intl.formatMessage({ id: 'datagrid.empty.message' })}
               </TableCell>
             </TableRow>
           )}

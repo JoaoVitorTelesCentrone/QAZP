@@ -53,7 +53,7 @@ export function UsersTable<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md  border-[1px] pt-10">
+    <div className="rounded-md w-[1000px] border-2 border-secondary shadow-sm shadow-tertiary pt-10">
         <div className="flex mx-64 justify-between py-4">
             <Input
             placeholder="Filtrar por nome"
@@ -61,7 +61,7 @@ export function UsersTable<TData, TValue>({
             onChange={(event) =>
                 table.getColumn("name")?.setFilterValue(event.target.value)
             }
-            className="text-secondary-foreground text-center font-bold  mx-32"
+            className="text-secondary-foreground text-center font-bold"
             />
 
             <Input
@@ -70,7 +70,7 @@ export function UsersTable<TData, TValue>({
             onChange={(event) =>
                 table.getColumn("userName")?.setFilterValue(event.target.value)
             }
-            className="text-secondary-foreground text-center font-bold  mx-32"
+            className="text-secondary-foreground text-center font-bold"
             />
         </div>
       <Table className="border-2 border-secondary">

@@ -4,6 +4,7 @@ import Call from "./components/Call";
 import Plan from "./components/Plan";
 import WhatWeDo from "./components/WhatWeDo";
 import { Toaster, toast } from 'sonner'
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <Call />
       <Plan />
       <WhatWeDo />
+      <Footer />
     </>
   );
 }
