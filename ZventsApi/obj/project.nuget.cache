@@ -1,6 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "/2ybzdLFDcajdI5WuPUetfHCBmIDLbynBxIYbLnrfFM7Af9GiE4kQdtg4gMDm8hjgrZR5xq2shstYlODuOpMzg==",
+=======
+<<<<<<< HEAD
+  "dgSpecHash": "/2ybzdLFDcajdI5WuPUetfHCBmIDLbynBxIYbLnrfFM7Af9GiE4kQdtg4gMDm8hjgrZR5xq2shstYlODuOpMzg==",
+=======
+  "dgSpecHash": "bhZqhCLT7+XjBwvatLmmPgNk3L5AdGjr87lLGJyVQlo9VQs4gbulQI4IRkr9R9z/AxVZwZ4gb/dnRsYLab3I8w==",
+>>>>>>> 0dbeeb4378b35cb268665bda02c95492f66cb218
+>>>>>>> main
   "success": true,
   "projectFilePath": "C:\\Users\\JoaoCentrone\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj",
   "expectedPackageFiles": [
