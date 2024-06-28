@@ -16,6 +16,8 @@ interface userDataProps {
     name: string | undefined;
     userName: string | undefined;
     password: string | undefined;
+    createdDate: string | undefined;
+    role: number | undefined;
   }
   
   const EditUserForm: React.FC<EditUserFormProps> = ({closeModal, userData}) => {
@@ -50,8 +52,15 @@ interface userDataProps {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
       e.preventDefault()
-      updateUser({id: userData?.id , name: userData?.name, userName: userData?.userName, password: userData?.password })
-    }
+      updateUser({
+      id: userData?.id,
+      name: name,          
+      userName: username,  
+      password: password,  
+      createdDate: userData?.createdDate,
+      role: userData?.role
+    });
+  }
   
     useEffect(() => {
         if (userData) {
