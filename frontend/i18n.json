@@ -30,6 +30,7 @@
         "create.client.page.state.field.label": "Estado",
         "create.client.page.city.field.label": "Cidade",
         "create.client.page.create.client.button": "Criar cliente",
+        "edit.client.page.create.client.button": "Salvar",
         "datagrid.empty.message": "Nenhum resultado foi encontrado."
     }
 }
