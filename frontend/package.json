@@ -5,7 +5,7 @@
   "scripts": {
     "start:dev": "concurrently \"npm run start-frontend\" \"npm run start-backend\" \"npm run open-browser\"",
     "start-frontend": "npm run dev",
-    "start-backend": "cd ..\\ZventsApi\\ && dotnet tool install --global dotnet-ef && dotnet ef database update && dotnet run",
+    "start-backend": "cd ..\\ZventsApi\\ && dotnet ef database update && dotnet run",
     "open-browser": "ping 127.0.0.1 -n 11 > nul && start chrome http://localhost:3000",
     "dev": "next dev",
     "build": "next build",
