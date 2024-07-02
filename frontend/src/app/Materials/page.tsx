@@ -10,7 +10,7 @@ import { materialColumns } from './columns'
 export type materialProps = { 
   id: string
   category: string
-  value: string
+  price: string
   name: string
 }
 
@@ -22,7 +22,7 @@ const Materials = () => {
     setMaterialsName(response.data)
     // console.log(response.data)
     const materialNames = response.data.map((material:any) => ({ 
-      name: material.name, value: material.value, category: material.category
+      name: material.name, price: material.price, category: material.category
     }))
     setMaterials(materialNames)
     console.log(materials)
@@ -45,7 +45,7 @@ const Materials = () => {
         <div key={index} className="flex justify-around w-full p-4">
           <h1 key={index}>{material.name}</h1>
           <h1 key={index}>{material.category}</h1>
-          <h1 key={index}>{material.value}</h1>
+          <h1 key={index}>{material.price}</h1>
         </div>
        ))} */}
     </div>
