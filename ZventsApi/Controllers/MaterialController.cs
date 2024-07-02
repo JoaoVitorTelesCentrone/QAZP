@@ -37,6 +37,14 @@ namespace ZventsApi.Controllers
             return await _context.Materials.Where(x => x.Category == category).ToArrayAsync();
         }
 
+        [HttpGet("name/{name}")]
+        public async Task<ActionResult<IEnumerable<Material>>> GetMaterialByName(
+            string name
+        )
+        {
+            return await _context.Materials.Where(x => x.Name == name).ToArrayAsync();
+        }
+
         [HttpPost]
         public ActionResult<Material> PostMaterial(Material material)
         {
