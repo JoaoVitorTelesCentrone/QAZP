@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { LucideTrash2, PlusCircleIcon, Trash2Icon } from 'lucide-react'
-import { Table } from 'antd'
+import { Calendar, DatePicker, Table, TimePicker } from 'antd'
 import {
   ClientProps,
   MaterialCategory,
@@ -20,6 +20,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
+type mats = {
+  id: string
+  quantity: number
+}
+
 const CreateEvent = () => {
   const [clients, setClients] = useState<ClientProps[]>([])
   const [clientEmail, setCLientEmail] = useState('')
@@ -27,6 +32,7 @@ const CreateEvent = () => {
   const [clientName, setCLientName] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedMaterial, setSelectedMaterial] = useState('')
+  const [selectedMaterialId, setSelectedMaterialId] = useState('')
   const [selectedMaterialIndex, setSelectedMaterialIndex] = useState(0)
   const [selectedMaterialPrice, setSelectedMaterialPrice] = useState(0)
   const [materialQnt, setMaterialQnt] = useState(0)
@@ -34,13 +40,13 @@ const CreateEvent = () => {
   const [insertedMaterial, setInsertedMaterial] = useState<
     insertMaterialProps[]
   >([])
-  const [deleteModal, setDeleteModal] = useState(false)
+  const [materialIdAndQuantity, setMaterialIdAndQuantity] = useState<mats[]>([])
 
   const getClients = async () => {
     try {
       const response = await axios.get('http://localhost:5196/api/Client')
       console.log(response.data)
-      const clientNames = response.data.map((client: any) => ({
+      const clientNames = response.data.$values.map((client: any) => ({
         name: client.fullName,
         documentId: client.documentId,
         id: client.id,
@@ -89,7 +95,13 @@ const CreateEvent = () => {
     setCLientName(name)
   }
 
-  const getMaterialValues = (name: string, index: number, price: number) => {
+  const getMaterialValues = (
+    id: string,
+    name: string,
+    index: number,
+    price: number,
+  ) => {
+    setSelectedMaterialId(id)
     setSelectedMaterial(name)
     setSelectedMaterialIndex(index)
     setSelectedMaterialPrice(price)
@@ -98,6 +110,7 @@ const CreateEvent = () => {
   const insertMaterial = (
     event: React.FormEvent,
     materialName: string,
+    materialId: string,
     quantity: number,
     index: number,
     price: number,
@@ -109,11 +122,21 @@ const CreateEvent = () => {
       key: index.toString(),
       price,
     }
+
+    const newMaterialInsertPost: mats = {
+      id: materialId,
+      quantity: quantity,
+    }
     setInsertedMaterial(prevMaterials => [...prevMaterials, newMaterialInsert])
+    setMaterialIdAndQuantity(prevMaterials => [
+      ...prevMaterials,
+      newMaterialInsertPost,
+    ])
     setCLientName('')
     setMaterialQnt(0)
     setSelectedCategory('')
     setSelectedMaterial('')
+    console.log(materialIdAndQuantity)
   }
 
   const removeMaterial = (index: number) => {
@@ -166,7 +189,7 @@ const CreateEvent = () => {
   }
 
   return (
-    <div>
+    <div className="h-full bg-primary">
       <UserSideMenu />
       <div className="h-full bg-primary">
         <h1 className="text-4xl font-bold mx-32 py-8 text-center text-tertiary">
@@ -222,18 +245,48 @@ const CreateEvent = () => {
           </div>
           <h1 className="font-bold text-2xl my-1">Informações do Evento</h1>
           <div className="my-4 flex flex-col justify-around">
+            <div className=" my-10 flex justify-around">
+              <div>
+                <h1 className="font-bold">Data do evento</h1>
+                <DatePicker format="DD/MM/YYYY" size="large" />
+              </div>
+              <div>
+                <h1 className="font-bold">Inicio do evento</h1>
+                <TimePicker format="HH:mm" needConfirm={false} size="large" />
+              </div>
+
+              <div>
+                <h1 className="font-bold">Inicio do evento</h1>
+                <TimePicker needConfirm={false} format="HH:mm" size="large" />
+              </div>
+            </div>
             <div className="flex mb-4 justify-around">
               <Input
                 className="bg-white text-black mx-2"
-                placeholder="Digite o Estado"
+                placeholder="Digite o CEP"
+              />
+              <Input
+                className="bg-white text-black mx-2"
+                placeholder="Digite a Estado"
               />
               <Input
                 className="bg-white text-black mx-2"
                 placeholder="Digite a Cidade"
               />
+            </div>
+
+            <div className="flex mb-4 justify-around">
               <Input
                 className="bg-white text-black mx-2"
                 placeholder="Digite a Rua"
+              />
+              <Input
+                className="bg-white text-black mx-2"
+                placeholder="Digite o numero"
+              />
+              <Input
+                className="bg-white text-black mx-2"
+                placeholder="Digite o complemento"
               />
             </div>
             <Input
@@ -275,6 +328,7 @@ const CreateEvent = () => {
                       <DropdownMenuItem
                         onClick={() =>
                           getMaterialValues(
+                            material.id,
                             material.name,
                             index,
                             material.price,
@@ -301,6 +355,7 @@ const CreateEvent = () => {
                   insertMaterial(
                     e,
                     selectedMaterial,
+                    selectedMaterialId,
                     materialQnt,
                     selectedMaterialIndex,
                     selectedMaterialPrice,
@@ -328,6 +383,7 @@ const CreateEvent = () => {
               <span className="font-bold">{totalAmount}</span>
             </div>
           </div>
+          <Button>Criar evento</Button>
         </form>
       </div>
     </div>

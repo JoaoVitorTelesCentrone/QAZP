@@ -8,7 +8,6 @@ import { redirect } from 'next/navigation'
 import { LogOut, MenuIcon, TreePalm, XIcon } from 'lucide-react'
 
 const UserSideMenu = () => {
-  const [open, setOpen] = useState(false)
   const [loggedIn, setIsLogged] = useAtom(authAtom)
   const [user, setUser] = useAtom(userInfoAtom)
   console.log(user)
@@ -17,27 +16,16 @@ const UserSideMenu = () => {
     redirect('/login')
   }
 
-  const openMenu = () => {
-    setOpen(true)
-  }
-
-  const closeMenu = () => {
-    setOpen(false)
-  }
-
   return (
     <div className={`flex h-full`}>
       <div
-        className={`fixed inset-y-0 left-0 transform ${open ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out bg-gray-800 text-white w-64 p-4`}
+        className={`fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out bg-gray-800 text-white w-64 p-4`}
       >
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-secondary">
             <TreePalm />
           </h1>
           <h1 className="text-secondary font-bold w-[100px] my-3">{`Bem vindo, ${user.username}`}</h1>
-          <button className="text-white" onClick={() => closeMenu()}>
-            {open ? <XIcon /> : 'Open'}
-          </button>
         </div>
         <nav>
           <ul className="flex flex-col space-y-4">
@@ -98,19 +86,6 @@ const UserSideMenu = () => {
           <LogOut />
           <span>Logout</span>
         </button>
-      </div>
-
-      <div
-        className={`flex-1 p-8 ${open ? 'ml-64' : 'ml-0'} transition-all duration-300`}
-      >
-        <MenuIcon
-          className={
-            open ? 'hidden' : 'text-primary h-6 w-6 rounded-md cursor-pointer'
-          }
-          onClick={() => openMenu()}
-        >
-          {open ? 'Close Menu' : 'Open Menu'}
-        </MenuIcon>
       </div>
     </div>
   )

@@ -15,7 +15,7 @@ const Page = () => {
   return (
     <div>
       <UserSideMenu />
-      <div className="mx-20">
+      <div className="m-20">
         <div className="flex justify-between">
           <h1 className="text-4xl ml-56 font-bold uppercase">Eventos</h1>
           <Link

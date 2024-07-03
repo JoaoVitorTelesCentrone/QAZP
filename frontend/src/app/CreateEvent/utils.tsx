@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { ColumnDef } from '@tanstack/react-table'
+import { LucideTrash2 } from 'lucide-react'
 
 export const MaterialCategory = [
   { name: 'Comida', index: 0 },
@@ -20,6 +21,7 @@ export type ClientProps = {
 }
 
 export type MaterialType = {
+  id: string
   category: string
   name: string
   price: number
