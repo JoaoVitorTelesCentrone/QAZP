@@ -2,32 +2,38 @@
 import { Input } from '@/components/ui/input'
 import { intl } from '@/i18n'
 import { useAtom } from 'jotai';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { userInfoAtom } from '../atoms/userInfoAtom';
 import { authAtom } from '../atoms/authAtom';
 import { SearchIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { EyeClosedIcon } from '@radix-ui/react-icons';
 import axios, { isAxiosError } from 'axios';
 import { toast } from 'sonner';
-import { redirect } from 'next/navigation';
 
-type ClientFormProps = { 
-    clientData?: {fullName: string,
-        documentId: string,
-        phoneNumber: string,
-        email: string,
-        zipCode: string,
-        addressName: string,
-        addressNumber: string,
-        addressComplement: string,
-        district: string,
-        state: string,
-        city: string,}
-    closeModal: () => void
-}
 
-const ClientForm: React.FC<ClientFormProps> = ({clientData, closeModal}) => {
+interface ClientFormProps {
+    clientData: ClientDataProps | undefined;
+    closeModal: () => void;
+  }
+  
+  interface ClientDataProps {
+    id: string | undefined;
+    fullName: string | undefined;
+    documentId: string | undefined;
+    email: string | undefined;
+    zipCode: string | undefined;
+    addressName: string | undefined;
+    addressComplement: string | undefined;
+    addressNumber: string | undefined;
+    district: string | undefined;
+    state: string | undefined;
+    city: string | undefined;
+    createdDate: string | undefined;
+    isActive: boolean | undefined;
+    phoneNumber: string | undefined;
+  }
+
+const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     const [isLogged, setIsLogged] = useAtom(authAtom)
     const [userInfo, setUserInfo] = useAtom(userInfoAtom)
     const [fullName, setFullName] = useState(clientData?.fullName)
@@ -42,61 +48,67 @@ const ClientForm: React.FC<ClientFormProps> = ({clientData, closeModal}) => {
     const [state, setState] = useState(clientData?.state)
     const [city, setCity] = useState(clientData?.city)
 
-    async function editClient() {
-        const data = {
-            fullName,
-            documentId,
-            phoneNumber,
-            email,
-            zipCode,
-            addressName,
-            addressNumber,
-            addressComplement,
-            district,
-            state,
-            city,
-        }
+    const updateClient = async (updatedData: ClientDataProps) => {
         try {
-            const response = await axios.put('http://localhost:5196/api/Client', data);
-            const userData = response.data
-            console.log(response.status);
-            if (response.status === 201) {
-                console.log(response.data)
-                console.log(data)
-                toast.success('Cliente criado')
-                redirect('/clients')
-            }
-            if (response.status === 409) {
-                console.log(response.data)
-                console.log(data)
-                toast.error('Cliente criado')
-            }
-        } catch (error: unknown) {
+            console.log('Updating client with data:', updatedData);
+            const response = await axios.put(`http://localhost:5196/api/Client/${clientData?.id}`, updatedData);
+            console.log('Update response:', response);
+            toast.success('Cliente alterado com sucesso');  
+            closeModal(); 
+        } catch (error) {
             if (isAxiosError(error)) {
-                console.error('Erro ao fazer a requisição:', error)
+                console.error('Error message:', error.message);
                 if (error.response) {
-                    console.error('Código de status:', error.response.status);
-                    if (error.response.status === 409) {
-                        toast.error('Esse cliente já existe!');
-                    } else if (error.response.status === 400) {
-                        toast.error('Erro de requisição. Verifique os dados enviados.');
-                    } else {
-                        toast.error('Erro desconhecido.');
-                    }
+                    console.error('Response data:', error.response.data);
+                    console.error('Response status:', error.response.status);
+                    console.error('Response headers:', error.response.headers);
                 }
+            } else {
+                console.error('Unexpected error:', error);
             }
-            console.log(data)
+            toast.error('Falha ao atualizar cliente');  
         }
-    }
+    };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        await editClient()
-    }
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        updateClient({
+            id: clientData?.id,
+            fullName: fullName,
+            documentId: documentId,
+            createdDate: clientData?.createdDate,
+            email: email,
+            zipCode: zipCode,
+            addressName: addressName,
+            addressComplement: addressComplement,
+            addressNumber: addressNumber,
+            district: district,
+            state: state,
+            city: city,
+            isActive: clientData?.isActive,
+            phoneNumber: phoneNumber,
+        });
+    };
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit} className='mt-5 mb-8 flex-col flex mx-auto border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-white p-10 max-w-[500px]'>
+    useEffect(() => {
+        if (clientData) {
+            setFullName(clientData.fullName || '');
+            setDocumentId(clientData.documentId || '');
+            setPhoneNumber(clientData.phoneNumber || '');
+            setEmail(clientData.email || '');
+            setZipCode(clientData.zipCode || '');
+            setAddressName(clientData.addressName || '');
+            setAddressNumber(clientData.addressNumber || '');
+            setAddressComplement(clientData.addressComplement || '');
+            setDistrict(clientData.district || '');
+            setState(clientData.state || '');
+            setCity(clientData.city || '');
+        }
+    }, [clientData]);
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit} className='mt-5 mb-8 flex-col flex mx-auto border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-white p-10 max-w-[500px]'>
                 <div>
                     <X className='cursor-pointer' onClick={closeModal} />
                     <h1 className='text-2xl font-bold mb-2'>{intl.formatMessage({ id: 'create.client.page.personal.information.section' })}</h1>
@@ -178,12 +190,12 @@ const ClientForm: React.FC<ClientFormProps> = ({clientData, closeModal}) => {
                     </div>
                 </div>
                 <div className="flex justify-between">
-                    <Button className='text-secondary' variant='default'>{intl.formatMessage({ id: 'create.client.page.create.client.button' })}</Button>
+                    <Button className='text-secondary' variant='default'>{intl.formatMessage({ id: 'edit.client.page.create.client.button' })}</Button>
                     <Button className='text-secondary' onClick={closeModal} variant='default'>Fechar</Button>
                 </div>
             </form>
-    </div>
-  )
+        </div>
+    )
 }
 
 export default ClientForm
