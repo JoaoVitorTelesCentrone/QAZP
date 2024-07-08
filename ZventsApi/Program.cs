@@ -8,6 +8,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     // Preserve references to handle circular references
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+
 });
 builder.Services.AddDbContext<ZventsDbContext>(options =>
     options.UseSqlite("Data Source=Zvents.db"));
