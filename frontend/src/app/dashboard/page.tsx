@@ -23,7 +23,7 @@ const Dashboard = () => {
   const getClients = async () => {
     const response = await axios.get('http://localhost:5196/api/Client')
     console.log('Vai toma no cu' + response.data.$values)
-    setNumberOfClients(response.data.$values.length)
+    setNumberOfClients(response.data.length)
     console.log(`Numero de clientes ${numberOfCLients}`)
   }
 

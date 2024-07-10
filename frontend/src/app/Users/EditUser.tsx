@@ -63,10 +63,10 @@ const EditUser: React.FC<editUserProps> = ({ userId }) => {
       {editModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white shadow-lg shadow-slate-600 rounded-lg p-8">
-            <EditUserForm
+            {/* <EditUserForm
               userData={userDataInput}
               closeModal={() => setEditModal(false)}
-            />
+            /> */}
           </div>
         </div>
       )}
