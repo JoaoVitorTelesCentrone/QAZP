@@ -26,7 +26,16 @@ type mats = {
 }
 
 const CreateEvent = () => {
+  const [zipCode, setZipCode] = useState('')
+  const [addressName, setAddressName] = useState('')
+  const [addressNumber, setAddressNumber] = useState('')
+  const [addressComplement, setAddressComplement] = useState('')
+  const [district, setDistrict] = useState('')
+  const [state, setState] = useState('')
+  const [city, setCity] = useState('')
+  const [estimatedAudience, setEstimatedAudience] = useState('')
   const [clients, setClients] = useState<ClientProps[]>([])
+  const [clientId, setClientId] = useState('')
   const [clientEmail, setCLientEmail] = useState('')
   const [clientDocument, setCLientDocument] = useState('')
   const [clientName, setCLientName] = useState('')
@@ -41,6 +50,7 @@ const CreateEvent = () => {
     insertMaterialProps[]
   >([])
   const [materialIdAndQuantity, setMaterialIdAndQuantity] = useState<mats[]>([])
+  const [totalAmount, setTotalAmount] = useState(0)
 
   const getClients = async () => {
     try {
@@ -84,12 +94,22 @@ const CreateEvent = () => {
     getClients()
   }, [])
 
+  useEffect(() => {
+    const newTotalAmount = insertedMaterial.reduce(
+      (sum, material) => sum + material.price * material.quantity,
+      0,
+    )
+    setTotalAmount(newTotalAmount)
+  }, [insertedMaterial])
+
   const getCLienInputValues = (
     email: string,
     documentId: string,
     name: string,
+    id: string,
     index: number,
   ) => {
+    setClientId(id)
     setCLientEmail(email)
     setCLientDocument(documentId)
     setCLientName(name)
@@ -132,7 +152,6 @@ const CreateEvent = () => {
       ...prevMaterials,
       newMaterialInsertPost,
     ])
-    setCLientName('')
     setMaterialQnt(0)
     setSelectedCategory('')
     setSelectedMaterial('')
@@ -144,11 +163,6 @@ const CreateEvent = () => {
     newInsertedMaterial.splice(index, 1)
     setInsertedMaterial(newInsertedMaterial)
   }
-
-  const totalAmount = insertedMaterial.reduce(
-    (sum, material) => sum + material.price * material.quantity,
-    0,
-  )
 
   const columns = [
     {
@@ -178,14 +192,33 @@ const CreateEvent = () => {
     },
   ]
 
-  const postEvent = async () => {
-    const body = {}
+  const postEvent = async (event: React.FormEvent) => {
+    event.preventDefault()
+    const body = {
+      name: clientName,
+      type: 0,
+      clientId: clientId,
+      startAt: '2024-07-04T18:03:55.640Z',
+      endAt: '2024-07-04T18:03:55.640Z',
+      zipCode: zipCode,
+      addressName: addressName,
+      addressNumber: addressNumber,
+      addressComplement: addressComplement,
+      district: district,
+      state: state,
+      city: city,
+      estimatedAudience: estimatedAudience,
+      materials: materialIdAndQuantity,
+      totalAmount: totalAmount,
+    }
     try {
-      const res = await axios.post('', body)
+      const res = await axios.post('http://localhost:5196/api/Event', body)
       console.log(res.data)
+      console.log(clientId, materialIdAndQuantity)
     } catch (error) {
       console.error(error)
     }
+    console.log(clientId, materialIdAndQuantity, body, totalAmount)
   }
 
   return (
@@ -214,6 +247,7 @@ const CreateEvent = () => {
                           client.email,
                           client.documentId,
                           client.name,
+                          client.id,
                           index,
                         )
                       }
@@ -268,10 +302,12 @@ const CreateEvent = () => {
               <Input
                 className="bg-white text-black mx-2"
                 placeholder="Digite a Estado"
+                onChange={e => setDistrict(e.target.value)}
               />
               <Input
                 className="bg-white text-black mx-2"
                 placeholder="Digite a Cidade"
+                onChange={e => setCity(e.target.value)}
               />
             </div>
 
@@ -279,19 +315,23 @@ const CreateEvent = () => {
               <Input
                 className="bg-white text-black mx-2"
                 placeholder="Digite a Rua"
+                onChange={e => setAddressName(e.target.value)}
               />
               <Input
                 className="bg-white text-black mx-2"
                 placeholder="Digite o numero"
+                onChange={e => setAddressNumber(e.target.value)}
               />
               <Input
                 className="bg-white text-black mx-2"
                 placeholder="Digite o complemento"
+                onChange={e => setAddressComplement(e.target.value)}
               />
             </div>
             <Input
               className="bg-white text-black mx-2 w-full"
               placeholder="Digite a Audiência estimada"
+              onChange={e => setEstimatedAudience(e.target.value)}
             />
           </div>
           <h1 className="font-bold text-xl my-1">Selecione os Materiais</h1>
@@ -383,7 +423,7 @@ const CreateEvent = () => {
               <span className="font-bold">{totalAmount}</span>
             </div>
           </div>
-          <Button>Criar evento</Button>
+          <Button onClick={e => postEvent(e)}>Criar evento</Button>
         </form>
       </div>
     </div>
