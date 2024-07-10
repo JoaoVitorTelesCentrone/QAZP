@@ -56,7 +56,7 @@ const CreateEvent = () => {
     try {
       const response = await axios.get('http://localhost:5196/api/Client')
       console.log(response.data)
-      const clientNames = response.data.$values.map((client: any) => ({
+      const clientNames = response.data.map((client: any) => ({
         name: client.fullName,
         documentId: client.documentId,
         id: client.id,
@@ -81,7 +81,7 @@ const CreateEvent = () => {
       const materials = response.data.map((material: any) => ({
         name: material.name,
         id: material.id,
-        price: material.value,
+        price: material.price,
       }))
       setMaterials(materials)
     } catch (error) {
