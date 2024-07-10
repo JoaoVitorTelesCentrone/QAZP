@@ -54,7 +54,7 @@ const UserForm: React.FC<UserFormProps> = ({ closeModal, userData }) => {
     <div>
       <Toaster richColors />
       <div className="flex m-8 flex-col">
-        <h1 className="mb-4 font-bold text-xl uppercase">Editar usuário</h1>
+        <h1 className="mb-4 font-bold text-xl uppercase">Criar usuário</h1>
         <form className="">
           <div className="mx-auto mb-1 w-full">
             <p className="text-xl">Nome</p>

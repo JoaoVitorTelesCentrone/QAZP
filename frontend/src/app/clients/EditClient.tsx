@@ -8,17 +8,20 @@ type EditClientProps = {
 }
 
 type ClientDataProps = {
-  fullName: string
-  documentId: string
-  phoneNumber: string
-  email: string
-  zipCode: string
-  addressName: string
-  addressNumber: string
-  addressComplement: string
-  district: string
-  state: string
-  city: string
+  id: string | undefined
+  fullName: string | undefined
+  documentId: string | undefined
+  email: string | undefined
+  zipCode: string | undefined
+  addressName: string | undefined
+  addressComplement: string | undefined
+  addressNumber: string | undefined
+  district: string | undefined
+  state: string | undefined
+  city: string | undefined
+  createdDate: string | undefined
+  isActive: boolean | undefined
+  phoneNumber: string | undefined
 }
 
 const EditClient: React.FC<EditClientProps> = ({ userId }) => {
