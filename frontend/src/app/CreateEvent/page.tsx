@@ -195,30 +195,30 @@ const CreateEvent = () => {
   const postEvent = async (event: React.FormEvent) => {
     event.preventDefault()
     const body = {
-      name: clientName,
+      name: clientName || 'string',
       type: 0,
       clientId: clientId,
       startAt: '2024-07-04T18:03:55.640Z',
       endAt: '2024-07-04T18:03:55.640Z',
-      zipCode: zipCode,
-      addressName: addressName,
-      addressNumber: addressNumber,
-      addressComplement: addressComplement,
-      district: district,
-      state: state,
-      city: city,
-      estimatedAudience: estimatedAudience,
+      zipCode: zipCode || 'string',
+      addressName: addressName || 'string',
+      addressNumber: addressNumber || 'string',
+      addressComplement: addressComplement || 'string',
+      district: district || 'string',
+      state: state || 'string',
+      city: city || 'string',
+      estimatedAudience: parseInt(estimatedAudience, 10) || 0,
       materials: materialIdAndQuantity,
-      totalAmount: totalAmount,
+      totalAmount: totalAmount || 0,
     }
     try {
       const res = await axios.post('http://localhost:5196/api/Event', body)
       console.log(res.data)
-      console.log(clientId, materialIdAndQuantity)
+      console.log(clientId, materialIdAndQuantity, body)
     } catch (error) {
-      console.error(error)
+      console.error()
     }
-    console.log(clientId, materialIdAndQuantity, body, totalAmount)
+    console.log(clientId, materialIdAndQuantity, body)
   }
 
   return (
