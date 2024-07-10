@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 type mats = {
-  id: string
+  materialId: string
   quantity: number
 }
 
@@ -144,7 +144,7 @@ const CreateEvent = () => {
     }
 
     const newMaterialInsertPost: mats = {
-      id: materialId,
+      materialId: materialId,
       quantity: quantity,
     }
     setInsertedMaterial(prevMaterials => [...prevMaterials, newMaterialInsert])
