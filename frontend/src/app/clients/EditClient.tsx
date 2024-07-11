@@ -1,50 +1,50 @@
-import axios from "axios";
-import { Edit3Icon } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import ClientForm from "./ClientForm";
+import axios from 'axios'
+import { Edit3Icon } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import ClientForm from './ClientForm'
 
 type EditClientProps = {
-  userId: string;
-};
+  userId: string
+}
 
 type ClientDataProps = {
-  id: string | undefined;
-  fullName: string | undefined;
-  documentId: string | undefined;
-  email: string | undefined;
-  zipCode: string | undefined;
-  addressName: string | undefined;
-  addressComplement: string | undefined;
-  addressNumber: string | undefined;
-  district: string | undefined;
-  state: string | undefined;
-  city: string | undefined;
-  createdDate: string | undefined;
-  isActive: boolean | undefined;
-  phoneNumber: string | undefined;
-};
+  id: string | undefined
+  fullName: string | undefined
+  documentId: string | undefined
+  email: string | undefined
+  zipCode: string | undefined
+  addressName: string | undefined
+  addressComplement: string | undefined
+  addressNumber: string | undefined
+  district: string | undefined
+  state: string | undefined
+  city: string | undefined
+  createdDate: string | undefined
+  isActive: boolean | undefined
+  phoneNumber: string | undefined
+}
 
 const EditClient: React.FC<EditClientProps> = ({ userId }) => {
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false)
   const [clientData, setClientData] = useState<ClientDataProps | undefined>(
-    undefined
-  );
+    undefined,
+  )
 
   useEffect(() => {
-    fetchUserData();
-  }, [openModal]);
+    fetchUserData()
+  }, [openModal])
 
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5196/api/Client/id/${userId}`
-      );
-      setClientData(response.data);
-      console.log(clientData);
+        `http://localhost:5196/api/Client/id/${userId}`,
+      )
+      setClientData(response.data)
+      console.log(clientData)
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.error('Error fetching user data:', error)
     }
-  };
+  }
 
   return (
     <div>
@@ -61,7 +61,7 @@ const EditClient: React.FC<EditClientProps> = ({ userId }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default EditClient;
+export default EditClient

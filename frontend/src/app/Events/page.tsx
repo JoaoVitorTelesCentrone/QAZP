@@ -6,22 +6,26 @@ import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
-
 const Page = () => {
   const [auth, isAuth] = useAtom(authAtom)
 
-  if(!auth) { 
+  if (!auth) {
     redirect('/login')
   }
   return (
     <div>
-        <UserSideMenu />
-        <div className='m-20'>
-          <div className='flex justify-between'>
-            <h1 className='text-4xl font-bold uppercase'>Eventos</h1>
-            <Link className='bg-primary rounded-xl p-3 text-white font-bold ' href='/CreateEvent'>Criar evento</Link>
-          </div>
+      <UserSideMenu />
+      <div className="m-20">
+        <div className="flex justify-between">
+          <h1 className="text-4xl ml-56 font-bold uppercase">Eventos</h1>
+          <Link
+            className="bg-primary rounded-xl p-3 text-white font-bold "
+            href="/CreateEvent"
+          >
+            Criar evento
+          </Link>
         </div>
+      </div>
     </div>
   )
 }

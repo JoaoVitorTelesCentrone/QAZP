@@ -4,31 +4,58 @@ import foto from '../../assets/foto-1.png'
 
 const WhatWeDo = () => {
   return (
-    <div className='py-20 flex flex-col bg-primary'>
-        <div className='flex flex-col'>
-            <h1 className='mx-auto text-tertiary text-3xl uppercase font-bold font-montserrat'>o que fazemos ?</h1>
-            <h1 className='mx-auto text-secondary text-5xl uppercase font-bold font-montserrat my-4'>levamos vida a eventos mágicos</h1>
-            <p className='mx-auto max-w-[800px] text-secondary text-md font-light text-center font-montserrat my-4'>Na nossa empresa, levamos vida a eventos mágicos, transformando cada ocasião em uma experiência encantadora e memorável. Com criatividade, dedicação e atenção aos detalhes, criamos momentos únicos que cativam e surpreendem, tornando cada celebração verdadeiramente especial.</p>
-        </div>
-        <div className='py-24 flex mx-auto'>
-            <div className='mx-14'>
-                <div className='bg-secondary rounded-xl p-3 mb-8'>
-                    <h1 className='font-montserrat font-bold text-2xl text-primary uppercase text-center'>design</h1>
-                    <p className='font-montserrat max-w-[350px] my-2 text-primary text-center'>Criamos experiências únicas e emocionantes para casais apaixonados, cuidando de todos os aspectos do planejamento para que seu dia especial seja perfeito.</p>
-                </div>
+    <div className="py-20 flex flex-col bg-primary">
+      <div className="flex flex-col">
+        <h1 className="mx-auto text-tertiary text-3xl uppercase font-bold font-montserrat">
+          o que fazemos ?
+        </h1>
+        <h1 className="mx-auto text-secondary text-5xl uppercase font-bold font-montserrat my-4">
+          levamos vida a eventos mágicos
+        </h1>
+        <p className="mx-auto max-w-[800px] text-secondary text-md font-light text-center font-montserrat my-4">
+          Na nossa empresa, levamos vida a eventos mágicos, transformando cada
+          ocasião em uma experiência encantadora e memorável. Com criatividade,
+          dedicação e atenção aos detalhes, criamos momentos únicos que cativam
+          e surpreendem, tornando cada celebração verdadeiramente especial.
+        </p>
+      </div>
+      <div className="py-24 flex mx-auto">
+        <div className="mx-14">
+          <div className="bg-secondary rounded-xl p-3 mb-8">
+            <h1 className="font-montserrat font-bold text-2xl text-primary uppercase text-center">
+              design
+            </h1>
+            <p className="font-montserrat max-w-[350px] my-2 text-primary text-center">
+              Criamos experiências únicas e emocionantes para casais
+              apaixonados, cuidando de todos os aspectos do planejamento para
+              que seu dia especial seja perfeito.
+            </p>
+          </div>
 
-                <div className='mb-8'>
-                    <h1 className='font-montserrat font-bold text-2xl text-tertiary uppercase text-center'>design</h1>
-                    <p className='font-montserrat max-w-[350px] my-2 text-center text-secondary'>Criamos experiências únicas e emocionantes para casais apaixonados, cuidando de todos os aspectos do planejamento para que seu dia especial seja perfeito.</p>
-                </div>
+          <div className="mb-8">
+            <h1 className="font-montserrat font-bold text-2xl text-tertiary uppercase text-center">
+              design
+            </h1>
+            <p className="font-montserrat max-w-[350px] my-2 text-center text-secondary">
+              Criamos experiências únicas e emocionantes para casais
+              apaixonados, cuidando de todos os aspectos do planejamento para
+              que seu dia especial seja perfeito.
+            </p>
+          </div>
 
-                <div className='mb-8'>
-                    <h1 className='font-montserrat font-bold text-2xl text-tertiary uppercase text-center'>design</h1>
-                    <p className='font-montserrat max-w-[350px] my-2 text-secondary text-center'>Criamos experiências únicas e emocionantes para casais apaixonados, cuidando de todos os aspectos do planejamento para que seu dia especial seja perfeito.</p>
-                </div>
-            </div>
-            <Image alt='foto' src={foto} />
+          <div className="mb-8">
+            <h1 className="font-montserrat font-bold text-2xl text-tertiary uppercase text-center">
+              design
+            </h1>
+            <p className="font-montserrat max-w-[350px] my-2 text-secondary text-center">
+              Criamos experiências únicas e emocionantes para casais
+              apaixonados, cuidando de todos os aspectos do planejamento para
+              que seu dia especial seja perfeito.
+            </p>
+          </div>
         </div>
+        <Image alt="foto" src={foto} />
+      </div>
     </div>
   )
 }
