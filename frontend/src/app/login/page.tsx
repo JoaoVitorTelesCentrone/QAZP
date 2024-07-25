@@ -47,7 +47,7 @@ const LoginPage = () => {
         setTimeout(() => {
           router.push('/dashboard')
           setLoading(false)
-        }, 500)
+        }, 1000)
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
