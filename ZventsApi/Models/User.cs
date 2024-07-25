@@ -25,10 +25,12 @@ namespace ZventsApi.Models
         public string UserName { get; set; }
         public UserRole? Role { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool? IsActive { get; set; }
 
         public User()
         {
             CreatedDate = DateTime.Now;
+            IsActive = true;
         }
     }
 }

@@ -34,9 +34,12 @@ namespace ZventsApi.Controllers
                 {
                     Name = createEventDto.Name,
                     Type = createEventDto.Type,
+                    Status = createEventDto.Status,
                     ClientId = createEventDto.ClientId,
-                    StartAt = createEventDto.StartAt,
-                    EndAt = createEventDto.EndAt,
+                    StartDate = createEventDto.StartDate,
+                    EndDate = createEventDto.EndDate,
+                    StartTime = createEventDto.StartTime,
+                    EndTime = createEventDto.EndTime,
                     ZipCode = createEventDto.ZipCode,
                     AddressName = createEventDto.AddressName,
                     AddressNumber = createEventDto.AddressNumber,
@@ -56,12 +59,14 @@ namespace ZventsApi.Controllers
                     {
                         return NotFound($"Material with ID {materialDto.MaterialId} not found.");
                     }
-                    eventEntity.EventMaterials.Add(new EventMaterial
-                    {
-                        Event = eventEntity,
-                        Material = material,
-                        Quantity = materialDto.Quantity
-                    });
+                    eventEntity.EventMaterials.Add(
+                        new EventMaterial
+                        {
+                            Event = eventEntity,
+                            Material = material,
+                            Quantity = materialDto.Quantity
+                        }
+                    );
                 }
 
                 _context.Events.Add(eventEntity);
@@ -94,8 +99,8 @@ namespace ZventsApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEvent(Guid id, UpdateEventDto updateEventDto)
         {
-            var eventEntity = await _context.Events
-                .Include(e => e.EventMaterials)
+            var eventEntity = await _context
+                .Events.Include(e => e.EventMaterials)
                 .ThenInclude(em => em.Material)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
@@ -106,9 +111,12 @@ namespace ZventsApi.Controllers
 
             eventEntity.Name = updateEventDto.Name;
             eventEntity.Type = updateEventDto.Type;
+            eventEntity.Status = updateEventDto.Status;
             eventEntity.ClientId = updateEventDto.ClientId;
-            eventEntity.StartAt = updateEventDto.StartAt;
-            eventEntity.EndAt = updateEventDto.EndAt;
+            eventEntity.StartDate = updateEventDto.StartDate;
+            eventEntity.StartTime = updateEventDto.StartTime;
+            eventEntity.EndDate = updateEventDto.EndDate;
+            eventEntity.EndTime = updateEventDto.EndTime;
             eventEntity.ZipCode = updateEventDto.ZipCode;
             eventEntity.AddressName = updateEventDto.AddressName;
             eventEntity.AddressNumber = updateEventDto.AddressNumber;
@@ -118,6 +126,7 @@ namespace ZventsApi.Controllers
             eventEntity.City = updateEventDto.City;
             eventEntity.EstimatedAudience = updateEventDto.EstimatedAudience;
             eventEntity.TotalAmount = updateEventDto.TotalAmount;
+            eventEntity.IsActive = updateEventDto.IsActive;
 
             eventEntity.EventMaterials.Clear();
             foreach (var materialDto in updateEventDto.Materials)
@@ -128,12 +137,14 @@ namespace ZventsApi.Controllers
                     return NotFound($"Material with ID {materialDto.MaterialId} not found.");
                 }
 
-                eventEntity.EventMaterials.Add(new EventMaterial
-                {
-                    EventId = eventEntity.Id,
-                    MaterialId = material.Id,
-                    Quantity = materialDto.Quantity
-                });
+                eventEntity.EventMaterials.Add(
+                    new EventMaterial
+                    {
+                        EventId = eventEntity.Id,
+                        MaterialId = material.Id,
+                        Quantity = materialDto.Quantity
+                    }
+                );
             }
 
             _context.Entry(eventEntity).State = EntityState.Modified;

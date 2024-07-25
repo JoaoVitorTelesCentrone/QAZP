@@ -114,6 +114,7 @@ namespace ZventsApi.Controllers
             userToUpdate.Password = updatedUser.Password;
             userToUpdate.UserName = updatedUser.UserName;
             userToUpdate.Role = updatedUser.Role;
+            userToUpdate.IsActive = updatedUser.IsActive;
 
             _context.SaveChanges();
 
