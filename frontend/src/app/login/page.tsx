@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import axios from 'axios'
 import { Toaster, toast } from 'sonner'
 import Footer from '../components/Footer'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 const LoginPage = () => {
   const router = useRouter()
@@ -20,9 +21,11 @@ const LoginPage = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(false)
   const [logged, isLogged] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   async function verifyLogin(username: string, password: string) {
     try {
+      setLoading(true)
       const response = await axios.get(
         `http://localhost:5196/api/User/${username}&${password}`,
       )
@@ -34,7 +37,6 @@ const LoginPage = () => {
         console.log(response.data)
         isLogged(true)
         setError(false)
-        // setUserInfo()
         setUserAuth(true)
         toast.success(`Bem vindo ${username}`)
         setUserInfo({
@@ -44,12 +46,14 @@ const LoginPage = () => {
         })
         setTimeout(() => {
           router.push('/dashboard')
-        }, 2000)
+          setLoading(false)
+        }, 500)
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
       toast.error('Usuário ou senha incorretos')
       setError(true)
+      setLoading(false)
     }
   }
 
@@ -59,49 +63,58 @@ const LoginPage = () => {
   }
 
   return (
-    <>
-      <Header />
-      <Toaster richColors />
-      <div className="flex flex-col mx-auto py-14 bg-primary h-screen">
-        <h1 className="mx-auto text-5xl text-secondary-foreground my-8 font-bold uppercase text-secondary">
-          Faça seu login
-        </h1>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col mx-auto rounded-xl bg-slate-400 p-6 bg-opacity-20 shadow-md shadow-slate-500"
-        >
-          <label className="text-lg font-bold ">Usuário</label>
-          <Input
-            placeholder="Digite o usuário"
-            onChange={e => setUsername(e.target.value)}
-            className="p-2 bg-white border-slate-500 mb-8"
-            type="text"
-            id="email"
-          />
+    <div>
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <ClipLoader size={50} color={'#123abc'} loading={loading} />
+        </div>
+      ) : (
+        <>
+          <Header />
+          <Toaster richColors />
+          <div className="flex flex-col mx-auto py-14 bg-primary h-screen">
+            <h1 className="mx-auto text-5xl text-secondary-foreground my-8 font-bold uppercase text-secondary">
+              Faça seu login
+            </h1>
 
-          <label className="text-lg font-bold" htmlFor="password">
-            Senha
-          </label>
-          <Input
-            placeholder="Digite a senha"
-            onChange={e => setPassword(e.target.value)}
-            className="p-2 border-slate-500 bg-white mb-8"
-            type="password"
-            id="password"
-          />
-          <div className="flex flex-col">
-            <button
-              data-testid="login-button"
-              className="bg-primary text-secondary rounded-xl px-6 py-3 max-w-[150px] mx-auto"
-              type="submit"
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col mx-auto rounded-xl bg-slate-400 p-6 bg-opacity-20 shadow-md shadow-slate-500"
             >
-              Entrar
-            </button>
+              <label className="text-lg font-bold ">Usuário</label>
+              <Input
+                placeholder="Digite o usuário"
+                onChange={e => setUsername(e.target.value)}
+                className="p-2 bg-white border-slate-500 mb-8"
+                type="text"
+                id="email"
+              />
+
+              <label className="text-lg font-bold" htmlFor="password">
+                Senha
+              </label>
+              <Input
+                placeholder="Digite a senha"
+                onChange={e => setPassword(e.target.value)}
+                className="p-2 border-slate-500 bg-white mb-8"
+                type="password"
+                id="password"
+              />
+              <div className="flex flex-col">
+                <button
+                  data-testid="login-button"
+                  className="bg-primary text-secondary rounded-xl px-6 py-3 max-w-[150px] mx-auto"
+                  type="submit"
+                >
+                  Entrar
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-      <Footer />
-    </>
+          <Footer />
+        </>
+      )}
+    </div>
   )
 }
 

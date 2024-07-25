@@ -7,6 +7,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@tanstack/react-table": "^8.16.0",
     "node-fetch": "^3.3.2",
+    "react-spinners": "^0.14.1",
     "shadcn-ui": "^0.2.3",
     "styled-components": "^6.1.8"
   }
