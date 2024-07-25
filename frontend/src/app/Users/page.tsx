@@ -28,10 +28,10 @@ const Users = () => {
 
   const columns = useMemo(() => userColumns(), [])
   return (
-    <div className="flex flex-col bg-primary">
+    <div className="flex flex-col">
       <UserHeader />
       <div className="flex my-20 mx-10 justify-between">
-        <h1 className="text-4xl font-bold uppercase text-secondary-foreground">
+        <h1 className="text-4xl ml-72 font-bold uppercase text-secondary-foreground">
           Usuários
         </h1>
         <Link

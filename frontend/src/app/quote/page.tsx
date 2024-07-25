@@ -32,10 +32,11 @@ const Page = () => {
   return (
     <div>
       <UserSideMenu />
-      <div className="m-20">
-        <h1 className="my-4 text-4xl font-bold uppercase">Orçamentos</h1>
-
-        <QuoteTable columns={quoteColumns} data={quote} />
+      <div className="">
+        <h1 className="ml-72 my-12 text-4xl font-bold uppercase">Orçamentos</h1>
+        <div className="ml-72 mr-32">
+          <QuoteTable columns={quoteColumns} data={quote} />
+        </div>
       </div>
     </div>
   )
