@@ -50,12 +50,12 @@ const Dashboard = () => {
   return (
     <div>
       <UserHeader />
-      <h1 className="text-5xl font-bold ml-72 my-10">
+      <h1 className="text-4xl font-bold ml-72 my-10 flex justify-center">
         Seja bem vindo ao Zventos, {user.username}
       </h1>
       <div className="flex mx-16">
         <div className="flex p-4 mx-auto ml-72 my-6 w-[1000px]">
-          <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-seconadry p-8">
+          <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
             <h1 className="text-3xl text-gray-400 font-bold">
               Número de Clientes
             </h1>
@@ -84,8 +84,8 @@ const Dashboard = () => {
         </div>
         <LucideLineChart className="w-72 h-72 text-gray-300" />
       </div>
-      <h1 className="font-bold mt-16 text-4xl ml-72">Próximos eventos</h1>
-      <div className="ml-10 ">
+      <h1 className="font-bold mt-16 text-4xl ml-72 flex justify-center">Próximos eventos</h1>
+      <div className="ml-10">
         <DashboardTable columns={eventsColumns} data={events} />
       </div>
     </div>

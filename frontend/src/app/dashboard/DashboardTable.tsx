@@ -64,7 +64,7 @@ export function DashboardTable<TData, TValue>({
         />
       </div> */}
       <Table className="border-2 border-secondary ">
-        <TableHeader className="bg-primary text-secondary">
+        <TableHeader className="bg-cyan-700 text-gray-100">
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map(header => {
