@@ -161,14 +161,6 @@ C:\Users\UendellRios\Desktop\Cypress-project\ZventsApi\obj\Debug\net8.0\ZventsAp
 C:\Users\UendellRios\Desktop\Cypress-project\ZventsApi\obj\Debug\net8.0\ref\ZventsApi.dll
 C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\appsettings.json
-C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi\bin\Debug\net8.0\appsettings.Development.json
-C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi\bin\Debug\net8.0\appsettings.json
-C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi\bin\Debug\net8.0\ZventsApi.deps.json
-C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi\bin\Debug\net8.0\ZventsApi.runtimeconfig.json
-C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi\obj\Debug\net8.0\staticwebassets.build.json
-C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi\obj\Debug\net8.0\ZventsApi.sourcelink.json
-C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi\obj\project.assets.json
-C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi\obj\ZventsApi.csproj.nuget.dgspec.json
 C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi.exe
 C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi.deps.json
 C:\Users\JoaoCentrone\Desktop\Cypress-project\ZventsApi\bin\Debug\net8.0\ZventsApi.runtimeconfig.json

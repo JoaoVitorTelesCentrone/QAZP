@@ -1,16 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/2ybzdLFDcajdI5WuPUetfHCBmIDLbynBxIYbLnrfFM7Af9GiE4kQdtg4gMDm8hjgrZR5xq2shstYlODuOpMzg==",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-  "dgSpecHash": "/2ybzdLFDcajdI5WuPUetfHCBmIDLbynBxIYbLnrfFM7Af9GiE4kQdtg4gMDm8hjgrZR5xq2shstYlODuOpMzg==",
-=======
-  "dgSpecHash": "bhZqhCLT7+XjBwvatLmmPgNk3L5AdGjr87lLGJyVQlo9VQs4gbulQI4IRkr9R9z/AxVZwZ4gb/dnRsYLab3I8w==",
->>>>>>> 0dbeeb4378b35cb268665bda02c95492f66cb218
->>>>>>> main
-=======
->>>>>>> main
+  "dgSpecHash": "jq5W4jkX+ZLwYa33Y4L6OYE+H9od9MYDkOc55lwDQGK3MfYQ9B3KFHbzP1AiKFI4hVIjjHyuLNzIEOtiDp7PBg==",
   "success": true,
   "projectFilePath": "C:\\Users\\JoaoCentrone\\Desktop\\Cypress-project\\ZventsApi\\ZventsApi.csproj",
   "expectedPackageFiles": [
@@ -180,5 +170,12 @@
     "C:\\Users\\JoaoCentrone\\.nuget\\packages\\system.threading.tasks.dataflow\\7.0.0\\system.threading.tasks.dataflow.7.0.0.nupkg.sha512",
     "C:\\Users\\JoaoCentrone\\.nuget\\packages\\system.windows.extensions\\7.0.0\\system.windows.extensions.7.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problema ao ler o arquivo de cache C:\\Users\\JoaoCentrone\\Desktop\\Cypress-project\\ZventsApi\\obj\\project.nuget.cache: Invalid property identifier character: <. Path 'dgSpecHash', line 4, position 0."
+    }
+  ]
 }
