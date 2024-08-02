@@ -45,7 +45,7 @@ namespace ZventsApi.Models
         public int? EstimatedAudience { get; set; }
         public List<MaterialDto> Materials { get; set; } = [];
         public decimal? TotalAmount { get; set; }
-        public bool? IsActive { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 
     public enum EventType
@@ -86,18 +86,23 @@ namespace ZventsApi.Models
 
         [Required(ErrorMessage = "Type is required")]
         public EventType Type { get; set; }
+
         [Required(ErrorMessage = "Status is required")]
         public EventStatus Status { get; set; }
 
         [Required(ErrorMessage = "ClientId is required")]
         public Guid ClientId { get; set; }
         public Client? Client { get; set; }
+
         [Required(ErrorMessage = "StartDate is required")]
         public DateOnly StartDate { get; set; }
+
         [Required(ErrorMessage = "StarTime is required")]
         public TimeOnly StartTime { get; set; }
+
         [Required(ErrorMessage = "EndDate is required")]
         public DateOnly EndDate { get; set; }
+
         [Required(ErrorMessage = "EndTime is required")]
         public TimeOnly EndTime { get; set; }
 
@@ -123,11 +128,11 @@ namespace ZventsApi.Models
         public virtual ICollection<EventMaterial> EventMaterials { get; set; } = [];
         public decimal? TotalAmount { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool? IsActive { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public Event()
         {
-            IsActive = true;
+            IsDeleted = false;
             CreatedDate = DateTime.Now;
             Status = 0;
         }

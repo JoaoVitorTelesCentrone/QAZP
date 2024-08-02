@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Data.Entity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ZventsApi.Models;
 
@@ -13,13 +14,20 @@ namespace ZventsApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUserAsync()
         {
-            return await _context.Users.OrderByDescending(x => x.CreatedDate).ToArrayAsync();
+            var activeUsers = await _context
+                .Users.Where(dbUser =>
+                    dbUser.IsDeleted == false && dbUser.UserStatus == UserStatus.Active
+                )
+                .OrderBy(dbUser => dbUser.CreatedDate)
+                .ToListAsync();
+
+            return Ok(activeUsers);
         }
 
         [HttpPost]
         public ActionResult<User> PostUser(User user)
         {
-            bool userExists = _context.Users.Any(u => u.UserName == user.UserName);
+            bool userExists = _context.Users.Any(dbUser => dbUser.UserName == user.UserName);
 
             if (!userExists)
             {
@@ -35,7 +43,7 @@ namespace ZventsApi.Controllers
         [HttpGet("name/{name}")]
         public ActionResult<User> GetUserByName(string name)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Name == name);
+            var user = _context.Users.FirstOrDefault(dbUser => dbUser.Name == name);
 
             if (user == null)
             {
@@ -48,7 +56,7 @@ namespace ZventsApi.Controllers
         [HttpGet("id/{id}")]
         public ActionResult<User> GetUserById(Guid id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            var user = _context.Users.FirstOrDefault(dbUser => dbUser.Id == id);
 
             if (user == null)
             {
@@ -61,7 +69,7 @@ namespace ZventsApi.Controllers
         [HttpGet("userName/{userName}")]
         public ActionResult<User> GetUserByUserName(string userName)
         {
-            var user = _context.Users.FirstOrDefault(u => u.UserName == userName);
+            var user = _context.Users.FirstOrDefault(dbUser => dbUser.UserName == userName);
 
             if (user == null)
             {
@@ -74,13 +82,17 @@ namespace ZventsApi.Controllers
         [HttpGet("{username}&{password}")]
         public ActionResult<User> GetUserByCredentials(string username, string password)
         {
-            var user = _context.Users.FirstOrDefault(u =>
-                u.UserName == username && u.Password == password
+            var user = _context.Users.FirstOrDefault(dbUser =>
+                dbUser.UserName == username && dbUser.Password == password
             );
 
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });
+            }
+            else if (user.UserStatus == UserStatus.Inactive || user.IsDeleted == true)
+            {
+                return Unauthorized("User is not authorized");
             }
 
             return Ok(new { message = "Login successful" });
@@ -98,8 +110,8 @@ namespace ZventsApi.Controllers
 
             if (userToUpdate.Role == UserRole.Admin && updatedUser.Role != UserRole.Admin)
             {
-                bool isAdminExists = _context.Users.Any(u =>
-                    u.Role == UserRole.Admin && u.Id != id
+                bool isAdminExists = _context.Users.Any(dbUser =>
+                    dbUser.Role == UserRole.Admin && dbUser.Id != id
                 );
 
                 if (!isAdminExists)
@@ -114,11 +126,60 @@ namespace ZventsApi.Controllers
             userToUpdate.Password = updatedUser.Password;
             userToUpdate.UserName = updatedUser.UserName;
             userToUpdate.Role = updatedUser.Role;
-            userToUpdate.IsActive = updatedUser.IsActive;
+            userToUpdate.UserStatus = updatedUser.UserStatus;
 
             _context.SaveChanges();
 
             return Ok(userToUpdate);
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> SoftDeleteUser(Guid id)
+        {
+            var userToDelete = await _context.Users.FindAsync(id);
+
+            if (userToDelete == null)
+            {
+                return NotFound();
+            }
+
+            if (userToDelete.Role == UserRole.Admin)
+            {
+                bool isAdminExists = _context.Users.Any(dbUser =>
+                    dbUser.Role == UserRole.Admin && dbUser.Id != id
+                );
+
+                if (!isAdminExists)
+                {
+                    return Conflict(new { message = "Cannot delete the last admin user" });
+                }
+            }
+
+            userToDelete.IsDeleted = true;
+            _context.Entry(userToDelete).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool UserExists(Guid id)
+        {
+            return _context.Users.Any(user => user.Id == id);
         }
 
         [HttpDelete("{id}")]
@@ -133,8 +194,8 @@ namespace ZventsApi.Controllers
 
             if (userToDelete.Role == UserRole.Admin)
             {
-                bool isAdminExists = _context.Users.Any(u =>
-                    u.Role == UserRole.Admin && u.Id != id
+                bool isAdminExists = _context.Users.Any(dbUser =>
+                    dbUser.Role == UserRole.Admin && dbUser.Id != id
                 );
 
                 if (!isAdminExists)
