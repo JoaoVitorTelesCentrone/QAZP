@@ -52,11 +52,11 @@ const Clients = () => {
         <>
           <UserHeader />
           <div className="p-20 justify-between flex">
-            <h1 className="ml-48 uppercase text-4xl font-bold text-secondary-foreground">
+            <h1 className="ml-48 uppercase text-4xl font-bold text-secondary-foreground ">
               {intl.formatMessage({ id: 'client.page.title' })}
             </h1>
             <Link
-              className="flex bg-primary p-4 rounded-xl text-white"
+              className="flex bg-quartenary p-4 rounded-xl text-white"
               href="/CreateClient"
             >
               {intl.formatMessage({
