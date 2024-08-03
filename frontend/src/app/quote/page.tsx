@@ -7,37 +7,55 @@ import { redirect } from 'next/navigation'
 import { quoteColumns } from './column'
 import { QuoteTable } from './QuoteTable'
 import axios from 'axios'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 const Page = () => {
   const [auth, isAuth] = useAtom(authAtom)
   const [quote, setQuote] = useState([])
+  const [loading, setLoading] = useState(false)
 
   if (!auth) {
     redirect('/login')
   }
+  async function fetchUserData() {
+    try {
+      const response = await axios.get('http://localhost:5196/api/Quote')
+
+      setQuote(response.data)
+    } catch (error) {
+      console.error('Erro ao fazer a requisição:', error)
+      throw error
+    }
+  }
 
   useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const response = await axios.get('http://localhost:5196/api/Quote')
-
-        setQuote(response.data)
-      } catch (error) {
-        console.error('Erro ao fazer a requisição:', error)
-        throw error
-      }
+    const fetch = async () => {
+      setLoading(true)
+      await new Promise(resolve => setTimeout(resolve, 500))
+      await Promise.all([fetchUserData()])
+      setLoading(false)
     }
-    fetchUserData()
+    fetch()
   }, [])
   return (
     <div>
-      <UserSideMenu />
-      <div className="">
-        <h1 className="ml-72 my-12 text-4xl font-bold uppercase">Orçamentos</h1>
-        <div className="ml-72 mr-32">
-          <QuoteTable columns={quoteColumns} data={quote} />
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <ClipLoader size={50} color={'#123abc'} loading={loading} />
         </div>
-      </div>
+      ) : (
+        <>
+          <UserSideMenu />
+          <div className="">
+            <h1 className="ml-72 my-12 text-4xl font-bold uppercase">
+              Orçamentos
+            </h1>
+            <div className="ml-72 mr-32">
+              <QuoteTable columns={quoteColumns} data={quote} />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
