@@ -52,18 +52,18 @@ export function MaterialTable<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md  border-[1px] pt-10 mx-64 my-16">
-      <div className="flex mx-64 justify-between py-4">
+    <div className="rounded-md pt-2 mx-64 my-16">
+      <div className="flex mx-64 justify-between py-2">
         <Input
           placeholder="Filtrar por nome"
           value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
           onChange={event =>
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
-          className="text-secondary-foreground text-center font-bold  mx-32"
+          className="text-secondary-foreground text-center font-bold  mx-32 border-primary"
         />
       </div>
-      <Table className="border-2 border-secondary">
+      <Table className="border-2 border-secondary ">
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
@@ -71,7 +71,7 @@ export function MaterialTable<TData, TValue>({
                 return (
                   <TableHead
                     key={header.id}
-                    className=" py-2 text-secondary-foreground text-center"
+                    className=" py-2 text-secondary-foreground text-center bg-cyan-700 text-gray-100"
                   >
                     {header.isPlaceholder
                       ? null
