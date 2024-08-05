@@ -40,7 +40,7 @@ const Page = () => {
             </h1>
             <Link
               className="bg-quartenary flex p-4 rounded-xl text-white"
-              href="/CreateClient"
+              href="/CreateEvent"
             >
               Criar evento
               <Plus className="h-4 w-4 mt-1 ml-2" />{' '}
