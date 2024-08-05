@@ -19,7 +19,7 @@ const UserSideMenu = () => {
   return (
     <div className={`flex h-full`}>
       <div
-        className={`fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out bg-gray-800 text-white w-64 p-4`}
+        className={`fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out bg-gray-800 text-white w-64 p-4 flex flex-col`}
       >
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-secondary">
@@ -27,7 +27,7 @@ const UserSideMenu = () => {
           </h1>
           <h1 className="text-secondary font-bold w-[100px] my-3">{`Bem vindo, ${user.username}`}</h1>
         </div>
-        <nav>
+        <nav className="flex-grow">
           <ul className="flex flex-col space-y-4">
             <li>
               <Link
