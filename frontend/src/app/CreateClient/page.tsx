@@ -297,7 +297,7 @@ const CreateClientForm = () => {
             </div>
           </div>
         </div>
-        <Button className='bg-primary text-white'
+        <Button className='bg-quartenary text-white'
         variant="default">
           {intl.formatMessage({
             id: 'create.client.page.create.client.button',
