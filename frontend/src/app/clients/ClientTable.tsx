@@ -54,7 +54,7 @@ export function ClientTable<TData, TValue>({
 
   return (
     <div className="rounded-md pt-0">
-      <div className="flex items-center justify-around mx-0 py-0 ">
+      <div className="flex items-center justify-around mx-0 py-0">
         <Input
           placeholder={intl.formatMessage({
             id: 'client.page.filter.by.name.field.placeholder',
