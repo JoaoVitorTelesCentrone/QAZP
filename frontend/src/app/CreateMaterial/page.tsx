@@ -34,10 +34,6 @@ const MaterialCategory: MaterialCategoryProps[] = [
 ]
 
 const CreateMaterial = () => {
-  const redirectM = () => {
-    redirect('/Materials')
-  }
-
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0)
   const [type, setType] = useState('')
@@ -61,12 +57,11 @@ const CreateMaterial = () => {
         console.log(response.data)
         console.log(data)
         toast.success('Material criado')
+        redirect('/Materials')
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
       toast.error('Deu erro!')
-    } finally {
-      redirectM()
     }
 
     return true

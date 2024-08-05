@@ -53,8 +53,8 @@ export function ClientTable<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md  border-[1px] pt-10">
-      <div className="flex items-center justify-around mx-4 py-4">
+    <div className="rounded-md pt-0">
+      <div className="flex items-center justify-around mx-0 py-0">
         <Input
           placeholder={intl.formatMessage({
             id: 'client.page.filter.by.name.field.placeholder',
@@ -65,7 +65,7 @@ export function ClientTable<TData, TValue>({
           onChange={event =>
             table.getColumn('fullName')?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-sm border-primary font-bold text-center"
         />
         <Input
           placeholder={intl.formatMessage({
@@ -77,18 +77,18 @@ export function ClientTable<TData, TValue>({
           onChange={event =>
             table.getColumn('documentId')?.setFilterValue(event.target.value)
           }
-          className="max-w-sm my-10"
+          className="max-w-sm my-10  border-primary font-bold text-center"
         />
       </div>
       <Table className="border-2 border-secondary">
-        <TableHeader>
+        <TableHeader className="bg-cyan-700 text-gray-100">
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map(header => {
                 return (
                   <TableHead
                     key={header.id}
-                    className=" py-2 text-secondary-foreground text-center"
+                    className="py-2 text-secondary-foreground text-center"
                   >
                     {header.isPlaceholder
                       ? null

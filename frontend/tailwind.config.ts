@@ -27,6 +27,7 @@ const config = {
         primary: '#222831',
         secondary: '#EEEEEE',
         tertiary: '#76ABAE',
+        quartenary:'#004d40'
       },
       borderRadius: {
         lg: 'var(--radius)',

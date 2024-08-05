@@ -22,7 +22,7 @@ export const clientColumns: ColumnDef<Client>[] = [
   {
     id: 'select',
     header: ({ table }) => (
-      <Checkbox
+      <Checkbox className='bg-white'
         checked={
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && 'indeterminate')
@@ -34,7 +34,7 @@ export const clientColumns: ColumnDef<Client>[] = [
       />
     ),
     cell: ({ row }) => (
-      <Checkbox
+      <Checkbox className='bg-white'
         checked={row.getIsSelected()}
         onCheckedChange={(value: any) => row.toggleSelected(!!value)}
         aria-label="Select row"

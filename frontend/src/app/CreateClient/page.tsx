@@ -117,7 +117,7 @@ const CreateClientForm = () => {
       </h1>
       <form
         onSubmit={handleSubmit}
-        className="mt-5 mb-8 flex-col flex mx-auto border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-slate-600 bg-opacity-10 p-10 max-w-[500px]"
+        className="mt-3 mb-4 flex-col flex mx-auto border-0 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-slate-600 bg-opacity-10 p-4 max-w-[500px]"
       >
         <div>
           <h1 className="text-2xl font-bold mb-2">
@@ -134,7 +134,7 @@ const CreateClientForm = () => {
               </h1>
               <Input
                 onChange={e => setFullName(e.target.value)}
-                className="p-2 border-slate-500 bg-white mb-4"
+                className="p-4 border-slate-500 bg-white mb-4"
                 placeholder={intl.formatMessage({
                   id: 'create.client.page.fullName.field.placeholder',
                 })}
@@ -150,7 +150,7 @@ const CreateClientForm = () => {
               </h1>
               <Input
                 onChange={e => setDocumentId(e.target.value)}
-                className="p-2 border-slate-500 bg-white mb-4"
+                className="p-4 border-slate-500 bg-white mb-4"
                 placeholder={intl.formatMessage({
                   id: 'create.client.page.document.field.placeholder',
                 })}
@@ -164,7 +164,7 @@ const CreateClientForm = () => {
               </h1>
               <Input
                 onChange={e => setPhoneNumber(e.target.value)}
-                className="p-2 border-slate-500 bg-white mb-4"
+                className="p-4 border-slate-500 bg-white mb-4"
                 placeholder={intl.formatMessage({
                   id: 'create.client.page.phoneNumber.field.placeholder',
                 })}
@@ -177,7 +177,7 @@ const CreateClientForm = () => {
           <Input
             type="email"
             onChange={e => setEmail(e.target.value)}
-            className="p-2 border-slate-500 bg-white mb-4"
+            className="p-4 border-slate-500 bg-white mb-4"
             placeholder={intl.formatMessage({
               id: 'create.client.page.email.field.placeholder',
             })}
@@ -198,7 +198,7 @@ const CreateClientForm = () => {
               </h1>
               <div className="flex">
                 <Input
-                  className="p-2 border-slate-500 bg-white mb-4"
+                  className="p-4 border-slate-500 bg-white mb-4"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.zipCode.field.placeholder',
                   })}
@@ -218,15 +218,15 @@ const CreateClientForm = () => {
                 })}
               </h1>
               <Input
-                className="p-2 border-slate-500 bg-neutral-300 mb-4"
+                className="p-4 border-slate-500 bg-neutral-300 mb-2"
                 value={addressName}
                 onChange={e => setAddressName(e.target.value)}
                 readOnly={true}
               />
             </div>
           </div>
-          <div className="w-full flex justify-around">
-            <div className="mx-1">
+          <div className="w-full justify-between flex">
+            <div className="mr-2">
               <h1>
                 {intl.formatMessage({
                   id: 'create.client.page.streetNumber.field.label',
@@ -234,13 +234,13 @@ const CreateClientForm = () => {
               </h1>
               <Input
                 onChange={e => setAddressNumber(e.target.value)}
+                className="p-4 border-slate-500 bg-white mb-2"
                 placeholder={intl.formatMessage({
                   id: 'create.client.page.streetNumber.field.placeholder',
                 })}
-                className="p-2 border-slate-500 bg-white mb-4"
               />
             </div>
-            <div className="mx-1">
+            <div>
               <h1>
                 {intl.formatMessage({
                   id: 'create.client.page.streetComplement.field.label',
@@ -248,10 +248,10 @@ const CreateClientForm = () => {
               </h1>
               <Input
                 onChange={e => setAddressComplement(e.target.value)}
+                className="p-4 border-slate-500 bg-white mb-4"
                 placeholder={intl.formatMessage({
                   id: 'create.client.page.streetComplement.field.placeholder',
                 })}
-                className="p-2 border-slate-500 bg-white mb-4"
               />
             </div>
           </div>
@@ -297,7 +297,8 @@ const CreateClientForm = () => {
             </div>
           </div>
         </div>
-        <Button variant="default">
+        <Button className='bg-quartenary text-white'
+        variant="default">
           {intl.formatMessage({
             id: 'create.client.page.create.client.button',
           })}

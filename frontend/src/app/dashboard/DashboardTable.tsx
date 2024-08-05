@@ -52,7 +52,7 @@ export function DashboardTable<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md mx-64 my-6">
+    <div className="rounded-md mx-4 my-6">
       {/* <div className="flex mx-64 justify-between py-4">
         <Input
           placeholder="Filtrar por nome"
