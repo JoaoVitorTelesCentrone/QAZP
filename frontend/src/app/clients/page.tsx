@@ -56,7 +56,7 @@ const Clients = () => {
               {intl.formatMessage({ id: 'client.page.title' })}
             </h1>
             <Link
-              className="flex bg-quartenary p-4 rounded-xl text-white"
+              className="bg-quartenary flex p-4 rounded-xl text-white"
               href="/CreateClient"
             >
               {intl.formatMessage({

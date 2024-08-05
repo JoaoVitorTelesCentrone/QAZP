@@ -88,7 +88,7 @@ export function ClientTable<TData, TValue>({
                 return (
                   <TableHead
                     key={header.id}
-                    className=" py-2 text-secondary-foreground text-center"
+                    className="py-2 text-secondary-foreground text-center"
                   >
                     {header.isPlaceholder
                       ? null
