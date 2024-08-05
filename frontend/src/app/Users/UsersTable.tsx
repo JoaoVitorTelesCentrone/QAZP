@@ -52,30 +52,30 @@ export function UsersTable<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md w-[1000px] border-2 border-secondary shadow-sm shadow-tertiary pt-10">
-      <div className="flex mx-64 justify-between py-4">
+    <div className="rounded-md pt-0">
+      <div className="flex items-center justify-around mx-0 py-0">
         <Input
           placeholder="Filtrar por nome"
           value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
           onChange={event =>
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
-          className="text-secondary-foreground text-center font-bold"
+          className="max-w-sm border-primary text-center font-bold"
         />
 
         <Input
-          placeholder="Filtrar por usuario"
+          placeholder="Filtrar por usuário"
           value={
             (table.getColumn('userName')?.getFilterValue() as string) ?? ''
           }
           onChange={event =>
             table.getColumn('userName')?.setFilterValue(event.target.value)
           }
-          className="text-secondary-foreground text-center font-bold"
+          className="max-w-sm my-10 border-primary text-center font-bold"
         />
       </div>
       <Table className="border-2 border-secondary">
-        <TableHeader>
+        <TableHeader className="bg-cyan-700 text-gray-100">
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map(header => {

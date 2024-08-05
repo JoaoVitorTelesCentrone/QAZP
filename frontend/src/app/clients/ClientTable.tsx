@@ -65,7 +65,7 @@ export function ClientTable<TData, TValue>({
           onChange={event =>
             table.getColumn('fullName')?.setFilterValue(event.target.value)
           }
-          className="max-w-sm border-primary"
+          className="max-w-sm border-primary font-bold text-center"
         />
         <Input
           placeholder={intl.formatMessage({
@@ -77,7 +77,7 @@ export function ClientTable<TData, TValue>({
           onChange={event =>
             table.getColumn('documentId')?.setFilterValue(event.target.value)
           }
-          className="max-w-sm my-10  border-primary"
+          className="max-w-sm my-10  border-primary font-bold text-center"
         />
       </div>
       <Table className="border-2 border-secondary">
