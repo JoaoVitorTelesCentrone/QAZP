@@ -50,7 +50,7 @@ const Page = () => {
             <h1 className="ml-72 my-12 text-4xl font-bold uppercase">
               Orçamentos
             </h1>
-            <div className="ml-72 mr-32">
+            <div className="ml-72 mr-10">
               <QuoteTable columns={quoteColumns} data={quote} />
             </div>
           </div>

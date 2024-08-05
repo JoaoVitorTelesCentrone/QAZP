@@ -52,8 +52,8 @@ export function QuoteTable<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md  pt-2">
-      <div className="flex mx-64 justify-between py-4">
+    <div className="rounded-md  pt-0">
+      <div className="flex mx-0 justify-around py-0">
         <Input
           placeholder="Filtrar por nome"
           value={
@@ -62,18 +62,18 @@ export function QuoteTable<TData, TValue>({
           onChange={event =>
             table.getColumn('firstName')?.setFilterValue(event.target.value)
           }
-          className="text-secondary-foreground text-center font-bold  mx-32 border-primary"
+          className="max-w-sm border-primary font-bold text-center my-10"
         />
       </div>
       <Table className="border-2 border-secondary">
-        <TableHeader>
+        <TableHeader className="bg-cyan-700 text-gray-100">
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map(header => {
                 return (
                   <TableHead
                     key={header.id}
-                    className=" py-2 text-secondary-foreground text-center bg-cyan-700 text-gray-100"
+                    className="py-2 text-secondary-foreground text-center"
                   >
                     {header.isPlaceholder
                       ? null
