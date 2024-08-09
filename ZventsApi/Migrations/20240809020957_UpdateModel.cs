@@ -12,20 +12,47 @@ namespace ZventsApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
+                name: "IsActive",
+                table: "Quotes",
+                newName: "IsDeleted");
+
+            migrationBuilder.RenameColumn(
+                name: "IsActive",
+                table: "Materials",
+                newName: "IsDeleted");
+
+            migrationBuilder.RenameColumn(
                 name: "StartAt",
                 table: "Events",
                 newName: "StartTime");
+
+            migrationBuilder.RenameColumn(
+                name: "IsActive",
+                table: "Events",
+                newName: "IsDeleted");
 
             migrationBuilder.RenameColumn(
                 name: "EndAt",
                 table: "Events",
                 newName: "StartDate");
 
-            migrationBuilder.AddColumn<bool>(
+            migrationBuilder.RenameColumn(
                 name: "IsActive",
+                table: "Clients",
+                newName: "IsDeleted");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsDeleted",
                 table: "Users",
                 type: "INTEGER",
                 nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "UserStatus",
+                table: "Users",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AddColumn<DateOnly>(
                 name: "EndDate",
@@ -53,7 +80,11 @@ namespace ZventsApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IsActive",
+                name: "IsDeleted",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "UserStatus",
                 table: "Users");
 
             migrationBuilder.DropColumn(
@@ -69,6 +100,16 @@ namespace ZventsApi.Migrations
                 table: "Events");
 
             migrationBuilder.RenameColumn(
+                name: "IsDeleted",
+                table: "Quotes",
+                newName: "IsActive");
+
+            migrationBuilder.RenameColumn(
+                name: "IsDeleted",
+                table: "Materials",
+                newName: "IsActive");
+
+            migrationBuilder.RenameColumn(
                 name: "StartTime",
                 table: "Events",
                 newName: "StartAt");
@@ -77,6 +118,16 @@ namespace ZventsApi.Migrations
                 name: "StartDate",
                 table: "Events",
                 newName: "EndAt");
+
+            migrationBuilder.RenameColumn(
+                name: "IsDeleted",
+                table: "Events",
+                newName: "IsActive");
+
+            migrationBuilder.RenameColumn(
+                name: "IsDeleted",
+                table: "Clients",
+                newName: "IsActive");
         }
     }
 }

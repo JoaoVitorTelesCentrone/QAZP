@@ -11,8 +11,8 @@ using ZventsApi.Models;
 namespace ZventsApi.Migrations
 {
     [DbContext(typeof(ZventsDbContext))]
-    [Migration("20240725015637_UpdateModel")]
-    partial class UpdateModel
+    [Migration("20240809023523_MaterialSeed")]
+    partial class MaterialSeed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,7 +59,7 @@ namespace ZventsApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PhoneNumber")
@@ -119,7 +119,7 @@ namespace ZventsApi.Migrations
                     b.Property<int?>("EstimatedAudience")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -186,7 +186,7 @@ namespace ZventsApi.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -225,7 +225,7 @@ namespace ZventsApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PhoneNumber")
@@ -245,7 +245,7 @@ namespace ZventsApi.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -262,6 +262,9 @@ namespace ZventsApi.Migrations
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("UserStatus")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
