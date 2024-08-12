@@ -8,7 +8,7 @@ import UserHeader from '../components/UserHeader'
 import axios from 'axios'
 import { Events, eventsColumns } from './columns'
 import { DashboardTable } from './DashboardTable'
-import { LucideLineChart } from 'lucide-react'
+import { LucideLineChart, Calendar } from 'lucide-react'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import ClipLoader from 'react-spinners/ClipLoader'
 
@@ -69,10 +69,10 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen">
-      <aside className="w-64 bg-gray-800 text-white">
+      <aside className="w-64 bg-primary text-white">
         {/* Menu lateral */}
       </aside>
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-quintenary">
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <ClipLoader size={50} color={'#123abc'} loading={loading} />
@@ -81,7 +81,7 @@ const Dashboard = () => {
           <>
             <UserHeader />
             <h1 className="text-4xl font-bold my-10 flex justify-center">
-              Seja bem vindo ao Zventos, {user.username}
+              Seja bem-vindo(a) ao Z-Eventos, {user.username}
             </h1>
             <div className="flex justify-center mx-4">
               <div className="flex p-4 my-6 w-full max-w-screen-xl justify-center">
@@ -114,9 +114,13 @@ const Dashboard = () => {
               </div>
               <LucideLineChart className="w-72 h-72 text-gray-300" />
             </div>
-            <h1 className="font-bold mt-16 text-4xl flex justify-center">Próximos eventos</h1>
-            <div className="flex justify-center mt-8 w-full">
-              <div className="w-full max-w-screen-xl">
+            <div>            
+            <h1 className="font-bold mt-16 text-4xl flex justify-center items-center">Próximos eventos
+              <Calendar className="w-12 h-12 text-primary mr-4 ml-2" />
+            </h1>
+            </div>
+            <div className="flex justify-center mt-8 bg-quintenary">
+              <div className="w-full overflow-x-auto">
                 <DashboardTable columns={eventsColumns} data={events} />
               </div>
             </div>

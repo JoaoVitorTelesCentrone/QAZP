@@ -6,7 +6,7 @@ import { useAtom } from 'jotai'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Plus } from 'lucide-react'
+import { Plus, Calendar } from 'lucide-react'
 import { clientColumns } from './columns'
 import { ClientTable } from './ClientTable'
 import axios from 'axios'
@@ -43,7 +43,8 @@ const Clients = () => {
     redirect('/login')
   }
   return (
-    <div>
+    <div className='flex h-screen'>
+    <div className='flex-1 flex flex-col bg-quintenary'>
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <ClipLoader size={50} color={'#123abc'} loading={loading} />
@@ -51,12 +52,15 @@ const Clients = () => {
       ) : (
         <>
           <UserHeader />
-          <div className="p-20 justify-between flex">
-            <h1 className="ml-48 uppercase text-4xl font-bold text-secondary-foreground ">
-              {intl.formatMessage({ id: 'client.page.title' })}
+          <div className='bg-quintenary'>
+          <div className="p-10 justify-between flex">
+            <h1 className="ml-72 text-4xl font-bold text-secondary-foreground">
+              {intl.formatMessage({ id: 'client.page.title' })}     
             </h1>
+            <Calendar className="w-12 h-12 text-primary" />
+            
             <Link
-              className="bg-quartenary flex p-4 rounded-xl text-white"
+              className="bg-primary flex p-4 rounded-xl text-white"
               href="/CreateClient"
             >
               {intl.formatMessage({
@@ -68,8 +72,10 @@ const Clients = () => {
           <div className="ml-72 mr-10">
             <ClientTable columns={clientColumns} data={clients} />
           </div>
+          </div>
         </>
       )}
+    </div>
     </div>
   )
 }

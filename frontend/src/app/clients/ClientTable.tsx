@@ -80,7 +80,7 @@ export function ClientTable<TData, TValue>({
           className="max-w-sm my-10  border-primary font-bold text-center"
         />
       </div>
-      <Table className="border-2 border-secondary">
+      <Table className="border-2 border-cyan-700">
         <TableHeader className="bg-cyan-700 text-gray-100">
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
@@ -105,7 +105,7 @@ export function ClientTable<TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map(row => (
-              <TableRow
+              <TableRow className='border-cyan-700'
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
@@ -128,22 +128,22 @@ export function ClientTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-end space-x-2 py-4 mr-4">
-        <Button
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button className='bg-sextenary'
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          <ArrowBigLeft className="ml-2 h-5 w-5" />
+          <ArrowBigLeft className="ml-2 h-5 w-5 mr-2" />
         </Button>
-        <Button
+        <Button className='bg-sextenary'
           variant="outline"
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          <ArrowBigRight className="ml-2 h-5 w-5" />
+          <ArrowBigRight className="ml-2 mr-2 h-5 w-5" />
         </Button>
       </div>
     </div>
