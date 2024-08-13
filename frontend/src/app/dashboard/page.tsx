@@ -13,7 +13,7 @@ import { userInfoAtom } from '../atoms/userInfoAtom'
 import ClipLoader from 'react-spinners/ClipLoader'
 
 const Dashboard = () => {
-  const [isLogged, setIsLogged] = useAtom(authAtom)
+  const [isLogged] = useAtom(authAtom)
   const [loading, setLoading] = useState(true)
   const [user] = useAtom(userInfoAtom)
   const [numberOfClients, setNumberOfClients] = useState('')
@@ -28,8 +28,7 @@ const Dashboard = () => {
   const getClients = async () => {
     try {
       const response = await axios.get('http://localhost:5196/api/Client')
-      setNumberOfClients(response.data.length)
-      console.log(`Numero de clientes ${numberOfClients}`)
+      setNumberOfClients(response.data.length.toString())
     } catch (error) {
       console.error('Error fetching clients:', error)
     }
@@ -38,8 +37,7 @@ const Dashboard = () => {
   const getUsers = async () => {
     try {
       const response = await axios.get('http://localhost:5196/api/User')
-      setNumberOfUsers(response.data.length)
-      console.log(`Numero de usuarios ${numberOfUsers}`)
+      setNumberOfUsers(response.data.length.toString())
     } catch (error) {
       console.error('Error fetching users:', error)
     }
@@ -48,9 +46,8 @@ const Dashboard = () => {
   const getEvents = async () => {
     try {
       const response = await axios.get('http://localhost:5196/api/Event')
-      setNumberOfEvents(response.data.length)
+      setNumberOfEvents(response.data.length.toString())
       setEvents(response.data)
-      console.log(`Numero de eventos ${numberOfEvents}`)
     } catch (error) {
       console.error('Error fetching events:', error)
     }
@@ -59,7 +56,6 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
-      await new Promise(resolve => setTimeout(resolve, 500))
       await Promise.all([getClients(), getUsers(), getEvents()])
       setLoading(false)
     }
@@ -69,9 +65,6 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen">
-      <aside className="w-64 bg-gray-800 text-white">
-        {/* Menu lateral */}
-      </aside>
       <div className="flex-1 flex flex-col">
         {loading ? (
           <div className="flex justify-center items-center h-full">
@@ -80,12 +73,12 @@ const Dashboard = () => {
         ) : (
           <>
             <UserHeader />
-            <h1 className="text-4xl font-bold my-10 flex justify-center">
+            <h1 className="max-xl:ml-36 text-4xl font-bold my-10 max-xl:my-6 flex justify-center">
               Seja bem vindo ao Zventos, {user.username}
             </h1>
             <div className="flex justify-center mx-4">
-              <div className="flex p-4 my-6 w-full max-w-screen-xl justify-center">
-                <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
+              <div className="flex  p-4 my-6 w-full max-w-screen-xl justify-center max-xl:flex-col max-xl:ml-60">
+                <div className="max-xl:mb-10 rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
                   <h1 className="text-3xl text-gray-400 font-bold">
                     Número de Clientes
                   </h1>
@@ -94,7 +87,7 @@ const Dashboard = () => {
                   </h1>
                 </div>
 
-                <div className="rounded-xl mx-4 border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
+                <div className="max-xl:mb-10 max-xl:mx-0 rounded-xl mx-4 border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
                   <h1 className="text-3xl font-bold text-gray-400">
                     Número de Usuários
                   </h1>
@@ -103,7 +96,7 @@ const Dashboard = () => {
                   </h1>
                 </div>
 
-                <div className="rounded-xl border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
+                <div className="max-xl:mb-10 rounded-xl border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
                   <h1 className="text-3xl text-gray-400 font-bold">
                     Número de Eventos
                   </h1>
@@ -114,11 +107,11 @@ const Dashboard = () => {
               </div>
               <LucideLineChart className="w-72 h-72 text-gray-300" />
             </div>
-            <h1 className="font-bold mt-16 text-4xl flex justify-center">Próximos eventos</h1>
-            <div className="flex justify-center mt-8 w-full">
-              <div className="w-full max-w-screen-xl">
-                <DashboardTable columns={eventsColumns} data={events} />
-              </div>
+            <h1 className="font-bold mt-16 max-xl:mt-2 text-4xl flex justify-center">
+              Próximos eventos
+            </h1>
+            <div className="ml-64">
+              <DashboardTable columns={eventsColumns} data={events} />
             </div>
           </>
         )}

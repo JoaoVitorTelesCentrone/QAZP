@@ -15,9 +15,13 @@ const config = {
       padding: '2rem',
       screens: {
         '2xl': '1400px',
+        'xl': '1200px',
       },
     },
     extend: {
+      screens: {
+        'max-xl': {'max': '1199px'}, // Custom breakpoint for less than 1200px
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

@@ -25,7 +25,6 @@ const UserSideMenu = () => {
           <h1 className="text-secondary">
             <TreePalm />
           </h1>
-          <h1 className="text-secondary font-bold w-[100px] my-3">{`Bem vindo, ${user.username}`}</h1>
         </div>
         <nav className="flex-grow">
           <ul className="flex flex-col space-y-4">
