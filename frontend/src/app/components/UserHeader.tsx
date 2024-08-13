@@ -17,7 +17,7 @@ const UserSideMenu = () => {
   }
 
   return (
-    <div className={`flex h-full`}>
+    <div>
       <div
         className={`fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out bg-gray-800 text-white w-64 p-4 flex flex-col`}
       >

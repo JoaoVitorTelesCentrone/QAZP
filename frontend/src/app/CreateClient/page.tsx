@@ -109,10 +109,10 @@ const CreateClientForm = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-quintenary">
       <UserHeader />
       <Toaster richColors />
-      <h1 className="mx-auto my-4 text-5xl font-bold text-center">
+      <h1 className="ml-72 my-4 text-5xl font-bold text-center ">
         {intl.formatMessage({ id: 'create.client.page.title' })}
       </h1>
       <form
@@ -297,7 +297,7 @@ const CreateClientForm = () => {
             </div>
           </div>
         </div>
-        <Button className='bg-quartenary text-white'
+        <Button className='bg-primary text-white'
         variant="default">
           {intl.formatMessage({
             id: 'create.client.page.create.client.button',

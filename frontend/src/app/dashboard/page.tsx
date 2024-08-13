@@ -8,7 +8,7 @@ import UserHeader from '../components/UserHeader'
 import axios from 'axios'
 import { Events, eventsColumns } from './columns'
 import { DashboardTable } from './DashboardTable'
-import { LucideLineChart } from 'lucide-react'
+import { LucideLineChart, Calendar } from 'lucide-react'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import ClipLoader from 'react-spinners/ClipLoader'
 
@@ -65,7 +65,8 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen">
-      <div className="flex-1 flex flex-col">
+      <aside className="w-64 bg-primary text-white">{/* Menu lateral */}</aside>
+      <div className="flex-1 flex flex-col bg-quintenary">
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <ClipLoader size={50} color={'#123abc'} loading={loading} />
