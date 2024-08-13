@@ -41,11 +41,11 @@ namespace ZventsApi.Models
         [Required(ErrorMessage = "City is required")]
         public string City { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool? IsActive { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public Client()
         {
-            IsActive = true;
+            IsDeleted = false;
             CreatedDate = DateTime.Now;
         }
     }

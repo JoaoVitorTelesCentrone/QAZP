@@ -13,13 +13,18 @@ namespace ZventsApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Material>>> GetMaterialAsync()
         {
-            return await _context.Materials.OrderByDescending(x => x.CreatedDate).ToArrayAsync();
+            var activeMaterials = await _context
+                .Materials.Where(dbMaterial => dbMaterial.IsDeleted == false)
+                .OrderBy(dbMaterial => dbMaterial.CreatedDate)
+                .ToListAsync();
+
+            return Ok(activeMaterials);
         }
 
         [HttpGet("id/{id}")]
         public ActionResult<Material> GetMaterialById(Guid id)
         {
-            var material = _context.Materials.FirstOrDefault(m => m.Id == id);
+            var material = _context.Materials.FirstOrDefault(dbMaterial => dbMaterial.Id == id);
 
             if (material == null)
             {
@@ -34,22 +39,24 @@ namespace ZventsApi.Controllers
             MaterialCategory category
         )
         {
-            return await _context.Materials.Where(x => x.Category == category).ToArrayAsync();
+            return await _context
+                .Materials.Where(dbMaterial => dbMaterial.Category == category)
+                .ToArrayAsync();
         }
 
         [HttpGet("name/{name}")]
-        public async Task<ActionResult<IEnumerable<Material>>> GetMaterialByName(
-            string name
-        )
+        public async Task<ActionResult<IEnumerable<Material>>> GetMaterialByName(string name)
         {
-            return await _context.Materials.Where(x => x.Name == name).ToArrayAsync();
+            return await _context
+                .Materials.Where(dbMaterial => dbMaterial.Name == name)
+                .ToArrayAsync();
         }
 
         [HttpPost]
         public ActionResult<Material> PostMaterial(Material material)
         {
-            bool materialExists = _context.Materials.Any(q =>
-                q.Name == material.Name && q.Category == material.Category
+            bool materialExists = _context.Materials.Any(dbMaterial =>
+                dbMaterial.Name == material.Name && dbMaterial.Category == material.Category
             );
 
             if (!materialExists)

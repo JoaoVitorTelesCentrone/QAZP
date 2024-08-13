@@ -7,9 +7,12 @@ namespace ZventsApi.Models
     {
         public required string Name { get; set; }
         public EventType Type { get; set; }
+        public EventStatus Status { get; set; }
         public Guid ClientId { get; set; }
-        public DateTime StartAt { get; set; }
-        public DateTime EndAt { get; set; }
+        public DateOnly StartDate { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public DateOnly EndDate { get; set; }
+        public TimeOnly EndTime { get; set; }
         public required string ZipCode { get; set; }
         public required string AddressName { get; set; }
         public required string AddressNumber { get; set; }
@@ -26,9 +29,12 @@ namespace ZventsApi.Models
     {
         public required string Name { get; set; }
         public EventType Type { get; set; }
+        public EventStatus Status { get; set; }
         public Guid ClientId { get; set; }
-        public DateTime StartAt { get; set; }
-        public DateTime EndAt { get; set; }
+        public DateOnly StartDate { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public DateOnly EndDate { get; set; }
+        public TimeOnly EndTime { get; set; }
         public required string ZipCode { get; set; }
         public required string AddressName { get; set; }
         public required string AddressNumber { get; set; }
@@ -39,6 +45,7 @@ namespace ZventsApi.Models
         public int? EstimatedAudience { get; set; }
         public List<MaterialDto> Materials { get; set; } = [];
         public decimal? TotalAmount { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 
     public enum EventType
@@ -60,6 +67,14 @@ namespace ZventsApi.Models
         Symposium,
     }
 
+    public enum EventStatus
+    {
+        Created,
+        Ongoing,
+        Finalized,
+        Canceled
+    }
+
     public class Event
     {
         [Key]
@@ -72,16 +87,24 @@ namespace ZventsApi.Models
         [Required(ErrorMessage = "Type is required")]
         public EventType Type { get; set; }
 
+        [Required(ErrorMessage = "Status is required")]
+        public EventStatus Status { get; set; }
+
         [Required(ErrorMessage = "ClientId is required")]
         public Guid ClientId { get; set; }
-
         public Client? Client { get; set; }
 
-        [Required(ErrorMessage = "StartAt is required")]
-        public DateTime StartAt { get; set; }
+        [Required(ErrorMessage = "StartDate is required")]
+        public DateOnly StartDate { get; set; }
 
-        [Required(ErrorMessage = "EndAt is required")]
-        public DateTime EndAt { get; set; }
+        [Required(ErrorMessage = "StarTime is required")]
+        public TimeOnly StartTime { get; set; }
+
+        [Required(ErrorMessage = "EndDate is required")]
+        public DateOnly EndDate { get; set; }
+
+        [Required(ErrorMessage = "EndTime is required")]
+        public TimeOnly EndTime { get; set; }
 
         [Required(ErrorMessage = "ZipCode is required")]
         public string ZipCode { get; set; }
@@ -105,12 +128,13 @@ namespace ZventsApi.Models
         public virtual ICollection<EventMaterial> EventMaterials { get; set; } = [];
         public decimal? TotalAmount { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool? IsActive { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public Event()
         {
-            IsActive = true;
+            IsDeleted = false;
             CreatedDate = DateTime.Now;
+            Status = 0;
         }
     }
 }
