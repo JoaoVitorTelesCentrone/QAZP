@@ -5,8 +5,14 @@ namespace ZventsApi.Models
 {
     public enum UserRole
     {
-        Admin = 0,
-        Vendor = 1
+        Admin,
+        Vendor,
+    }
+
+    public enum UserStatus
+    {
+        Active,
+        Inactive,
     }
 
     public class User
@@ -25,10 +31,14 @@ namespace ZventsApi.Models
         public string UserName { get; set; }
         public UserRole? Role { get; set; }
         public DateTime CreatedDate { get; set; }
+        public UserStatus UserStatus { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public User()
         {
             CreatedDate = DateTime.Now;
+            IsDeleted = false;
+            UserStatus = UserStatus.Active;
         }
     }
 }

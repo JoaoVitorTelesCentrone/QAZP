@@ -21,12 +21,12 @@ namespace ZventsApi.Models
 
         [Required(ErrorMessage = "Estimated audience is required")]
         public int EstimatedAudience { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
 
         public Quote()
         {
-            IsActive = true;
+            IsDeleted = false;
             CreatedDate = DateTime.Now;
         }
     }

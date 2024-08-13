@@ -56,7 +56,7 @@ namespace ZventsApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PhoneNumber")
@@ -73,7 +73,7 @@ namespace ZventsApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("ZventsApi.Models.Event", b =>
@@ -107,25 +107,34 @@ namespace ZventsApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("EndAt")
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeOnly>("EndTime")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("EstimatedAudience")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StartAt")
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeOnly>("StartTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.Property<decimal?>("TotalAmount")
                         .HasColumnType("TEXT");
@@ -141,7 +150,7 @@ namespace ZventsApi.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("ZventsApi.Models.EventMaterial", b =>
@@ -159,7 +168,7 @@ namespace ZventsApi.Migrations
 
                     b.HasIndex("MaterialId");
 
-                    b.ToTable("EventMaterials");
+                    b.ToTable("EventMaterials", (string)null);
                 });
 
             modelBuilder.Entity("ZventsApi.Models.Material", b =>
@@ -174,7 +183,7 @@ namespace ZventsApi.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -186,7 +195,7 @@ namespace ZventsApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Materials");
+                    b.ToTable("Materials", (string)null);
                 });
 
             modelBuilder.Entity("ZventsApi.Models.Quote", b =>
@@ -213,7 +222,7 @@ namespace ZventsApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PhoneNumber")
@@ -221,7 +230,7 @@ namespace ZventsApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Quotes");
+                    b.ToTable("Quotes", (string)null);
                 });
 
             modelBuilder.Entity("ZventsApi.Models.User", b =>
@@ -232,6 +241,9 @@ namespace ZventsApi.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -248,9 +260,12 @@ namespace ZventsApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserStatus")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ZventsApi.Models.Event", b =>
