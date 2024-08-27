@@ -17,8 +17,6 @@ namespace ZventsApi.Models
         [RegularExpression(@"^\d{11}$|^\d{14}$", ErrorMessage = "Invalid DocumentId")]
         [ValidDocument(ErrorMessage = "Invalid DocumentId")]
         public string DocumentId { get; set; }
-
-        [Required(ErrorMessage = "UserName is required")]
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
 
