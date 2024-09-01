@@ -1,5 +1,4 @@
-﻿using System.Data.Entity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ZventsApi.Models;
 
