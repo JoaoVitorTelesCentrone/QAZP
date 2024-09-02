@@ -115,9 +115,10 @@ const CreateClientForm = () => {
       <h1 className="ml-72 my-4 text-5xl font-bold text-center ">
         {intl.formatMessage({ id: 'create.client.page.title' })}
       </h1>
+      <div className='ml-72'>
       <form
         onSubmit={handleSubmit}
-        className="mt-3 mb-4 flex-col flex mx-auto border-0 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-slate-600 bg-opacity-10 p-4 max-w-[500px]"
+        className="mt-3 mb-4 flex-col flex mx-auto border-0 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-slate-900 bg-opacity-10 p-4 max-w-[500px]"
       >
         <div>
           <h1 className="text-2xl font-bold mb-2">
@@ -304,6 +305,7 @@ const CreateClientForm = () => {
           })}
         </Button>
       </form>
+      </div>
     </div>
   )
 }
