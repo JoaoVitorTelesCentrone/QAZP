@@ -16,9 +16,9 @@ const Page = () => {
           Nossa história
         </h1>
         <p className="mt-2 font-medium text-2xl font-montserrat text-secondary text-center">
-          Com o objetivo de aprender e desenvolver nossas habilidades alem da
+          Com o objetivo de aprender e desenvolver nossas habilidades além da
           nossa área de atuação, começamos a planejar o escopo de um projeto
-          onde alem de treinar poderiamos o tornar util para a utilizaçao em
+          onde além de treinar poderíamos o tornar útil para a utilização em
           outros campos como por exemplo para os testes automatizados e2e com o
           cypress ou qualquer outra ferramenta.
         </p>
