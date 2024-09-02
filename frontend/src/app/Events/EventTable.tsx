@@ -30,7 +30,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
-export function UsersTable<TData, TValue>({
+export function EventTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {

@@ -8,38 +8,25 @@ import {
   ArrowUpDown,
   ArrowBigLeft,
   ArrowBigRight,
+  Edit2Icon,
+  Trash2Icon,
 } from 'lucide-react'
 import { useState } from 'react'
+import EditClient from '../clients/EditClient'
+import DeleteEvent from './deleteEvent'
 
 export type Events = {
+  id: string
   name: string
-  username: string
-  password: string
+  addressName: string
+  zipCode: string
+  state: string
+  city: string
+  estimatedAudience: string
+  type: string
 }
 
 export const eventsColumns: ColumnDef<Events>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
-        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={value => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -61,14 +48,14 @@ export const eventsColumns: ColumnDef<Events>[] = [
     },
   },
   {
-    accessorKey: 'username',
+    accessorKey: 'type',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Usuário
+          Tipo
           {column.getIsSorted() === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : column.getIsSorted() === 'desc' ? (
@@ -79,5 +66,114 @@ export const eventsColumns: ColumnDef<Events>[] = [
         </Button>
       )
     },
+  },
+  {
+    accessorKey: 'zipCode',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Cep
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      )
+    },
+  },
+  {
+    accessorKey: 'addressName',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Rua
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      )
+    },
+  },
+  {
+    accessorKey: 'city',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Cidade
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      )
+    },
+  },
+  {
+    accessorKey: 'state',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Estado
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      )
+    },
+  },
+  {
+    accessorKey: 'estimatedAudience',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Audiencia estimada
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      )
+    },
+  },
+  {
+    id: 'delete',
+    cell: ({ row }) => <EditClient userId={row.original.id} />,
+  },
+
+  {
+    id: 'delete',
+    cell: ({ row }) => <DeleteEvent eventId={row.original.id} />,
   },
 ]

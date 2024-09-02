@@ -1,23 +1,44 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import UserSideMenu from '../components/UserHeader'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import ClipLoader from 'react-spinners/ClipLoader'
+import { EventTable } from './EventTable'
+import axios from 'axios'
+import { Users } from 'lucide-react'
+import { Events, eventsColumns } from './columns'
+import { eventChangeAtom } from '../atoms/eventChangeAtom'
 
 const Page = () => {
   const [auth, isAuth] = useAtom(authAtom)
   const [loading, setLoading] = useState(false)
+  const [events, setEvents] = useState<Events[]>([])
+  const [eventChange] = useAtom(eventChangeAtom)
 
   if (!auth) {
     redirect('/login')
   }
 
+  const getEvents = async () => {
+    try {
+      const response = await axios.get('http://localhost:5196/api/Event')
+      setEvents(response.data)
+    } catch (error) {
+      console.error('Error fetching events:', error)
+    }
+  }
+
+  useEffect(() => {
+    getEvents()
+  }, [eventChange])
+
   useEffect(() => {
     const fetch = async () => {
       setLoading(true)
+      getEvents()
       await new Promise(resolve => setTimeout(resolve, 500))
       setLoading(false)
     }
@@ -41,6 +62,9 @@ const Page = () => {
               >
                 Criar evento
               </Link>
+            </div>
+            <div className="w-[800px] flex mx-auto my-10">
+              <EventTable data={events} columns={eventsColumns} />
             </div>
           </div>
         </>
