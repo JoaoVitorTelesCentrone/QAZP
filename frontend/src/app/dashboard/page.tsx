@@ -111,7 +111,7 @@ const Dashboard = () => {
             <h1 className="font-bold mt-16 max-xl:mt-2 text-4xl flex justify-center">
               Próximos eventos
             </h1>
-            <div className="ml-64">
+            <div className="justify-center">
               <DashboardTable columns={eventsColumns} data={events} />
             </div>
           </>
