@@ -19,7 +19,6 @@ const EditEvent: React.FC<EditEventProps> = ({ eventId }) => {
   }
 
   const handleUpdate = async () => {
-    // Optionally, you can trigger a parent update or refresh action here
     closeModal()
   }
 

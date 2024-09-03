@@ -1,6 +1,5 @@
-// components/EditEventModal.tsx
 import React, { useEffect, useState } from 'react'
-import { Modal, Input, DatePicker, TimePicker } from 'antd'
+import { Modal, Input } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import axios from 'axios'
 
@@ -31,13 +30,12 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
 
   useEffect(() => {
     if (visible) {
-      // Fetch event details when the modal is visible
       axios
-        .get(`http://localhost:5196/api/Event/${eventId}`)
+        .get(`http://localhost:5196/api/Event/id/${eventId}`)
         .then(response => {
           const event = response.data
           setName(event.name)
-          setStartAt(event.startAt ? dayjs(event.startAt) : null)
+          setStartAt(event.startDate ? dayjs(event.startDate) : null)
           setEndAt(event.endAt ? dayjs(event.endAt) : null)
           setZipCode(event.zipCode || '')
           setAddressName(event.addressName || '')
@@ -52,7 +50,7 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
           console.error('Error fetching event details:', error)
         })
     }
-  }, [])
+  }, [visible, eventId])
 
   const handleUpdate = async () => {
     try {
@@ -79,90 +77,92 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
 
   return (
     <Modal
-      title="Edit Event"
+      title={`Editar evento do ${name}`}
       visible={visible}
       onCancel={onClose}
       onOk={handleUpdate}
       okText="Update"
       cancelText="Cancel"
     >
-      <div>
+      <div className="my-4">
+        <h1 className="font-bold">Nome</h1>
         <Input
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder="Event Name"
         />
-        <DatePicker
-          value={startAt}
-          onChange={date => setStartAt(date ?? null)}
-          format="YYYY-MM-DD"
-          placeholder="Start Date"
-        />
-        <TimePicker
-          value={startAt}
-          onChange={time =>
-            setStartAt(
-              time
-                ? dayjs(startAt).hour(time.hour()).minute(time.minute())
-                : null,
-            )
-          }
-          format="HH:mm"
-          placeholder="Start Time"
-        />
-        <DatePicker
-          value={endAt}
-          onChange={date => setEndAt(date ?? null)}
-          format="YYYY-MM-DD"
-          placeholder="End Date"
-        />
-        <TimePicker
-          value={endAt}
-          onChange={time =>
-            setEndAt(
-              time
-                ? dayjs(endAt).hour(time.hour()).minute(time.minute())
-                : null,
-            )
-          }
-          format="HH:mm"
-          placeholder="End Time"
-        />
-        <Input
-          value={zipCode}
-          onChange={e => setZipCode(e.target.value)}
-          placeholder="Zip Code"
-        />
-        <Input
-          value={addressName}
-          onChange={e => setAddressName(e.target.value)}
-          placeholder="Address Name"
-        />
-        <Input
-          value={addressNumber}
-          onChange={e => setAddressNumber(e.target.value)}
-          placeholder="Address Number"
-        />
-        <Input
-          value={addressComplement}
-          onChange={e => setAddressComplement(e.target.value)}
-          placeholder="Address Complement"
-        />
-        <Input
-          value={district}
-          onChange={e => setDistrict(e.target.value)}
-          placeholder="District"
-        />
-        <Input
-          value={state}
-          onChange={e => setState(e.target.value)}
-          placeholder="State"
-        />
-        <Input
-          value={city}
-          onChange={e => setCity(e.target.value)}
-          placeholder="City"
-        />
+        <h1 className="font-bold mt-4">Data</h1>
+        <div className="my-2">
+          <h1>
+            {startAt ? startAt.format('YYYY-MM-DD HH:mm') : 'No start date set'}
+          </h1>
+          <h1>
+            {endAt ? endAt.format('YYYY-MM-DD HH:mm') : 'No end date set'}
+          </h1>
+        </div>
+        <h1 className="font-bold mt-4">Endereço</h1>
+        <div className="flex">
+          <div>
+            <h1>CEP</h1>
+            <Input
+              value={zipCode}
+              onChange={e => setZipCode(e.target.value)}
+              placeholder="Zip Code"
+            />
+          </div>
+          <div>
+            <h1>Rua</h1>
+            <Input
+              value={addressName}
+              onChange={e => setAddressName(e.target.value)}
+              placeholder="Address Name"
+            />
+          </div>
+          <div>
+            <h1>Número</h1>
+            <Input
+              value={addressNumber}
+              onChange={e => setAddressNumber(e.target.value)}
+              placeholder="Address Number"
+            />
+          </div>
+          <div>
+            <h1>Complemento</h1>
+            <Input
+              value={addressComplement}
+              onChange={e => setAddressComplement(e.target.value)}
+              placeholder="Address Complement"
+            />
+          </div>
+        </div>
+
+        <div className="flex my-4">
+          <div>
+            <h1>Bairro</h1>
+            <Input
+              value={district}
+              onChange={e => setDistrict(e.target.value)}
+              placeholder="District"
+            />
+          </div>
+          <div>
+            <h1>Estado</h1>
+            <Input
+              value={state}
+              onChange={e => setState(e.target.value)}
+              placeholder="State"
+            />
+          </div>
+          <div>
+            <h1>Cidade</h1>
+            <Input
+              value={city}
+              onChange={e => setCity(e.target.value)}
+              placeholder="City"
+            />
+          </div>
+        </div>
+        <h1 className="font-bold mt-4">Audiência Estimada</h1>
         <Input
           value={estimatedAudience}
           onChange={e => setEstimatedAudience(Number(e.target.value))}
