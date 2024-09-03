@@ -3,24 +3,20 @@ import React, { useState } from 'react'
 import { Toaster } from 'sonner'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
-import { useAtom } from 'jotai'
-import { clientChangeAtom } from '../atoms/clientChangeAtom'
 
-type deleteClientProps = {
-  userId: string
+type deleteMaterialProps = {
+  materialId: string
 }
 
-const DeleteClient: React.FC<deleteClientProps> = ({ userId }) => {
+const DeleteMaterial: React.FC<deleteMaterialProps> = ({ materialId }) => {
   const [deleteModal, setDeleteModal] = useState(false)
-  const [clientChange, setClientChange] = useAtom(clientChangeAtom)
   const deleteData = async (): Promise<void> => {
     try {
-      await axios.patch(`http://localhost:5196/api/Client/${userId}`, {
-        isDeleted: true,
+      await axios.patch(`http://localhost:5196/api/Material/${materialId}`, {
+        isActive: false,
       })
       console.log('Dados deletados com sucesso.')
       setDeleteModal(false)
-      setClientChange(prev => prev + 1)
     } catch (error) {
       console.error('Erro ao deletar os dados:', error)
     }
@@ -60,4 +56,4 @@ const DeleteClient: React.FC<deleteClientProps> = ({ userId }) => {
   )
 }
 
-export default DeleteClient
+export default DeleteMaterial

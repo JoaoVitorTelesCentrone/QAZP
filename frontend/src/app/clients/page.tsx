@@ -12,11 +12,17 @@ import { ClientTable } from './ClientTable'
 import axios from 'axios'
 import { intl } from '../../i18n'
 import ClipLoader from 'react-spinners/ClipLoader'
+import { clientChangeAtom } from '../atoms/clientChangeAtom'
 
 const Clients = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
   const [clients, setClients] = useState([])
   const [loading, setLoading] = useState(false)
+  const [clientChange, setClientChange] = useAtom(clientChangeAtom)
+
+  useEffect(() => {
+    fetchUserData()
+  }, [clientChange])
 
   async function fetchUserData() {
     try {
