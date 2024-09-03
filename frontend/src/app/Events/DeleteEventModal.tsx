@@ -21,7 +21,9 @@ const DeleteEventModal: React.FC<DeleteEventModalProps> = ({
   const handleConfirm = async () => {
     setLoading(true)
     try {
-      await axios.patch(`/api/Event/${eventId}`, { isActive: false })
+      await axios.patch(`http://localhost:5196/api/Event/${eventId}`, {
+        isActive: false,
+      })
       setEventChange(prev => prev + 1)
       onClose()
     } catch (error) {

@@ -14,6 +14,7 @@ import {
 import { useState } from 'react'
 import EditClient from '../clients/EditClient'
 import DeleteEvent from './deleteEvent'
+import EditEvent from './editEvent'
 
 export type Events = {
   id: string
@@ -169,7 +170,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
   },
   {
     id: 'delete',
-    cell: ({ row }) => <EditClient userId={row.original.id} />,
+    cell: ({ row }) => <EditEvent eventId={row.original.id} />,
   },
 
   {
