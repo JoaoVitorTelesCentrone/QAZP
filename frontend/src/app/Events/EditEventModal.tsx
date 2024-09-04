@@ -45,6 +45,7 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
           setState(event.state || '')
           setCity(event.city || '')
           setEstimatedAudience(event.estimatedAudience || 0)
+          console.log(response.data)
         })
         .catch(error => {
           console.error('Error fetching event details:', error)
