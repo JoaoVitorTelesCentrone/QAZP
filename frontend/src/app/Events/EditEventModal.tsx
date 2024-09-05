@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Input } from 'antd'
+import { Modal, Input, DatePicker, TimePicker, message } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import axios from 'axios'
+import { useAtom } from 'jotai'
+import { eventChangeAtom } from '../atoms/eventChangeAtom'
 
 type EditEventModalProps = {
   visible: boolean
@@ -10,6 +12,7 @@ type EditEventModalProps = {
   onUpdate: () => void
 }
 
+type material = { materialId: string; quantity: string }
 const EditEventModal: React.FC<EditEventModalProps> = ({
   visible,
   onClose,
@@ -17,8 +20,10 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
   onUpdate,
 }) => {
   const [name, setName] = useState('')
-  const [startAt, setStartAt] = useState<Dayjs | null>(null)
-  const [endAt, setEndAt] = useState<Dayjs | null>(null)
+  const [startDate, setStartDate] = useState<Dayjs | null>(null)
+  const [endDate, setEndDate] = useState<Dayjs | null>(null)
+  const [startTime, setStartTime] = useState<Dayjs | null>(null)
+  const [endTime, setEndTime] = useState<Dayjs | null>(null)
   const [zipCode, setZipCode] = useState('')
   const [addressName, setAddressName] = useState('')
   const [addressNumber, setAddressNumber] = useState('')
@@ -27,6 +32,29 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
   const [state, setState] = useState('')
   const [city, setCity] = useState('')
   const [estimatedAudience, setEstimatedAudience] = useState(0)
+  const [clientId, setClientID] = useState('')
+  const [materiais, setMateriais] = useState<material>()
+  const [eventChange, setEventChange] = useAtom(eventChangeAtom)
+
+  const getMaterials = async (eventId: string) => {
+    if (eventId) {
+      try {
+        axios
+          .get('http://localhost:5196/api/Event/id/', {
+            params: { eventId: eventId },
+          })
+          .then(response => {
+            const material = response.data
+            setMateriais({
+              materialId: material.materialId,
+              quantity: material.quantity,
+            })
+          })
+      } catch {
+        message.error('Nao deu pra trazer os materiais')
+      }
+    }
+  }
 
   useEffect(() => {
     if (visible) {
@@ -35,8 +63,13 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
         .then(response => {
           const event = response.data
           setName(event.name)
-          setStartAt(event.startDate ? dayjs(event.startDate) : null)
-          setEndAt(event.endAt ? dayjs(event.endAt) : null)
+          setClientID(event.clientId)
+          setStartDate(event.startDate ? dayjs(event.startDate) : null)
+          setEndDate(event.endDate ? dayjs(event.endDate) : null)
+          setStartTime(
+            event.startTime ? dayjs(event.startTime, 'HH:mm:ss') : null,
+          )
+          setEndTime(event.endTime ? dayjs(event.endTime, 'HH:mm:ss') : null) // Add format for time
           setZipCode(event.zipCode || '')
           setAddressName(event.addressName || '')
           setAddressNumber(event.addressNumber || '')
@@ -45,7 +78,6 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
           setState(event.state || '')
           setCity(event.city || '')
           setEstimatedAudience(event.estimatedAudience || 0)
-          console.log(response.data)
         })
         .catch(error => {
           console.error('Error fetching event details:', error)
@@ -57,8 +89,13 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
     try {
       const body = {
         name,
-        startAt: startAt ? startAt.format('YYYY-MM-DD HH:mm') : '',
-        endAt: endAt ? endAt.format('YYYY-MM-DD HH:mm') : '',
+        clientId,
+        type: 0,
+        status: 0,
+        startDate: startDate ? startDate.format('YYYY-MM-DD') : '',
+        endDate: endDate ? endDate.format('YYYY-MM-DD') : '',
+        startTime: startTime ? startTime.format('HH:mm:ss') : '',
+        endTime: endTime ? endTime.format('HH:mm:ss') : '',
         zipCode,
         addressName,
         addressNumber,
@@ -68,11 +105,14 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
         city,
         estimatedAudience,
       }
-      await axios.patch(`http://localhost:5196/api/Event/${eventId}`, body)
+      await axios.put(`http://localhost:5196/api/Event/${eventId}`, body)
       onUpdate()
       onClose()
+      message.success('Deu bom')
+      setEventChange(prev => prev + 1)
     } catch (error) {
       console.error('Error updating event:', error)
+      message.error('Deu ruim')
     }
   }
 
@@ -93,13 +133,30 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
           placeholder="Event Name"
         />
         <h1 className="font-bold mt-4">Data</h1>
-        <div className="my-2">
-          <h1>
-            {startAt ? startAt.format('YYYY-MM-DD HH:mm') : 'No start date set'}
-          </h1>
-          <h1>
-            {endAt ? endAt.format('YYYY-MM-DD HH:mm') : 'No end date set'}
-          </h1>
+        <div className="my-2 flex justify-between">
+          <DatePicker
+            value={startDate}
+            onChange={date => setStartDate(date)}
+            format="YYYY/MM/DD"
+          />
+          <DatePicker
+            value={endDate}
+            onChange={date => setEndDate(date)}
+            format="YYYY/MM/DD"
+          />
+        </div>
+
+        <div className="my-2 flex justify-between">
+          <TimePicker
+            value={startTime}
+            onChange={time => setStartTime(time)}
+            format="HH:mm:ss"
+          />
+          <TimePicker
+            value={endTime}
+            onChange={time => setEndTime(time)}
+            format="HH:mm:ss"
+          />
         </div>
         <h1 className="font-bold mt-4">Endereço</h1>
         <div className="flex">
