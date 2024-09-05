@@ -64,30 +64,30 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <div className="flex h-screen">
-      <aside className="w-64 bg-primary text-white">{/* Menu lateral */}</aside>
+    <div>
+      <div className="flex h-screen">
+       <aside className="w-64 bg-primary text-white">{/* Menu lateral */}</aside>
       <div className="flex-1 flex flex-col bg-tertiary">
-        {loading ? (
-          <div className="flex justify-center items-center h-full">
-            <ClipLoader size={50} color={'#123abc'} loading={loading} />
-          </div>
-        ) : (
-          <>
-            <UserHeader />
-            <h1 className="max-xl:ml-36 text-4xl font-bold my-10 max-xl:my-6 flex justify-center">
-              Seja bem vindo ao Zventos, {user.username}
-            </h1>
-            <div className="flex justify-center mx-4">
-              <div className="flex  p-4 my-6 w-full max-w-screen-xl justify-center max-xl:flex-col max-xl:ml-60">
-                <div className="max-xl:mb-10 rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
-                  <h1 className="text-3xl text-gray-400 font-bold">
-                    Número de Clientes
-                  </h1>
-                  <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
-                    {numberOfClients}
-                  </h1>
-                </div>
-
+      {loading ? (
+        <div className="flex justify-center items-center h-full">
+          <ClipLoader size={50} color={'#123abc'} loading={loading} />
+        </div>
+      ) : (
+        <>
+          <UserHeader />
+          <h1 className="text-5xl font-bold ml-72 my-10">
+            Dashboards operacionais
+          </h1>
+          <div className="flex mx-16">
+            <div className="flex p-4 mx-auto ml-72 my-6 w-[1000px]">
+              <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
+                <h1 className="text-3xl text-gray-400 font-bold">
+                  Número de Clientes
+                </h1>
+                <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
+                  {numberOfClients}
+                </h1>
+              </div>
                 <div className="max-xl:mb-10 max-xl:mx-0 rounded-xl mx-4 border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
                   <h1 className="text-3xl font-bold text-gray-400">
                     Número de Usuários

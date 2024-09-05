@@ -6,6 +6,8 @@ import { userInfoAtom } from '../atoms/userInfoAtom'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
 import { LogOut, MenuIcon, TreePalm, XIcon } from 'lucide-react'
+import AvatarUser from './Avatar'
+
 
 const UserSideMenu = () => {
   const [loggedIn, setIsLogged] = useAtom(authAtom)
@@ -17,16 +19,15 @@ const UserSideMenu = () => {
   }
 
   return (
-    <div>
-      <div
-        className={`fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out bg-gray-800 text-white w-64 p-4 flex flex-col`}
-      >
+    <div className="flex h-full">
+      <div className="fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out bg-gray-800 text-white w-64 p-4 flex flex-col">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-secondary">
-            <TreePalm />
-          </h1>
+          <TreePalm />
+          <ul>
+            <li>Zventos</li>
+          </ul>
         </div>
-        <nav className="flex-grow">
+        <nav className="flex-1">
           <ul className="flex flex-col space-y-4">
             <li>
               <Link
@@ -78,8 +79,12 @@ const UserSideMenu = () => {
             </li>
           </ul>
         </nav>
+        <div className="mt-6 mb-4 flex justify-center">
+          <AvatarUser name={`${user.username}`} />
+        </div>
+        <hr className="border-gray-600 my-4" />
         <button
-          className="text-white mt-4 flex items-center space-x-2"
+          className="text-white flex items-center space-x-2 flex justify-center"
           onClick={() => setIsLogged(false)}
         >
           <LogOut />
@@ -87,7 +92,9 @@ const UserSideMenu = () => {
         </button>
       </div>
     </div>
-  )
+  );
+
+
 }
 
 export default UserSideMenu
