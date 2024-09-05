@@ -13,18 +13,23 @@ namespace ZventsApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Event>>> GetEventAsync()
         {
-            return await _context.Events.OrderByDescending(x => x.CreatedDate).ToArrayAsync();
+            var activeEvents = await _context
+                .Events.Where(dbEvent => dbEvent.IsDeleted == false)
+                .OrderBy(dbEvent => dbEvent.CreatedDate)
+                .ToListAsync();
+
+            return Ok(activeEvents);
         }
 
         [HttpPost]
         public async Task<ActionResult<Event>> PostEvent(CreateEventDto createEventDto)
         {
-            bool eventExists = _context.Events.Any(e =>
+            bool eventExists = _context.Events.Any(dbEvent =>
                 (
-                    e.Name == createEventDto.Name
-                    && e.Type == createEventDto.Type
-                    && e.ClientId == createEventDto.ClientId
-                    && e.IsActive == true
+                    dbEvent.Name == createEventDto.Name
+                    && dbEvent.Type == createEventDto.Type
+                    && dbEvent.ClientId == createEventDto.ClientId
+                    && dbEvent.IsDeleted == false
                 )
             );
 
@@ -34,9 +39,12 @@ namespace ZventsApi.Controllers
                 {
                     Name = createEventDto.Name,
                     Type = createEventDto.Type,
+                    Status = createEventDto.Status,
                     ClientId = createEventDto.ClientId,
-                    StartAt = createEventDto.StartAt,
-                    EndAt = createEventDto.EndAt,
+                    StartDate = createEventDto.StartDate,
+                    EndDate = createEventDto.EndDate,
+                    StartTime = createEventDto.StartTime,
+                    EndTime = createEventDto.EndTime,
                     ZipCode = createEventDto.ZipCode,
                     AddressName = createEventDto.AddressName,
                     AddressNumber = createEventDto.AddressNumber,
@@ -56,12 +64,14 @@ namespace ZventsApi.Controllers
                     {
                         return NotFound($"Material with ID {materialDto.MaterialId} not found.");
                     }
-                    eventEntity.EventMaterials.Add(new EventMaterial
-                    {
-                        Event = eventEntity,
-                        Material = material,
-                        Quantity = materialDto.Quantity
-                    });
+                    eventEntity.EventMaterials.Add(
+                        new EventMaterial
+                        {
+                            Event = eventEntity,
+                            Material = material,
+                            Quantity = materialDto.Quantity
+                        }
+                    );
                 }
 
                 _context.Events.Add(eventEntity);
@@ -75,7 +85,7 @@ namespace ZventsApi.Controllers
         [HttpGet("id/{id}")]
         public ActionResult<Event> GetEventById(Guid id)
         {
-            var @event = _context.Events.FirstOrDefault(e => e.Id == id);
+            var @event = _context.Events.FirstOrDefault(dbEvent => dbEvent.Id == id);
 
             if (@event == null)
             {
@@ -86,18 +96,20 @@ namespace ZventsApi.Controllers
         }
 
         [HttpGet("clientId/{clientId}")]
-        public async Task<ActionResult<IEnumerable<Event>>> GetEventByClientIdy(Guid clientId)
+        public async Task<ActionResult<IEnumerable<Event>>> GetEventByClientId(Guid clientId)
         {
-            return await _context.Events.Where(e => e.ClientId == clientId).ToArrayAsync();
+            return await _context
+                .Events.Where(dbEvent => dbEvent.ClientId == clientId)
+                .ToArrayAsync();
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEvent(Guid id, UpdateEventDto updateEventDto)
         {
-            var eventEntity = await _context.Events
-                .Include(e => e.EventMaterials)
-                .ThenInclude(em => em.Material)
-                .FirstOrDefaultAsync(e => e.Id == id);
+            var eventEntity = await _context
+                .Events.Include(dbEvent => dbEvent.EventMaterials)
+                .ThenInclude(dbMaterial => dbMaterial.Material)
+                .FirstOrDefaultAsync(dbEvent => dbEvent.Id == id);
 
             if (eventEntity == null)
             {
@@ -106,9 +118,12 @@ namespace ZventsApi.Controllers
 
             eventEntity.Name = updateEventDto.Name;
             eventEntity.Type = updateEventDto.Type;
+            eventEntity.Status = updateEventDto.Status;
             eventEntity.ClientId = updateEventDto.ClientId;
-            eventEntity.StartAt = updateEventDto.StartAt;
-            eventEntity.EndAt = updateEventDto.EndAt;
+            eventEntity.StartDate = updateEventDto.StartDate;
+            eventEntity.StartTime = updateEventDto.StartTime;
+            eventEntity.EndDate = updateEventDto.EndDate;
+            eventEntity.EndTime = updateEventDto.EndTime;
             eventEntity.ZipCode = updateEventDto.ZipCode;
             eventEntity.AddressName = updateEventDto.AddressName;
             eventEntity.AddressNumber = updateEventDto.AddressNumber;
@@ -128,12 +143,14 @@ namespace ZventsApi.Controllers
                     return NotFound($"Material with ID {materialDto.MaterialId} not found.");
                 }
 
-                eventEntity.EventMaterials.Add(new EventMaterial
-                {
-                    EventId = eventEntity.Id,
-                    MaterialId = material.Id,
-                    Quantity = materialDto.Quantity
-                });
+                eventEntity.EventMaterials.Add(
+                    new EventMaterial
+                    {
+                        EventId = eventEntity.Id,
+                        MaterialId = material.Id,
+                        Quantity = materialDto.Quantity
+                    }
+                );
             }
 
             _context.Entry(eventEntity).State = EntityState.Modified;
@@ -159,7 +176,39 @@ namespace ZventsApi.Controllers
 
         private bool EventExists(Guid id)
         {
-            return _context.Events.Any(e => e.Id == id);
+            return _context.Events.Any(dbEvent => dbEvent.Id == id);
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> SoftDeletEvent(Guid id)
+        {
+            var eventToDelete = await _context.Events.FindAsync(id);
+
+            if (eventToDelete == null)
+            {
+                return NotFound();
+            }
+
+            eventToDelete.IsDeleted = true;
+            _context.Entry(eventToDelete).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!EventExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

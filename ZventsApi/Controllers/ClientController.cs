@@ -6,26 +6,26 @@ namespace ZventsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientController(ZventsDbContext context) : ControllerBase
     {
-        private readonly ZventsDbContext _context;
-
-        public ClientController(ZventsDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ZventsDbContext _context = context;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client>>> GetClientAsync()
         {
-            return await _context.Clients.OrderByDescending(x => x.CreatedDate).ToListAsync();
+            var activeClients = await _context
+                .Clients.Where(dbclient => dbclient.IsDeleted == false)
+                .OrderBy(dbclient => dbclient.CreatedDate)
+                .ToListAsync();
+
+            return Ok(activeClients);
         }
 
         [HttpPost]
         public async Task<ActionResult<Client>> PostClientAsync(Client client)
         {
-            bool clientExists = await _context.Clients.AnyAsync(q =>
-                q.DocumentId == client.DocumentId
+            bool clientExists = await _context.Clients.AnyAsync(dbclient =>
+                dbclient.DocumentId == client.DocumentId
             );
 
             if (!clientExists)
@@ -55,8 +55,8 @@ namespace ZventsApi.Controllers
         [HttpGet("documentId/{documentId}")]
         public async Task<ActionResult<Client>> GetClientByDocumentId(string documentId)
         {
-            var client = await _context.Clients.FirstOrDefaultAsync(u =>
-                u.DocumentId == documentId
+            var client = await _context.Clients.FirstOrDefaultAsync(dbclient =>
+                dbclient.DocumentId == documentId
             );
 
             if (client == null)
@@ -77,8 +77,8 @@ namespace ZventsApi.Controllers
                 return NotFound();
             }
 
-            var existingClient = await _context.Clients.FirstOrDefaultAsync(c =>
-                c.Id != id && c.DocumentId == updatedClient.DocumentId
+            var existingClient = await _context.Clients.FirstOrDefaultAsync(dbClient =>
+                dbClient.Id != id && dbClient.DocumentId == updatedClient.DocumentId
             );
 
             if (existingClient != null)
@@ -97,11 +97,47 @@ namespace ZventsApi.Controllers
             clientToUpdate.District = updatedClient.District;
             clientToUpdate.State = updatedClient.State;
             clientToUpdate.City = updatedClient.City;
-            clientToUpdate.IsActive = updatedClient.IsActive;
 
             await _context.SaveChangesAsync();
 
             return Ok(clientToUpdate);
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> SoftDeleteClient(Guid id)
+        {
+            var clientToDelete = await _context.Clients.FindAsync(id);
+
+            if (clientToDelete == null)
+            {
+                return NotFound();
+            }
+
+            clientToDelete.IsDeleted = true;
+            _context.Entry(clientToDelete).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ClientExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool ClientExists(Guid id)
+        {
+            return _context.Clients.Any(client => client.Id == id);
         }
 
         [HttpDelete("{id}")]

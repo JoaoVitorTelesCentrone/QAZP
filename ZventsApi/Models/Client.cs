@@ -17,8 +17,6 @@ namespace ZventsApi.Models
         [RegularExpression(@"^\d{11}$|^\d{14}$", ErrorMessage = "Invalid DocumentId")]
         [ValidDocument(ErrorMessage = "Invalid DocumentId")]
         public string DocumentId { get; set; }
-
-        [Required(ErrorMessage = "UserName is required")]
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
 
@@ -41,11 +39,11 @@ namespace ZventsApi.Models
         [Required(ErrorMessage = "City is required")]
         public string City { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool? IsActive { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public Client()
         {
-            IsActive = true;
+            IsDeleted = false;
             CreatedDate = DateTime.Now;
         }
     }
