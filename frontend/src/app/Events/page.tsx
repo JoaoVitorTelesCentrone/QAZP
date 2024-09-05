@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import UserSideMenu from '../components/UserHeader'
+import UserHeader from '../components/UserHeader'
 import { useAtom, useSetAtom } from 'jotai'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
@@ -8,9 +8,12 @@ import Link from 'next/link'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { EventTable } from './EventTable'
 import axios from 'axios'
-import { Users } from 'lucide-react'
+import { Plus, Users } from 'lucide-react'
 import { Events, eventsColumns } from './columns'
 import { eventChangeAtom } from '../atoms/eventChangeAtom'
+import { TbCalendarPlus } from 'react-icons/tb'
+import { Tooltip } from 'antd'
+import { GiGlassCelebration } from 'react-icons/gi'
 
 const Page = () => {
   const [auth, isAuth] = useAtom(authAtom)
@@ -53,17 +56,25 @@ const Page = () => {
       ) : (
         <>
           <UserHeader />
-          <div className="p-20 justify-between flex">
-            <h1 className="ml-48 uppercase text-4xl font-bold text-secondary-foreground ">
-              Eventos
-            </h1>
-            <Link
-              className="bg-primary flex p-4 rounded-xl text-white"
-              href="/CreateEvent"
-            >
-              Criar evento
-              <Plus className="h-4 w-4 mt-1 ml-2" />{' '}
-            </Link>
+          <div className="bg-tertiary h-screen">
+            <div className="p-10 ">
+              <div className="flex mt-4 justify-between w-full">
+                <div className="flex">
+                  <h1 className=" text-7xl my-12 font-bold ml-72 text-secondary-foreground">
+                    Eventos
+                  </h1>
+                  <Tooltip title={'Criar novo cliente'}>
+                    <Link href="/CreateEvent">
+                      <TbCalendarPlus className="bg-primary w-16 h-16 p-4 rounded-full m-14 text-white" />
+                    </Link>
+                  </Tooltip>
+                </div>
+                <GiGlassCelebration className="w-48 h-48 mr-8 text-cyan-900" />
+              </div>
+            </div>
+            <div className="ml-72 mr-10">
+              <EventTable columns={eventsColumns} data={events} />
+            </div>
           </div>
         </>
       )}

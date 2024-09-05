@@ -71,10 +71,6 @@ export const materialColumns = (): ColumnDef<materialProps>[] => [
     },
   },
   {
-    id: 'edit',
-    cell: ({ row }) => <EditUser userId={row.original.name} />,
-  },
-  {
     id: 'delete',
     cell: ({ row }) => <DeleteMaterial materialId={row.original.id} />,
   },

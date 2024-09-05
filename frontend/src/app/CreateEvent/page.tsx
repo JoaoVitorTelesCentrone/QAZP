@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { redirect } from 'next/navigation'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/navigation'
 
 type mats = {
   materialId: string
@@ -30,7 +31,7 @@ type mats = {
 
 const CreateEvent = () => {
   const [startDate, setStartDate] = useState('')
-
+  const router = useRouter()
   const [startTime, setStartTime] = useState('')
 
   const [endDate, setEndDate] = useState('')
@@ -253,7 +254,7 @@ const CreateEvent = () => {
       console.log(res.data)
       console.log(clientId, materialIdAndQuantity, body)
       message.success('Evento criado com sucesso')
-      redirect('/Events')
+      router.push('/Events')
     } catch (error) {
       console.error()
     }
