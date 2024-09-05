@@ -3,11 +3,13 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
+import DeleteQuote from './DeleteQuote'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export type Quotes = {
+  id: string
   fullName: string
   lastName: string
   email: string
@@ -138,5 +140,9 @@ export const quoteColumns: ColumnDef<Quotes>[] = [
         </Button>
       )
     },
+  },
+  {
+    id: 'delete',
+    cell: ({ row }) => <DeleteQuote quoteId={row.original.id} />,
   },
 ]
