@@ -7,6 +7,7 @@ import axios from 'axios'
 import { MaterialTable } from './MaterialTable'
 import { materialColumns } from './columns'
 import ClipLoader from 'react-spinners/ClipLoader'
+import { Plus } from 'lucide-react'
 
 export type materialProps = {
   id: string
@@ -52,16 +53,19 @@ const Materials = () => {
       ) : (
         <>
           <UserSideMenu />
-          <div className="flex justify-between m-10">
-            <h1 className="text-4xl font-bold ml-64">Materiais</h1>
+          <div className="p-20 justify-between flex">
+            <h1 className="ml-48 uppercase text-4xl font-bold text-secondary-foreground ">
+              Materiais
+              </h1>
             <Link
               href="/CreateMaterial"
-              className="text-white bg-primary p-3 rounded-xl"
+              className="bg-primary flex p-4 rounded-xl text-white"
             >
               Criar Material
+              <Plus className="h-4 w-4 mt-1 ml-2" />{' '}
             </Link>
           </div>
-          <div className="ml-10">
+          <div className="ml-72 mr-10">
             <MaterialTable columns={columns} data={materials} />
           </div>
           {/* {materials.map((material, index) => (

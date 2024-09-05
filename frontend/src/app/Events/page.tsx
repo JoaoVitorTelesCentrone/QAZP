@@ -6,6 +6,8 @@ import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import ClipLoader from 'react-spinners/ClipLoader'
+import UserHeader from '../components/UserHeader'
+import { Plus } from 'lucide-react'
 
 const Page = () => {
   const [auth, isAuth] = useAtom(authAtom)
@@ -31,17 +33,18 @@ const Page = () => {
         </div>
       ) : (
         <>
-          <UserSideMenu />
-          <div className="m-20">
-            <div className="flex justify-between">
-              <h1 className="text-4xl ml-56 font-bold uppercase">Eventos</h1>
-              <Link
-                className="bg-primary rounded-xl p-3 text-white font-bold "
-                href="/CreateEvent"
-              >
-                Criar evento
-              </Link>
-            </div>
+          <UserHeader />
+          <div className="p-20 justify-between flex">
+            <h1 className="ml-48 uppercase text-4xl font-bold text-secondary-foreground ">
+              Eventos
+            </h1>
+            <Link
+              className="bg-primary flex p-4 rounded-xl text-white"
+              href="/CreateEvent"
+            >
+              Criar evento
+              <Plus className="h-4 w-4 mt-1 ml-2" />{' '}
+            </Link>
           </div>
         </>
       )}

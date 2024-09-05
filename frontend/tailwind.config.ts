@@ -15,9 +15,13 @@ const config = {
       padding: '2rem',
       screens: {
         '2xl': '1400px',
+        'xl': '1200px',
       },
     },
     extend: {
+      screens: {
+        'max-xl': {'max': '1199px'}, // Custom breakpoint for less than 1200px
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -26,7 +30,7 @@ const config = {
         foreground: 'hsl(var(--foreground))',
         primary: '#222831',
         secondary: '#EEEEEE',
-        tertiary: '#76ABAE',
+        tertiary: '#E8E8E8', //cinza claro
       },
       borderRadius: {
         lg: 'var(--radius)',
