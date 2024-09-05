@@ -77,7 +77,7 @@ const Dashboard = () => {
         <>
           <UserHeader />
           <h1 className="text-5xl font-bold ml-72 my-10">
-            Seja bem vindo ao Zventos, {user.username}
+            Dashboards operacionais
           </h1>
           <div className="flex mx-16">
             <div className="flex p-4 mx-auto ml-72 my-6 w-[1000px]">
