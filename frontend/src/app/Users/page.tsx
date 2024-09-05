@@ -49,7 +49,7 @@ const Users = () => {
               Usuários
             </h1>
             <Link
-              className="flex bg-quartenary hover:transition delay-100 hover:scale-125 p-4 rounded-xl text-white"
+              className="flex bg-primary hover:transition delay-100 hover:scale-125 p-4 rounded-xl text-white"
               href="/CreateUser"
             >
               Criar usuário

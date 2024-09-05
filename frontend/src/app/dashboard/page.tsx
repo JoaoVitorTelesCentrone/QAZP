@@ -66,7 +66,7 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen">
       <aside className="w-64 bg-primary text-white">{/* Menu lateral */}</aside>
-      <div className="flex-1 flex flex-col bg-quintenary">
+      <div className="flex-1 flex flex-col bg-tertiary">
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <ClipLoader size={50} color={'#123abc'} loading={loading} />

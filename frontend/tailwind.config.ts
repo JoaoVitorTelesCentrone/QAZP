@@ -30,11 +30,7 @@ const config = {
         foreground: 'hsl(var(--foreground))',
         primary: '#222831',
         secondary: '#EEEEEE',
-        tertiary: '#76ABAE',
-        quartenary:'#004d40',
-        quintenary: '#E8E8E8', //cinza claro
-        sextenary: '#ACBCB7', // verde acinzentado
-        lastenary:'#798EA7' //azul claro
+        tertiary: '#E8E8E8', //cinza claro
       },
       borderRadius: {
         lg: 'var(--radius)',

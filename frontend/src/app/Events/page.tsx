@@ -39,7 +39,7 @@ const Page = () => {
               Eventos
             </h1>
             <Link
-              className="bg-quartenary flex p-4 rounded-xl text-white"
+              className="bg-primary flex p-4 rounded-xl text-white"
               href="/CreateEvent"
             >
               Criar evento

@@ -57,13 +57,13 @@ const Page = () => {
     <div>
       <Header />
       <Toaster richColors />
-      <div className="p-20 bg-quintenary">
+      <div className="p-20 bg-tertiary">
         <h1 className="text-6xl mx-auto font-montserrat font-bold uppercase text-center text-primary ">
           Solicite um orçamento
         </h1>
         <div className="my-10 bg-primary shadow-md shadow-slate-500 mx-auto  max-w-[500px] justify-between py-10 flex flex-col border-2 rounded-2xl">
           <div className="shadow-black flex flex-col mx-10 py-4 rounded-xl">
-            <h1 className="text-2xl text-quintenary font-bold ">
+            <h1 className="text-2xl text-tertiary font-bold ">
               Informações pessoais
             </h1>
             <Input
@@ -122,7 +122,7 @@ const Page = () => {
         <div className="my-10 text-center justify-center flex">
           <button
             onClick={handleSubmit}
-            className="bg-primary border-[0.5px] border-white text-quintenary p-4 rounded-xl font-bold uppercase mx-10 shadow-lg"
+            className="bg-primary border-[0.5px] border-white text-tertiary p-4 rounded-xl font-bold uppercase mx-10 shadow-lg"
           >
             Enviar solicitação
           </button>

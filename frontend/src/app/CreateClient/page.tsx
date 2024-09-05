@@ -109,7 +109,7 @@ const CreateClientForm = () => {
   }
 
   return (
-    <div className="flex flex-col bg-quintenary max-h-screen">
+    <div className="flex flex-col bg-tertiary max-h-screen">
       <UserHeader />
       <Toaster richColors />
       <h1 className="ml-72 my-4 text-5xl font-bold text-center ">

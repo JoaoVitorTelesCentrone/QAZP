@@ -59,7 +59,7 @@ const Materials = () => {
               </h1>
             <Link
               href="/CreateMaterial"
-              className="bg-quartenary flex p-4 rounded-xl text-white"
+              className="bg-primary flex p-4 rounded-xl text-white"
             >
               Criar Material
               <Plus className="h-4 w-4 mt-1 ml-2" />{' '}

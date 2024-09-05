@@ -44,7 +44,7 @@ const Clients = () => {
   }
   return (
     <div className='flex h-screen'>
-    <div className='flex-1 flex flex-col bg-quintenary'>
+    <div className='flex-1 flex flex-col bg-tertiary'>
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <ClipLoader size={50} color={'#123abc'} loading={loading} />
@@ -52,7 +52,7 @@ const Clients = () => {
       ) : (
         <>
           <UserHeader />
-          <div className='bg-quintenary'>
+          <div className='bg-tertiary'>
           <div className="p-10 justify-between flex">
             <h1 className="ml-72 text-4xl font-bold text-secondary-foreground">
               {intl.formatMessage({ id: 'client.page.title' })}     
