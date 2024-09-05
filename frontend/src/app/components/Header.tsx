@@ -11,12 +11,12 @@ const Header = () => {
   const [user, setUser] = useAtom(userInfoAtom)
 
   return (
-    <div className=" flex p-8 bg-primary text-secondary justify-around">
+    <div className=" flex p-8 bg-black text-secondary justify-around">
       <Link
         href="/"
         className="text-2xl text-secondary font-extrabold font-montserrat"
       >
-        Eventos
+        Z-Eventos
       </Link>
       {isLogged ? (
         <UserHeader />

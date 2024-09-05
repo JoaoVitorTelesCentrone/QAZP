@@ -36,16 +36,16 @@ const Users = () => {
 
   const columns = useMemo(() => userColumns(), [])
   return (
-    <div className="flex flex-col">
+    <div>
       {loading ? (
-        <div className="flex justify-center items-center h-screen mx-auto">
+        <div className="flex justify-center items-center h-screen">
           <ClipLoader size={50} color={'#123abc'} loading={loading} />
         </div>
       ) : (
         <>
           <UserHeader />
-          <div className="flex my-20 mx-10 justify-between">
-            <h1 className="text-4xl ml-72 font-bold uppercase text-secondary-foreground">
+          <div className="p-20 justify-between flex">
+            <h1 className="text-4xl ml-48 font-bold uppercase text-secondary-foreground">
               Usuários
             </h1>
             <Link
@@ -56,7 +56,7 @@ const Users = () => {
               <Plus className="h-4 w-4 mt-1 ml-2" />{' '}
             </Link>
           </div>
-          <div className="mx-auto h-screen">
+          <div className="ml-72 mr-10">
             <UsersTable data={userData} columns={columns} />
           </div>
         </>
