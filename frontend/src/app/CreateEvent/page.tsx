@@ -1,4 +1,5 @@
 'use client'
+import { Dayjs } from 'dayjs'
 import React, { useState, useEffect } from 'react'
 import UserSideMenu from '../components/UserHeader'
 import axios from 'axios'
@@ -28,29 +29,13 @@ type mats = {
 }
 
 const CreateEvent = () => {
-  const [startDate, setStartDate] = useState({
-    year: 0,
-    month: 0,
-    day: 0,
-    dayOfWeek: 0,
-  })
+  const [startDate, setStartDate] = useState('')
 
-  const [startTime, setStartTime] = useState({
-    hour: 0,
-    minute: 0,
-  })
+  const [startTime, setStartTime] = useState('')
 
-  const [endDate, setEndDate] = useState({
-    year: 0,
-    month: 0,
-    day: 0,
-    dayOfWeek: 0,
-  })
+  const [endDate, setEndDate] = useState('')
 
-  const [endTime, setEndTime] = useState({
-    hour: 0,
-    minute: 0,
-  })
+  const [endTime, setEndTime] = useState('')
 
   const [zipCode, setZipCode] = useState('')
   const [addressName, setAddressName] = useState('')
@@ -78,23 +63,27 @@ const CreateEvent = () => {
   const [materialIdAndQuantity, setMaterialIdAndQuantity] = useState<mats[]>([])
   const [totalAmount, setTotalAmount] = useState(0)
 
-  const handleDateChange = (date, setDate) => {
+  const handleDateChange = (
+    date: Dayjs | null,
+    setDate: React.Dispatch<React.SetStateAction<string>>,
+  ) => {
     if (date) {
-      setDate({
-        year: date.year().toString(),
-        month: date.month().toString() + 1, // month is 0-indexed in Dayjs
-        day: date.date().toString(),
-        dayOfWeek: date.day().toString(),
-      })
+      const formattedDate = `${date.year()}-${(date.month() + 1).toString().padStart(2, '0')}-${date.date().toString().padStart(2, '0')}`
+      setDate(formattedDate)
+    } else {
+      setDate('')
     }
   }
 
-  const handleTimeChange = (time, setTime) => {
+  const handleTimeChange = (
+    time: Dayjs | null,
+    setTime: React.Dispatch<React.SetStateAction<string>>,
+  ) => {
     if (time) {
-      setTime({
-        hour: time.hour().toString(),
-        minute: time.minute().toString(),
-      })
+      const formattedTime = `${time.hour().toString().padStart(2, '0')}:${time.minute().toString().padStart(2, '0')}:${time.second().toString().padStart(2, '0')}`
+      setTime(formattedTime)
+    } else {
+      setTime('')
     }
   }
 
@@ -333,8 +322,8 @@ const CreateEvent = () => {
               <div>
                 <h1 className="font-bold">Data do evento</h1>
                 <DatePicker
-                  onChange={date => handleDateChange(date, setEndDate)}
-                  format="DD/MM/YYYY"
+                  onChange={date => handleDateChange(date, setStartDate)}
+                  format="YYYY/MM/DD"
                   size="large"
                 />
               </div>
@@ -342,16 +331,16 @@ const CreateEvent = () => {
               <div>
                 <h1 className="font-bold">Fim do evento</h1>
                 <DatePicker
-                  onChange={date => handleDateChange(date, setStartDate)}
-                  format="DD/MM/YYYY"
+                  onChange={date => handleDateChange(date, setEndDate)}
+                  format="YYYY/MM/DD"
                   size="large"
                 />
               </div>
               <div>
                 <h1 className="font-bold">Início do evento</h1>
                 <TimePicker
-                  onChange={date => handleTimeChange(date, setEndDate)}
-                  format="HH:mm"
+                  onChange={date => handleTimeChange(date, setStartTime)}
+                  format="HH:mm:ss"
                   needConfirm={false}
                   size="large"
                 />
@@ -359,8 +348,8 @@ const CreateEvent = () => {
               <div>
                 <h1 className="font-bold">Fim do evento</h1>
                 <TimePicker
-                  onChange={date => handleDateChange(date, setEndDate)}
-                  format="HH:mm"
+                  onChange={date => handleTimeChange(date, setEndTime)}
+                  format="HH:mm:ss"
                   needConfirm={false}
                   size="large"
                 />
