@@ -21,7 +21,6 @@ const Clients = () => {
   async function fetchUserData() {
     try {
       const response = await axios.get('http://localhost:5196/api/Client')
-      console.log(response)
       setClients(response.data)
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)

@@ -9,7 +9,6 @@ export default async function handler(
     const response = await axios.get(`http://localhost:5196/api/Quote`)
     if (response.status === 200) {
       const quoteData = response.data
-      console.log(quoteData)
       res.status(200).json(quoteData)
     } else {
       throw new Error('Erro ao obter a citação')

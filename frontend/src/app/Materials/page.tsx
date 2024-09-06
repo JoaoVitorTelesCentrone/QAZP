@@ -8,6 +8,10 @@ import { MaterialTable } from './MaterialTable'
 import { materialColumns } from './columns'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { Plus } from 'lucide-react'
+import {
+  formatCurrency,
+  materialCategoryNameConverter,
+} from '@/functions/functions'
 
 export type materialProps = {
   id: string
@@ -23,14 +27,13 @@ const Materials = () => {
   const getMaterial = async () => {
     const response = await axios.get('http://localhost:5196/api/Material')
     setMaterialsName(response.data)
-    // console.log(response.data)
+
     const materialNames = response.data.map((material: any) => ({
       name: material.name,
-      price: material.price,
-      category: material.category,
+      price: formatCurrency(material.price),
+      category: materialCategoryNameConverter(material.category),
     }))
     setMaterials(materialNames)
-    console.log(materials)
   }
 
   useEffect(() => {
@@ -56,7 +59,7 @@ const Materials = () => {
           <div className="p-20 justify-between flex">
             <h1 className="ml-48 uppercase text-4xl font-bold text-secondary-foreground ">
               Materiais
-              </h1>
+            </h1>
             <Link
               href="/CreateMaterial"
               className="bg-primary flex p-4 rounded-xl text-white"
