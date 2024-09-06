@@ -78,5 +78,21 @@ namespace ZventsApi.Controllers
         {
             return _context.Quotes.Any(quote => quote.Id == id);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteQuote(Guid id)
+        {
+            var quoteToDelete = _context.Quotes.Find(id);
+
+            if (quoteToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _context.Quotes.Remove(quoteToDelete);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }

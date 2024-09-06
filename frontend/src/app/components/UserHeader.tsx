@@ -12,7 +12,6 @@ import AvatarUser from './Avatar'
 const UserSideMenu = () => {
   const [loggedIn, setIsLogged] = useAtom(authAtom)
   const [user, setUser] = useAtom(userInfoAtom)
-  console.log(user)
 
   if (!loggedIn) {
     redirect('/login')

@@ -71,5 +71,57 @@ namespace ZventsApi.Controllers
                 new { message = "There is already a Material with the same Name and Category" }
             );
         }
+
+        [HttpPatch]
+        public async Task<IActionResult> SoftDeleteMaterial(Guid id)
+        {
+            var materialToDelete = await _context.Materials.FindAsync(id);
+
+            if (materialToDelete == null)
+            {
+                return NotFound();
+            }
+
+            materialToDelete.IsDeleted = true;
+            _context.Entry(materialToDelete).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MaterialExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+        private bool MaterialExists(Guid id)
+        {
+            return _context.Materials.Any(material => material.Id == id);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteMaterial(Guid id)
+        {
+            var materialToDelete = _context.Materials.Find(id);
+
+            if (materialToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _context.Materials.Remove(materialToDelete);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }

@@ -42,7 +42,6 @@ const CreateClientForm = () => {
         `https://viacep.com.br/ws/${zipCode}/json/`,
       )
 
-      console.log(response.data)
       const cepData = response.data
       setAddressName(cepData.logradouro)
       setDistrict(cepData.bairro)
@@ -73,16 +72,11 @@ const CreateClientForm = () => {
         data,
       )
       const userData = response.data
-      console.log(response.status)
       if (response.status === 201) {
-        console.log(response.data)
-        console.log(data)
         toast.success('Cliente criado')
         redirect('/clients')
       }
       if (response.status === 409) {
-        console.log(response.data)
-        console.log(data)
         toast.error('Cliente criado')
       }
     } catch (error: unknown) {
@@ -99,7 +93,6 @@ const CreateClientForm = () => {
           }
         }
       }
-      console.log(data)
     }
   }
 

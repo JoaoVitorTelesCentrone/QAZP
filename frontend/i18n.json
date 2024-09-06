@@ -31,6 +31,15 @@
         "create.client.page.city.field.label": "Cidade",
         "create.client.page.create.client.button": "Criar cliente",
         "edit.client.page.create.client.button": "Salvar",
-        "datagrid.empty.message": "Nenhum resultado foi encontrado."
+        "datagrid.empty.message": "Nenhum resultado foi encontrado.",
+        "material.category.food": "Comida",
+        "material.category.decoration": "Decoração",
+        "material.category.utensils": "Utensílios",
+        "material.category.furniture": "Móveis",
+        "material.category.humanResources": "Recursos Humanos",
+        "material.category.realEstate": "Imóveis",
+        "material.category.entertainment": "Entretenimento",
+        "material.category.marketing": "Marketing"
+        
     }
 }
