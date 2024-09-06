@@ -46,16 +46,13 @@ const CreateMaterial = () => {
       value: price,
       isActive: true,
     }
-    console.log(data)
+
     try {
       const response = await axios.post(
         'http://localhost:5196/api/Material',
         data,
       )
-      console.log(response.status)
       if (response.status === 201) {
-        console.log(response.data)
-        console.log(data)
         toast.success('Material criado')
         redirect('/Materials')
       }

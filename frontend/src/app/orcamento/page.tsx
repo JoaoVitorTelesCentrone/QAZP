@@ -44,12 +44,10 @@ const Page = () => {
         },
       })
       .then(response => {
-        console.log('Resposta:', response.data)
         toast.success('Orçamento enviado')
       })
       .catch(error => {
         console.error('Erro:', error)
-        console.log(quote)
         toast.error('Evento não foi criado')
       })
   }

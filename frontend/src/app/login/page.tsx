@@ -32,9 +32,7 @@ const LoginPage = () => {
       const userName = response.data.name
       const userData = response.data.username
       const userPassword = response.data.password
-      console.log(userData)
       if (response.status === 200) {
-        console.log(response.data)
         isLogged(true)
         setError(false)
         setUserAuth(true)

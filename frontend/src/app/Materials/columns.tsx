@@ -26,7 +26,8 @@ import DeleteMaterial from './DeleteMaterial'
 export type Materiais = {
   id: string
   name: string
-  value: string
+  price: string
+  category: string
 }
 
 export const materialColumns = (): ColumnDef<materialProps>[] => [
@@ -51,7 +52,27 @@ export const materialColumns = (): ColumnDef<materialProps>[] => [
     },
   },
   {
-    accessorKey: 'value',
+    accessorKey: 'category',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Categoria
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      )
+    },
+  },
+  {
+    accessorKey: 'price',
     header: ({ column }) => {
       return (
         <Button

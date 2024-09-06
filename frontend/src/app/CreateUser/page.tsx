@@ -40,10 +40,7 @@ const CreateUserForm = () => {
     try {
       const response = await axios.post('http://localhost:5196/api/User', data)
       const userData = response.data
-      console.log(response.status)
       if (response.status === 201) {
-        console.log(response.data)
-        console.log(data)
         toast.success('Usuário criado')
       }
     } catch (error) {

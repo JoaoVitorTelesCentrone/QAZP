@@ -13,7 +13,6 @@ function MeuComponente() {
       const response = await axios.get('http://localhost:5196/api/Quote')
 
       if (response.status === 200) {
-        console.log(response.data)
         setQuote(response.data)
       } else {
         throw new Error('Erro ao obter a citação')
