@@ -12,7 +12,7 @@ import { Plus, Users } from 'lucide-react'
 import { Events, eventsColumns } from './columns'
 import { eventChangeAtom } from '../atoms/eventChangeAtom'
 import { TbCalendarPlus } from 'react-icons/tb'
-import { Tooltip } from 'antd'
+import { Button, Tooltip } from 'antd'
 import { GiGlassCelebration } from 'react-icons/gi'
 
 const Page = () => {
@@ -59,17 +59,23 @@ const Page = () => {
           <div className="bg-tertiary h-screen">
             <div className="p-10 ">
               <div className="flex mt-4 justify-between w-full">
-                <div className="flex">
-                  <h1 className=" text-7xl my-12 font-bold ml-72 text-secondary-foreground">
+                <div className="flex ml-72">
+                  <GiGlassCelebration className=" w-16 h-16 p-1 rounded-full my-14 mx-2 text-primary border-2 border-primary" />
+
+                  <h1 className=" text-7xl my-14 font-bold  text-secondary-foreground">
                     Eventos
                   </h1>
-                  <Tooltip title={'Criar novo cliente'}>
-                    <Link href="/CreateEvent">
-                      <TbCalendarPlus className="bg-primary w-16 h-16 p-4 rounded-full m-14 text-white" />
-                    </Link>
-                  </Tooltip>
                 </div>
-                <GiGlassCelebration className="w-48 h-48 mr-8 text-cyan-900" />
+                <Button
+                  icon={<TbCalendarPlus className="w-5 h-5 " />}
+                  type="primary"
+                  className="mt-16"
+                  size="large"
+                >
+                  <Link href="/CreateEvent" className="text-lg">
+                    Criar novo evento
+                  </Link>
+                </Button>
               </div>
             </div>
             <div className="ml-72 mr-10">
