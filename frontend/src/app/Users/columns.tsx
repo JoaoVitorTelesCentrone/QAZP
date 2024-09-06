@@ -67,12 +67,4 @@ export const userColumns = (): ColumnDef<Users>[] => [
       )
     },
   },
-  {
-    id: 'edit',
-    cell: ({ row }) => <EditUser userId={row.original.userName} />,
-  },
-  {
-    id: 'delete',
-    cell: ({ row }) => <DeleteUser userId={row.original.id} />,
-  },
 ]

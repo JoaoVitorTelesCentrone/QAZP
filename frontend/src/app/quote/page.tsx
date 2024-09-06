@@ -8,11 +8,17 @@ import { quoteColumns } from './column'
 import { QuoteTable } from './QuoteTable'
 import axios from 'axios'
 import ClipLoader from 'react-spinners/ClipLoader'
+import { quoteChangeAtom } from '../atoms/changeQuoteAtom'
 
 const Page = () => {
   const [auth, isAuth] = useAtom(authAtom)
   const [quote, setQuote] = useState([])
   const [loading, setLoading] = useState(false)
+  const [quoteChange, setQuoteChange] = useAtom(quoteChangeAtom)
+
+  useEffect(() => {
+    fetchUserData()
+  }, [quoteChange])
 
   if (!auth) {
     redirect('/login')

@@ -18,6 +18,7 @@ import { UUID } from 'crypto'
 import EditUser from '../Users/EditUser'
 import DeleteUser from '../Users/DeleteUser'
 import { materialProps } from './page'
+import DeleteMaterial from './DeleteMaterial'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -91,11 +92,7 @@ export const materialColumns = (): ColumnDef<materialProps>[] => [
     },
   },
   {
-    id: 'edit',
-    cell: ({ row }) => <EditUser userId={row.original.name} />,
-  },
-  {
     id: 'delete',
-    cell: ({ row }) => <DeleteUser userId={row.original.id} />,
+    cell: ({ row }) => <DeleteMaterial materialId={row.original.id} />,
   },
 ]

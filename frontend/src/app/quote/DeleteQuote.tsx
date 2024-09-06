@@ -5,22 +5,24 @@ import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { useAtom } from 'jotai'
 import { clientChangeAtom } from '../atoms/clientChangeAtom'
+import { quoteChangeAtom } from '../atoms/changeQuoteAtom'
 
-type deleteClientProps = {
-  userId: string
+type deleteQuoteProps = {
+  quoteId: string
 }
 
-const DeleteClient: React.FC<deleteClientProps> = ({ userId }) => {
+const DeleteQuote: React.FC<deleteQuoteProps> = ({ quoteId }) => {
   const [deleteModal, setDeleteModal] = useState(false)
-  const [clientChange, setClientChange] = useAtom(clientChangeAtom)
+  const [quoteChange, setQuoteChange] = useAtom(quoteChangeAtom)
+
   const deleteData = async (): Promise<void> => {
     try {
-      await axios.patch(`http://localhost:5196/api/Client/${userId}`, {
+      await axios.patch(`http://localhost:5196/api/Quote/${quoteId}`, {
         isDeleted: true,
       })
       console.log('Dados deletados com sucesso.')
       setDeleteModal(false)
-      setClientChange(prev => prev + 1)
+      setQuoteChange(prev => prev + 1)
     } catch (error) {
       console.error('Erro ao deletar os dados:', error)
     }
@@ -60,4 +62,4 @@ const DeleteClient: React.FC<deleteClientProps> = ({ userId }) => {
   )
 }
 
-export default DeleteClient
+export default DeleteQuote

@@ -30,7 +30,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
-export function UsersTable<TData, TValue>({
+export function EventTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -63,16 +63,6 @@ export function UsersTable<TData, TValue>({
           className="text-secondary-foreground text-center font-bold  mx-32"
         />
 
-        <Input
-          placeholder="Filtrar por usuário"
-          value={
-            (table.getColumn('username')?.getFilterValue() as string) ?? ''
-          }
-          onChange={event =>
-            table.getColumn('username')?.setFilterValue(event.target.value)
-          }
-          className="text-center ml-32 font-bold mb-10 "
-        />
       </div>
       <Table className="border-2 border-secondary">
         <TableHeader>

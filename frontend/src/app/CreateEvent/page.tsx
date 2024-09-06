@@ -1,11 +1,12 @@
 'use client'
+import { Dayjs } from 'dayjs'
 import React, { useState, useEffect } from 'react'
 import UserSideMenu from '../components/UserHeader'
 import axios from 'axios'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { LucideTrash2, PlusCircleIcon, Trash2Icon } from 'lucide-react'
-import { Calendar, DatePicker, Table, TimePicker } from 'antd'
+import { Calendar, DatePicker, message, Table, TimePicker } from 'antd'
 import {
   ClientProps,
   MaterialCategory,
@@ -19,6 +20,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { redirect } from 'next/navigation'
+import dayjs from 'dayjs'
+import { useRouter } from 'next/navigation'
 
 type mats = {
   materialId: string
@@ -26,6 +30,14 @@ type mats = {
 }
 
 const CreateEvent = () => {
+  const [startDate, setStartDate] = useState('')
+  const router = useRouter()
+  const [startTime, setStartTime] = useState('')
+
+  const [endDate, setEndDate] = useState('')
+
+  const [endTime, setEndTime] = useState('')
+
   const [zipCode, setZipCode] = useState('')
   const [addressName, setAddressName] = useState('')
   const [addressNumber, setAddressNumber] = useState('')
@@ -51,6 +63,30 @@ const CreateEvent = () => {
   >([])
   const [materialIdAndQuantity, setMaterialIdAndQuantity] = useState<mats[]>([])
   const [totalAmount, setTotalAmount] = useState(0)
+
+  const handleDateChange = (
+    date: Dayjs | null,
+    setDate: React.Dispatch<React.SetStateAction<string>>,
+  ) => {
+    if (date) {
+      const formattedDate = `${date.year()}-${(date.month() + 1).toString().padStart(2, '0')}-${date.date().toString().padStart(2, '0')}`
+      setDate(formattedDate)
+    } else {
+      setDate('')
+    }
+  }
+
+  const handleTimeChange = (
+    time: Dayjs | null,
+    setTime: React.Dispatch<React.SetStateAction<string>>,
+  ) => {
+    if (time) {
+      const formattedTime = `${time.hour().toString().padStart(2, '0')}:${time.minute().toString().padStart(2, '0')}:${time.second().toString().padStart(2, '0')}`
+      setTime(formattedTime)
+    } else {
+      setTime('')
+    }
+  }
 
   const getClients = async () => {
     try {
@@ -198,8 +234,10 @@ const CreateEvent = () => {
       name: clientName || 'string',
       type: 0,
       clientId: clientId,
-      startAt: '2024-07-04T18:03:55.640Z',
-      endAt: '2024-07-04T18:03:55.640Z',
+      startDate: startDate,
+      startTime: startTime,
+      endDate: endDate,
+      endTime: endTime,
       zipCode: zipCode || 'string',
       addressName: addressName || 'string',
       addressNumber: addressNumber || 'string',
@@ -215,6 +253,8 @@ const CreateEvent = () => {
       const res = await axios.post('http://localhost:5196/api/Event', body)
       console.log(res.data)
       console.log(clientId, materialIdAndQuantity, body)
+      message.success('Evento criado com sucesso')
+      router.push('/Events')
     } catch (error) {
       console.error()
     }
@@ -230,7 +270,7 @@ const CreateEvent = () => {
         </h1>
         <form
           action=""
-          className="flex flex-col  w-[1200px] rounded-xl bg-opacity-30 bg-slate-400 p-16 mx-auto"
+          className="flex flex-col w-[1200px] rounded-xl bg-opacity-30 bg-slate-400 p-16 mx-auto"
         >
           <h1 className="font-bold text-2xl ">Informações do cliente</h1>
           <div className="flex justify-around my-4 w-full">
@@ -240,7 +280,7 @@ const CreateEvent = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-white p-2 border-2 rounded-xl w-[280px] overflow-y-auto h-[120px] ">
                 {clients.map((client, index) => (
-                  <>
+                  <div key={index}>
                     <DropdownMenuItem
                       onClick={() =>
                         getCLienInputValues(
@@ -251,47 +291,69 @@ const CreateEvent = () => {
                           index,
                         )
                       }
-                      key={index}
                     >
                       {client.name}
                     </DropdownMenuItem>
                     <hr className="h-2" />
-                  </>
+                  </div>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <div className="flex  w-full">
+            <div className="flex w-full">
               <div className="mx-10">
                 <h1 className="p-1 font-bold">Email</h1>
-                <h1 className=" text-white text-center font-bold  h-[33px] rounded-xl">
+                <div className="text-white text-center font-bold h-[33px] rounded-xl">
                   {clientEmail}
-                </h1>
+                </div>
               </div>
 
               <div className="mx-10">
                 <h1 className="p-1 font-bold">Documento</h1>
-                <h1 className=" text-white font-bold text-center  h-[33px] rounded-xl">
+                <div className="text-white font-bold text-center h-[33px] rounded-xl">
                   {clientDocument}
-                </h1>
+                </div>
               </div>
             </div>
           </div>
+
           <h1 className="font-bold text-2xl my-1">Informações do Evento</h1>
           <div className="my-4 flex flex-col justify-around">
-            <div className=" my-10 flex justify-around">
+            <div className="my-10 flex justify-around">
               <div>
                 <h1 className="font-bold">Data do evento</h1>
-                <DatePicker format="DD/MM/YYYY" size="large" />
-              </div>
-              <div>
-                <h1 className="font-bold">Inicio do evento</h1>
-                <TimePicker format="HH:mm" needConfirm={false} size="large" />
+                <DatePicker
+                  onChange={date => handleDateChange(date, setStartDate)}
+                  format="YYYY/MM/DD"
+                  size="large"
+                />
               </div>
 
               <div>
-                <h1 className="font-bold">Inicio do evento</h1>
-                <TimePicker needConfirm={false} format="HH:mm" size="large" />
+                <h1 className="font-bold">Fim do evento</h1>
+                <DatePicker
+                  onChange={date => handleDateChange(date, setEndDate)}
+                  format="YYYY/MM/DD"
+                  size="large"
+                />
+              </div>
+              <div>
+                <h1 className="font-bold">Início do evento</h1>
+                <TimePicker
+                  onChange={date => handleTimeChange(date, setStartTime)}
+                  format="HH:mm:ss"
+                  needConfirm={false}
+                  size="large"
+                />
+              </div>
+              <div>
+                <h1 className="font-bold">Fim do evento</h1>
+                <TimePicker
+                  onChange={date => handleTimeChange(date, setEndTime)}
+                  format="HH:mm:ss"
+                  needConfirm={false}
+                  size="large"
+                />
               </div>
             </div>
             <div className="flex mb-4 justify-around">
@@ -301,7 +363,7 @@ const CreateEvent = () => {
               />
               <Input
                 className="bg-white text-black mx-2"
-                placeholder="Digite a Estado"
+                placeholder="Digite o Estado"
                 onChange={e => setDistrict(e.target.value)}
               />
               <Input
@@ -310,7 +372,6 @@ const CreateEvent = () => {
                 onChange={e => setCity(e.target.value)}
               />
             </div>
-
             <div className="flex mb-4 justify-around">
               <Input
                 className="bg-white text-black mx-2"
@@ -319,7 +380,7 @@ const CreateEvent = () => {
               />
               <Input
                 className="bg-white text-black mx-2"
-                placeholder="Digite o numero"
+                placeholder="Digite o número"
                 onChange={e => setAddressNumber(e.target.value)}
               />
               <Input
@@ -334,6 +395,7 @@ const CreateEvent = () => {
               onChange={e => setEstimatedAudience(e.target.value)}
             />
           </div>
+
           <h1 className="font-bold text-xl my-1">Selecione os Materiais</h1>
           <div className="flex my-4">
             <div className="flex justify-around w-full">
@@ -343,17 +405,16 @@ const CreateEvent = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white p-2 h-[120px] overflow-y-auto border-2 rounded-xl w-[300px] ">
                   {MaterialCategory.map((category, index) => (
-                    <>
+                    <div key={index}>
                       <DropdownMenuItem
                         onClick={() =>
                           getMaterialsByCategory(category.name, index)
                         }
-                        key={index}
                       >
                         {category.name}
                       </DropdownMenuItem>
                       <hr className="h-2" />
-                    </>
+                    </div>
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -374,7 +435,6 @@ const CreateEvent = () => {
                             material.price,
                           )
                         }
-                        key={index}
                       >
                         {material.name}
                       </DropdownMenuItem>
@@ -407,6 +467,7 @@ const CreateEvent = () => {
               </Button>
             </div>
           </div>
+
           <div className="py-8">
             <h1 className="p-2 font-bold text-3xl mx-10 py-7 text-center text-tertiary">
               Informações do seu evento
