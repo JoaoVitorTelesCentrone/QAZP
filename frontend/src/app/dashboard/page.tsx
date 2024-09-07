@@ -4,13 +4,15 @@ import React, { useEffect, useState } from 'react'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
 import { useAtom } from 'jotai'
-import UserHeader from '../components/UserHeader'
 import axios from 'axios'
 import { Events, eventsColumns } from './columns'
 import { DashboardTable } from './DashboardTable'
 import { LucideLineChart, Calendar } from 'lucide-react'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import ClipLoader from 'react-spinners/ClipLoader'
+import UserSideMenu from '../components/UserHeader'
+import { MdEventAvailable } from "react-icons/md";
+
 
 const Dashboard = () => {
   const [isLogged] = useAtom(authAtom)
@@ -65,23 +67,21 @@ const Dashboard = () => {
 
   return (
     <div>
-      <div className="flex h-screen">
-        <aside className="w-64 bg-primary text-white">
-          {/* Menu lateral */}
-        </aside>
-        <div className="flex-1 flex flex-col bg-tertiary">
-          {loading ? (
-            <div className="flex justify-center items-center h-full">
-              <ClipLoader size={50} color={'#123abc'} loading={loading} />
-            </div>
-          ) : (
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <ClipLoader size={50} color={'#123abc'} loading={loading} />
+        </div>
+      ) : (
             <>
-              <UserHeader />
-              <h1 className="text-5xl font-bold ml-72 my-10">
+              <UserSideMenu />
+              <div className="flex ml-72">
+                <LucideLineChart className="w-16 h-16 p-1 rounded-full my-12 mx-2 text-primary border-2 border-primary" />
+              <h1 className="text-6xl my-12 font-bold  text-secondary-foreground">
                 Dashboards operacionais
               </h1>
-              <div className="flex mx-16">
-                <div className="flex p-4 mx-auto ml-72 my-6 w-[1000px]">
+              </div>              
+              <div className="flex mx-24">
+                <div className="flex p-1 mx-auto ml-72 my-0 w-[1200px]">
                   <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
                     <h1 className="text-3xl text-gray-400 font-bold">
                       Número de Clientes
@@ -108,19 +108,20 @@ const Dashboard = () => {
                     </h1>
                   </div>
                 </div>
-                <LucideLineChart className="w-72 h-72 text-gray-300" />
+                
               </div>
-              <h1 className="font-bold mt-16 max-xl:mt-2 text-4xl flex justify-center">
+              <div className="flex ml-72">
+                <MdEventAvailable  className=" w-10 h-10 p-1 rounded-full my-8 mx-2 text-primary border-2 border-primary" />
+                <h1 className="text-4xl my-8 font-bold  text-secondary-foreground">
                 Próximos eventos
               </h1>
-              <div className="justify-center">
+              </div>
+              <div className="ml-72 mr-10">
                 <DashboardTable columns={eventsColumns} data={events} />
               </div>
             </>
           )}
         </div>
-      </div>
-    </div>
   )
 }
 

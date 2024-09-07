@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import UserHeader from '../components/UserHeader'
 import { useAtom, useSetAtom } from 'jotai'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
@@ -8,12 +7,12 @@ import Link from 'next/link'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { EventTable } from './EventTable'
 import axios from 'axios'
-import { Plus, Users } from 'lucide-react'
 import { Events, eventsColumns } from './columns'
 import { eventChangeAtom } from '../atoms/eventChangeAtom'
 import { TbCalendarPlus } from 'react-icons/tb'
 import { Button, Tooltip } from 'antd'
 import { GiGlassCelebration } from 'react-icons/gi'
+import UserSideMenu from '../components/UserHeader'
 
 const Page = () => {
   const [auth, isAuth] = useAtom(authAtom)
@@ -55,7 +54,7 @@ const Page = () => {
         </div>
       ) : (
         <>
-          <UserHeader />
+          <UserSideMenu />
           <div className="bg-tertiary h-screen">
             <div className="p-10 ">
               <div className="flex mt-4 justify-between w-full">
