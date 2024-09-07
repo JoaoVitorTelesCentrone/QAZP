@@ -1,3 +1,4 @@
+import { MaterialCategory } from '@/enuns/enuns';
 import { intl } from '@/i18n'
 
 export function formatCurrency(value: number): string {
@@ -7,46 +8,46 @@ export function formatCurrency(value: number): string {
     }).format(value);
 }
 
-export function materialCategoryNameConverter(materialCategory: Number) {
+export function materialCategoryNameConverter(materialCategory: MaterialCategory) {
     let convertedMaterialCategory
 
     switch (materialCategory) {
-      case (materialCategory = 0):
+      case (materialCategory = MaterialCategory.Food):
         convertedMaterialCategory = `${intl.formatMessage({
           id: 'material.category.food',
         })}`
         break
-      case (materialCategory = 1):
+      case (materialCategory = MaterialCategory.Decoration):
         convertedMaterialCategory = `${intl.formatMessage({
           id: 'material.category.decoration',
         })}`
         break
-      case (materialCategory = 2):
+      case (materialCategory = MaterialCategory.Utensils):
         convertedMaterialCategory = `${intl.formatMessage({
           id: 'material.category.utensils',
         })}`
         break
-      case (materialCategory = 3):
+      case (materialCategory = MaterialCategory.Furniture):
         convertedMaterialCategory = `${intl.formatMessage({
           id: 'material.category.furniture',
         })}`
         break
-      case (materialCategory = 4):
+      case (materialCategory = MaterialCategory.HumanResources):
         convertedMaterialCategory = `${intl.formatMessage({
           id: 'material.category.humanResources',
         })}`
         break
-      case (materialCategory = 5):
+      case (materialCategory = MaterialCategory.RealEstate):
         convertedMaterialCategory = `${intl.formatMessage({
           id: 'material.category.realEstate',
         })}`
         break
-      case (materialCategory = 6):
+      case (materialCategory = MaterialCategory.Entertainment):
         convertedMaterialCategory = `${intl.formatMessage({
           id: 'material.category.entertainment',
         })}`
         break
-      case (materialCategory = 7):
+      case (materialCategory = MaterialCategory.Marketing):
         convertedMaterialCategory = `${intl.formatMessage({
           id: 'material.category.marketing',
         })}`
