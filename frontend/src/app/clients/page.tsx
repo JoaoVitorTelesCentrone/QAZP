@@ -67,7 +67,7 @@ const Clients = () => {
                   <h1 className=" text-7xl my-12 font-bold ml-72 text-secondary-foreground">
                     {intl.formatMessage({ id: 'client.page.title' })}
                   </h1>
-                  <Tooltip title={'Criar novo cliente'}>
+                  <Tooltip title={'Criar cliente'}>
                     <Link href="/CreateClient">
                       <FaUserPlus className="bg-primary w-16 h-16 p-4 rounded-full m-14 text-white" />
                     </Link>
