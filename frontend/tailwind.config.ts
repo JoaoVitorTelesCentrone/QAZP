@@ -31,6 +31,7 @@ const config = {
         primary: '#222831',
         secondary: '#EEEEEE',
         tertiary: '#E8E8E8', // Cinza claro
+        quartenary: '#1b1f23'
       },
       borderRadius: {
         lg: 'var(--radius)',

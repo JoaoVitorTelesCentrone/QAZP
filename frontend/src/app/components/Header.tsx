@@ -11,7 +11,7 @@ const Header = () => {
   const [user, setUser] = useAtom(userInfoAtom)
 
   return (
-    <div className=" flex p-8 bg-black text-secondary justify-around">
+    <div className=" flex p-8 bg-quartenary text-secondary justify-around">
       <Link
         href="/"
         className="text-2xl text-secondary font-extrabold font-montserrat"

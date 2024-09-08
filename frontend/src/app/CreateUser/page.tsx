@@ -76,11 +76,8 @@ const CreateUserForm = () => {
         <UserHeader />
         <Toaster richColors />
         <div className="flex my-8 m-32 ml-32 flex-col">
-          <div className="ml-56 flex w-full">
-            <Link href="/Users">
-              <ArrowLeft />
-            </Link>
-            <h1 className="font-monospace font-semibold text-4xl ml-96 text-primary mb-6">
+          <div className="ml-60 flex w-full">
+            <h1 className="font-monospace font-semibold text-4xl ml-96 text-primary mb-20 mt-6">
               Criar usuário
             </h1>
           </div>

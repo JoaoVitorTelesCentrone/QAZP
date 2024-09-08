@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div className="bg-primary p-10">
+    <div className="bg-quartenary p-10">
       <ul className="flex justify-around">
         <a href="https://zbra.dev/pt">
           <li className="text-secondary text-sm">ZBRA</li>
