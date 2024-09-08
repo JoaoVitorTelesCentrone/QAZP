@@ -20,7 +20,7 @@ const config = {
     },
     extend: {
       screens: {
-        'max-xl': {'max': '1199px'}, // Custom breakpoint for less than 1200px
+        'max-xl': { max: '1199px' }, // Custom breakpoint for less than 1200px
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -30,7 +30,7 @@ const config = {
         foreground: 'hsl(var(--foreground))',
         primary: '#222831',
         secondary: '#EEEEEE',
-        tertiary: '#E8E8E8', //cinza claro
+        tertiary: '#E8E8E8', // Cinza claro
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -50,6 +50,10 @@ const config = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+      fontFamily: {
+        raleway: ['Raleway', 'sans-serif'],
+        monospace: ['Roboto Mono', 'monospace'],
       },
     },
   },

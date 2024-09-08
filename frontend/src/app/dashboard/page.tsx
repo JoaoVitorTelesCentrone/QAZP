@@ -74,14 +74,15 @@ const Dashboard = () => {
       ) : (
             <>
               <UserSideMenu />
+              <div className="bg-tertiary h-screen">                
               <div className="flex ml-72">
                 <LucideLineChart className="w-16 h-16 p-1 rounded-full my-12 mx-2 text-primary border-2 border-primary" />
-              <h1 className="text-6xl my-12 font-bold  text-secondary-foreground">
+              <h1 className="font-monospace font-semibold text-6xl my-12  text-secondary-foreground">
                 Dashboards operacionais
               </h1>
               </div>              
               <div className="flex mx-24">
-                <div className="flex p-1 mx-auto ml-72 my-0 w-[1200px]">
+                <div className="flex p-1 mx-auto ml-72 my-2 w-[1200px]">
                   <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
                     <h1 className="text-3xl text-gray-400 font-bold">
                       Número de Clientes
@@ -107,17 +108,17 @@ const Dashboard = () => {
                       {numberOfEvents}
                     </h1>
                   </div>
-                </div>
-                
+                </div>                
               </div>
               <div className="flex ml-72">
-                <MdEventAvailable  className=" w-10 h-10 p-1 rounded-full my-8 mx-2 text-primary border-2 border-primary" />
-                <h1 className="text-4xl my-8 font-bold  text-secondary-foreground">
+                <MdEventAvailable  className=" w-10 h-10 p-1 rounded-full my-9 mx-2 text-primary border-2 border-primary" />
+                <h1 className="font-monospace font-bold text-5xl my-8 text-secondary-foreground">
                 Próximos eventos
               </h1>
               </div>
               <div className="ml-72 mr-10">
                 <DashboardTable columns={eventsColumns} data={events} />
+              </div>
               </div>
             </>
           )}

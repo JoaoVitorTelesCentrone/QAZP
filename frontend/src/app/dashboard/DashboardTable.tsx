@@ -111,8 +111,8 @@ export function DashboardTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button className='bg-sextenary'
+      <div className="flex items-center justify-end space-x-2 py-4 mr-0">
+        <Button className='bg-tertiary border-gray-800'
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
@@ -120,7 +120,7 @@ export function DashboardTable<TData, TValue>({
         >
           <ArrowBigLeft className="ml-2 mr-2 h-5 w-5" />
         </Button>
-        <Button className='bg-sextenary'
+        <Button className='bg-tertiary border-gray-800'
           variant="outline"
           size="sm"
           onClick={() => table.nextPage()}

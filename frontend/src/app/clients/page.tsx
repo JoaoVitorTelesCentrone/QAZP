@@ -15,6 +15,8 @@ import { IoPeopleOutline } from 'react-icons/io5'
 import { Button, Tooltip } from 'antd'
 import UserSideMenu from '../components/UserHeader'
 import { FaUserPlus } from 'react-icons/fa'
+import { FaUsers } from "react-icons/fa6";
+
 
 const Clients = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
@@ -61,10 +63,10 @@ const Clients = () => {
         <div className="bg-tertiary h-screen">
           <div className="p-10 ">
             <div className="flex mt-4 justify-between w-full">
-              <div className="flex ml-72">
-                <IoPeopleOutline className=" w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
+              <div className="flex ml-64">
+                <FaUsers className=" w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
 
-                <h1 className=" text-7xl my-4 font-bold mx-4 text-secondary-foreground">
+                <h1 className="font-monospace font-semibold text-primary text-7xl my-4 mx-4 text-secondary-foreground">
                   Clientes
                 </h1>
               </div>

@@ -63,17 +63,17 @@ const Materials = () => {
         <div className="bg-tertiary h-fullscreen">
           <div className="p-10 ">
             <div className="flex mt-4 justify-between w-full">
-              <div className="flex ml-72">
-                <CiPenpot className=" w-16 h-16 p-1 rounded-full my-14 mx-2 text-primary border-2 border-primary" />
+              <div className="flex ml-64">
+                <CiPenpot className=" w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
 
-                <h1 className=" text-7xl my-14 font-bold  text-secondary-foreground">
+                <h1 className="font-monospace font-semibold text-7xl my-3 ml-6 text-secondary-foreground">
                   Materiais
                 </h1>
               </div>
               <Button
                 icon={<TbBasketPlus className="w-5 h-5 " />}
                 type="primary"
-                className="mt-16"
+                className="mt-8"
                 size="large"
               >
                 <Link href="/CreateMaterial" className="text-lg">
