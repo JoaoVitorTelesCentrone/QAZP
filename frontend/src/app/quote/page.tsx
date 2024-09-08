@@ -60,7 +60,7 @@ const Page = () => {
               <div className="flex ml-64">
                 <GiTakeMyMoney  className=" w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
 
-                <h1 className="font-monospace font-semibold text-7xl my-3 mx-4 text-secondary-foreground">
+                <h1 className="font-monospace font-semibold text-7xl my-3 mx-4 text-secondary-foreground text-primary">
                   Orçamentos
                 </h1>
               </div>

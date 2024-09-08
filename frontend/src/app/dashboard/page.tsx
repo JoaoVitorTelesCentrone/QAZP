@@ -82,7 +82,7 @@ const Dashboard = () => {
               </h1>
               </div>              
               <div className="flex mx-24">
-                <div className="flex p-1 mx-auto ml-72 my-2 w-[1200px]">
+                <div className="flex p-1 mx-auto ml-72 my-2 w-[1100px]">
                   <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
                     <h1 className="text-3xl text-gray-400 font-bold">
                       Número de Clientes

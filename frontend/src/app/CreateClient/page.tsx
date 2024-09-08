@@ -105,7 +105,7 @@ const CreateClientForm = () => {
     <div className="flex flex-col bg-tertiary max-h-screen">
       <UserHeader />
       <Toaster richColors />
-      <h1 className="ml-72 my-4 text-5xl font-bold text-center ">
+      <h1 className="font-monospace font-semibold ml-72 my-4 text-5xl text-center ">
         {intl.formatMessage({ id: 'create.client.page.title' })}
       </h1>
       <div className='ml-72'>
