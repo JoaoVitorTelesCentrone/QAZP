@@ -47,6 +47,7 @@ const Page = () => {
     }
     fetch()
   }, [])
+  
   return (
     <div>
       {loading ? (

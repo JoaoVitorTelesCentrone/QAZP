@@ -71,14 +71,14 @@ export function DashboardTable<TData, TValue>({
                 return (
                   <TableHead
                     key={header.id}
-                    className=" py-2 text-secondary-foreground text-center"
+                    className="py-2 text-secondary-foreground text-center"
                   >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                   </TableHead>
                 )
               })}

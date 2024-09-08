@@ -39,7 +39,21 @@
         "material.category.humanResources": "Recursos Humanos",
         "material.category.realEstate": "Imóveis",
         "material.category.entertainment": "Entretenimento",
-        "material.category.marketing": "Marketing"
-        
+        "material.category.marketing": "Marketing",
+        "event.type.wedding": "Casamento",
+        "event.type.tradeShow": "Feira",
+        "event.type.party": "Festa",
+        "event.type.festival": "Festival",
+        "event.type.workshop": "Workshop",
+        "event.type.exhibition": "Exibição",
+        "event.type.launch": "Lançamento",
+        "event.type.championship": "Campeonato",
+        "event.type.convention": "Convenção",
+        "event.type.seminar": "Seminário",
+        "event.type.meeting": "Assembléia",
+        "event.type.campaign": "Campanha",
+        "event.type.ceremony": "Cerimônia",
+        "event.type.symposium": "Simpósio",
+        "event.type.ball": "Balé"
     }
 }

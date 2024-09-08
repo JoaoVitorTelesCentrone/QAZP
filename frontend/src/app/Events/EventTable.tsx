@@ -64,15 +64,15 @@ export function EventTable<TData, TValue>({
         />
 
       </div>
-      <Table className="border-2 border-secondary">
-        <TableHeader>
+      <Table className="border-2 border-cyan-700">
+        <TableHeader className="bg-cyan-700 text-gray-100">
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map(header => {
                 return (
                   <TableHead
                     key={header.id}
-                    className=" py-2 text-secondary-foreground text-center"
+                    className="py-2 text-secondary-foreground text-center"
                   >
                     {header.isPlaceholder
                       ? null
