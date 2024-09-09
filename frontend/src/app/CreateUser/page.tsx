@@ -114,8 +114,8 @@ const CreateUserForm = () => {
                     type={showPassword1 ? 'text' : 'password'}
                     onChange={e => setPassword(e.target.value)}
                     required
-                    placeholder="Digite senha"
-                    className="bg-white border-slate-500 pr-12"
+                    placeholder="Digite a senha"
+                    className="bg-white border-slate-500 pr-12 my-2"
                   />
                   <div className="absolute right-0 flex items-center px-3">
                     {showPassword1 ? (
