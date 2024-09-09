@@ -3,7 +3,6 @@ import { useAtom } from 'jotai'
 import React, { useState } from 'react'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
-import UserHeader from '../components/UserHeader'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -11,6 +10,7 @@ import { SearchIcon } from 'lucide-react'
 import axios, { isAxiosError } from 'axios'
 import { Toaster, toast } from 'sonner'
 import { intl } from '../../i18n'
+import UserSideMenu from '../components/UserHeader'
 
 const CreateClientForm = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
@@ -103,9 +103,9 @@ const CreateClientForm = () => {
 
   return (
     <div className="flex flex-col bg-tertiary max-h-screen">
-      <UserHeader />
+      <UserSideMenu />
       <Toaster richColors />
-      <h1 className="ml-72 my-4 text-5xl font-bold text-center ">
+      <h1 className="font-monospace font-semibold ml-72 my-4 text-5xl text-center ">
         {intl.formatMessage({ id: 'create.client.page.title' })}
       </h1>
       <div className='ml-72'>

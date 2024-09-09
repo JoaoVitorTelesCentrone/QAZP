@@ -1,22 +1,22 @@
 'use client'
 
-import { BsFillPersonVcardFill } from 'react-icons/bs'
-
 import React, { useEffect, useState } from 'react'
-import UserHeader from '../components/UserHeader'
 import { useAtom } from 'jotai'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Plus, Calendar, Handshake } from 'lucide-react'
 import { clientColumns } from './columns'
 import { ClientTable } from './ClientTable'
 import axios from 'axios'
 import { intl } from '../../i18n'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { clientChangeAtom } from '../atoms/clientChangeAtom'
+import { IoPeopleOutline } from 'react-icons/io5'
+import { Button, Tooltip } from 'antd'
+import UserSideMenu from '../components/UserHeader'
 import { FaUserPlus } from 'react-icons/fa'
-import { Tooltip } from 'antd'
+import { FaUsers } from "react-icons/fa6";
+
 
 const Clients = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
@@ -59,31 +59,37 @@ const Clients = () => {
         </div>
       ) : (
         <>
-          <UserHeader />
-          <div className="bg-tertiary h-screen">
-            <div className="p-10 ">
-              <div className="flex mt-4 justify-between w-full">
-                <div className="flex">
-                  <h1 className=" text-7xl my-12 font-bold ml-72 text-secondary-foreground">
-                    {intl.formatMessage({ id: 'client.page.title' })}
-                  </h1>
-                  <Tooltip title={'Criar novo cliente'}>
-                    <Link href="/CreateClient">
-                      <FaUserPlus className="bg-primary w-16 h-16 p-4 rounded-full m-14 text-white" />
-                    </Link>
-                  </Tooltip>
-                </div>
-                <BsFillPersonVcardFill className="w-48 h-48 mr-8 text-cyan-900" />
+        <UserSideMenu />
+        <div className="bg-tertiary h-screen">
+          <div className="p-10 ">
+            <div className="flex mt-4 justify-between w-full">
+              <div className="flex ml-64">
+                <FaUsers className=" w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
+
+                <h1 className="font-monospace font-semibold text-primary text-7xl my-4 mx-4 text-secondary-foreground">
+                  Clientes
+                </h1>
               </div>
-            </div>
-            <div className="ml-72 mr-10">
-              <ClientTable columns={clientColumns} data={clients} />
+              <Button
+                icon={<FaUserPlus className="w-5 h-5 " />}
+                type="primary"
+                className="mt-8"
+                size="large"
+              >
+                <Link href="/CreateClient" className="text-lg">
+                  Criar novo cliente
+                </Link>
+              </Button>
             </div>
           </div>
-        </>
-      )}
-    </div>
-  )
+          <div className="ml-72 mr-10">
+            <ClientTable columns={clientColumns} data={clients} />
+          </div>
+        </div>
+      </>
+    )}
+  </div>
+)
 }
 
 export default Clients

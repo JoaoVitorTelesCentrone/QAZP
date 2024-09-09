@@ -129,7 +129,7 @@ export function ClientTable<TData, TValue>({
         </TableBody>
       </Table>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button className='bg-sextenary'
+        <Button className='bg-tertiary border-gray-800'
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
@@ -137,7 +137,7 @@ export function ClientTable<TData, TValue>({
         >
           <ArrowBigLeft className="ml-2 h-5 w-5 mr-2" />
         </Button>
-        <Button className='bg-sextenary'
+        <Button className='bg-tertiary border-gray-800'
           variant="outline"
           size="sm"
           onClick={() => table.nextPage()}
