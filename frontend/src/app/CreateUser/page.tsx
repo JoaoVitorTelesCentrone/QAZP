@@ -77,7 +77,7 @@ const CreateUserForm = () => {
         <Toaster richColors />
         <div className="flex my-8 m-32 ml-32 flex-col">
           <div className="ml-60 flex w-full">
-            <h1 className="font-monospace font-semibold text-4xl ml-96 text-primary mb-20 mt-6">
+            <h1 className="font-monospace font-semibold text-4xl ml-96 text-primary mb-16 mt-6">
               Criar usuário
             </h1>
           </div>
@@ -85,7 +85,7 @@ const CreateUserForm = () => {
           <div className="ml-60">
             <form
               onSubmit={handleSubmit}
-              className="flex-col flex p-8 rounded-xl bg-slate-400 bg-opacity-30 max-w-[400px] mx-auto shadow-lg shadow-slate-500"
+              className="flex-col flex p-8 rounded-xl bg-slate-900 bg-opacity-10 max-w-[400px] mx-auto shadow-lg shadow-slate-500 border-0 border-secondary-foreground border-slate-200 "
             >
               <div className="mx-auto mb-1 w-full">
                 <p>Nome</p>
