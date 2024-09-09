@@ -158,7 +158,7 @@ const CreateUserForm = () => {
                   As senhas são diferentes
                 </h1>
               )}
-              <Button variant="outline" className="bg-primary mt-2 text-white">
+              <Button variant="outline" className="bg-primary mt-4 text-white">
                 Criar usuário
               </Button>
             </form>
