@@ -74,12 +74,12 @@ const LoginPage = () => {
             <h1 className="mx-auto text-5xl text-secondary-foreground my-8 font-bold uppercase text-secondary">
               Faça seu login
             </h1>
-
+            <div className='mx-auto'>
             <form
               onSubmit={handleSubmit}
-              className="flex flex-col mx-auto rounded-xl bg-slate-400 p-6 bg-opacity-20 shadow-md shadow-slate-500"
+              className="flex flex-col rounded-xl bg-slate-400 p-6 bg-opacity-20 shadow-md shadow-slate-500"
             >
-              <label className="text-lg font-bold ">Usuário</label>
+              <label className="text-white text-lg font-bold ">Usuário</label>
               <Input
                 placeholder="Digite o usuário"
                 onChange={e => setUsername(e.target.value)}
@@ -88,7 +88,7 @@ const LoginPage = () => {
                 id="email"
               />
 
-              <label className="text-lg font-bold" htmlFor="password">
+              <label className="text-white text-lg font-bold" htmlFor="password">
                 Senha
               </label>
               <Input
@@ -108,6 +108,7 @@ const LoginPage = () => {
                 </button>
               </div>
             </form>
+            </div>
           </div>
           <Footer />
         </>

@@ -63,7 +63,7 @@ export function MaterialTable<TData, TValue>({
           className="max-w-sm border-primary font-bold text-center my-10"
         />
       </div>
-      <Table className="border-2 border-secondary ">
+      <Table className="border-2 border-cyan-700 ">
         <TableHeader className="bg-cyan-700 text-gray-100">
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
@@ -88,7 +88,7 @@ export function MaterialTable<TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map(row => (
-              <TableRow
+              <TableRow className='border-cyan-700'
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
@@ -111,8 +111,8 @@ export function MaterialTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-end space-x-2 py-4 mr-4">
-        <Button
+      <div className="flex items-center justify-end space-x-2 py-4 mr-0">
+        <Button className='bg-tertiary border-gray-800'
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
@@ -120,7 +120,7 @@ export function MaterialTable<TData, TValue>({
         >
           <ArrowBigLeft className="ml-2 h-5 w-5" />
         </Button>
-        <Button
+        <Button className='bg-tertiary border-gray-800'
           variant="outline"
           size="sm"
           onClick={() => table.nextPage()}
