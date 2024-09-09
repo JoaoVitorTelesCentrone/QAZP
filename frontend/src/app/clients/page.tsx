@@ -15,7 +15,7 @@ import axios from 'axios'
 import { intl } from '../../i18n'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { clientChangeAtom } from '../atoms/clientChangeAtom'
-import { FaUserPlus } from 'react-icons/fa'
+// import { FaUserPlus } from 'react-icons/fa'
 import { Tooltip } from 'antd'
 
 const Clients = () => {
