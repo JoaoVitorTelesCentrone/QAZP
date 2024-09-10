@@ -128,7 +128,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
   return (
     <div>
       <Modal
-        title="Criar Client"
+        title="Criar Cliente"
         visible={isVisible}
         onCancel={onClose} // Close the modal when "X" is clicked
         footer={[]}

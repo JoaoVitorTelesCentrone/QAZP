@@ -15,8 +15,7 @@ import { IoPeopleOutline } from 'react-icons/io5'
 import { Button, Tooltip } from 'antd'
 import UserSideMenu from '../components/UserHeader'
 import { FaUserPlus } from 'react-icons/fa'
-import { FaUsers } from "react-icons/fa6";
-import CreateClientForm from '../CreateClient/page'
+import { FaUsers } from 'react-icons/fa6'
 import CreateClientModal from './CreateClientModal'
 
 const Clients = () => {
