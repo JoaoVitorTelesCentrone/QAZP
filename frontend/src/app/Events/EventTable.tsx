@@ -60,7 +60,7 @@ export function EventTable<TData, TValue>({
           onChange={event =>
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
-          className="text-secondary-foreground text-center font-bold  mx-32"
+          className="border-primary text-secondary-foreground text-center font-bold  mx-32"
         />
 
       </div>
@@ -89,7 +89,7 @@ export function EventTable<TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map(row => (
-              <TableRow
+              <TableRow className='border-cyan-700'
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
@@ -112,8 +112,8 @@ export function EventTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-end space-x-2 py-4 mr-4">
-        <Button
+      <div className="flex items-center justify-end space-x-2 py-4 mr-0">
+        <Button className='bg-tertiary border-gray-800'
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
@@ -121,7 +121,7 @@ export function EventTable<TData, TValue>({
         >
           <ArrowBigLeft className="ml-2 h-5 w-5" />
         </Button>
-        <Button
+        <Button className='bg-tertiary border-gray-800'
           variant="outline"
           size="sm"
           onClick={() => table.nextPage()}
