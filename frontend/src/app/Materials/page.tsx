@@ -16,6 +16,9 @@ import {
   materialCategoryNameConverter,
 } from '@/functions/functions'
 import { ClassNames } from '@emotion/react'
+import CreateMaterialModal from './createMaterialModal'
+import { useAtom } from 'jotai'
+import { materialChangeAtom } from '../atoms/materialChange'
 
 export type materialProps = {
   id: string
@@ -28,6 +31,16 @@ const Materials = () => {
   const [materials, setMaterials] = useState<materialProps[]>([])
   const [materialsName, setMaterialsName] = useState('')
   const [loading, setLoading] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
+  const [change, setChange] = useAtom(materialChangeAtom)
+
+  useEffect(() => {
+    const fetch = async () => {
+      getMaterial()
+    }
+    fetch()
+  }, [change])
+
   const getMaterial = async () => {
     const response = await axios.get('http://localhost:5196/api/Material')
     setMaterialsName(response.data)
@@ -53,6 +66,12 @@ const Materials = () => {
   const columns = useMemo(() => materialColumns(), [])
   return (
     <div>
+      {openModal && (
+        <CreateMaterialModal
+          isVisible={openModal}
+          onClose={() => setOpenModal(false)}
+        />
+      )}
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <ClipLoader size={50} color={'#123abc'} loading={loading} />
@@ -61,10 +80,10 @@ const Materials = () => {
         <>
           <UserSideMenu />
           <div className="bg-tertiary h-screen">
-            <div >
+            <div>
               <div className="p-10 ">
                 <div className="flex mt-4 justify-between w-full">
-                  <div className="flex ml-64">
+                  <div className="flex ml-48">
                     <CiPenpot className=" w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
 
                     <h1 className="font-monospace font-semibold text-7xl my-3 ml-6 text-secondary-foreground">
@@ -76,10 +95,9 @@ const Materials = () => {
                     type="primary"
                     className="mt-8"
                     size="large"
+                    onClick={() => setOpenModal(true)}
                   >
-                    <Link href="/CreateMaterial" className="text-lg">
-                      Criar material
-                    </Link>
+                    <h1 className="text-lg">Criar material</h1>
                   </Button>
                 </div>
               </div>
