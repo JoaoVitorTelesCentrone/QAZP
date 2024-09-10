@@ -253,6 +253,7 @@ const CreateEvent = () => {
       totalAmount: totalAmount,
     }
     try {
+      await axios.post('http://localhost:5196/api/Event', body)
       toast.success('Evento criado com sucesso')
       router.push('/Events')
     } catch (error) {
