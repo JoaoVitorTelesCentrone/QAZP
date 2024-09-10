@@ -61,7 +61,7 @@ const Users = () => {
                   size="large"
                 >
                   <Link href="/CreateUser" className="text-lg">
-                    Criar novo usuário
+                    Criar usuário
                   </Link>
                 </Button>
               </div>

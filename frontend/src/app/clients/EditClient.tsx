@@ -43,7 +43,6 @@ const EditClient: React.FC<EditClientProps> = ({ userId }) => {
         `http://localhost:5196/api/Client/id/${userId}`,
       )
       setClientData(response.data)
-      console.log(clientData)
       setClientChange(prev => prev + 1)
     } catch (error) {
       console.error('Error fetching user data:', error)

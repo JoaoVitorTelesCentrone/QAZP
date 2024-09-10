@@ -1,14 +1,16 @@
-import { EventType, MaterialCategory } from '@/enuns/enuns';
+import { EventType, MaterialCategory } from '@/enuns/enuns'
 import { intl } from '@/i18n'
 
 export function formatCurrency(value: number): string {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
-    currency: 'BRL'
-  }).format(value);
+    currency: 'BRL',
+  }).format(value)
 }
 
-export function materialCategoryNameConverter(materialCategory: MaterialCategory) {
+export function materialCategoryNameConverter(
+  materialCategory: MaterialCategory,
+) {
   let convertedMaterialCategory
 
   switch (materialCategory) {
@@ -137,4 +139,28 @@ export function eventTypeNameConverter(eventType: EventType) {
       break
   }
   return convertedEventType
+}
+
+export function documentIdConverter(documentId: string) {
+  let formatedDocumentId
+
+  if (documentId.length == 11) {
+    const documentPart1 = documentId.substring(0, 3)
+    const documentPart2 = documentId.substring(3, 6)
+    const documentPart3 = documentId.substring(6, 9)
+    const documentPart4 = documentId.substring(9, 11)
+
+    formatedDocumentId = `${documentPart1}.${documentPart2}.${documentPart3}-${documentPart4}`
+  } else if (documentId.length == 14) {
+    const documentPart1 = documentId.substring(0, 2)
+    const documentPart2 = documentId.substring(2, 5)
+    const documentPart3 = documentId.substring(5, 8)
+    const documentPart4 = documentId.substring(8, 12)
+    const documentPart5 = documentId.substring(12, 14)
+
+    formatedDocumentId = `${documentPart1}.${documentPart2}.${documentPart3}/${documentPart4}-${documentPart5}`
+  } else if (documentId == null) {
+    return
+  }
+  return formatedDocumentId
 }

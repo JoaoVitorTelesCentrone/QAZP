@@ -34,6 +34,8 @@ export const EventType = [
 export type ClientProps = {
   id: string
   name: string
+  documentId: string
+  email: string
 }
 
 export type MaterialType = {

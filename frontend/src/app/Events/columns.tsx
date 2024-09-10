@@ -211,7 +211,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
     },
   },
   {
-    id: 'delete',
+    id: 'edit',
     cell: ({ row }) => <EditEvent eventId={row.original.id} />,
   },
 

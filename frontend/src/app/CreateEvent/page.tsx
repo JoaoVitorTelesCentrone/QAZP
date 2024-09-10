@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import UserSideMenu from '../components/UserHeader'
-import { formatCurrency } from '@/functions/functions'
+import { documentIdConverter, formatCurrency } from '@/functions/functions'
 import { Toaster, toast } from 'sonner'
 
 type Mats = {
@@ -47,6 +47,8 @@ const CreateEvent = () => {
   const [clients, setClients] = useState<ClientProps[]>([])
   const [clientId, setClientId] = useState('')
   const [clientName, setClientName] = useState('')
+  const [clientDocument, setClientDocument] = useState('')
+  const [clientEmail, setClientEmail] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedMaterial, setSelectedMaterial] = useState('')
   const [selectedMaterialId, setSelectedMaterialId] = useState('')
@@ -54,7 +56,9 @@ const CreateEvent = () => {
   const [selectedMaterialPrice, setSelectedMaterialPrice] = useState(0)
   const [materialQnt, setMaterialQnt] = useState('')
   const [materials, setMaterials] = useState<MaterialType[]>([])
-  const [insertedMaterial, setInsertedMaterial] = useState<insertMaterialProps[]>([])
+  const [insertedMaterial, setInsertedMaterial] = useState<
+    insertMaterialProps[]
+  >([])
   const [materialIdAndQuantity, setMaterialIdAndQuantity] = useState<Mats[]>([])
   const [totalAmount, setTotalAmount] = useState(0)
   const router = useRouter()
@@ -65,7 +69,7 @@ const CreateEvent = () => {
         const response = await axios.get('http://localhost:5196/api/Client')
         const clientNames = response.data.map((client: any) => ({
           name: client.fullName,
-          documentId: client.documentId,
+          documentId: documentIdConverter(client.documentId),
           id: client.id,
           email: client.email,
         }))
@@ -109,9 +113,14 @@ const CreateEvent = () => {
     }
   }
 
-  const getMaterialsByCategory = async (categoryName: string, category: number) => {
+  const getMaterialsByCategory = async (
+    categoryName: string,
+    category: number,
+  ) => {
     try {
-      const response = await axios.get(`http://localhost:5196/api/Material/category/${category}`)
+      const response = await axios.get(
+        `http://localhost:5196/api/Material/category/${category}`,
+      )
       const materials = response.data.map((material: any) => ({
         name: material.name,
         id: material.id,
@@ -127,19 +136,22 @@ const CreateEvent = () => {
   const getClientValues = (
     name: string,
     id: string,
+    documentId: string,
+    email: string,
   ) => {
     setClientId(id)
     setClientName(name)
+    setClientDocument(documentId)
+    setClientEmail(email)
   }
 
   const getEventTypeNameAndIndex = (
     eventType: SetStateAction<number>,
-    stringEventType: string
+    stringEventType: string,
   ) => {
     setEventType(eventType)
     setSelectedType(stringEventType)
   }
-
 
   const getMaterialValues = (
     id: string,
@@ -174,7 +186,10 @@ const CreateEvent = () => {
       quantity: quantity,
     }
     setInsertedMaterial(prevMaterials => [...prevMaterials, newMaterialInsert])
-    setMaterialIdAndQuantity(prevMaterials => [...prevMaterials, newMaterialInsertPost])
+    setMaterialIdAndQuantity(prevMaterials => [
+      ...prevMaterials,
+      newMaterialInsertPost,
+    ])
     setMaterialQnt('')
     setSelectedCategory('')
     setSelectedMaterial('')
@@ -251,48 +266,17 @@ const CreateEvent = () => {
       <UserSideMenu />
       <Toaster richColors />
       <div className="h-full bg-primary">
-        <h1 className="text-4xl font-bold mx-32 py-8 text-center text-tertiary">Criar evento</h1>
+        <h1 className="text-4xl font-bold mx-32 py-8 text-center text-tertiary">
+          Criar evento
+        </h1>
         <form className="flex flex-col w-[1200px] rounded-xl bg-opacity-30 bg-slate-400 p-16 mx-auto space-y-8">
-          <h1 className="text-3xl font-bold text-left text-tertiary">Informações do Evento</h1>
+          <h1 className="text-3xl font-bold text-left text-tertiary">
+            Informações do Cliente
+          </h1>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
               <div className="flex flex-col flex-grow">
-                <label className="font-bold block mb-2">Tipo</label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] md:w-[210px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
-                    <span>{selectedType || 'Selecione um Tipo'}</span>
-                    <ChevronDown className="h-6 w-6" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-full max-h-48 overflow-y-auto">
-                    {EventType.map((eventType, index) => (
-                      <div key={index}>
-                        <DropdownMenuItem
-                          className="cursor-pointer my-1"
-                          onClick={() =>
-                            getEventTypeNameAndIndex(eventType.index, eventType.name)
-                          }
-                          key={index}
-                        >
-                          {eventType.name}
-                        </DropdownMenuItem>
-                        <hr className="my-1 border-gray-300" />
-                      </div>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <div className="flex flex-col flex-grow">
-                <label className="font-bold block mb-2">Título</label>
-                <Input
-                  value={eventName}
-                  onChange={e => setEventName(e.target.value)}
-                  placeholder="Digite o Título do evento"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px]"
-                />
-              </div>
-
-              <div className="flex flex-col flex-grow">
-                <label className="font-bold block mb-2">Cliente</label>
+                <h1 className="font-bold block mb-2">Cliente</h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] md:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                     <span>{clientName || 'Selecione um Cliente'}</span>
@@ -302,7 +286,14 @@ const CreateEvent = () => {
                     {clients.map((client, index) => (
                       <div key={index}>
                         <DropdownMenuItem
-                          onClick={() => getClientValues(client.name, client.id)}
+                          onClick={() =>
+                            getClientValues(
+                              client.name,
+                              client.id,
+                              client.documentId,
+                              client.email,
+                            )
+                          }
                         >
                           {client.name}
                         </DropdownMenuItem>
@@ -312,13 +303,75 @@ const CreateEvent = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
+              <div className="flex flex-col flex-grow">
+                <label className="font-bold block mb-2">Documento</label>
+                <Input
+                  value={clientDocument}
+                  onChange={e => setClientDocument(e.target.value)}
+                  disabled={true}
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[230px]"
+                />
+              </div>
+              <div className="flex flex-col flex-grow">
+                <label className="font-bold block mb-2">Email</label>
+                <Input
+                  value={clientEmail}
+                  onChange={e => setClientDocument(e.target.value)}
+                  disabled={true}
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[380px]"
+                />
+              </div>
+            </div>
+          </div>
+          <h1 className="text-3xl font-bold text-left text-tertiary">
+            Informações do Evento
+          </h1>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
+                <div className="flex flex-col flex-grow">
+                  <label className="font-bold block mb-2">Tipo</label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] md:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                      <span>{selectedType || 'Selecione um Tipo'}</span>
+                      <ChevronDown className="h-6 w-6" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-full max-h-48 overflow-y-auto">
+                      {EventType.map((eventType, index) => (
+                        <div key={index}>
+                          <DropdownMenuItem
+                            className="cursor-pointer my-1"
+                            onClick={() =>
+                              getEventTypeNameAndIndex(
+                                eventType.index,
+                                eventType.name,
+                              )
+                            }
+                            key={index}
+                          >
+                            {eventType.name}
+                          </DropdownMenuItem>
+                          <hr className="my-1 border-gray-300" />
+                        </div>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <div className="flex flex-col flex-grow">
+                  <label className="font-bold block mb-2">Título</label>
+                  <Input
+                    value={eventName}
+                    onChange={e => setEventName(e.target.value)}
+                    placeholder="Digite o Título do evento"
+                    className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[630px]"
+                  />
+                </div>
             </div>
           </div>
 
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
-              <div className="flex flex-col flex-grow">
-                <label className="font-bold block mb-2">CEP</label>
+          <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
+          <div className="flex flex-col flex-grow">
+            <label className="font-bold block mb-2">CEP</label>
                 <Input
                   value={zipCode}
                   onChange={e => setZipCode(e.target.value)}
@@ -332,7 +385,7 @@ const CreateEvent = () => {
                   value={addressName}
                   onChange={e => setAddressName(e.target.value)}
                   placeholder="Digite a Rua"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[300px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[340px]"
                 />
               </div>
               <div className="flex flex-col flex-grow">
@@ -350,11 +403,12 @@ const CreateEvent = () => {
                   value={addressComplement}
                   onChange={e => setAddressComplement(e.target.value)}
                   placeholder="Digite o complemento"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[400px]"
-                />
-              </div>
-            </div>
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[350px]"
+                /> 
           </div>
+          </div>
+          </div>
+          
 
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
@@ -388,63 +442,72 @@ const CreateEvent = () => {
               <div className="flex flex-col flex-grow">
                 <label className="font-bold block mb-2">Público estimado</label>
                 <Input
-                  type='number'
+                  type="number"
                   value={estimatedAudience}
                   onChange={e => setEstimatedAudience(e.target.value)}
                   placeholder="Público estimado"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[160px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[150px]"
                 />
               </div>
             </div>
           </div>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
-              <div className="flex flex-col flex-grow">
+              <div className="flex flex-col">
                 <label className="font-bold block mb-2">Data de ínicio</label>
                 <DatePicker
                   onChange={date => handleDateChange(date, setStartDate)}
                   format="YYYY/MM/DD"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[252px]"
-                  placeholder='Selecione uma data'
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[250px]"
+                  placeholder="Selecione uma data"
                 />
               </div>
-              <div className="flex flex-col flex-grow">
-                <label className="font-bold block mb-2">Horário de ínicio</label>
+              <div className="flex flex-col">
+                <label className="font-bold block mb-2">
+                  Horário de ínicio
+                </label>
                 <TimePicker
                   onChange={time => handleTimeChange(time, setStartTime)}
                   format="HH:mm:ss"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[252px]"
-                  placeholder='Selecione um horário'
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[250px]"
+                  placeholder="Selecione um horário"
                 />
               </div>
-              <div className="flex flex-col flex-grow">
-                <label className="font-bold block mb-2">Data de finalização</label>
+              <div className="flex flex-col">
+                <label className="font-bold block mb-2">
+                  Data de finalização
+                </label>
                 <DatePicker
                   onChange={date => handleDateChange(date, setEndDate)}
                   format="YYYY/MM/DD"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[252px]"
-                  placeholder='Selecione uma data'
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[250px]"
+                  placeholder="Selecione uma data"
                 />
               </div>
-              <div className="flex flex-col flex-grow">
-                <label className="font-bold block mb-2">Horário de finalização</label>
+              <div className="flex flex-col">
+                <label className="font-bold block mb-2">
+                  Horário de finalização
+                </label>
                 <TimePicker
                   onChange={time => handleTimeChange(time, setEndTime)}
                   format="HH:mm:ss"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[252px]"
-                  placeholder='Selecione um horário'
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[250px]"
+                  placeholder="Selecione um horário"
                 />
               </div>
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-left text-tertiary">Selecione os Materiais</h1>
+          <h1 className="text-3xl font-bold text-left text-tertiary">
+            Selecione os Materiais
+          </h1>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
               <div className="flex flex-col flex-grow">
+                <h1 className="font-bold block mb-2">Categoria</h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                     <span>{selectedCategory || 'Selecione uma Categoria'}</span>
@@ -454,7 +517,9 @@ const CreateEvent = () => {
                     {MaterialCategory.map((category, index) => (
                       <div key={index}>
                         <DropdownMenuItem
-                          onClick={() => getMaterialsByCategory(category.name, index)}
+                          onClick={() =>
+                            getMaterialsByCategory(category.name, index)
+                          }
                         >
                           {category.name}
                         </DropdownMenuItem>
@@ -465,6 +530,7 @@ const CreateEvent = () => {
                 </DropdownMenu>
               </div>
               <div className="flex flex-col flex-grow">
+                <h1 className="font-bold block mb-2">Material</h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                     <span>{selectedMaterial || 'Selecione um Material'}</span>
@@ -474,7 +540,14 @@ const CreateEvent = () => {
                     {materials.map((material, index) => (
                       <div key={index}>
                         <DropdownMenuItem
-                          onClick={() => getMaterialValues(material.id, material.name, index, material.price)}
+                          onClick={() =>
+                            getMaterialValues(
+                              material.id,
+                              material.name,
+                              index,
+                              material.price,
+                            )
+                          }
                         >
                           {material.name}
                         </DropdownMenuItem>
@@ -485,20 +558,28 @@ const CreateEvent = () => {
                 </DropdownMenu>
               </div>
               <div className="flex flex-col flex-grow">
+                <h1 className="font-bold block mb-2">Quantidade</h1>
                 <Input
-                  type='number'
+                  type="number"
                   value={materialQnt}
                   onChange={e => setMaterialQnt(e.target.value)}
                   placeholder="Quantidade"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[160px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[150px]"
                 />
               </div>
               <div className="flex flex-col flex-grow">
                 <Button
                   onClick={e =>
-                    insertMaterial(e, selectedMaterial, selectedMaterialId, Number(materialQnt), selectedMaterialIndex, selectedMaterialPrice)
+                    insertMaterial(
+                      e,
+                      selectedMaterial,
+                      selectedMaterialId,
+                      Number(materialQnt),
+                      selectedMaterialIndex,
+                      selectedMaterialPrice,
+                    )
                   }
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[120px] md:w-[160px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[120px] md:w-[155px]  mt-8"
                 >
                   <PlusCircleIcon className="h-8 w-8" />
                 </Button>
@@ -506,7 +587,9 @@ const CreateEvent = () => {
             </div>
           </div>
           <div className="space-y-4">
-            <h1 className="text-3xl font-bold text-center text-tertiary">Relação de Materiais</h1>
+            <h1 className="text-3xl font-bold text-center text-tertiary">
+              Relação de Materiais
+            </h1>
             <Table
               scroll={{ y: 200 }}
               dataSource={insertedMaterial}
@@ -520,7 +603,12 @@ const CreateEvent = () => {
             </div>
           </div>
 
-          <Button onClick={postEvent} className="bg-cyan-700 w-full mt-4 font-bold text-tertiary">Criar evento</Button>
+          <Button
+            onClick={postEvent}
+            className="bg-cyan-700 w-full mt-4 font-bold text-tertiary"
+          >
+            Criar evento
+          </Button>
         </form>
       </div>
     </div>
