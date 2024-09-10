@@ -19,7 +19,7 @@ const UserSideMenu = () => {
 
   return (
     <div className="flex h-full">
-      <div className="fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out bg-gray-800 text-white w-64 p-4 flex flex-col">
+      <div className="fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out bg-gray-800 text-white w-48 p-4 flex flex-col">
         <div className="flex items-center justify-between mb-6">
           <TreePalm />
           <ul>
@@ -91,7 +91,7 @@ const UserSideMenu = () => {
         </button>
       </div>
     </div>
-  );
+  )
 
 
 }

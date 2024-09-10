@@ -74,8 +74,8 @@ export function ClientTable<TData, TValue>({
           value={
             (table.getColumn('documentId')?.getFilterValue() as string) ?? ''
           }
-          onChange={event =>
-            table.getColumn('documentId')?.setFilterValue(event.target.value)
+          onChange={client =>
+            table.getColumn('documentId')?.setFilterValue(client.target.value)
           }
           className="max-w-sm my-10  border-primary font-bold text-center"
         />

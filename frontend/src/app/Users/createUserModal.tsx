@@ -1,0 +1,166 @@
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { DropdownMenuContent } from '@radix-ui/react-dropdown-menu'
+import { Button, Input, Modal } from 'antd'
+import axios, { isAxiosError } from 'axios'
+import { ChevronDown, Eye, EyeOff, SearchIcon } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+
+import { useAtom } from 'jotai'
+
+import { redirect } from 'next/navigation'
+import { authAtom } from '../atoms/authAtom'
+import { userInfoAtom } from '../atoms/userInfoAtom'
+import { userChangeAtom } from '../atoms/changeUserAtom'
+
+export type createUserProps = {
+  isVisible: boolean
+  onClose: () => void
+}
+
+const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
+  const [isLogged, setIsLogged] = useAtom(authAtom)
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom)
+  const [name, setName] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmedPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState(false)
+  const [createUser, setCreateUser] = useState(false)
+  const [showPassword1, setShowPassword1] = useState(false)
+  const [showPassword2, setShowPassword2] = useState(false)
+  const [different, setDifferent] = useState(false)
+  const [change, setChange] = useAtom(userChangeAtom)
+
+  if (!isLogged) {
+    redirect('/login')
+  }
+
+  async function verifyCreation() {
+    const data = {
+      name,
+      username,
+      password,
+      role: 0,
+    }
+    try {
+      const response = await axios.post('http://localhost:5196/api/User', data)
+      const userData = response.data
+      if (response.status === 201) {
+        toast.success('Usuário criado')
+        onClose()
+        setChange(prev => prev + 1)
+      }
+    } catch (error) {
+      console.error('Erro ao fazer a requisição:', error)
+      toast.error('Esse usuário já existe!')
+      setError(true)
+    }
+  }
+
+  const changeState1 = () => {
+    setShowPassword1(prevState => !prevState)
+  }
+
+  const changeState2 = () => {
+    setShowPassword2(prevState => !prevState)
+  }
+
+  useEffect(() => {
+    if (password !== confirmedPassword) {
+      setDifferent(true)
+    } else {
+      setDifferent(false)
+    }
+  }, [confirmedPassword])
+
+  return (
+    <div>
+      <Modal
+        title="Criar Usuário"
+        visible={isVisible}
+        onCancel={onClose} // Close the modal when "X" is clicked
+        footer={[]}
+      >
+        <div className="">
+          <form className="">
+            <div className="mx-auto mb-1 ">
+              <p>Nome</p>
+              <Input
+                onChange={e => setName(e.target.value)}
+                required
+                placeholder="Digite o nome completo"
+                className="bg-white border-slate-500 mx-auto my-2"
+              />
+            </div>
+
+            <div className="mx-auto my-1 w-full">
+              <p>Usuário</p>
+              <Input
+                onChange={e => setUsername(e.target.value)}
+                required
+                placeholder="Digite o nome do usuário"
+                className="bg-white border-slate-500 mx-auto my-2"
+              />
+            </div>
+
+            <div className="relative mx-auto my-1 w-full">
+              <p>Senha</p>
+              <div className="flex items-center">
+                <Input
+                  type={showPassword1 ? 'text' : 'password'}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  placeholder="Digite a senha"
+                  className="bg-white border-slate-500 pr-12 my-2"
+                />
+                <div className="absolute right-0 flex items-center px-3">
+                  {showPassword1 ? (
+                    <EyeOff onClick={changeState1} className="cursor-pointer" />
+                  ) : (
+                    <Eye onClick={changeState1} className="cursor-pointer" />
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="relative mx-auto my-1 w-full">
+              <p>Confirme a senha</p>
+              <div className="flex items-center">
+                <Input
+                  type={showPassword2 ? 'text' : 'password'}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  required
+                  placeholder="Confirme a senha"
+                  className="bg-white border-slate-500 pr-12"
+                />
+                <div className="absolute right-0 flex items-center px-3">
+                  {showPassword2 ? (
+                    <EyeOff onClick={changeState2} className="cursor-pointer" />
+                  ) : (
+                    <Eye onClick={changeState2} className="cursor-pointer" />
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {different && (
+              <h1 className="text-red-700 font-bold">
+                As senhas são diferentes
+              </h1>
+            )}
+            <Button className="mt-3" onClick={() => verifyCreation()}>
+              Criar usuário
+            </Button>
+          </form>
+        </div>
+      </Modal>
+    </div>
+  )
+}
+
+export default CreateUserModal

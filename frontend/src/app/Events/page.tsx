@@ -46,6 +46,7 @@ const Page = () => {
     }
     fetch()
   }, [])
+  
   return (
     <div>
       {loading ? (
@@ -72,7 +73,7 @@ const Page = () => {
                   size="large"
                 >
                   <Link href="/CreateEvent" className="text-lg">
-                    Criar novo evento
+                    Criar evento
                   </Link>
                 </Button>
               </div>

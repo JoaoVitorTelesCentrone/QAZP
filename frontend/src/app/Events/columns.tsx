@@ -19,12 +19,14 @@ import EditEvent from './editEvent'
 export type Events = {
   id: string
   name: string
-  addressName: string
-  zipCode: string
-  state: string
   city: string
+  state: string
   estimatedAudience: string
   type: string
+  clientName: string
+  startDate: string
+  endDate: string
+  totalAmount: string
 }
 
 export const eventsColumns: ColumnDef<Events>[] = [
@@ -69,41 +71,21 @@ export const eventsColumns: ColumnDef<Events>[] = [
     },
   },
   {
-    accessorKey: 'zipCode',
+    accessorKey: 'clientName',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Cep
+          Cliente
           {column.getIsSorted() === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : column.getIsSorted() === 'desc' ? (
             <ArrowUp className="ml-2 h-4 w-4" />
           ) : (
             <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-      )
-    },
-  },
-  {
-    accessorKey: 'addressName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Rua
-          {column.getIsSorted() === 'asc' ? (
-            <ArrowDown className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === 'desc' ? (
-            <ArrowUp className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
+          )}{' '}
         </Button>
       )
     },
@@ -149,6 +131,46 @@ export const eventsColumns: ColumnDef<Events>[] = [
     },
   },
   {
+    accessorKey: 'startDate',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Data de início
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      )
+    },
+  },
+  {
+    accessorKey: 'endDate',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Data de finalização
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      )
+    },
+  },
+  {
     accessorKey: 'estimatedAudience',
     header: ({ column }) => {
       return (
@@ -169,7 +191,27 @@ export const eventsColumns: ColumnDef<Events>[] = [
     },
   },
   {
-    id: 'delete',
+    accessorKey: 'totalAmount',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Valor total
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      )
+    },
+  },
+  {
+    id: 'edit',
     cell: ({ row }) => <EditEvent eventId={row.original.id} />,
   },
 
