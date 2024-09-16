@@ -1,10 +1,15 @@
 // components/EditEvent.tsx
 'use client'
 import React, { useEffect, useState } from 'react'
-import { ChevronDown, Edit2Icon } from 'lucide-react'
+import {
+  ChevronDown,
+  Edit2Icon,
+  LucideTrash2,
+  PlusCircleIcon,
+} from 'lucide-react'
 import dayjs, { Dayjs } from 'dayjs'
 import axios from 'axios'
-import { DatePicker, Input, message, TimePicker } from 'antd'
+import { Button, DatePicker, Input, message, Table, TimePicker } from 'antd'
 import { useRouter } from 'next/router'
 import {
   DropdownMenu,
@@ -17,16 +22,27 @@ import { useAtom } from 'jotai'
 import { clientsAtom } from '@/app/CreateEvent/page'
 import { documentIdConverter } from '@/functions/functions'
 import { eventIdAtom } from '../atoms/EventIdAtom'
+import { insertMaterialProps } from '../CreateEvent/utils'
 
 type EditEventProps = {
   eventId: string
+}
+
+type Mats = {
+  materialId: string
+  quantity: number
 }
 
 const EditEvent: React.FC<EditEventProps> = () => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [name, setName] = useState('')
   const [startDate, setStartDate] = useState<Dayjs | null>(null)
-
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedMaterial, setSelectedMaterial] = useState('')
+  const [selectedMaterialId, setSelectedMaterialId] = useState('')
+  const [selectedMaterialIndex, setSelectedMaterialIndex] = useState(0)
+  const [selectedMaterialPrice, setSelectedMaterialPrice] = useState(0)
+  const [materialQnt, setMaterialQnt] = useState('')
   const [endDate, setEndDate] = useState<Dayjs | null>(null)
   const [startTime, setStartTime] = useState<Dayjs | null>(null)
   const [endTime, setEndTime] = useState<Dayjs | null>(null)
@@ -44,10 +60,87 @@ const EditEvent: React.FC<EditEventProps> = () => {
   const [eventId, setEventId] = useState('')
   const [clients, setClients] = useAtom(clientsAtom)
   const [materials, setMaterials] = useState<
-    { material: string; quantity: number }[]
+    {
+      materialId: string
+      materialName: string
+      quantity: number
+      price: number
+    }[]
   >([])
 
   const [eventAtom, setEventAtom] = useAtom(eventIdAtom)
+  const [insertedMaterial, setInsertedMaterial] = useState<
+    insertMaterialProps[]
+  >([])
+  const [materialIdAndQuantity, setMaterialIdAndQuantity] = useState<Mats[]>([])
+
+  const getClientValues = (name: string, id: string) => {
+    setClientId(id)
+    setClientName(name)
+  }
+
+  const MaterialCategory = [
+    { name: 'Comida', index: 0 },
+    { name: 'Decoração', index: 1 },
+    { name: 'Utensilios', index: 2 },
+    { name: 'Mobilia', index: 3 },
+    { name: 'Recursos humanos', index: 4 },
+    { name: 'Aluguel', index: 5 },
+    { name: 'Entretenimento', index: 6 },
+    { name: 'Marketing', index: 7 },
+  ]
+
+  const MaterialColumns = [
+    {
+      title: 'Nome',
+      dataIndex: 'materialName',
+      key: 'materialName',
+    },
+    {
+      title: 'Quantidade',
+      dataIndex: 'quantity',
+      key: 'quantity',
+    },
+    {
+      title: 'Preço',
+      dataIndex: 'materiaPrice',
+      key: 'materiaPrice',
+    },
+    {
+      title: '',
+      key: 'action',
+      render: (record: any, index: number) => (
+        <LucideTrash2
+          onClick={() => removeMaterial(index)}
+          className="h-5 w-5 inline-block text-primary ml-2 cursor-pointer"
+        />
+      ),
+    },
+  ]
+
+  const removeMaterial = (index: number) => {
+    const newInsertedMaterial = [...insertedMaterial]
+    newInsertedMaterial.splice(index, 1)
+    setInsertedMaterial(newInsertedMaterial)
+  }
+
+  const insertMaterial = (
+    event: React.FormEvent,
+    materialName: string,
+    materialId: string,
+    quantity: number,
+    index: number,
+    price: number,
+  ) => {
+    event.preventDefault()
+    const newMaterialInsert: insertMaterialProps = {
+      name: materialName,
+      quantity,
+      key: index.toString(),
+      price,
+    }
+    setInsertedMaterial(prevMaterials => [...prevMaterials, newMaterialInsert])
+  }
 
   useEffect(() => {
     const fetchEventAndClient = async () => {
@@ -101,30 +194,16 @@ const EditEvent: React.FC<EditEventProps> = () => {
     fetchEventAndClient()
   }, [eventAtom])
 
-  const getClients = async () => {
-    try {
-      const response = await axios.get('http://localhost:5196/api/Client')
-      const clientNames = response.data.map((client: any) => ({
-        name: client.fullName,
-        documentId: documentIdConverter(client.documentId),
-        id: client.id,
-        email: client.email,
-      }))
-      setClients(clientNames)
-    } catch (error) {
-      console.error('Error fetching clients:', error)
-    }
-  }
-
-  useEffect(() => {
-    getClients()
-  }, [])
-
-  const getMaterialsFromTheEvent = async (eventId: string) => {}
-
-  const getClientValues = (name: string, id: string) => {
-    setClientId(id)
-    setClientName(name)
+  const getMaterialValues = (
+    id: string,
+    name: string,
+    index: number,
+    price: number,
+  ) => {
+    setSelectedMaterialId(id)
+    setSelectedMaterial(name)
+    setSelectedMaterialIndex(index)
+    setSelectedMaterialPrice(price)
   }
 
   const handleUpdate = async () => {
@@ -132,8 +211,6 @@ const EditEvent: React.FC<EditEventProps> = () => {
       const body = {
         name,
         clientId,
-        type: 0,
-        status: 0,
         startDate: startDate ? startDate.format('YYYY-MM-DD') : '',
         endDate: endDate ? endDate.format('YYYY-MM-DD') : '',
         startTime: startTime ? startTime.format('HH:mm:ss') : '',
@@ -147,11 +224,31 @@ const EditEvent: React.FC<EditEventProps> = () => {
         city,
         estimatedAudience,
       }
-      await axios.put(`http://localhost:5196/api/Event/${eventId}`, body)
+      await axios.put(`http://localhost:5196/api/Event/${eventAtom}`, body)
       message.success('Atualização feita com sucesso')
     } catch (error) {
       console.error('Error updating event:', error)
       message.error('Erro ao atualizar evento')
+    }
+  }
+
+  const getMaterialsByCategory = async (
+    categoryName: string,
+    category: number,
+  ) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5196/api/Material/category/${category}`,
+      )
+      const materials = response.data.map((material: any) => ({
+        name: material.name,
+        id: material.id,
+        price: material.price,
+      }))
+      setMaterials(materials)
+      setSelectedCategory(categoryName)
+    } catch (error) {
+      console.error('Error fetching materials:', error)
     }
   }
 
@@ -318,25 +415,104 @@ const EditEvent: React.FC<EditEventProps> = () => {
               Materiais
             </h1>
 
-            <h1>
-              {Array.isArray(materials) && materials.length > 0 ? (
-                <ul>
-                  {materials.map((material, index) => (
-                    <li key={index} className="mt-2">
-                      <strong>Material:</strong> {material.material}
-                      <br />
-                      <strong>Quantidade:</strong> {material.quantity}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>Nenhum material disponível</p>
-              )}
-            </h1>
-          </div>
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
+                <div className="flex flex-col flex-grow">
+                  <h1 className="font-bold block mb-2">Categoria</h1>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                      <span>
+                        {selectedCategory || 'Selecione uma Categoria'}
+                      </span>
+                      <ChevronDown className="h-6 w-6" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-full max-h-48 overflow-y-auto">
+                      {MaterialCategory.map((category, index) => (
+                        <div key={index}>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              getMaterialsByCategory(category.name, index)
+                            }
+                          >
+                            {category.name}
+                          </DropdownMenuItem>
+                          <hr className="my-1 border-gray-300" />
+                        </div>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <div className="flex flex-col flex-grow">
+                  <h1 className="font-bold block mb-2">Material</h1>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                      <span>{selectedMaterial || 'Selecione um Material'}</span>
+                      <ChevronDown className="h-6 w-6" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-full max-h-48 overflow-y-auto">
+                      {materials.map((material, index) => (
+                        <div key={index}>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              getMaterialValues(
+                                material.materialId,
+                                material.materialName,
+                                index,
+                                material.price,
+                              )
+                            }
+                          >
+                            {material.materialName}
+                          </DropdownMenuItem>
+                          <hr className="my-1 border-gray-300" />
+                        </div>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <div className="flex flex-col flex-grow">
+                  <h1 className="font-bold block mb-2">Quantidade</h1>
+                  <Input
+                    type="number"
+                    value={materialQnt}
+                    onChange={e => setMaterialQnt(e.target.value)}
+                    placeholder="Quantidade"
+                    className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[150px]"
+                  />
+                </div>
+                <div className="flex flex-col flex-grow">
+                  <Button
+                    onClick={e =>
+                      insertMaterial(
+                        e,
+                        selectedMaterial,
+                        selectedMaterialId,
+                        Number(materialQnt),
+                        selectedMaterialIndex,
+                        selectedMaterialPrice,
+                      )
+                    }
+                    className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[120px] md:w-[155px]  mt-8"
+                  >
+                    <PlusCircleIcon className="h-8 w-8" />
+                  </Button>
+                </div>
+              </div>
+            </div>
 
-          <div className="flex mt-4">
-            <button onClick={handleUpdate}>Atualizar</button>
+            <div className="mt-16">
+              <Table
+                scroll={{ y: 200 }}
+                dataSource={materials}
+                columns={MaterialColumns}
+                pagination={false}
+                rowKey="key"
+              />
+            </div>
+
+            <div className="flex mt-4">
+              <button onClick={handleUpdate}>Atualizar</button>
+            </div>
           </div>
         </div>
       </div>
