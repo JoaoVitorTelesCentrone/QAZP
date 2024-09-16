@@ -22,7 +22,7 @@ import { useAtom } from 'jotai'
 import { clientsAtom } from '@/app/CreateEvent/page'
 import { documentIdConverter } from '@/functions/functions'
 import { eventIdAtom } from '../atoms/EventIdAtom'
-import { insertMaterialProps } from '../CreateEvent/utils'
+import { insertMaterialProps, MaterialType } from '../CreateEvent/utils'
 
 type EditEventProps = {
   eventId: string
@@ -34,7 +34,6 @@ type Mats = {
 }
 
 const EditEvent: React.FC<EditEventProps> = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false)
   const [name, setName] = useState('')
   const [startDate, setStartDate] = useState<Dayjs | null>(null)
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -59,6 +58,8 @@ const EditEvent: React.FC<EditEventProps> = () => {
   const [totalAmount, setTotalAmount] = useState('')
   const [eventId, setEventId] = useState('')
   const [clients, setClients] = useAtom(clientsAtom)
+  const [sMaterials, setSMaterials] = useState<MaterialType[]>([])
+
   const [materials, setMaterials] = useState<
     {
       materialId: string
@@ -103,8 +104,8 @@ const EditEvent: React.FC<EditEventProps> = () => {
     },
     {
       title: 'Preço',
-      dataIndex: 'materiaPrice',
-      key: 'materiaPrice',
+      dataIndex: 'price',
+      key: 'price',
     },
     {
       title: '',
@@ -133,13 +134,13 @@ const EditEvent: React.FC<EditEventProps> = () => {
     price: number,
   ) => {
     event.preventDefault()
-    const newMaterialInsert: insertMaterialProps = {
-      name: materialName,
-      quantity,
-      key: index.toString(),
-      price,
+    const newMaterialInsert = {
+      materialName: materialName,
+      quantity: quantity,
+      materialId: materialId,
+      price: price,
     }
-    setInsertedMaterial(prevMaterials => [...prevMaterials, newMaterialInsert])
+    setMaterials(prevMaterials => [...prevMaterials, newMaterialInsert])
   }
 
   useEffect(() => {
@@ -245,7 +246,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
         id: material.id,
         price: material.price,
       }))
-      setMaterials(materials)
+      setSMaterials(materials)
       setSelectedCategory(categoryName)
     } catch (error) {
       console.error('Error fetching materials:', error)
@@ -450,19 +451,19 @@ const EditEvent: React.FC<EditEventProps> = () => {
                       <ChevronDown className="h-6 w-6" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-full max-h-48 overflow-y-auto">
-                      {materials.map((material, index) => (
+                      {sMaterials.map((material, index) => (
                         <div key={index}>
                           <DropdownMenuItem
                             onClick={() =>
                               getMaterialValues(
-                                material.materialId,
-                                material.materialName,
+                                material.id,
+                                material.name,
                                 index,
                                 material.price,
                               )
                             }
                           >
-                            {material.materialName}
+                            {material.name}
                           </DropdownMenuItem>
                           <hr className="my-1 border-gray-300" />
                         </div>
