@@ -9,5 +9,7 @@
         public Material Material { get; set; }
 
         public int Quantity { get; set; }
+        public string MaterialName { get; set; }
+        public decimal MaterialPrice {get ; set; }
     }
 }
