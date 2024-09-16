@@ -43,7 +43,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
   const [totalAmount, setTotalAmount] = useState('')
   const [eventId, setEventId] = useState('')
   const [clients, setClients] = useAtom(clientsAtom)
-  const [materials, setMaterials] = useState()
+  const [materials, setMaterials] = useState<
+    { material: string; quantity: number }[]
+  >([])
 
   const [eventAtom, setEventAtom] = useAtom(eventIdAtom)
 
@@ -85,10 +87,10 @@ const EditEvent: React.FC<EditEventProps> = () => {
 
           if (event.id) {
             const materialsResponse = await axios.get(
-              `http://localhost:5196/api/Client/id/${event.id}`,
+              `http://localhost:5196/api/EventMaterial/eventId/${event.id}`,
             )
             const materials = materialsResponse.data
-            setMaterials(event.id)
+            setMaterials(materials)
           }
         }
       } catch (error) {
@@ -316,7 +318,21 @@ const EditEvent: React.FC<EditEventProps> = () => {
               Materiais
             </h1>
 
-            <h1>materiais {materials}</h1>
+            <h1>
+              {Array.isArray(materials) && materials.length > 0 ? (
+                <ul>
+                  {materials.map((material, index) => (
+                    <li key={index} className="mt-2">
+                      <strong>Material:</strong> {material.material}
+                      <br />
+                      <strong>Quantidade:</strong> {material.quantity}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Nenhum material disponível</p>
+              )}
+            </h1>
           </div>
 
           <div className="flex mt-4">
