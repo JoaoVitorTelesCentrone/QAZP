@@ -146,7 +146,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
       quantity: quantity,
     }
     setMaterials(prevMaterials => [...prevMaterials, newMaterialInsert])
-    setSendMaterial(prevMaterials => [...prevMaterials, newMaterialSend])
+    setSendMaterial([...materials, newMaterialSend])
   }
 
   useEffect(() => {
