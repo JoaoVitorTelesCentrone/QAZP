@@ -148,9 +148,11 @@ namespace ZventsApi.Controllers
                 eventEntity.EventMaterials.Add(
                     new EventMaterial
                     {
-                        EventId = eventEntity.Id,
-                        MaterialId = material.Id,
-                        Quantity = materialDto.Quantity
+                        Event = eventEntity,
+                        Material = material,
+                        Quantity = materialDto.Quantity,
+                        MaterialPrice = material.Price,
+                        MaterialName = material.Name
                     }
                 );
             }

@@ -59,6 +59,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
   const [eventId, setEventId] = useState('')
   const [clients, setClients] = useAtom(clientsAtom)
   const [sMaterials, setSMaterials] = useState<MaterialType[]>([])
+  const [sendMaterial, setSendMaterial] = useState<Mats[]>([])
 
   const [materials, setMaterials] = useState<
     {
@@ -120,9 +121,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
   ]
 
   const removeMaterial = (index: number) => {
-    const newInsertedMaterial = [...insertedMaterial]
+    const newInsertedMaterial = [...materials]
     newInsertedMaterial.splice(index, 1)
-    setInsertedMaterial(newInsertedMaterial)
+    setMaterials(newInsertedMaterial)
   }
 
   const insertMaterial = (
@@ -140,7 +141,12 @@ const EditEvent: React.FC<EditEventProps> = () => {
       materialId: materialId,
       price: price,
     }
+    const newMaterialSend = {
+      materialId: materialId,
+      quantity: quantity,
+    }
     setMaterials(prevMaterials => [...prevMaterials, newMaterialInsert])
+    setSendMaterial(prevMaterials => [...prevMaterials, newMaterialSend])
   }
 
   useEffect(() => {
@@ -224,7 +230,12 @@ const EditEvent: React.FC<EditEventProps> = () => {
         state,
         city,
         estimatedAudience,
+        materials: sendMaterial,
+        type: 0,
+        status: 0,
       }
+      console.log(body)
+
       await axios.put(`http://localhost:5196/api/Event/${eventAtom}`, body)
       message.success('Atualização feita com sucesso')
     } catch (error) {
@@ -416,7 +427,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
               Materiais
             </h1>
 
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col justify-around mx-auto my-10">
               <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
                 <div className="flex flex-col flex-grow">
                   <h1 className="font-bold block mb-2">Categoria</h1>
