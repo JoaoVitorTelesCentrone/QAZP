@@ -16,6 +16,7 @@ import { redirect } from 'next/navigation'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { clientChangeAtom } from '../atoms/clientChangeAtom'
+import ValidatedInput from '../components/ValidatedInput'
 
 const ClientCategory: ClientCategoryProps[] = [
   { name: 'Comida', index: 1 },
@@ -130,7 +131,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
       <Modal
         title="Criar Cliente"
         visible={isVisible}
-        onCancel={onClose} // Close the modal when "X" is clicked
+        onCancel={onClose}
         footer={[]}
       >
         <form className="">
@@ -147,60 +148,67 @@ const CreateClientModal: React.FC<createClientProps> = ({
                     id: 'create.client.page.fullName.field.label',
                   })}
                 </h1>
-                <Input
-                  onChange={e => setFullName(e.target.value)}
+                <ValidatedInput
+                  onChange={setFullName}
                   className="p-4 border-slate-500 bg-white mb-4"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.fullName.field.placeholder',
                   })}
+                  value={fullName}
+                  required
                 />
               </div>
             </div>
             <div className="w-full justify-between flex">
-              <div className="mr-2">
+              <div className="mr-2 mt-3 w-56">
                 <h1>
                   {intl.formatMessage({
                     id: 'create.client.page.document.field.label',
                   })}
                 </h1>
-                <Input
-                  onChange={e => setDocumentId(e.target.value)}
+                <ValidatedInput
+                  onChange={setDocumentId}
                   className="p-4 border-slate-500 bg-white mb-4"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.document.field.placeholder',
                   })}
+                  value={documentId}
+                  required
                 />
               </div>
-              <div>
+              <div className="mt-3 w-56">
                 <h1>
                   {intl.formatMessage({
                     id: 'create.client.page.phoneNumber.field.label',
                   })}
                 </h1>
-                <Input
-                  onChange={e => setPhoneNumber(e.target.value)}
+                <ValidatedInput
+                  onChange={setPhoneNumber}
                   className="p-4 border-slate-500 bg-white mb-4"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.phoneNumber.field.placeholder',
                   })}
+                  value={''}
+                  required
                 />
               </div>
             </div>
-            <h1>
+            <h1 className="mt-3">
               {intl.formatMessage({
                 id: 'create.client.page.email.field.label',
               })}
             </h1>
-            <Input
-              type="email"
-              onChange={e => setEmail(e.target.value)}
+            <ValidatedInput
+              onChange={setEmail}
               className="p-4 border-slate-500 bg-white mb-4"
               placeholder={intl.formatMessage({
                 id: 'create.client.page.email.field.placeholder',
               })}
+              value={email}
+              required
             />
           </div>
-          <h1 className="text-2xl font-bold my-2">
+          <h1 className="text-2xl font-bold mt-8 mb-4">
             {intl.formatMessage({
               id: 'create.client.page.localization.information.section',
             })}
@@ -214,13 +222,14 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   })}
                 </h1>
                 <div className="flex">
-                  <Input
+                  <ValidatedInput
                     className="p-4 border-slate-500 bg-white mb-4"
                     placeholder={intl.formatMessage({
                       id: 'create.client.page.zipCode.field.placeholder',
                     })}
                     value={zipCode}
-                    onChange={e => setZipCode(e.target.value)}
+                    onChange={setZipCode}
+                    required
                   />
                   <SearchIcon
                     className="p-2 h-10 w-10 cursor-pointer"
@@ -235,14 +244,15 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   })}
                 </h1>
                 <Input
-                  className="p-4 border-slate-500 bg-neutral-300 mb-2"
+                  className="p-2 border-slate-500 bg-neutral-300 mb-2"
                   value={addressName}
                   onChange={e => setAddressName(e.target.value)}
                   readOnly={true}
+                  disabled
                 />
               </div>
             </div>
-            <div className="w-full justify-between flex">
+            <div className="w-full justify-between flex mt-3">
               <div className="mr-2">
                 <h1>
                   {intl.formatMessage({
@@ -251,7 +261,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                 </h1>
                 <Input
                   onChange={e => setAddressNumber(e.target.value)}
-                  className="p-4 border-slate-500 bg-white mb-2"
+                  className="p-2 border-slate-500 bg-white mb-2"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.streetNumber.field.placeholder',
                   })}
@@ -265,7 +275,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                 </h1>
                 <Input
                   onChange={e => setAddressComplement(e.target.value)}
-                  className="p-4 border-slate-500 bg-white mb-4"
+                  className="p-2 border-slate-500 bg-white mb-4 w-64"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.streetComplement.field.placeholder',
                   })}
@@ -284,6 +294,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   value={district}
                   onChange={e => setDistrict(e.target.value)}
                   readOnly={true}
+                  disabled
                 />
               </div>
               <div className="mx-1">
@@ -297,6 +308,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   value={state}
                   onChange={e => setState(e.target.value)}
                   readOnly={true}
+                  disabled
                 />
               </div>
               <div className="mx-1">
@@ -310,6 +322,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   value={city}
                   onChange={e => setCity(e.target.value)}
                   readOnly={true}
+                  disabled
                 />
               </div>
             </div>
