@@ -40,13 +40,13 @@ const Clients = () => {
   }
 
   useEffect(() => {
-    const fetch = async () => {
-      setLoading(true)
-      await new Promise(resolve => setTimeout(resolve, 500))
-      await Promise.all([fetchUserData()])
-      setLoading(false)
-    }
-    fetch()
+    // const fetch = async () => {
+    //   setLoading(true)
+    //   await new Promise(resolve => setTimeout(resolve, 500))
+    //   await Promise.all([fetchUserData()])
+    //   setLoading(false)
+    // }
+    fetchUserData()
   }, [])
 
   if (!isLogged) {

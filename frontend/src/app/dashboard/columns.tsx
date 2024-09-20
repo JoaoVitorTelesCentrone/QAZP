@@ -31,7 +31,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Nome
+          Título
           {column.getIsSorted() === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : column.getIsSorted() === 'desc' ? (
@@ -51,7 +51,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Convidados
+          Público
           {column.getIsSorted() === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : column.getIsSorted() === 'desc' ? (
@@ -71,7 +71,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Data
+          Data do evento
           <ArrowUp className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -81,7 +81,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
   {
     accessorKey: 'addressName',
     header: ({ column }) => {
-      return <Button variant="ghost">Endereço</Button>
+      return <Button variant="ghost">Local</Button>
     },
   },
 ]

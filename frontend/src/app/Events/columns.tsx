@@ -27,7 +27,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Nome
+        Título
         {column.getIsSorted() === 'asc' ? (
           <ArrowDown className="ml-2 h-4 w-4" />
         ) : column.getIsSorted() === 'desc' ? (
@@ -74,42 +74,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
       </Button>
     ),
   },
-  {
-    accessorKey: 'city',
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Cidade
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowDown className="ml-2 h-4 w-4" />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowUp className="ml-2 h-4 w-4" />
-        ) : (
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        )}
-      </Button>
-    ),
-  },
-  {
-    accessorKey: 'state',
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Estado
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowDown className="ml-2 h-4 w-4" />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowUp className="ml-2 h-4 w-4" />
-        ) : (
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        )}
-      </Button>
-    ),
-  },
+
   {
     accessorKey: 'startDate',
     header: ({ column }) => (
@@ -117,7 +82,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Data de início
+        Data inicial
         {column.getIsSorted() === 'asc' ? (
           <ArrowDown className="ml-2 h-4 w-4" />
         ) : column.getIsSorted() === 'desc' ? (
@@ -135,7 +100,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Data de finalização
+        Data final
         {column.getIsSorted() === 'asc' ? (
           <ArrowDown className="ml-2 h-4 w-4" />
         ) : column.getIsSorted() === 'desc' ? (
@@ -153,7 +118,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Audiencia estimada
+        Público
         {column.getIsSorted() === 'asc' ? (
           <ArrowDown className="ml-2 h-4 w-4" />
         ) : column.getIsSorted() === 'desc' ? (
@@ -171,7 +136,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Valor total
+        Total (R$)
         {column.getIsSorted() === 'asc' ? (
           <ArrowDown className="ml-2 h-4 w-4" />
         ) : column.getIsSorted() === 'desc' ? (

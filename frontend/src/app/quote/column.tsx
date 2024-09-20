@@ -87,7 +87,7 @@ export const quoteColumns: ColumnDef<Quotes>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Tipo do evento
+          Tipo
           {column.getIsSorted() === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : column.getIsSorted() === 'desc' ? (
@@ -107,7 +107,7 @@ export const quoteColumns: ColumnDef<Quotes>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Audiência estimada
+          Público
           {column.getIsSorted() === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : column.getIsSorted() === 'desc' ? (
