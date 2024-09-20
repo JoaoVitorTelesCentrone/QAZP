@@ -75,14 +75,14 @@ const Dashboard = () => {
             <>
               <UserSideMenu />
               <div className="bg-tertiary h-screen">                
-              <div className="flex ml-72">
+              <div className="flex ml-56">
                 <LucideLineChart className="w-16 h-16 p-1 rounded-full my-12 mx-2 text-primary border-2 border-primary" />
               <h1 className="font-monospace font-semibold text-6xl my-12  text-secondary-foreground">
                 Dashboards operacionais
               </h1>
               </div>              
               <div className="flex mx-24">
-                <div className="flex p-1 mx-auto ml-72 my-2 w-[1100px]">
+                <div className="flex p-1 mx-auto my-2 w-[1100px] ml-96">
                   <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
                     <h1 className="text-3xl text-gray-400 font-bold">
                       Número de Clientes
@@ -110,13 +110,13 @@ const Dashboard = () => {
                   </div>
                 </div>                
               </div>
-              <div className="flex ml-72">
+              <div className="flex ml-56">
                 <MdEventAvailable  className=" w-10 h-10 p-1 rounded-full my-9 mx-2 text-primary border-2 border-primary" />
                 <h1 className="font-monospace font-bold text-5xl my-8 text-secondary-foreground">
                 Próximos eventos
               </h1>
               </div>
-              <div className="ml-72 mr-10">
+              <div className="ml-56 mr-10">
                 <DashboardTable columns={eventsColumns} data={events} />
               </div>
               </div>
