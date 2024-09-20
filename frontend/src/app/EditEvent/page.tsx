@@ -20,7 +20,7 @@ import {
 import UserSideMenu from '@/app/components/UserHeader'
 import { useAtom } from 'jotai'
 import { clientsAtom } from '@/app/CreateEvent/page'
-import { documentIdConverter } from '@/functions/functions'
+import { documentIdConverter, formatCurrency } from '@/functions/functions'
 import { eventIdAtom } from '../atoms/EventIdAtom'
 import { insertMaterialProps, MaterialType } from '../CreateEvent/utils'
 
@@ -55,7 +55,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
   const [estimatedAudience, setEstimatedAudience] = useState(0)
   const [clientId, setClientId] = useState('')
   const [clientName, setClientName] = useState('')
-  const [totalAmount, setTotalAmount] = useState('')
+  const [totalAmount, setTotalAmount] = useState(0)
   const [eventId, setEventId] = useState('')
   const [clients, setClients] = useAtom(clientsAtom)
   const [sMaterials, setSMaterials] = useState<MaterialType[]>([])
@@ -105,8 +105,8 @@ const EditEvent: React.FC<EditEventProps> = () => {
     },
     {
       title: 'Preço',
-      dataIndex: 'price',
-      key: 'price',
+      dataIndex: 'materialPrice',
+      key: 'materialPrice',
     },
     {
       title: '',
@@ -244,6 +244,14 @@ const EditEvent: React.FC<EditEventProps> = () => {
     }
   }
 
+  // useEffect(() => {
+  //   const newTotalAmount = insertedMaterial.reduce(
+  //     (sum, material) => sum + material.price * material.quantity,
+  //     0,
+  //   )
+  //   setTotalAmount(newTotalAmount)
+  // }, [materials])
+
   const getMaterialsByCategory = async (
     categoryName: string,
     category: number,
@@ -263,6 +271,8 @@ const EditEvent: React.FC<EditEventProps> = () => {
       console.error('Error fetching materials:', error)
     }
   }
+
+  const totalAmountConverted = formatCurrency(Number(totalAmount))
 
   return (
     <div>
@@ -520,6 +530,10 @@ const EditEvent: React.FC<EditEventProps> = () => {
                 pagination={false}
                 rowKey="key"
               />
+              <div className="bg-tertiary p-4  mt-4 rounded-xl flex justify-between">
+                <span className="font-bold">Valor final</span>
+                <span className="font-bold">{totalAmountConverted}</span>
+              </div>
             </div>
 
             <div className="flex mt-4">
