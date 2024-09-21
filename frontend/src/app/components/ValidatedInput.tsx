@@ -7,7 +7,8 @@ interface ValidatedInputProps {
   label?: string;
   required?: boolean;
   className?: string;
-  readonly?:boolean;
+  readOnly?:boolean;
+  disabled?:boolean;
 }
 
 const ValidatedInput: React.FC<ValidatedInputProps> = ({
@@ -16,6 +17,7 @@ const ValidatedInput: React.FC<ValidatedInputProps> = ({
   placeholder,
   label,
   required = false,
+
 }) => {
   const [isTouched, setIsTouched] = useState(false);
 

@@ -59,7 +59,7 @@ const Page = () => {
           <div className="bg-tertiary h-screen">
             <div className="p-10 ">
               <div className="flex mt-4 justify-between w-full">
-                <div className="flex ml-64">
+                <div className="flex ml-48">
                   <GiGlassCelebration className=" w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
 
                   <h1 className="font-monospace font-semibold text-7xl my-3 mx-4 text-secondary-foreground">
@@ -78,7 +78,7 @@ const Page = () => {
                 </Button>
               </div>
             </div>
-            <div className="ml-72 mr-10">
+            <div className="ml-56 mr-10">
               <EventTable columns={eventsColumns} data={events} />
             </div>
           </div>
