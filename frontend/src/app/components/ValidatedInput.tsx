@@ -7,8 +7,9 @@ interface ValidatedInputProps {
   label?: string;
   required?: boolean;
   className?: string;
-  readOnly?:boolean;
+  readonly?:boolean;
   disabled?:boolean;
+  type?: string;
 }
 
 const ValidatedInput: React.FC<ValidatedInputProps> = ({
@@ -28,7 +29,7 @@ const ValidatedInput: React.FC<ValidatedInputProps> = ({
   const isValid = required ? value.trim().length > 0 : true;
 
   return (
-    <div className="mb-4 relative">
+    <div className="mb-4 relative w-[100%]">
       {label && <label className="block text-sm font-medium mb-1">{label}</label>}
       <input
         value={value}

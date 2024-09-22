@@ -74,10 +74,8 @@ const Users = () => {
                   size="large"
                   onClick={() => setOpenModal(true)}
                 >
-                  <Link href="/CreateUser" className="text-lg">
                     Criar usuário
-                  </Link>
-                </Button>
+               </Button>
               </div>
             </div>
             <div className="ml-72 mr-10">
