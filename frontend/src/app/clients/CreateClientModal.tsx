@@ -189,6 +189,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                     id: 'create.client.page.phoneNumber.field.placeholder',
                   })}
                   value={phoneNumber}
+                  type='text'
                 />
               </div>
             </div>
@@ -328,13 +329,15 @@ const CreateClientModal: React.FC<createClientProps> = ({
               </div>
             </div>
           </div>
-          <Button className='bg-primary text-white'
+          <div className='flex justify-end mt-3 mr-1'>
+          <Button className='bg-primary text-white w-[30%]'
           onClick={() => createClient()}
           >
             {intl.formatMessage({
               id: 'create.client.page.create.client.button',
             })}
           </Button>
+          </div>
         </form>
       </Modal>
     </div>

@@ -158,9 +158,11 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
                 As senhas são diferentes
               </h1>
             )}
-            <Button className="mt-3 bg-primary text-white" onClick={() => verifyCreation()}>
+            <div className='flex justify-end mt-3'>
+            <Button className="bg-primary text-white w-[30%]" onClick={() => verifyCreation()}>
               Criar usuário
             </Button>
+            </div>
           </form>
         </div>
       </Modal>
