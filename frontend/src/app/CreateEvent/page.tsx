@@ -606,7 +606,6 @@ const CreateEvent = () => {
                   onChange={setMaterialQnt}
                   placeholder="Quantidade"
                   className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 sm:w-[200px] md:w-[150px]"
-                  required
                 />
               </div>
               <div className="flex flex-col flex-grow">
