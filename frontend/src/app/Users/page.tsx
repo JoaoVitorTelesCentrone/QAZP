@@ -74,8 +74,8 @@ const Users = () => {
                   size="large"
                   onClick={() => setOpenModal(true)}
                 >
-                    Criar usuário
-               </Button>
+                  Criar usuário
+                </Button>
               </div>
             </div>
             <div className="ml-56 mr-10">
@@ -87,5 +87,5 @@ const Users = () => {
     </div>
   )
 }
-  
-  export default Users
+
+export default Users

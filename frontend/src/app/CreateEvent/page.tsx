@@ -26,12 +26,15 @@ import {
 import UserSideMenu from '../components/UserHeader'
 import { documentIdConverter, formatCurrency } from '@/functions/functions'
 import { Toaster, toast } from 'sonner'
+import { atom, useAtom } from 'jotai'
 import ValidatedInput from '../components/ValidatedInput'
 
 type Mats = {
   materialId: string
   quantity: number
 }
+
+export const clientsAtom = atom<ClientProps[]>([])
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState('')
@@ -49,7 +52,7 @@ const CreateEvent = () => {
   const [state, setState] = useState('')
   const [city, setCity] = useState('')
   const [estimatedAudience, setEstimatedAudience] = useState('')
-  const [clients, setClients] = useState<ClientProps[]>([])
+  const [clients, setClients] = useAtom(clientsAtom)
   const [clientId, setClientId] = useState('')
   const [clientName, setClientName] = useState('')
   const [clientDocument, setClientDocument] = useState('')
