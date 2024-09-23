@@ -1,5 +1,5 @@
-// components/EditEvent.tsx
 'use client'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import {
   ChevronDown,
@@ -10,7 +10,7 @@ import {
 import dayjs, { Dayjs } from 'dayjs'
 import axios from 'axios'
 import { Button, DatePicker, Input, message, Table, TimePicker } from 'antd'
-import { useRouter } from 'next/router'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +23,7 @@ import { clientsAtom } from '@/app/CreateEvent/page'
 import { documentIdConverter, formatCurrency } from '@/functions/functions'
 import { eventIdAtom } from '../atoms/EventIdAtom'
 import { insertMaterialProps, MaterialType } from '../CreateEvent/utils'
+
 
 type EditEventProps = {
   eventId: string
@@ -55,18 +56,20 @@ const EditEvent: React.FC<EditEventProps> = () => {
   const [estimatedAudience, setEstimatedAudience] = useState(0)
   const [clientId, setClientId] = useState('')
   const [clientName, setClientName] = useState('')
-  const [totalAmount, setTotalAmount] = useState(0)
+  const [totalAmount, setTotalAmount] = useState<Number>()
   const [eventId, setEventId] = useState('')
   const [clients, setClients] = useAtom(clientsAtom)
   const [sMaterials, setSMaterials] = useState<MaterialType[]>([])
   const [sendMaterial, setSendMaterial] = useState<Mats[]>([])
+
+  const router = useRouter()
 
   const [materials, setMaterials] = useState<
     {
       materialId: string
       materialName: string
       quantity: number
-      price: number
+      materialPrice: number
     }[]
   >([])
 
@@ -139,13 +142,15 @@ const EditEvent: React.FC<EditEventProps> = () => {
       materialName: materialName,
       quantity: quantity,
       materialId: materialId,
-      price: price,
+      materialPrice: price,
     }
     const newMaterialSend = {
       materialId: materialId,
       quantity: quantity,
     }
+    console.log(newMaterialInsert)
     setMaterials(prevMaterials => [...prevMaterials, newMaterialInsert])
+    console.log(newMaterialInsert)
     setSendMaterial([...materials, newMaterialSend])
   }
 
@@ -213,6 +218,14 @@ const EditEvent: React.FC<EditEventProps> = () => {
     setSelectedMaterialPrice(price)
   }
 
+  useEffect(() => {
+    const newTotalAmount = materials.reduce(
+      (sum, material) => sum + material.materialPrice * material.quantity,
+      0,
+    )
+    setTotalAmount(newTotalAmount)
+  }, [sendMaterial])
+
   const handleUpdate = async () => {
     try {
       const body = {
@@ -231,6 +244,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
         city,
         estimatedAudience,
         materials: sendMaterial,
+        totalAmount: totalAmount,
         type: 0,
         status: 0,
       }
@@ -241,16 +255,10 @@ const EditEvent: React.FC<EditEventProps> = () => {
     } catch (error) {
       console.error('Error updating event:', error)
       message.error('Erro ao atualizar evento')
+    } finally {
+      router.push('/Events')
     }
   }
-
-  // useEffect(() => {
-  //   const newTotalAmount = insertedMaterial.reduce(
-  //     (sum, material) => sum + material.price * material.quantity,
-  //     0,
-  //   )
-  //   setTotalAmount(newTotalAmount)
-  // }, [materials])
 
   const getMaterialsByCategory = async (
     categoryName: string,
