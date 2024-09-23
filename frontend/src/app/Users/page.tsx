@@ -74,9 +74,7 @@ const Users = () => {
                   size="large"
                   onClick={() => setOpenModal(true)}
                 >
-                  <Link href="/CreateUser" className="text-lg">
-                    Criar usuário
-                  </Link>
+                  Criar usuário
                 </Button>
               </div>
             </div>
@@ -89,5 +87,5 @@ const Users = () => {
     </div>
   )
 }
-  
-  export default Users
+
+export default Users

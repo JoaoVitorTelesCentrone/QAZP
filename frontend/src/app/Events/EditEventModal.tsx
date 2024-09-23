@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Input, DatePicker, TimePicker, message } from 'antd'
+import { Input, DatePicker, TimePicker, message } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import axios from 'axios'
 import { useAtom } from 'jotai'
-import { eventChangeAtom } from '../atoms/eventChangeAtom'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { ChevronDown } from 'lucide-react'
+import { useRouter } from 'next/router'
 
-type EditEventModalProps = {
-  visible: boolean
-  onClose: () => void
-  eventId: string
-  onUpdate: () => void
-}
+type Material = { materialId: string; quantity: string }
 
-type material = { materialId: string; quantity: string }
-const EditEventModal: React.FC<EditEventModalProps> = ({
-  visible,
-  onClose,
-  eventId,
-  onUpdate,
-}) => {
+const EditEventPage: React.FC = () => {
+  const router = useRouter()
+  const { eventId } = router.query // Get eventId from the URL
+
   const [name, setName] = useState('')
   const [startDate, setStartDate] = useState<Dayjs | null>(null)
   const [endDate, setEndDate] = useState<Dayjs | null>(null)
@@ -33,43 +32,50 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
   const [city, setCity] = useState('')
   const [estimatedAudience, setEstimatedAudience] = useState(0)
   const [clientId, setClientID] = useState('')
-  const [materiais, setMateriais] = useState<material>()
-  const [eventChange, setEventChange] = useAtom(eventChangeAtom)
+  const [materiais, setMateriais] = useState<Material>()
+  // const [eventChange, setEventChange] = useAtom(eventChangeAtom)
+  // const [totalAmount, setTotalAmount] = useState('')
+  // const [clients, setClients] = useAtom(clientsAtom)
+  // const [eventClient, setEventClient] = useState('')
+  // const [sendClients, setSendlients] = useAtom(clientsAtom)
+  const [isDropdownOpen, setDropdownOpen] = useState(false)
 
-  const getMaterials = async (eventId: string) => {
-    if (eventId) {
+  const getClientById = async (clientId: string) => {
+    if (clientId) {
       try {
-        axios
-          .get('http://localhost:5196/api/Event/id/', {
-            params: { eventId: eventId },
-          })
-          .then(response => {
-            const material = response.data
-            setMateriais({
-              materialId: material.materialId,
-              quantity: material.quantity,
-            })
-          })
+        const response = await axios.get(
+          'http://localhost:5196/api/Client/id/',
+          {
+            params: { clientId },
+          },
+        )
+        const client = response.data
+        setClientID(client.id)
+        // setEventClient(client.name)
       } catch {
-        message.error('Nao deu pra trazer os materiais')
+        message.error('Não foi possível trazer o cliente')
       }
     }
   }
 
+  const getClientValues = (name: string, id: string) => {
+    // setEventClient(name)
+    setClientID(id)
+  }
+
   useEffect(() => {
-    if (visible) {
+    if (eventId) {
       axios
         .get(`http://localhost:5196/api/Event/id/${eventId}`)
         .then(response => {
           const event = response.data
           setName(event.name)
-          setClientID(event.clientId)
           setStartDate(event.startDate ? dayjs(event.startDate) : null)
           setEndDate(event.endDate ? dayjs(event.endDate) : null)
           setStartTime(
             event.startTime ? dayjs(event.startTime, 'HH:mm:ss') : null,
           )
-          setEndTime(event.endTime ? dayjs(event.endTime, 'HH:mm:ss') : null) // Add format for time
+          setEndTime(event.endTime ? dayjs(event.endTime, 'HH:mm:ss') : null)
           setZipCode(event.zipCode || '')
           setAddressName(event.addressName || '')
           setAddressNumber(event.addressNumber || '')
@@ -78,12 +84,13 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
           setState(event.state || '')
           setCity(event.city || '')
           setEstimatedAudience(event.estimatedAudience || 0)
+          // setTotalAmount(event.totalAmount)
         })
         .catch(error => {
           console.error('Error fetching event details:', error)
         })
     }
-  }, [visible, eventId])
+  }, [eventId])
 
   const handleUpdate = async () => {
     try {
@@ -106,32 +113,61 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
         estimatedAudience,
       }
       await axios.put(`http://localhost:5196/api/Event/${eventId}`, body)
-      onUpdate()
-      onClose()
-      message.success('Deu bom')
-      setEventChange(prev => prev + 1)
+      message.success('Atualização feita com sucesso')
+      // setEventChange(prev => prev + 1)
+      router.push('/events') // Navigate back to events list after update
     } catch (error) {
       console.error('Error updating event:', error)
-      message.error('Deu ruim')
+      message.error('Erro ao atualizar evento')
     }
   }
 
   return (
-    <Modal
-      title={`Editar evento do ${name}`}
-      visible={visible}
-      onCancel={onClose}
-      onOk={handleUpdate}
-      okText="Update"
-      cancelText="Cancel"
-    >
+    <div>
+      <h1>Editar evento do {name}</h1>
       <div className="my-4">
         <h1 className="font-bold">Nome</h1>
         <Input
           value={name}
           onChange={e => setName(e.target.value)}
-          placeholder="Event Name"
+          placeholder="Nome do Evento"
         />
+
+        <div>
+          <h1>Cliente</h1>
+          <div className="flex">
+            {/* <h1>{eventClient}</h1>
+            <div onClick={() => setDropdownOpen(!isDropdownOpen)}>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] md:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                  <span>{eventClient || 'Selecione um Cliente'}</span>
+                  <ChevronDown className="h-6 w-6" />
+                </DropdownMenuTrigger>
+                {isDropdownOpen && (
+                  <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-full max-h-48 overflow-y-auto">
+                    {clients.length > 0 ? (
+                      clients.map((client, index) => (
+                        <div key={index}>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              getClientValues(client.name, client.id)
+                            }
+                          >
+                            {client.name}
+                          </DropdownMenuItem>
+                          <hr className="my-1 border-gray-300" />
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-4">Nenhum cliente disponível</div>
+                    )}
+                  </DropdownMenuContent>
+                )}
+              </DropdownMenu>
+            </div> */}
+          </div>
+        </div>
+
         <h1 className="font-bold mt-4">Data</h1>
         <div className="my-2 flex justify-between">
           <DatePicker
@@ -158,6 +194,7 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
             format="HH:mm:ss"
           />
         </div>
+
         <h1 className="font-bold mt-4">Endereço</h1>
         <div className="flex">
           <div>
@@ -165,7 +202,7 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
             <Input
               value={zipCode}
               onChange={e => setZipCode(e.target.value)}
-              placeholder="Zip Code"
+              placeholder="CEP"
             />
           </div>
           <div>
@@ -173,7 +210,7 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
             <Input
               value={addressName}
               onChange={e => setAddressName(e.target.value)}
-              placeholder="Address Name"
+              placeholder="Nome da Rua"
             />
           </div>
           <div>
@@ -181,55 +218,19 @@ const EditEventModal: React.FC<EditEventModalProps> = ({
             <Input
               value={addressNumber}
               onChange={e => setAddressNumber(e.target.value)}
-              placeholder="Address Number"
-            />
-          </div>
-          <div>
-            <h1>Complemento</h1>
-            <Input
-              value={addressComplement}
-              onChange={e => setAddressComplement(e.target.value)}
-              placeholder="Address Complement"
+              placeholder="Número"
             />
           </div>
         </div>
+        {/* Other form fields */}
 
-        <div className="flex my-4">
-          <div>
-            <h1>Bairro</h1>
-            <Input
-              value={district}
-              onChange={e => setDistrict(e.target.value)}
-              placeholder="District"
-            />
-          </div>
-          <div>
-            <h1>Estado</h1>
-            <Input
-              value={state}
-              onChange={e => setState(e.target.value)}
-              placeholder="State"
-            />
-          </div>
-          <div>
-            <h1>Cidade</h1>
-            <Input
-              value={city}
-              onChange={e => setCity(e.target.value)}
-              placeholder="City"
-            />
-          </div>
+        <div className="flex mt-4">
+          <button onClick={handleUpdate}>Atualizar</button>
+          <button onClick={() => router.push('/events')}>Cancelar</button>
         </div>
-        <h1 className="font-bold mt-4">Audiência Estimada</h1>
-        <Input
-          value={estimatedAudience}
-          onChange={e => setEstimatedAudience(Number(e.target.value))}
-          type="number"
-          placeholder="Estimated Audience"
-        />
       </div>
-    </Modal>
+    </div>
   )
 }
 
-export default EditEventModal
+export default EditEventPage

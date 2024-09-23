@@ -27,7 +27,7 @@ namespace ZventsApi.Controllers
             bool eventExists = _context.Events.Any(dbEvent =>
                 (
                     dbEvent.Name == createEventDto.Name
-                    && dbEvent.Type == createEventDto.Type
+                    // && dbEvent.Type == createEventDto.Type
                     && dbEvent.ClientId == createEventDto.ClientId
                     && dbEvent.IsDeleted == false
                 )
@@ -69,7 +69,9 @@ namespace ZventsApi.Controllers
                         {
                             Event = eventEntity,
                             Material = material,
-                            Quantity = materialDto.Quantity
+                            Quantity = materialDto.Quantity,
+                            MaterialPrice = material.Price,
+                            MaterialName = material.Name
                         }
                     );
                 }
@@ -146,9 +148,11 @@ namespace ZventsApi.Controllers
                 eventEntity.EventMaterials.Add(
                     new EventMaterial
                     {
-                        EventId = eventEntity.Id,
-                        MaterialId = material.Id,
-                        Quantity = materialDto.Quantity
+                        Event = eventEntity,
+                        Material = material,
+                        Quantity = materialDto.Quantity,
+                        MaterialPrice = material.Price,
+                        MaterialName = material.Name
                     }
                 );
             }

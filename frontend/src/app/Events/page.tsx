@@ -13,16 +13,37 @@ import { TbCalendarPlus } from 'react-icons/tb'
 import { Button, Tooltip } from 'antd'
 import { GiGlassCelebration } from 'react-icons/gi'
 import UserSideMenu from '../components/UserHeader'
+import { documentIdConverter } from '@/functions/functions'
+import { clientsAtom } from '../CreateEvent/page'
 
 const Page = () => {
   const [auth, isAuth] = useAtom(authAtom)
   const [loading, setLoading] = useState(false)
   const [events, setEvents] = useState<Events[]>([])
   const [eventChange] = useAtom(eventChangeAtom)
+  const [clients, setClients] = useAtom(clientsAtom)
 
   if (!auth) {
     redirect('/login')
   }
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const response = await axios.get('http://localhost:5196/api/Client')
+        const clientNames = response.data.map((client: any) => ({
+          name: client.fullName,
+          documentId: documentIdConverter(client.documentId),
+          id: client.id,
+          email: client.email,
+        }))
+        setClients(clientNames)
+      } catch (error) {
+        console.error('Error fetching clients:', error)
+      }
+    }
+    fetchClients()
+  }, [])
 
   const getEvents = async () => {
     try {
@@ -46,7 +67,7 @@ const Page = () => {
     }
     fetch()
   }, [])
-  
+
   return (
     <div>
       {loading ? (

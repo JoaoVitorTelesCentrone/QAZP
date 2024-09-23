@@ -22,11 +22,14 @@ import {
 import UserSideMenu from '../components/UserHeader'
 import { documentIdConverter, formatCurrency } from '@/functions/functions'
 import { Toaster, toast } from 'sonner'
+import { atom, useAtom } from 'jotai'
 
 type Mats = {
   materialId: string
   quantity: number
 }
+
+export const clientsAtom = atom<ClientProps[]>([])
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState('')
@@ -44,7 +47,7 @@ const CreateEvent = () => {
   const [state, setState] = useState('')
   const [city, setCity] = useState('')
   const [estimatedAudience, setEstimatedAudience] = useState('')
-  const [clients, setClients] = useState<ClientProps[]>([])
+  const [clients, setClients] = useAtom(clientsAtom)
   const [clientId, setClientId] = useState('')
   const [clientName, setClientName] = useState('')
   const [clientDocument, setClientDocument] = useState('')
@@ -329,50 +332,50 @@ const CreateEvent = () => {
           </h1>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
-                <div className="flex flex-col flex-grow">
-                  <label className="font-bold block mb-2">Tipo</label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] md:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
-                      <span>{selectedType || 'Selecione um Tipo'}</span>
-                      <ChevronDown className="h-6 w-6" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-full max-h-48 overflow-y-auto">
-                      {EventType.map((eventType, index) => (
-                        <div key={index}>
-                          <DropdownMenuItem
-                            className="cursor-pointer my-1"
-                            onClick={() =>
-                              getEventTypeNameAndIndex(
-                                eventType.index,
-                                eventType.name,
-                              )
-                            }
-                            key={index}
-                          >
-                            {eventType.name}
-                          </DropdownMenuItem>
-                          <hr className="my-1 border-gray-300" />
-                        </div>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-                <div className="flex flex-col flex-grow">
-                  <label className="font-bold block mb-2">Título</label>
-                  <Input
-                    value={eventName}
-                    onChange={e => setEventName(e.target.value)}
-                    placeholder="Digite o Título do evento"
-                    className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[630px]"
-                  />
-                </div>
+              <div className="flex flex-col flex-grow">
+                <label className="font-bold block mb-2">Tipo</label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] md:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                    <span>{selectedType || 'Selecione um Tipo'}</span>
+                    <ChevronDown className="h-6 w-6" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-full max-h-48 overflow-y-auto">
+                    {EventType.map((eventType, index) => (
+                      <div key={index}>
+                        <DropdownMenuItem
+                          className="cursor-pointer my-1"
+                          onClick={() =>
+                            getEventTypeNameAndIndex(
+                              eventType.index,
+                              eventType.name,
+                            )
+                          }
+                          key={index}
+                        >
+                          {eventType.name}
+                        </DropdownMenuItem>
+                        <hr className="my-1 border-gray-300" />
+                      </div>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <div className="flex flex-col flex-grow">
+                <label className="font-bold block mb-2">Título</label>
+                <Input
+                  value={eventName}
+                  onChange={e => setEventName(e.target.value)}
+                  placeholder="Digite o Título do evento"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[630px]"
+                />
+              </div>
             </div>
           </div>
 
           <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
-          <div className="flex flex-col flex-grow">
-            <label className="font-bold block mb-2">CEP</label>
+            <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
+              <div className="flex flex-col flex-grow">
+                <label className="font-bold block mb-2">CEP</label>
                 <Input
                   value={zipCode}
                   onChange={e => setZipCode(e.target.value)}
@@ -405,11 +408,10 @@ const CreateEvent = () => {
                   onChange={e => setAddressComplement(e.target.value)}
                   placeholder="Digite o complemento"
                   className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[350px]"
-                /> 
+                />
+              </div>
+            </div>
           </div>
-          </div>
-          </div>
-          
 
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
