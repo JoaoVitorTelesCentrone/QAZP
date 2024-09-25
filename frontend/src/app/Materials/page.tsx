@@ -27,10 +27,10 @@ const Materials = () => {
   const [materials, setMaterials] = useState<materialProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
-  const [change] = useAtom(materialChangeAtom); // useAtom com destructuring
+  const [change] = useAtom(materialChangeAtom); 
 
   const fetchMaterials = async () => {
-    setLoading(true); // Ativa o loading
+    setLoading(true);
     try {
       const response = await axios.get('http://localhost:5196/api/Material');
       const materialNames = response.data.map((material: any) => ({
@@ -43,12 +43,12 @@ const Materials = () => {
     } catch (error) {
       console.error('Erro ao buscar materiais:', error);
     } finally {
-      setLoading(false); // Desativa o loading independentemente de sucesso ou erro
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchMaterials(); // Chama a função para buscar materiais ao montar o componente e ao mudar o estado de `change`
+    fetchMaterials(); 
   }, [change]);
 
   const columns = useMemo(() => materialColumns(), []);
