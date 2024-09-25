@@ -65,7 +65,7 @@ const Materials = () => {
 
   const columns = useMemo(() => materialColumns(), [])
   return (
-    <div>
+    <div className='bg-tertiary'>
       {openModal && (
         <CreateMaterialModal
           isVisible={openModal}
@@ -80,10 +80,10 @@ const Materials = () => {
         <>
           <UserSideMenu />
           <div className="bg-tertiary h-screen">
-            <div>
-              <div className="p-10 ">
+            <div className='bg-tertiary'>
+              <div className="p-10">
                 <div className="flex mt-4 justify-between w-full">
-                  <div className="flex ml-48">
+                  <div className="flex ml-44">
                     <CiPenpot className=" w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
 
                     <h1 className="font-monospace font-semibold text-7xl my-3 ml-6 text-secondary-foreground">
@@ -101,7 +101,7 @@ const Materials = () => {
                   </Button>
                 </div>
               </div>
-              <div className="ml-72 mr-10">
+              <div className="ml-56 mr-10 bg-tertiary">
                 <MaterialTable columns={columns} data={materials} />
               </div>
             </div>

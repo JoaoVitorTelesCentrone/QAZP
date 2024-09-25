@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 
 import { useAtom } from 'jotai'
 import { materialChangeAtom } from '../atoms/materialChange'
+import ValidatedInput from '../components/ValidatedInput'
 
 const MaterialCategory: MaterialCategoryProps[] = [
   { name: 'Comida', index: 1 },
@@ -79,28 +80,31 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
       <Modal
         title="Criar material"
         visible={isVisible}
-        onCancel={onClose} // Close the modal when "X" is clicked
+        onCancel={onClose}
         footer={[]}
       >
-        <div className="flex flex-col my-8 rounded-xl mx-auto justify-around">
+        <div className="flex flex-col my-8 rounded-xl justify-around">
           <div className="flex flex-col">
-            <h1 className="mx-4">Digite o nome do material</h1>
-            <Input
-              onChange={e => setName(e.target.value)}
+            <h1>Digite o nome do material</h1>
+            <ValidatedInput
+              type="name"
+              onChange={setName}
               placeholder="Nome"
               className="border-2  bg-white placeholder:text-primary mx-4 my-1 w-[90%]"
+              value={name}
+              required
             />
           </div>
-          <div className="flex w-full my-2 mx-4">
+          <div className="flex w-full mt-4">
             <div className="flex flex-col w-[50%]">
-              <h1 className="my-1">Categoria</h1>
+              <h1>Categoria</h1>
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex border-2 bg-white  justify-between px-6 py-1 rounded-xl mr-8">
-                  <h1 className="mt-1 mr-3">{type ? type : 'Categoria'}</h1>
-                  <ChevronDown className="h-4 w-4 mt-2" />
+                <DropdownMenuTrigger className="flex border-2 bg-white  justify-between px-2 py-1 rounded mr-6 h-10">
+                  <h1>{type ? type : 'Categoria'}</h1>
+                  <ChevronDown className="h-4 w-4 mt-1" />
                 </DropdownMenuTrigger>
 
-                <DropdownMenuContent className="border-2 p-4 bg-white my-1 rounded-xl">
+                <DropdownMenuContent className="border-2 p-2 bg-white my-1 rounded-xl w-52">
                   {MaterialCategory.map((category, index) => (
                     <>
                       <DropdownMenuItem
@@ -118,19 +122,26 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className="w[50%]">
-              <h1 className="my-1">Digite o preço</h1>
-              <Input
-                type="number"
+            <div className="w-[50%]">
+              <h1>Digite o preço</h1>
+              <ValidatedInput
+                onChange={value => setPrice(Number(value))}
+                className="p-2 border-slate-500 bg-white mb-4 border rounded w-full"
                 placeholder="Digite o preço"
-                className="border-2  bg-white placeholder:text-primary"
-                onChange={e => setPrice(Number(e.target.value))}
+                value={price} 
+                type="number"
+                required
               />
             </div>
           </div>
-          <Button onClick={() => createMaterialRequest()} className="my-4 p-2">
-            Criar material
-          </Button>
+          <div className='w-full flex justify-end mt-3'>
+            <Button
+              className="bg-primary text-white w-[30%]"
+              onClick={() => createMaterialRequest()}
+            >
+              Criar material
+            </Button>
+          </div>
         </div>
       </Modal>
     </div>
