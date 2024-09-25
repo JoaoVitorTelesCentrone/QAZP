@@ -298,13 +298,13 @@ const CreateEvent = () => {
           <h1 className="text-3xl font-bold text-left text-primary">
             Informações do Cliente
           </h1>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
-              <div className="flex flex-col flex-grow">
+          <div className="flex flex-col">
+            <div className="flex  space-y-4 ">
+              <div className="flex flex-col mt-4 ">
                 <h1 className="font-bold block mb-2">Cliente</h1>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] w-full sm:w-[300px] md:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
-                    <span>{clientName || 'Selecione um Cliente'}</span>
+                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                    <span>{clientName || 'Cliente'}</span>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-96 max-h-72 overflow-y-auto">
@@ -328,22 +328,22 @@ const CreateEvent = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="flex flex-col flex-grow">
+              <div className="flex flex-col ">
                 <label className="font-bold block mb-2">Documento</label>
                 <Input
                   value={clientDocument}
                   onChange={e => setClientDocument(e.target.value)}
                   disabled={true}
-                  className="bg-white text-gray-600 border-gray-300 h-[40px]  border rounded w-full"
+                  className="bg-white text-gray-600 border-gray-300 h-[40px]  "
                 />
               </div>
-              <div className="flex flex-col flex-grow">
+              <div className="flex flex-col ">
                 <label className="font-bold block mb-2">Email</label>
                 <Input
                   value={clientEmail}
                   onChange={e => setClientDocument(e.target.value)}
                   disabled={true}
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] "
+                  className="bg-white text-gray-600 border border-gray-300  h-[40px] "
                 />
               </div>
             </div>
@@ -492,45 +492,45 @@ const CreateEvent = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
+          <div className="flex flex-col gap-4">
+            <div className="flex">
               <div className="flex flex-col">
-                <label className="font-bold">Data de ínicio</label>
+                <label className="font-bold">Data inicial</label>
                 <DatePicker
                   onChange={date => handleDateChange(date, setStartDate)}
                   format="YYYY/MM/DD"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-full sm:w-[300px] md:w-[250px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] "
                   placeholder="Selecione uma data"
                 />
               </div>
               <div className="flex flex-col">
-                <label className="font-bold">Horário de ínicio</label>
+                <label className="font-bold">Começo</label>
                 <TimePicker
                   onChange={time => handleTimeChange(time, setStartTime)}
                   format="HH:mm:ss"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-full sm:w-[300px] md:w-[250px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px]"
                   placeholder="Selecione um horário"
                 />
               </div>
               <div className="flex flex-col">
-                <label className="font-bold">Data de finalização</label>
+                <label className="font-bold">Data final</label>
                 <DatePicker
                   onChange={date => handleDateChange(date, setEndDate)}
                   format="YYYY/MM/DD"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-full sm:w-[300px] md:w-[250px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] "
                   placeholder="Selecione uma data"
                 />
               </div>
               <div className="flex flex-col">
-                <label className="font-bold">Horário de finalização</label>
+                <label className="font-bold">Fim do evento</label>
                 <TimePicker
                   onChange={time => handleTimeChange(time, setEndTime)}
                   format="HH:mm:ss"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-full sm:w-[300px] md:w-[250px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] "
                   placeholder="Selecione um horário"
                 />
               </div>
@@ -539,13 +539,13 @@ const CreateEvent = () => {
           <h1 className="text-3xl font-bold text-left text-primary">
             Selecione os Materiais
           </h1>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
-              <div className="flex flex-col flex-grow">
+          <div className="flex flex-col gap-4">
+            <div className="flex space-y-4 ">
+              <div className="flex flex-col mt-4">
                 <h1 className="font-bold">Categoria</h1>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] w-full sm:w-[300px] bg-white rounded flex items-center justify-between px-4 font-bold">
-                    <span>{selectedCategory || 'Selecione uma Categoria'}</span>
+                  <DropdownMenuTrigger className="border border-gray-300 h-[40px]  bg-white rounded flex items-center justify-between px-4 font-bold">
+                    <span>{selectedCategory || 'Categoria'}</span>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white border border-gray-300 rounded w-72 max-h-48 overflow-y-auto">
@@ -564,11 +564,11 @@ const CreateEvent = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="flex flex-col flex-grow">
+              <div className="flex flex-col">
                 <h1 className="font-bold">Material</h1>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] w-full sm:w-[400px] bg-white rounded flex items-center justify-between px-4 font-bold">
-                    <span>{selectedMaterial || 'Selecione um Material'}</span>
+                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded flex items-center justify-between px-4 font-bold">
+                    <span>{selectedMaterial || 'Material'}</span>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white border border-gray-300 rounded w-96 max-h-48 overflow-y-auto">
@@ -599,7 +599,7 @@ const CreateEvent = () => {
                   value={materialQnt}
                   onChange={setMaterialQnt}
                   placeholder="Quantidade"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 sm:w-[200px] md:w-[150px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 "
                 />
               </div>
               <div className="flex flex-col flex-grow">
@@ -614,7 +614,7 @@ const CreateEvent = () => {
                       selectedMaterialPrice,
                     )
                   }
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-full sm:w-[300px] md:w-[155px]  mt-6"
+                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] mt-6"
                 >
                   <PlusCircleIcon className="h-8 w-8" />
                 </Button>
