@@ -54,7 +54,7 @@ const Materials = () => {
   const columns = useMemo(() => materialColumns(), []);
 
   return (
-    <div>
+    <div className='bg-tertiary'>
       {openModal && (
         <CreateMaterialModal
           isVisible={openModal}

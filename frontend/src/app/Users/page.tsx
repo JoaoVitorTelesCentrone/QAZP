@@ -70,7 +70,7 @@ const Users = () => {
                 </Button>
               </div>
             </div>
-            <div className="ml-72 mr-10">
+            <div className="ml-56 mr-10">
               <UsersTable columns={columns} data={userData} />
             </div>
           </div>

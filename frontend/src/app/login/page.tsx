@@ -30,9 +30,20 @@ const LoginPage = () => {
       if (response.status === 200) {
         const { name } = response.data
         setUserAuth(true)
-        setUserInfo({ name, username, password})
-        toast.success(`Bem-vindo ${username}`)
-        router.push('/dashboard')
+        setUserInfo({
+          name: username,
+          username: username,
+          password: password,
+        })
+
+        await router.push('/dashboard')
+
+        setTimeout(() => {
+          setLoading(false)
+        }, 1000)
+
+        
+        toast.success(`Bem vindo ${username}`)
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)

@@ -58,10 +58,11 @@ const Clients = () => {
         <>
           <UserSideMenu />
           <div className="bg-tertiary h-screen">
-            <div className="p-10 ">
+            <div className="p-10">
               <div className="flex mt-4 justify-between w-full">
-                <div className="flex ml-64">
-                  <FaUsers className="w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
+                <div className="flex ml-48">
+                  <FaUsers className=" w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
+
                   <h1 className="font-monospace font-semibold text-primary text-7xl my-4 mx-4 text-secondary-foreground">
                     Clientes
                   </h1>
@@ -77,7 +78,7 @@ const Clients = () => {
                 </Button>
               </div>
             </div>
-            <div className="ml-72 mr-10">
+            <div className="ml-56 mr-10">
               <ClientTable columns={clientColumns} data={clients} />
             </div>
           </div>

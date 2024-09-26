@@ -16,6 +16,7 @@ import { redirect } from 'next/navigation'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { userChangeAtom } from '../atoms/changeUserAtom'
+import ValidatedInput from '../components/ValidatedInput'
 
 export type createUserProps = {
   isVisible: boolean
@@ -88,37 +89,40 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
       >
         <div className="">
           <form className="">
-            <div className="mx-auto mb-1 ">
-              <p>Nome</p>
-              <Input
-                onChange={e => setName(e.target.value)}
+            <div className="mx-auto">
+              <h1>Nome</h1>
+              <ValidatedInput
+                onChange={setName}
                 required
                 placeholder="Digite o nome completo"
-                className="bg-white border-slate-500 mx-auto my-2"
+                className="bg-white border-slate-500 border rounded w-full"
+                value={name}
               />
             </div>
 
-            <div className="mx-auto my-1 w-full">
-              <p>Usuário</p>
-              <Input
-                onChange={e => setUsername(e.target.value)}
+            <div className="mx-auto w-full mt-6">
+              <h1>Usuário</h1>
+              <ValidatedInput
+                onChange={setUsername}
                 required
                 placeholder="Digite o nome do usuário"
-                className="bg-white border-slate-500 mx-auto my-2"
+                className="bg-white border-slate-500 mx-auto border rounded w-full "
+                value={username}
               />
             </div>
 
-            <div className="relative mx-auto my-1 w-full">
-              <p>Senha</p>
+            <div className="relative mx-auto mt-6 w-full">
+              <h1>Senha</h1>
               <div className="flex items-center">
-                <Input
+                <ValidatedInput
                   type={showPassword1 ? 'text' : 'password'}
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={setPassword}
                   required
                   placeholder="Digite a senha"
                   className="bg-white border-slate-500 pr-12 my-2"
+                  value={password}
                 />
-                <div className="absolute right-0 flex items-center px-3">
+                <div className="absolute right-0 flex items-center px-3 -mt-3">
                   {showPassword1 ? (
                     <EyeOff onClick={changeState1} className="cursor-pointer" />
                   ) : (
@@ -128,17 +132,18 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
               </div>
             </div>
 
-            <div className="relative mx-auto my-1 w-full">
-              <p>Confirme a senha</p>
+            <div className="relative mx-auto mt-3 w-full mb-4">
+              <h1>Confirme a senha</h1>
               <div className="flex items-center">
-                <Input
+                <ValidatedInput
                   type={showPassword2 ? 'text' : 'password'}
-                  onChange={e => setConfirmPassword(e.target.value)}
+                  onChange={setConfirmPassword}
                   required
                   placeholder="Confirme a senha"
                   className="bg-white border-slate-500 pr-12"
+                  value={confirmedPassword}
                 />
-                <div className="absolute right-0 flex items-center px-3">
+                <div className="absolute right-0 flex items-center px-3 -mt-3">
                   {showPassword2 ? (
                     <EyeOff onClick={changeState2} className="cursor-pointer" />
                   ) : (
@@ -153,9 +158,11 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
                 As senhas são diferentes
               </h1>
             )}
-            <Button className="mt-3" onClick={() => verifyCreation()}>
+            <div className='flex justify-end mt-3'>
+            <Button className="bg-primary text-white w-[30%]" onClick={() => verifyCreation()}>
               Criar usuário
             </Button>
+            </div>
           </form>
         </div>
       </Modal>
