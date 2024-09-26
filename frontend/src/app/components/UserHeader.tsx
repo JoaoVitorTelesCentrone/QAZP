@@ -23,7 +23,7 @@ const UserSideMenu = () => {
   }
 
   if (!loggedIn) {
-    redirect('/login')
+    redirect('/')
   }
 
   return loading ? (

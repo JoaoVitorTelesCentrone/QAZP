@@ -9,7 +9,7 @@ import Footer from '../components/Footer'
 
 const Page = () => {
   return (
-    <div className="flex flex-col bg-primary">
+    <div className="flex flex-col">
       <Header />
       <div className="ml-96 max-w-[800px]">
         <h1 className="mt-14 font-bold text-5xl mx-auto font-montserrat uppercase text-center text-tertiary">
