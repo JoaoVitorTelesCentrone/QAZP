@@ -59,7 +59,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
   const [loading, setLoading] = useState(false)
 
   if (!isLogged) {
-    redirect('/login')
+    redirect('/')
   }
 
   const handleSearchClick: React.MouseEventHandler<
@@ -189,7 +189,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                     id: 'create.client.page.phoneNumber.field.placeholder',
                   })}
                   value={phoneNumber}
-                  type='text'
+                  type="text"
                 />
               </div>
             </div>
@@ -294,7 +294,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                 <Input
                   className="p-2 border-slate-500 bg-neutral-500 mb-4 border rounded w-full"
                   value={district}
-                  onChange={e=>setDistrict (e.target.value)}
+                  onChange={e => setDistrict(e.target.value)}
                   readOnly={true}
                   disabled={true}
                 />
@@ -329,14 +329,15 @@ const CreateClientModal: React.FC<createClientProps> = ({
               </div>
             </div>
           </div>
-          <div className='flex justify-end mt-3 mr-1'>
-          <Button className='bg-primary text-white w-[30%]'
-          onClick={() => createClient()}
-          >
-            {intl.formatMessage({
-              id: 'create.client.page.create.client.button',
-            })}
-          </Button>
+          <div className="flex justify-end mt-3 mr-1">
+            <Button
+              className="bg-primary text-white w-[30%]"
+              onClick={() => createClient()}
+            >
+              {intl.formatMessage({
+                id: 'create.client.page.create.client.button',
+              })}
+            </Button>
           </div>
         </form>
       </Modal>

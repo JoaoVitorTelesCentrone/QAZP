@@ -9,8 +9,7 @@ import { QuoteTable } from './QuoteTable'
 import axios from 'axios'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { quoteChangeAtom } from '../atoms/changeQuoteAtom'
-import { GiTakeMyMoney } from "react-icons/gi";
-
+import { GiTakeMyMoney } from 'react-icons/gi'
 
 const Page = () => {
   const [auth, isAuth] = useAtom(authAtom)
@@ -23,7 +22,7 @@ const Page = () => {
   }, [quoteChange])
 
   if (!auth) {
-    redirect('/login')
+    redirect('/')
   }
   async function fetchUserData() {
     try {
@@ -46,27 +45,27 @@ const Page = () => {
     fetch()
   }, [])
   return (
-<div>
+    <div>
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <ClipLoader size={50} color={'#123abc'} loading={loading} />
         </div>
       ) : (
         <>
-        <UserSideMenu />
-        <div className="bg-tertiary h-screen">
-          <div className="p-10 ">
-            <div className="flex mt-4 justify-between w-full">
-              <div className="flex ml-48">
-                <GiTakeMyMoney  className=" w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
+          <UserSideMenu />
+          <div className="bg-tertiary h-screen">
+            <div className="p-10 ">
+              <div className="flex mt-4 justify-between w-full">
+                <div className="flex ml-48">
+                  <GiTakeMyMoney className=" w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
 
-                <h1 className="font-monospace font-semibold text-7xl my-3 mx-4 text-secondary-foreground text-primary">
-                  Orçamentos
-                </h1>
+                  <h1 className="font-monospace font-semibold text-7xl my-3 mx-4 text-secondary-foreground text-primary">
+                    Orçamentos
+                  </h1>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="ml-56 mr-10">
+            <div className="ml-56 mr-10">
               <QuoteTable columns={quoteColumns} data={quote} />
             </div>
           </div>

@@ -43,9 +43,13 @@ const LoginPage = () => {
           password: userPassword,
         })
 
-        router.push('/dashboard')
+        await router.push('/dashboard')
 
-        setLoading(false)
+        setTimeout(() => {
+          setLoading(false)
+        }, 1000)
+
+        
         toast.success(`Bem vindo ${username}`)
       }
     } catch (error) {
