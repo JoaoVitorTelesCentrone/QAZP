@@ -17,36 +17,48 @@ const Page = () => {
         <h1 className="my-10 font-bold text-5xl mx-auto font-montserrat text-center text-cyan-500">
           Conheça Nossa equipe
         </h1>
-        <div className="justify-around flex mx-20 mt-2 mb-12">
+        <div className="justify-around flex xl:mx-20 mx-12 mt-2 mb-12">
           <div className="">
-            <h1 className="mt-12 font-bold text-3xl font-montserrat uppercase text-center text-secondary ">
+            <h1 className="mt-12  font-bold text-3xl font-montserrat uppercase text-center text-secondary ">
               Uendell Rios
             </h1>
-            <Image className="my-2 rounded-xl" src={Uendeus} alt="a" />
+            <Image
+              className="my-2 w-52 h-52 rounded-xl xl:h-72 xl:w-72"
+              src={Uendeus}
+              alt="a"
+            />
           </div>
 
           <a href="https://github.com/JoaoVitorTelesCentrone">
-            <div className="">
+            <div className="ml-4">
               <h1 className="mt-12 font-bold text-3xl font-montserrat uppercase text-center text-secondary">
                 João Centrone
               </h1>
-              <Image className="my-2 rounded-xl" src={centrone} alt="a" />
+              <Image
+                className="my-2 ml-4 rounded-xl w-52 h-52 xl:h-72 xl:w-72"
+                src={centrone}
+                alt="a"
+              />
             </div>
           </a>
           <div className="">
             <h1 className="mt-12 font-bold text-3xl font-montserrat uppercase text-center text-secondary ">
               Gustavo Alves
             </h1>
-            <Image className="my-2 rounded-xl" src={Gustavo} alt="a" />
+            <Image
+              className="my-2 rounded-xl w-52 h-52 xl:h-72 xl:w-72"
+              src={Gustavo}
+              alt="a"
+            />
           </div>
         </div>
 
         <h1 className="my-10 font-bold text-5xl mx-auto font-montserrat text-center text-cyan-500">
           Nosso Plano
         </h1>
-        <div className="flex my-10 bg-primary bg-opacity-90 mx-32 justify-between">
-          <div className="max-w-[600px]">
-            <h1 className="mt-12 font-bold text-5xl font-montserrat uppercase text-center text-tertiary ">
+        <div className="flex my-10 bg-primary bg-opacity-90 mx-12 xl:mx-24 justify-between">
+          <div className="max-w-[350px] xl:max-w-[600px]">
+            <h1 className="mt-12 font-bold text-4xl xl:text-5xl font-montserrat uppercase text-center text-tertiary ">
               O Começo
             </h1>
             <p className="mt-2 font-medium text-2xl font-montserrat text-secondary text-center">
@@ -58,8 +70,8 @@ const Page = () => {
             </p>
           </div>
           <ArrowRight className="text-white h-20 w-20 mt-32" />
-          <div className="max-w-[600px]">
-            <h1 className="mt-12 font-bold text-5xl font-montserrat uppercase text-center text-tertiary">
+          <div className="max-w-[350px] xl:max-w-[600px]">
+            <h1 className="mt-12 font-bold text-4xl xl:text-5xl font-montserrat uppercase text-center text-tertiary">
               Implementação
             </h1>
             <p className="mt-2 font-medium text-2xl font-montserrat text-secondary text-center">

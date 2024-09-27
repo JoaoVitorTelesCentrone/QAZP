@@ -8,7 +8,7 @@ const WhatWeDo = () => {
   return (
     <div className="px-20 pt-24 pb-10  flex justify-between bg-primary">
       <div className="flex flex-col text-center space-y-8">
-        <h1 className="mx-auto text-cyan-500 text-5xl uppercase font-bold font-montserrat">
+        <h1 className="mx-auto text-cyan-500 xl:text-5xl text-4xl uppercase font-bold font-montserrat">
           o que fazemos ?
         </h1>
         <h1 className="mx-auto text-secondary text-7xl uppercase font-bold font-montserrat my-4">
