@@ -24,7 +24,7 @@ const Page = () => {
   const [clients, setClients] = useAtom(clientsAtom)
 
   if (!auth) {
-    redirect('/login')
+    redirect('/')
   }
 
   useEffect(() => {

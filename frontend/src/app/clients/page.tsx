@@ -50,7 +50,7 @@ const Clients = () => {
   }, [])
 
   if (!isLogged) {
-    redirect('/login')
+    redirect('/')
   }
   return (
     <div>

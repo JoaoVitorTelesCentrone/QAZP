@@ -23,7 +23,7 @@ const Dashboard = () => {
   const [events, setEvents] = useState<Events[]>([])
 
   if (!isLogged) {
-    redirect('/login')
+    redirect('/')
   }
 
   const getClients = async () => {
@@ -73,40 +73,39 @@ const Dashboard = () => {
       ) : (
         <>
           <UserSideMenu />
-          <div className="bg-tertiary h-screen">
+          <div className="bg-tertiary h-screen w-full">
             <div className="flex ml-56">
-              <LucideLineChart className="w-16 h-16 p-1 rounded-full my-12 mx-2 text-primary border-2 border-primary" />
-              <h1 className="font-monospace font-semibold text-6xl my-12  text-secondary-foreground">
+              <LucideLineChart className="w-12 h-12 xl:w-16 xl:h-16 p-1 rounded-full my-12 mx-2 text-primary border-2 border-primary" />
+              <h1 className="font-monospace font-semibold text-5xl xl:text-6xl my-12  text-secondary-foreground">
                 Dashboards operacionais
               </h1>
             </div>
-            <div className="flex xl:mx-24 mx-4">
-              <div className="flex my-2 xl:w-[1100px] w-[800px] ml-56">
-                <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
-                  <h1 className="text-3xl text-gray-400 font-bold">
-                    Número de Clientes
-                  </h1>
-                  <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
-                    {numberOfClients}
-                  </h1>
-                </div>
-                <div className=" rounded-xl mx-4 border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
-                  <h1 className="text-3xl font-bold text-gray-400">
-                    Número de Usuários
-                  </h1>
-                  <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
-                    {numberOfUsers}
-                  </h1>
-                </div>
 
-                <div className=" rounded-xl border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
-                  <h1 className="text-3xl text-gray-400 font-bold">
-                    Número de Eventos
-                  </h1>
-                  <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
-                    {numberOfEvents}
-                  </h1>
-                </div>
+            <div className="flex my-2 xl:w-full xl:max-w-full max-w-[800px] ml-52 mr-10 xl:ml-60">
+              <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8 xl:p-12">
+                <h1 className="text-3xl text-gray-400 font-bold">
+                  Número de Clientes
+                </h1>
+                <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
+                  {numberOfClients}
+                </h1>
+              </div>
+              <div className=" rounded-xl mx-4 border-2 bg-gray-700 bg-opacity-10 border-secondary p-8 xl:p-12">
+                <h1 className="text-3xl font-bold text-gray-400">
+                  Número de Usuários
+                </h1>
+                <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
+                  {numberOfUsers}
+                </h1>
+              </div>
+
+              <div className=" rounded-xl border-2 bg-gray-700 bg-opacity-10 border-secondary p-8 xl:p-12">
+                <h1 className="text-3xl text-gray-400 font-bold">
+                  Número de Eventos
+                </h1>
+                <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
+                  {numberOfEvents}
+                </h1>
               </div>
             </div>
             <div className="flex ml-56">
@@ -115,7 +114,7 @@ const Dashboard = () => {
                 Próximos eventos
               </h1>
             </div>
-            <div className="ml-56 mr-10">
+            <div className="ml-56 mr-10 xl:w-[1500px] ">
               <DashboardTable columns={eventsColumns} data={events} />
             </div>
           </div>
