@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback, Suspense } from 'react';
 import UserSideMenu from '../components/UserHeader';
 import { Button } from 'antd';
 import axios from 'axios';
@@ -12,11 +12,10 @@ import {
   formatCurrency,
   materialCategoryNameConverter,
 } from '@/functions/functions';
-import CreateMaterialModal from './createMaterialModal';
 import { useAtom } from 'jotai';
 import { materialChangeAtom } from '../atoms/materialChange';
 
-export type materialProps = {
+export type MaterialProps = {
   id: string;
   category: string;
   price: string;
@@ -24,12 +23,12 @@ export type materialProps = {
 };
 
 const Materials = () => {
-  const [materials, setMaterials] = useState<materialProps[]>([]);
+  const [materials, setMaterials] = useState<MaterialProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
-  const [change] = useAtom(materialChangeAtom); 
+  const [change] = useAtom(materialChangeAtom);
 
-  const fetchMaterials = async () => {
+  const fetchMaterials = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get('http://localhost:5196/api/Material');
@@ -45,34 +44,30 @@ const Materials = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchMaterials(); 
-  }, [change]);
+    fetchMaterials();
+  }, [change, fetchMaterials]);
 
   const columns = useMemo(() => materialColumns(), []);
 
   return (
     <div className='bg-tertiary'>
-      {openModal && (
-        <CreateMaterialModal
-          isVisible={openModal}
-          onClose={() => setOpenModal(false)}
-        />
-      )}
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <ClipLoader size={50} color={'#123abc'} loading={loading} />
         </div>
       ) : (
         <>
-          <UserSideMenu />
+          <Suspense fallback={<ClipLoader size={50} color={'#123abc'} loading={true} />}>
+            <UserSideMenu />
+          </Suspense>
           <div className="bg-tertiary h-screen">
             <div className="p-10">
               <div className="flex mt-4 justify-between w-full">
                 <div className="flex ml-48">
-                  <CiPenpot className=" w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
+                  <CiPenpot className="w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
                   <h1 className="font-monospace font-semibold text-7xl my-3 ml-6 text-secondary-foreground">
                     Materiais
                   </h1>

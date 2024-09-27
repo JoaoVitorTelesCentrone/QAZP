@@ -1,62 +1,58 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useAtom } from 'jotai'
-import { authAtom } from '../atoms/authAtom'
-import { userInfoAtom } from '../atoms/userInfoAtom'
-import Header from '../components/Header'
-import { useRouter } from 'next/navigation'
-import { Input } from '@/components/ui/input'
-import axios from 'axios'
-import { Toaster, toast } from 'sonner'
-import Footer from '../components/Footer'
-import ClipLoader from 'react-spinners/ClipLoader'
-import { useState } from 'react'
+import Link from 'next/link';
+import { useAtom } from 'jotai';
+import { authAtom } from '../atoms/authAtom';
+import { userInfoAtom } from '../atoms/userInfoAtom';
+import Header from '../components/Header';
+import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import axios from 'axios';
+import { Toaster, toast } from 'sonner';
+import Footer from '../components/Footer';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { useState } from 'react';
 
 const API_URL = 'http://localhost:5196/api/User';
 
 const LoginPage = () => {
-  const router = useRouter()
-  const [userAuth, setUserAuth] = useAtom(authAtom)
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [userAuth, setUserAuth] = useAtom(authAtom);
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const verifyLogin = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/${username}&${password}`)
+      const response = await axios.get(`${API_URL}/${username}&${password}`);
       if (response.status === 200) {
-        const { name } = response.data
-        setUserAuth(true)
+        const { name } = response.data;
+        setUserAuth(true);
         setUserInfo({
           name: username,
           username: username,
           password: password,
-        })
+        });
 
-        await router.push('/dashboard')
-
-        setTimeout(() => {
-          setLoading(false)
-        }, 1000)
-
+        // Redirecionar imediatamente após a verificação de login
+        router.push('/dashboard');
         
-        toast.success(`Bem vindo ${username}`)
+        toast.success(`Bem-vindo ${username}`);
       }
     } catch (error) {
-      console.error('Erro ao fazer a requisição:', error)
-      toast.error('Usuário ou senha incorretos')
+      console.error('Erro ao fazer a requisição:', error);
+      toast.error('Usuário ou senha incorretos');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    verifyLogin()
-  }
+    e.preventDefault();
+    verifyLogin();
+  };
 
   return (
     <div>
@@ -80,7 +76,7 @@ const LoginPage = () => {
                 <label className="text-white text-lg font-bold">Usuário</label>
                 <Input
                   placeholder="Digite o usuário"
-                  onChange={e => setUsername(e.target.value)}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="p-2 bg-white border-slate-500 mb-8"
                   type="text"
                   id="email"
@@ -91,7 +87,7 @@ const LoginPage = () => {
                 </label>
                 <Input
                   placeholder="Digite a senha"
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="p-2 border-slate-500 bg-white mb-8"
                   type="password"
                   id="password"
@@ -111,7 +107,7 @@ const LoginPage = () => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;
