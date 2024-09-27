@@ -36,16 +36,21 @@ const LoginPage = () => {
           password: password,
         });
 
-        // Redirecionar imediatamente após a verificação de login
-        router.push('/dashboard');
-        
-        toast.success(`Bem-vindo ${username}`);
+        // Aguarda 2 segundos antes de redirecionar para a dashboard
+        setTimeout(() => {
+          toast.success(`Bem-vindo ${username}`);
+          router.push('/dashboard');
+        }, 200); // ajuste o tempo conforme necessário
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error);
       toast.error('Usuário ou senha incorretos');
+      // Também pode adicionar um timeout aqui se quiser mostrar um loading após erro
     } finally {
-      setLoading(false);
+      // Mantenha o loading ativo por um tempo fixo
+      setTimeout(() => {
+        setLoading(false);
+      }, 2500); // ajuste o tempo conforme necessário
     }
   };
 
