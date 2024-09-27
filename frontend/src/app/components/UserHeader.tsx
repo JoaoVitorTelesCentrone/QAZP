@@ -43,14 +43,16 @@ const UserSideMenu = () => {
         </div>
         <nav className="flex-1">
           <ul className="flex flex-col space-y-4">
-            {['dashboard', 'clients', 'Events', 'Materials', 'quote', 'Users'].map((page) => (
+            {['dashboard', 'clients', 'events', 'materials', 'quote', 'users'].map((page) => (
               <li key={page}>
-                <button
-                  onClick={() => handleNavigation(`/${page}`)}
+                <Link 
+                  href={`/${page}`}
+                  onClick={() => handleNavigation(`/${page}`)} // Mantendo o onClick para o loading
+                  data-testid={`link-${page}`} // Adicionando o data-testid aqui
                   className="block py-2 px-3 rounded hover:bg-gray-700 w-full text-left"
                 >
                   {page.charAt(0).toUpperCase() + page.slice(1)}
-                </button>
+                </Link>
               </li>
             ))}
           </ul>
@@ -62,6 +64,7 @@ const UserSideMenu = () => {
         <button
           className="text-white items-center space-x-2 flex justify-center"
           onClick={() => setIsLogged(false)}
+          data-testid="logout-button"
         >
           <LogOut />
           <span>Logout</span>
