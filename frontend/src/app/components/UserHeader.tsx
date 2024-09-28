@@ -43,7 +43,7 @@ const UserSideMenu = () => {
         </div>
         <nav className="flex-1">
           <ul className="flex flex-col space-y-4">
-            {['dashboard', 'clients', 'events', 'materials', 'quote', 'users'].map((page) => (
+            {['dashboard', 'clients', 'Events', 'Materials', 'quote', 'Users'].map((page) => (
               <li key={page}>
                 <Link 
                   href={`/${page}`}
