@@ -29,7 +29,9 @@ const Clients = () => {
       } catch (error) {
         console.error('Error fetching client data:', error)
       } finally {
-        setLoading(false)
+        setTimeout(()=>{
+          setLoading(false); // Garante que o loading seja desativado no final 
+         },3000)
       }
     }
 
@@ -38,7 +40,7 @@ const Clients = () => {
 
   useEffect(() => {
     if (!isLogged) {
-      redirect('/login')
+      redirect('/')
     }
   }, [isLogged])
 

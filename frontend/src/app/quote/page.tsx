@@ -19,7 +19,7 @@ const Page = () => {
 
   // Redireciona se o usuário não estiver autenticado
   if (!auth) {
-    redirect('/login')
+    redirect('/')
   }
 
   const fetchUserData = useCallback(async () => {

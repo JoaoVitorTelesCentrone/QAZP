@@ -17,7 +17,7 @@ const UserSideMenu = () => {
   const [loading, setLoading] = useState(false); 
 
   if (!loggedIn) {
-    redirect('/login');
+    redirect('/')
   }
 
   const handleNavigation = (href: string) => {

@@ -61,7 +61,9 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDataFromAPIs = async () => {
       await Promise.all([getClients(), getUsers(), getEvents()]);
-      setLoading(false); // Desativa o loading após buscar os dados
+      setTimeout(()=>{
+        setLoading(false); // Garante que o loading seja desativado no final 
+       },1000)
     };
 
     // Se o usuário não estiver logado, não busca os dados

@@ -38,7 +38,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
   const [change, setChange] = useAtom(userChangeAtom)
 
   if (!isLogged) {
-    redirect('/login')
+    redirect('/')
   }
 
   async function verifyCreation() {
@@ -158,10 +158,13 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
                 As senhas são diferentes
               </h1>
             )}
-            <div className='flex justify-end mt-3'>
-            <Button className="bg-primary text-white w-[30%]" onClick={() => verifyCreation()}>
-              Criar usuário
-            </Button>
+            <div className="flex justify-end mt-3">
+              <Button
+                className="bg-primary text-white w-[30%]"
+                onClick={() => verifyCreation()}
+              >
+                Criar usuário
+              </Button>
             </div>
           </form>
         </div>
