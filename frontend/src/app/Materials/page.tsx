@@ -14,6 +14,7 @@ import {
 } from '@/functions/functions';
 import { useAtom } from 'jotai';
 import { materialChangeAtom } from '../atoms/materialChange';
+import CreateMaterialModal from './createMaterialModal';
 
 export type MaterialProps = {
   id: string;
@@ -54,6 +55,12 @@ const Materials = () => {
 
   return (
     <div className='bg-tertiary'>
+      {openModal && (
+        <CreateMaterialModal
+          isVisible={openModal}
+          onClose={() => setOpenModal(false)}
+        />
+      )}
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <ClipLoader size={50} color={'#123abc'} loading={loading} />

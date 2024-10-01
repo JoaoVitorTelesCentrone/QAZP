@@ -1,7 +1,7 @@
 'use client';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
-import React, { useState } from 'react'; // Importando useState
+import React, { useState } from 'react';
 import { userInfoAtom } from '../atoms/userInfoAtom';
 import { authAtom } from '../atoms/authAtom';
 import { redirect } from 'next/navigation';
@@ -25,7 +25,7 @@ const UserSideMenu = () => {
     router.push(href); 
     setTimeout(() => {
       setLoading(false); 
-    }, 3000);
+    }, 3500);
   };
 
   return loading ? (
@@ -47,8 +47,8 @@ const UserSideMenu = () => {
               <li key={page}>
                 <Link 
                   href={`/${page}`}
-                  onClick={() => handleNavigation(`/${page}`)} // Mantendo o onClick para o loading
-                  data-testid={`link-${page}`} // Adicionando o data-testid aqui
+                  onClick={() => handleNavigation(`/${page}`)} 
+                  data-testid={`link-${page}`} 
                   className="block py-2 px-3 rounded hover:bg-gray-700 w-full text-left"
                 >
                   {page.charAt(0).toUpperCase() + page.slice(1)}

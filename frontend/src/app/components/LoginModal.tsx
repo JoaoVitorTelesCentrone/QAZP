@@ -28,44 +28,44 @@ const LoginPage = ({
   const [logged, isLogged] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  // Close modal
+  const API_URL = 'http://localhost:5196/api/User'
+
   const handleCancel = () => {
     setIsModalVisible(false)
   }
 
-  async function verifyLogin(username: string, password: string) {
+  const verifyLogin = async () => {
+    setLoading(true)
     try {
-      setLoading(true)
-      const response = await axios.get(
-        `http://localhost:5196/api/User/${username}&${password}`,
-      )
-      const userName = response.data.name
-      const userPassword = response.data.password
+      const response = await axios.get(`${API_URL}/${username}&${password}`)
       if (response.status === 200) {
-        isLogged(true)
-        setError(false)
+        const { name } = response.data
         setUserAuth(true)
         setUserInfo({
-          name: userName,
+          name: username,
           username: username,
-          password: userPassword,
+          password: password,
         })
-        setLoading(false)
-        toast.success(`Bem vindo ${username}`)
-        setIsModalVisible(false) // Close modal on successful login
-        await router.push('/dashboard')
+        setIsModalVisible(false)
+        router.push('/dashboard')
+        setTimeout(() => {
+          toast.success(`Bem-vindo ${username}`)
+        }, 10)
       }
     } catch (error) {
-      setLoading(false)
       console.error('Erro ao fazer a requisição:', error)
       toast.error('Usuário ou senha incorretos')
       setError(true)
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+      }, 2500)
     }
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await verifyLogin(username, password)
+    await verifyLogin()
   }
 
   return (
@@ -81,7 +81,7 @@ const LoginPage = ({
             title="Faça seu login"
             visible={isModalVisible}
             onCancel={handleCancel}
-            footer={null} // No default footer so we can customize buttons inside the form
+            footer={null}
           >
             <form onSubmit={handleSubmit}>
               <label className="text-lg font-bold">Usuário</label>
@@ -109,7 +109,6 @@ const LoginPage = ({
                   type="primary"
                   htmlType="submit"
                   className="bg-primary text-secondary rounded-xl px-6 py-3 max-w-[150px] mx-auto"
-                  loading={loading}
                 >
                   Entrar
                 </Button>
