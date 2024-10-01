@@ -10,7 +10,7 @@ import { LucideLineChart } from 'lucide-react';
 import { userInfoAtom } from '../atoms/userInfoAtom';
 import ClipLoader from 'react-spinners/ClipLoader';
 import UserSideMenu from '../components/UserHeader';
-import { MdEventAvailable } from "react-icons/md";
+import { MdEventAvailable } from 'react-icons/md'
 import { useRouter } from 'next/navigation';
 
 const Dashboard = () => {
@@ -83,39 +83,54 @@ const Dashboard = () => {
         ) : (
           <>
             <div className="flex ml-56">
-              <LucideLineChart className="w-16 h-16 p-1 rounded-full my-12 mx-2 text-primary border-2 border-primary" />
+              <LucideLineChart className="w-12 h-12 xl:w-16 xl:h-16 p-1 rounded-full my-12 mx-2 text-primary border-2 border-primary" />
               <h1 className="font-monospace font-semibold text-6xl my-12 text-secondary-foreground">
                 Dashboards operacionais
               </h1>
-            </div>
-            <div className="flex mx-24">
-              <div className="flex p-1 mx-auto my-2 w-[1100px] ml-56">
-                <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
-                  <h1 className="text-3xl text-gray-400 font-bold">Número de Clientes</h1>
-                  <h1 className="text-6xl text-gray-400 font-extrabold uppercase">{counts.clients}</h1>
-                </div>
-                <div className="max-xl:mb-10 max-xl:mx-0 rounded-xl mx-4 border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
-                  <h1 className="text-3xl font-bold text-gray-400">Número de Usuários</h1>
-                  <h1 className="text-6xl text-gray-400 font-extrabold uppercase">{counts.users}</h1>
-                </div>
-                <div className="max-xl:mb-10 rounded-xl border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
-                  <h1 className="text-3xl text-gray-400 font-bold">Número de Eventos</h1>
-                  <h1 className="text-6xl text-gray-400 font-extrabold uppercase">{counts.events}</h1>
-                </div>
+              </div>              
+              <div className="flex mx-24">
+                <div className="flex my-2 xl:w-full xl:max-w-full max-w-[800px] ml-52 mr-10 xl:ml-60">
+                  <div className="rounded-xl bg-gray-700 bg-opacity-10 border-2 border-secondary p-8">
+                    <h1 className="text-3xl text-gray-400 font-bold">
+                      Número de Clientes
+                    </h1>
+                    <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
+                      {counts.clients}
+                    </h1>
+                  </div>
+                  <div className="max-xl:mb-10 max-xl:mx-0 rounded-xl mx-4 border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
+                    <h1 className="text-3xl font-bold text-gray-400">
+                      Número de Usuários
+                    </h1>
+                    <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
+                      {counts.users}
+                    </h1>
+                  </div>
+
+                  <div className="max-xl:mb-10 rounded-xl border-2 bg-gray-700 bg-opacity-10 border-secondary p-8">
+                    <h1 className="text-3xl text-gray-400 font-bold">
+                      Número de Eventos
+                    </h1>
+                    <h1 className="text-6xl text-gray-400 font-extrabold uppercase">
+                      {counts.events}
+                    </h1>
+                  </div>
+                </div>                
               </div>
-            </div>
-            <div className="flex ml-56">
-              <MdEventAvailable className="w-10 h-10 p-1 rounded-full my-9 mx-2 text-primary border-2 border-primary" />
-              <h1 className="font-monospace font-bold text-5xl my-8 text-secondary-foreground">Próximos eventos</h1>
-            </div>
-            <div className="ml-56 mr-10">
-              <DashboardTable columns={eventsColumns} data={events} />
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-};
+              <div className="flex ml-56">
+                <MdEventAvailable  className=" w-10 h-10 p-1 rounded-full my-9 mx-2 text-primary border-2 border-primary" />
+                <h1 className="font-monospace font-bold text-5xl my-8 text-secondary-foreground">
+                Próximos eventos
+              </h1>
+              </div>
+              <div className="ml-56 mr-10">
+                <DashboardTable columns={eventsColumns} data={events} />
+              </div>
+            </>
+          )}
+        </div>
+        </div>
+  )
+}
 
 export default Dashboard;
