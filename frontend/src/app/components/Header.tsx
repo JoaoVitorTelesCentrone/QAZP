@@ -5,8 +5,8 @@ import React, { useState } from 'react'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import UserHeader from './UserHeader'
-import { Button } from 'antd'
-import LoginPage from './LoginModal'
+import { Button } from 'antd' 
+import LoginModal from './LoginModal'
 
 const Header = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
@@ -26,7 +26,7 @@ const Header = () => {
       ) : (
         <>
           {isModalVisible && (
-            <LoginPage
+            <LoginModal
               isModalVisible={isModalVisible}
               setIsModalVisible={setIsModalVisible}
             />

@@ -1,30 +1,32 @@
-'use client'
-import { useAtom } from 'jotai'
-import Link from 'next/link'
-import React, { useState } from 'react'
-import { userInfoAtom } from '../atoms/userInfoAtom'
-import { authAtom } from '../atoms/authAtom'
-import { redirect } from 'next/navigation'
-import { LogOut, MenuIcon, TreePalm, XIcon } from 'lucide-react'
-import AvatarUser from './Avatar'
-import ClipLoader from 'react-spinners/ClipLoader'
+'use client';
+import { useAtom } from 'jotai';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { userInfoAtom } from '../atoms/userInfoAtom';
+import { authAtom } from '../atoms/authAtom';
+import { redirect } from 'next/navigation';
+import { LogOut, TreePalm } from 'lucide-react';
+import AvatarUser from './Avatar';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { useRouter } from 'next/navigation';
 
 const UserSideMenu = () => {
-  const [loggedIn, setIsLogged] = useAtom(authAtom)
-  const [user, setUser] = useAtom(userInfoAtom)
-  const [loading, setLoading] = useState(false) // Add loading state
-
-  // Function to handle loading with a 1-second delay
-  const setLoadingWithDelay = () => {
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-    }, 1000) // 1 second delay to set loading back to false
-  }
+  const [loggedIn, setIsLogged] = useAtom(authAtom);
+  const [user] = useAtom(userInfoAtom);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false); 
 
   if (!loggedIn) {
     redirect('/')
   }
+
+  const handleNavigation = (href: string) => {
+    setLoading(true); 
+    router.push(href); 
+    setTimeout(() => {
+      setLoading(false); 
+    }, 3500);
+  };
 
   return loading ? (
     <div className="flex justify-center items-center h-screen">
@@ -41,60 +43,18 @@ const UserSideMenu = () => {
         </div>
         <nav className="flex-1">
           <ul className="flex flex-col space-y-4">
-            <li>
-              <Link
-                href="/dashboard"
-                onClick={setLoadingWithDelay} // Call the function here
-                className="block py-2 px-3 rounded hover:bg-gray-700"
-              >
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/clients"
-                onClick={setLoadingWithDelay} // Call the function here
-                className="block py-2 px-3 rounded hover:bg-gray-700"
-              >
-                Clientes
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/Events"
-                onClick={setLoadingWithDelay} // Call the function here
-                className="block py-2 px-3 rounded hover:bg-gray-700"
-              >
-                Eventos
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/Materials"
-                onClick={setLoadingWithDelay} // Call the function here
-                className="block py-2 px-3 rounded hover:bg-gray-700"
-              >
-                Materiais
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/quote"
-                onClick={setLoadingWithDelay} // Call the function here
-                className="block py-2 px-3 rounded hover:bg-gray-700"
-              >
-                Orçamentos
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/Users"
-                onClick={setLoadingWithDelay} // Call the function here
-                className="block py-2 px-3 rounded hover:bg-gray-700"
-              >
-                Usuários
-              </Link>
-            </li>
+            {['dashboard', 'clients', 'Events', 'Materials', 'quote', 'Users'].map((page) => (
+              <li key={page}>
+                <Link 
+                  href={`/${page}`}
+                  onClick={() => handleNavigation(`/${page}`)} 
+                  data-testid={`link-${page}`} 
+                  className="block py-2 px-3 rounded hover:bg-gray-700 w-full text-left"
+                >
+                  {page.charAt(0).toUpperCase() + page.slice(1)}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
         <div className="mt-6 mb-4 flex justify-center">
@@ -104,13 +64,14 @@ const UserSideMenu = () => {
         <button
           className="text-white items-center space-x-2 flex justify-center"
           onClick={() => setIsLogged(false)}
+          data-testid="logout-button"
         >
           <LogOut />
           <span>Logout</span>
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserSideMenu
+export default UserSideMenu;

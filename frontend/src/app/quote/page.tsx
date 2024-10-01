@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import UserSideMenu from '../components/UserHeader'
 import { useAtom } from 'jotai'
 import { authAtom } from '../atoms/authAtom'
@@ -12,38 +12,32 @@ import { quoteChangeAtom } from '../atoms/changeQuoteAtom'
 import { GiTakeMyMoney } from 'react-icons/gi'
 
 const Page = () => {
-  const [auth, isAuth] = useAtom(authAtom)
+  const [auth] = useAtom(authAtom)
   const [quote, setQuote] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [quoteChange, setQuoteChange] = useAtom(quoteChangeAtom)
+  const [loading, setLoading] = useState(true)
+  const [quoteChange] = useAtom(quoteChangeAtom)
 
-  useEffect(() => {
-    fetchUserData()
-  }, [quoteChange])
-
+  // Redireciona se o usuário não estiver autenticado
   if (!auth) {
     redirect('/')
   }
-  async function fetchUserData() {
+
+  const fetchUserData = useCallback(async () => {
+    setLoading(true)
     try {
       const response = await axios.get('http://localhost:5196/api/Quote')
-
       setQuote(response.data)
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
-      throw error
-    }
-  }
-
-  useEffect(() => {
-    const fetch = async () => {
-      setLoading(true)
-      await new Promise(resolve => setTimeout(resolve, 500))
-      await Promise.all([fetchUserData()])
+    } finally {
       setLoading(false)
     }
-    fetch()
   }, [])
+
+  useEffect(() => {
+    fetchUserData()
+  }, [fetchUserData, quoteChange])
+
   return (
     <div>
       {loading ? (

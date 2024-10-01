@@ -4,54 +4,46 @@ import React, { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import { clientColumns } from './columns'
 import { ClientTable } from './ClientTable'
 import axios from 'axios'
-import { intl } from '../../i18n'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { clientChangeAtom } from '../atoms/clientChangeAtom'
-import { IoPeopleOutline } from 'react-icons/io5'
-import { Button, Tooltip } from 'antd'
+import { Button } from 'antd'
 import UserSideMenu from '../components/UserHeader'
-import { FaUserPlus } from 'react-icons/fa'
-import { FaUsers } from 'react-icons/fa6'
+import { FaUserPlus, FaUsers } from 'react-icons/fa'
 import CreateClientModal from './CreateClientModal'
 
 const Clients = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
   const [clients, setClients] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [clientChange, setClientChange] = useAtom(clientChangeAtom)
   const [openModal, setOpenModal] = useState(false)
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5196/api/Client')
+        setClients(response.data)
+      } catch (error) {
+        console.error('Error fetching client data:', error)
+      } finally {
+        setTimeout(()=>{
+          setLoading(false); // Garante que o loading seja desativado no final 
+         },3000)
+      }
+    }
+
     fetchUserData()
   }, [clientChange])
 
-  async function fetchUserData() {
-    try {
-      const response = await axios.get('http://localhost:5196/api/Client')
-      setClients(response.data)
-    } catch (error) {
-      console.error('Erro ao fazer a requisição:', error)
-      throw error
-    }
-  }
-
   useEffect(() => {
-    // const fetch = async () => {
-    //   setLoading(true)
-    //   await new Promise(resolve => setTimeout(resolve, 500))
-    //   await Promise.all([fetchUserData()])
-    //   setLoading(false)
-    // }
-    fetchUserData()
-  }, [])
+    if (!isLogged) {
+      redirect('/')
+    }
+  }, [isLogged])
 
-  if (!isLogged) {
-    redirect('/')
-  }
   return (
     <div>
       {openModal && (
