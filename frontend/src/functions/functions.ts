@@ -150,7 +150,7 @@ export function documentIdConverter(documentId: string) {
     const documentPart3 = documentId.substring(6, 9)
     const documentPart4 = documentId.substring(9, 11)
 
-    formatedDocumentId = `${documentPart1}.${documentPart2}.${documentPart3}-${documentPart4}`
+    return formatedDocumentId = `${documentPart1}.${documentPart2}.${documentPart3}-${documentPart4}`
   } else if (documentId.length == 14) {
     const documentPart1 = documentId.substring(0, 2)
     const documentPart2 = documentId.substring(2, 5)
@@ -158,11 +158,12 @@ export function documentIdConverter(documentId: string) {
     const documentPart4 = documentId.substring(8, 12)
     const documentPart5 = documentId.substring(12, 14)
 
-    formatedDocumentId = `${documentPart1}.${documentPart2}.${documentPart3}/${documentPart4}-${documentPart5}`
+    return formatedDocumentId = `${documentPart1}.${documentPart2}.${documentPart3}/${documentPart4}-${documentPart5}`
   } else if (documentId == null) {
     return
+  } else {
+    return documentId
   }
-  return formatedDocumentId
 }
 
 export function formatDate(dateString: string): string {
