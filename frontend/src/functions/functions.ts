@@ -166,6 +166,24 @@ export function documentIdConverter(documentId: string) {
 }
 
 export function formatDate(dateString: string): string {
-  const [year, month, day] = dateString.split('-');
-  return `${day}/${month}/${year}`;
+  const [year, month, day] = dateString.split('-')
+  return `${day}/${month}/${year}`
+}
+
+export function formatPhoneNumber(phoneNumber: string) {
+  if (phoneNumber.length == 11) {
+    const DDD = phoneNumber.substring(0, 2)
+    const phoneNumberPart1 = phoneNumber.substring(2, 7)
+    const phoneNumberPart2 = phoneNumber.substring(7, 11)
+
+    return `(${DDD}) ${phoneNumberPart1}-${phoneNumberPart2}`
+  } else if (phoneNumber.length == 10) {
+    const DDD = phoneNumber.substring(0, 2)
+    const phoneNumberPart1 = phoneNumber.substring(2, 6)
+    const phoneNumberPart2 = phoneNumber.substring(6, 10)
+
+    return `(${DDD}) ${phoneNumberPart1}-${phoneNumberPart2}`
+  } else {
+    return phoneNumber
+  }
 }
