@@ -12,7 +12,6 @@ import axios from 'axios'
 import { Toaster, toast } from 'sonner'
 import Footer from '../components/Footer'
 import ClipLoader from 'react-spinners/ClipLoader'
-import { message } from 'antd'
 
 const LoginPage = () => {
   const router = useRouter()
@@ -26,7 +25,6 @@ const LoginPage = () => {
 
   async function verifyLogin(username: string, password: string) {
     try {
-      setLoading(true)
       const response = await axios.get(
         `http://localhost:5196/api/User/${username}&${password}`,
       )
@@ -37,6 +35,7 @@ const LoginPage = () => {
         isLogged(true)
         setError(false)
         setUserAuth(true)
+        setLoading(true)
         setUserInfo({
           name: userName,
           username: username,
@@ -45,12 +44,8 @@ const LoginPage = () => {
 
         await router.push('/dashboard')
 
-        setTimeout(() => {
-          setLoading(false)
-        }, 1000)
-
-        
         toast.success(`Bem vindo ${username}`)
+        setLoading(false)
       }
     } catch (error) {
       setLoading(false)
