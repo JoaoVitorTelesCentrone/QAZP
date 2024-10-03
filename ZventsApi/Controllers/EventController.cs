@@ -21,6 +21,28 @@ namespace ZventsApi.Controllers
             return Ok(activeEvents);
         }
 
+        [HttpGet("active-events")]
+        public async Task<ActionResult<IEnumerable<ActiveEventDto>>> GetActiveEventsAsync()
+        {
+            var activeEvents = await _context.Events
+                .Include(e => e.Client) // Inclui os dados do cliente
+                .Where(e => e.IsDeleted == false)
+                .Select(e => new ActiveEventDto
+                {
+                    ClientFullName = e.Client.FullName,
+                    Title = e.Name,
+                    Type = e.Type,
+                    StartDate = e.StartDate,
+                    EndDate = e.EndDate,
+                    EstimatedAudience = e.EstimatedAudience,
+                    TotalAmount = e.TotalAmount
+                })
+                .ToListAsync();
+
+            return Ok(activeEvents);
+        }
+
+
         [HttpPost]
         public async Task<ActionResult<Event>> PostEvent(CreateEventDto createEventDto)
         {

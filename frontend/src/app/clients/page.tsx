@@ -31,7 +31,7 @@ const Clients = () => {
       } finally {
         setTimeout(()=>{
           setLoading(false); // Garante que o loading seja desativado no final 
-         },3000)
+         },100)
       }
     }
 

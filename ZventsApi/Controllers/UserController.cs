@@ -23,6 +23,22 @@ namespace ZventsApi.Controllers
             return Ok(activeUsers);
         }
 
+        [HttpGet("activeUsers")]
+        public async Task<ActionResult<IEnumerable<object>>> GetActiveUsersAsync()
+        {
+            var activeUsers = await _context
+                .Users
+                .Where(dbUser => dbUser.IsDeleted == false && dbUser.UserStatus == UserStatus.Active)
+                .Select(dbUser => new {
+                    dbUser.Name,
+                    dbUser.UserName
+                })
+                .ToListAsync();
+
+            return Ok(activeUsers);
+        }
+
+
         [HttpPost]
         public ActionResult<User> PostUser(User user)
         {

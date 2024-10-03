@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { userColumns, type Users } from './columns'
 import { UsersTable } from './UsersTable'
 import axios from 'axios'
@@ -17,15 +17,31 @@ const Users = () => {
   const [change] = useAtom(userChangeAtom)
   const [openModal, setOpenModal] = useState(false)
 
+  // Usar um flag para evitar múltiplas execuções
+  const isFetching = useRef(false)
+
   const fetchUserData = useCallback(async () => {
+    if (isFetching.current) return
+    isFetching.current = true
+
     setLoading(true)
     try {
-      const response = await axios.get('http://localhost:5196/api/User')
-      setUserData(response.data)
+      const response = await axios.get('http://localhost:5196/api/User/activeUsers')
+      
+      const filteredData = response.data
+        .filter((user: any) => !user.isDeleted)
+        .map((user: any) => ({
+          name: user.name,
+          userName: user.userName,
+        }))
+
+      setUserData(filteredData)
+      console.log(filteredData)
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
     } finally {
       setLoading(false)
+      isFetching.current = false
     }
   }, [])
 

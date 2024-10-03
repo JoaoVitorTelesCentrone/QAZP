@@ -21,6 +21,25 @@ namespace ZventsApi.Controllers
             return Ok(activeClients);
         }
 
+        [HttpGet("active")]
+        public async Task<ActionResult<IEnumerable<ClientDto>>> GetActiveClientsAsync()
+        {
+            var activeClients = await _context.Clients
+                .Where(dbclient => dbclient.IsDeleted == false)
+                .Select(dbclient => new ClientDto
+                {
+                    FullName = dbclient.FullName,
+                    DocumentId = dbclient.DocumentId,
+                    Email = dbclient.Email,
+                    PhoneNumber = dbclient.PhoneNumber
+                })
+                .OrderBy(dbclient => dbclient.FullName)
+                .ToListAsync();
+
+            return Ok(activeClients);
+        }
+
+
         [HttpPost]
         public async Task<ActionResult<Client>> PostClientAsync(Client client)
         {
