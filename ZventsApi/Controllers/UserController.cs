@@ -55,6 +55,34 @@ namespace ZventsApi.Controllers
             return Conflict(new { message = "User already exists" });
         }
 
+        [HttpPost("login")]
+        public ActionResult<User> Login([FromBody] LoginRequest request)
+        {
+            var user = _context.Users.FirstOrDefault(dbUser =>
+                dbUser.UserName == request.Username && dbUser.Password == request.Password
+            );
+
+            if (user == null)
+            {
+                return NotFound(new { message = "Usuário não encontrado" });
+            }
+            else if (user.UserStatus == UserStatus.Inactive || user.IsDeleted == true) // Comparando com true
+            {
+                return Unauthorized("Usuário não autorizado");
+            }
+
+            return Ok(new { name = user.Name, message = "Login bem-sucedido" });
+        }
+
+
+        // Classe para encapsular as credenciais do login
+        public class LoginRequest
+        {
+            public string Username { get; set; }
+            public string Password { get; set; }
+        }
+
+
         [HttpGet("name/{name}")]
         public ActionResult<User> GetUserByName(string name)
         {

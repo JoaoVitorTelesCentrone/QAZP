@@ -2,13 +2,8 @@ import { Button } from 'antd'
 import Link from 'next/link'
 import Image from 'next/image'
 import foto from '../../assets/foto-1.png'
-import { redirect } from 'next/navigation'
 
 import React from 'react'
-
-const redirectTo = () => {
-  redirect('/orcamento')
-}
 
 const Call = () => {
   return (
