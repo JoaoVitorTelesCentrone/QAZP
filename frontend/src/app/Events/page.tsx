@@ -13,7 +13,7 @@ import { TbCalendarPlus } from 'react-icons/tb'
 import { Button } from 'antd'
 import { GiGlassCelebration } from 'react-icons/gi'
 import UserSideMenu from '../components/UserHeader'
-import { documentIdConverter } from '@/functions/functions'
+import { documentIdConverter, eventTypeNameConverter, formatCurrency, formatDate } from '@/functions/functions'
 import { clientsAtom } from '../CreateEvent/page'
 
 const Page = () => {
@@ -42,8 +42,18 @@ const Page = () => {
         email: client.email,
       }))
 
+      const events = eventsResponse.data.map((event: any) => ({        
+        name: event.name,
+        type: eventTypeNameConverter(event.type),
+        startDate: `${formatDate(event.startDate)} ${event.startTime}`,
+        endDate: `${formatDate(event.endDate)} ${event.endTime}`,
+        estimatedAudience: event.estimatedAudience,
+        totalAmount: formatCurrency(event.estimatedAudience),
+        clientName: clientsResponse.data.find((client: any) => client.id == event.clientId)?.fullName
+      }))
+
       setClients(clientNames)
-      setEvents(eventsResponse.data)
+      setEvents(events)
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {
