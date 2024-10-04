@@ -23,6 +23,15 @@ const LoginPage = () => {
   const [logged, isLogged] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  const TOKEN_EXPIRATION_TIME = 60 * 60 * 1000 // 1 hour
+
+  // Create token
+  const setToken = (token: string) => {
+    const expirationTime = Date.now() + TOKEN_EXPIRATION_TIME
+    localStorage.setItem('authToken', token)
+    localStorage.setItem('tokenExpiration', expirationTime.toString())
+  }
+
   async function verifyLogin(username: string, password: string) {
     try {
       const response = await axios.get(
@@ -42,8 +51,10 @@ const LoginPage = () => {
           password: userPassword,
         })
 
-        await router.push('/dashboard')
+        const token = 'dummy-token'
+        setToken(token)
 
+        await router.push('/dashboard')
         toast.success(`Bem vindo ${username}`)
         setLoading(false)
       }

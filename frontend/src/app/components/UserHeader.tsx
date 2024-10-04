@@ -1,29 +1,43 @@
 'use client'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { authAtom } from '../atoms/authAtom'
-import { redirect } from 'next/navigation'
-import { LogOut, MenuIcon, TreePalm, XIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { LogOut, TreePalm } from 'lucide-react'
 import AvatarUser from './Avatar'
 import ClipLoader from 'react-spinners/ClipLoader'
 
 const UserSideMenu = () => {
+  const router = useRouter()
   const [loggedIn, setIsLogged] = useAtom(authAtom)
   const [user, setUser] = useAtom(userInfoAtom)
-  const [loading, setLoading] = useState(false) // Add loading state
+  const [loading, setLoading] = useState(false)
 
-  // Function to handle loading with a 1-second delay
   const setLoadingWithDelay = () => {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
-    }, 1000) // 1 second delay to set loading back to false
+    }, 1000) // 1 second delay
   }
 
-  if (!loggedIn) {
-    redirect('/')
+  const handleLogout = () => {
+    // Remove the token from localStorage
+    localStorage.removeItem('authToken')
+
+    // Clear authentication state
+    setIsLogged(false)
+
+    // Clear user info state
+    setUser({
+      name: '',
+      username: '',
+      password: '',
+    })
+
+    // Redirect to login page
+    router.push('/login')
   }
 
   return loading ? (
@@ -44,7 +58,7 @@ const UserSideMenu = () => {
             <li>
               <Link
                 href="/dashboard"
-                onClick={setLoadingWithDelay} // Call the function here
+                onClick={setLoadingWithDelay}
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
                 Dashboard
@@ -53,7 +67,7 @@ const UserSideMenu = () => {
             <li>
               <Link
                 href="/clients"
-                onClick={setLoadingWithDelay} // Call the function here
+                onClick={setLoadingWithDelay}
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
                 Clientes
@@ -62,7 +76,7 @@ const UserSideMenu = () => {
             <li>
               <Link
                 href="/Events"
-                onClick={setLoadingWithDelay} // Call the function here
+                onClick={setLoadingWithDelay}
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
                 Eventos
@@ -71,7 +85,7 @@ const UserSideMenu = () => {
             <li>
               <Link
                 href="/Materials"
-                onClick={setLoadingWithDelay} // Call the function here
+                onClick={setLoadingWithDelay}
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
                 Materiais
@@ -80,7 +94,7 @@ const UserSideMenu = () => {
             <li>
               <Link
                 href="/quote"
-                onClick={setLoadingWithDelay} // Call the function here
+                onClick={setLoadingWithDelay}
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
                 Orçamentos
@@ -89,7 +103,7 @@ const UserSideMenu = () => {
             <li>
               <Link
                 href="/Users"
-                onClick={setLoadingWithDelay} // Call the function here
+                onClick={setLoadingWithDelay}
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
                 Usuários
@@ -103,7 +117,7 @@ const UserSideMenu = () => {
         <hr className="border-gray-600 my-4" />
         <button
           className="text-white items-center space-x-2 flex justify-center"
-          onClick={() => setIsLogged(false)}
+          onClick={handleLogout} // Call the logout function
         >
           <LogOut />
           <span>Logout</span>

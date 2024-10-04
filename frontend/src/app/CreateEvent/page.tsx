@@ -299,8 +299,8 @@ const CreateEvent = () => {
             Informações do Cliente
           </h1>
           <div className="flex flex-col">
-            <div className="flex  space-y-4 ">
-              <div className="flex flex-col mt-4 ">
+            <div className="flex Xl:w-full  space-y-4 ">
+              <div className="flex flex-col xl:w-[30%] xl:mr-2 mt-4 ">
                 <h1 className="font-bold block mb-2">Cliente</h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
@@ -328,7 +328,7 @@ const CreateEvent = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="flex flex-col ">
+              <div className="flex flex-col xl:w-[30%] xl:mx-2 ">
                 <label className="font-bold block mb-2">Documento</label>
                 <Input
                   value={clientDocument}
@@ -337,7 +337,7 @@ const CreateEvent = () => {
                   className="bg-white text-gray-600 border-gray-300 h-[40px]  "
                 />
               </div>
-              <div className="flex flex-col ">
+              <div className="flex flex-col xl:w-[30%] xl:mx-2 ">
                 <label className="font-bold block mb-2">Email</label>
                 <Input
                   value={clientEmail}
@@ -352,8 +352,8 @@ const CreateEvent = () => {
             Informações do Evento
           </h1>
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-grow space-y-4 sm:space-y-0 sm:space-x-6 mr-7">
-              <div className="flex flex-col flex-grow">
+            <div className="flex space-y-4 sm:space-y-0 sm:space-x-6 mr-7">
+              <div className="flex flex-col xl:w-72">
                 <label className="font-bold block mb-2">Tipo</label>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
@@ -381,7 +381,7 @@ const CreateEvent = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="flex flex-col flex-grow">
+              <div className="flex flex-col xl:w-[300px]">
                 <label className="font-bold block mb-2">Título</label>
                 <ValidatedInput
                   value={eventName}
@@ -412,7 +412,7 @@ const CreateEvent = () => {
                   onClick={handleSearchClick}
                 />
               </div>
-              <div className="flex flex-col flex-grow ml-6 mr-6">
+              <div className="flex flex-col xl:w-72 ml-6 mr-6">
                 <label className="font-bold">Endereço</label>
                 <Input
                   value={addressName}
@@ -423,7 +423,7 @@ const CreateEvent = () => {
                   readOnly
                 />
               </div>
-              <div className="flex flex-col flex-grow w-32 mr-3">
+              <div className="flex flex-col w-32 mr-3">
                 <label className="font-bold ">Número</label>
                 <ValidatedInput
                   value={addressNumber}
@@ -433,11 +433,7 @@ const CreateEvent = () => {
                   required
                 />
               </div>
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex  space-y-2 sm:space-y-0 sm:space-x-1">
-              <div className="flex flex-col flex-grow">
+              <div className="flex flex-col w-48 mr-3">
                 <label className="font-bold">Complemento</label>
                 <Input
                   value={addressComplement}
@@ -446,6 +442,10 @@ const CreateEvent = () => {
                   className="bg-white text-gray-600 border border-gray-300 rounded h-[40px]"
                 />
               </div>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex  space-y-2 sm:space-y-0 sm:space-x-1">
               <div className="flex flex-col flex-grow">
                 <label className="font-bold">Bairro</label>
                 <Input
@@ -492,7 +492,7 @@ const CreateEvent = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 mb-4">
             <div className="flex">
               <div className="flex flex-col">
                 <label className="font-bold">Data inicial</label>
@@ -536,19 +536,19 @@ const CreateEvent = () => {
               </div>
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-left text-primary">
+          <h1 className="text-4xl font-extrabold text-left text-primary mt-4">
             Selecione os Materiais
           </h1>
           <div className="flex flex-col gap-4">
             <div className="flex space-y-4 ">
-              <div className="flex flex-col mt-4">
+              <div className="flex flex-col xl:w-56 xl:mr-10 mt-4">
                 <h1 className="font-bold">Categoria</h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[40px]  bg-white rounded flex items-center justify-between px-4 font-bold">
                     <span>{selectedCategory || 'Categoria'}</span>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-white border border-gray-300 rounded w-72 max-h-48 overflow-y-auto">
+                  <DropdownMenuContent className="bg-white border border-gray-300 rounded w-72 xl:w-96 max-h-48 overflow-y-auto">
                     {MaterialCategory.map((category, index) => (
                       <div key={index}>
                         <DropdownMenuItem
@@ -564,7 +564,7 @@ const CreateEvent = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col xl:w-56 xl:mx-10">
                 <h1 className="font-bold">Material</h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded flex items-center justify-between px-4 font-bold">
@@ -592,17 +592,17 @@ const CreateEvent = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="flex flex-col flex-grow w-36">
+              <div className="flex flex-col xl:w-56 xl:mx-10 w-36">
                 <h1 className="font-bold ">Quantidade</h1>
                 <ValidatedInput
                   type="number"
                   value={materialQnt}
                   onChange={setMaterialQnt}
                   placeholder="Quantidade"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 "
+                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 xl:w-48 "
                 />
               </div>
-              <div className="flex flex-col flex-grow">
+              <div className="flex flex-col">
                 <Button
                   onClick={e =>
                     insertMaterial(
@@ -614,7 +614,7 @@ const CreateEvent = () => {
                       selectedMaterialPrice,
                     )
                   }
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] mt-6"
+                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] mt-6 xl:w-24"
                 >
                   <PlusCircleIcon className="h-8 w-8" />
                 </Button>
