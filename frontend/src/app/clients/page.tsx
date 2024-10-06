@@ -13,6 +13,7 @@ import { Button } from 'antd'
 import UserSideMenu from '../components/UserHeader'
 import { FaUserPlus, FaUsers } from 'react-icons/fa'
 import CreateClientModal from './CreateClientModal'
+import { documentIdConverter, formatPhoneNumber } from '@/functions/functions'
 
 const Clients = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
@@ -25,13 +26,22 @@ const Clients = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get('http://localhost:5196/api/Client')
-        setClients(response.data)
+
+        const clients = response.data.map((client: any) => ({
+          fullName: client.fullName,
+          documentId: documentIdConverter(client.documentId),
+          id: client.id,
+          email: client.email,
+          phoneNumber: formatPhoneNumber(client.phoneNumber),
+        }))
+        console.log(response.data)
+        setClients(clients)
       } catch (error) {
         console.error('Error fetching client data:', error)
       } finally {
-        setTimeout(()=>{
-          setLoading(false); // Garante que o loading seja desativado no final 
-         },3000)
+        setTimeout(() => {
+          setLoading(false) // Garante que o loading seja desativado no final
+        }, 3000)
       }
     }
 
