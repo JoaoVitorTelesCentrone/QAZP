@@ -1,8 +1,5 @@
 import React from 'react'
-import Image from 'next/image'
-import foto from '../../assets/foto-1.png'
 import { FaArrowDown } from 'react-icons/fa'
-import { FaArrowDown19 } from 'react-icons/fa6'
 
 const WhatWeDo = () => {
   return (

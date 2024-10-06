@@ -1,12 +1,6 @@
-import {
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { DropdownMenuContent } from '@radix-ui/react-dropdown-menu'
 import { Button, Input, Modal } from 'antd'
 import axios, { isAxiosError } from 'axios'
-import { ChevronDown, SearchIcon } from 'lucide-react'
+import { SearchIcon } from 'lucide-react'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -14,7 +8,6 @@ import { useAtom } from 'jotai'
 import { intl } from '@/i18n'
 import { redirect } from 'next/navigation'
 import { authAtom } from '../atoms/authAtom'
-import { userInfoAtom } from '../atoms/userInfoAtom'
 import { clientChangeAtom } from '../atoms/clientChangeAtom'
 import ValidatedInput from '../components/ValidatedInput'
 
@@ -56,7 +49,6 @@ const CreateClientModal: React.FC<createClientProps> = ({
   const [city, setCity] = useState('')
   const [change, setChange] = useAtom(clientChangeAtom)
 
-  const [loading, setLoading] = useState(false)
 
   if (!isLogged) {
     redirect('/')

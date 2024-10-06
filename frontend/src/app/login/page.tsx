@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useAtom } from 'jotai';
 import { authAtom } from '../atoms/authAtom';
 import { userInfoAtom } from '../atoms/userInfoAtom';

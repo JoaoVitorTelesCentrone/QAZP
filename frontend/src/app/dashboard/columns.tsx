@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { ColumnDef } from '@tanstack/react-table'
 import {
   ArrowUp,
@@ -9,10 +8,7 @@ import {
   ArrowBigLeft,
   ArrowBigRight,
 } from 'lucide-react'
-import { useState } from 'react'
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type Events = {
   id: string
   name: string
