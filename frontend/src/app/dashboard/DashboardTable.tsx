@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/table'
 import { useState } from 'react'
 import { ArrowBigLeft, ArrowBigRight } from 'lucide-react'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 interface DataTableProps<TData, TValue> {
