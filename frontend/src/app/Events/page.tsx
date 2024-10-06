@@ -17,29 +17,31 @@ import { documentIdConverter } from '@/functions/functions'
 
 const Page = () => {
   const [auth] = useAtom(authAtom)
-  const [loading, setLoading] = useState(true) // Começa como true para exibir o loader enquanto os dados são buscados
+  const [loading, setLoading] = useState(true) 
   const [events, setEvents] = useState<Events[]>([])
   const [eventChange] = useAtom(eventChangeAtom)
 
-  // Redireciona se o usuário não estiver autenticado
+  
   if (!auth) {
     redirect('/')
   }
 
   const fetchEvents = useCallback(async () => {
     try {
-      const eventsResponse = await axios.get('http://localhost:5196/api/Event/active-events') // Novo endpoint para eventos ativos
-      setEvents(eventsResponse.data) // Atualiza o estado com eventos ativos
+      const eventsResponse = await axios.get('http://localhost:5196/api/Event/active-events') 
+      setEvents(eventsResponse.data) 
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {
-      setLoading(false) // Define loading como false após a conclusão da requisição
+      setTimeout(() => {
+        setLoading(false)
+      }, 500);
     }
   }, [])
 
   useEffect(() => {
     fetchEvents()
-  }, [fetchEvents, eventChange]) // Chama fetchEvents sempre que eventChange mudar
+  }, [fetchEvents, eventChange])
 
   return (
     <div>

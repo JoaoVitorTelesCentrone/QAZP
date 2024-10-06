@@ -38,9 +38,8 @@ const Materials = () => {
   const fetchMaterials = useCallback(async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://localhost:5196/api/Material')
+      const response = await axios.get('http://localhost:5196/api/Material/active-materials')
       const materialNames = response.data.map((material: any) => ({
-        id: material.id,
         name: material.name,
         price: formatCurrency(material.price),
         category: materialCategoryNameConverter(material.category),
@@ -49,7 +48,10 @@ const Materials = () => {
     } catch (error) {
       console.error('Erro ao buscar materiais:', error)
     } finally {
-      setLoading(false)
+      setTimeout(() => {
+        setLoading(false)
+      }, 500);
+      
     }
   }, [])
 

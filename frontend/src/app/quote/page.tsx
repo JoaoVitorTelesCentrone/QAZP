@@ -17,7 +17,6 @@ const Page = () => {
   const [loading, setLoading] = useState(true)
   const [quoteChange] = useAtom(quoteChangeAtom)
 
-  // Redireciona se o usuário não estiver autenticado
   if (!auth) {
     redirect('/')
   }
@@ -30,7 +29,9 @@ const Page = () => {
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
     } finally {
-      setLoading(false)
+      setTimeout(() => {
+        setLoading(false)
+      }, 500);
     }
   }, [])
 

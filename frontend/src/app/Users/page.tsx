@@ -40,8 +40,11 @@ const Users = () => {
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
     } finally {
-      setLoading(false)
-      isFetching.current = false
+        setTimeout(() =>{
+          setLoading(false)
+        isFetching.current = false
+        },500)
+      
     }
   }, [])
 

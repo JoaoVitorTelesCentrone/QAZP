@@ -54,7 +54,10 @@ const LoginPage = ({
       toast.error('Usuário ou senha incorretos')
       setError(true)
     } finally {
-      setLoading(false)
+      setTimeout(()=>{
+        setLoading(false)
+      }, 4000);
+      
     }
   }
 

@@ -51,7 +51,12 @@ const Header = () => {
               Solicite um orçamento
             </Link>
           </ul>
-          <Button onClick={() => setIsModalVisible(true)}>Login</Button>
+          <Link
+              href="/login"
+              className="mx-6 text-secondary font-montserrat font-medium"
+            >
+              Login
+            </Link>
         </>
       )}
     </div>

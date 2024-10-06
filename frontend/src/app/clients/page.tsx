@@ -24,14 +24,14 @@ const Clients = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:5196/api/Client')
+        const response = await axios.get('http://localhost:5196/api/Client/active')
         setClients(response.data)
       } catch (error) {
         console.error('Error fetching client data:', error)
       } finally {
         setTimeout(()=>{
-          setLoading(false); // Garante que o loading seja desativado no final 
-         },100)
+          setLoading(false); 
+         },500)
       }
     }
 

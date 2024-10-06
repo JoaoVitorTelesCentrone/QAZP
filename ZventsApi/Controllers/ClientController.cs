@@ -15,7 +15,6 @@ namespace ZventsApi.Controllers
         {
             var activeClients = await _context
                 .Clients.Where(dbclient => dbclient.IsDeleted == false)
-                .OrderBy(dbclient => dbclient.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeClients);
@@ -33,7 +32,6 @@ namespace ZventsApi.Controllers
                     Email = dbclient.Email,
                     PhoneNumber = dbclient.PhoneNumber
                 })
-                .OrderBy(dbclient => dbclient.FullName)
                 .ToListAsync();
 
             return Ok(activeClients);
