@@ -47,4 +47,12 @@ namespace ZventsApi.Models
             CreatedDate = DateTime.Now;
         }
     }
+    public class ClientDto
+    {
+        public string FullName { get; set; }
+        public string DocumentId { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+    }
+
 }

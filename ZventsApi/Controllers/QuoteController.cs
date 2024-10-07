@@ -11,7 +11,7 @@ namespace ZventsApi.Controllers
         private readonly ZventsDbContext _context = context;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Quote>>> GetQuoteAsync()
+        public async Task<ActionResult<IEnumerable<Quote>>> GetActiveQuoteAsync()
         {
             var activeQuotes = await _context
                 .Quotes.Where(dbQuote => dbQuote.IsDeleted == false)
@@ -20,6 +20,24 @@ namespace ZventsApi.Controllers
 
             return Ok(activeQuotes);
             ;
+        }
+
+        [HttpGet("active-quotes")]
+        public async Task<ActionResult<IEnumerable<Quote>>> GetQuoteAsync()
+        {
+            var activeQuotes = await _context
+                .Quotes.Where(dbQuote => dbQuote.IsDeleted == false)
+                .Select(quote => new
+                {
+                    quote.FullName,
+                    quote.Email,
+                    quote.PhoneNumber,
+                    quote.EventType,
+                    quote.EstimatedAudience,
+                })
+                .ToListAsync();
+            
+            return Ok(activeQuotes);
         }
 
         [HttpPost]

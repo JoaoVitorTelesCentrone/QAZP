@@ -1,7 +1,7 @@
 'use client'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import UserHeader from './UserHeader'
@@ -9,7 +9,7 @@ import UserHeader from './UserHeader'
 const Header = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
   const [user, setUser] = useAtom(userInfoAtom)
-
+  
   return (
     <div className=" flex p-8 bg-quartenary text-secondary justify-around">
       <Link
@@ -42,9 +42,12 @@ const Header = () => {
               Solicite um orçamento
             </Link>
           </ul>
-          <Link href="/login" className="text-secondary">
-            Login
-          </Link>
+          <Link
+              href="/login"
+              className="mx-6 text-secondary font-montserrat font-medium"
+            >
+              Login
+            </Link>
         </>
       )}
     </div>

@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/table'
 import { useState } from 'react'
 import { ArrowBigLeft, ArrowBigRight } from 'lucide-react'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 interface DataTableProps<TData, TValue> {
@@ -53,16 +52,6 @@ export function DashboardTable<TData, TValue>({
 
   return (
     <div className="rounded-md mx-4 my-6">
-      {/* <div className="flex mx-64 justify-between py-4">
-        <Input
-          placeholder="Filtrar por nome"
-          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-          onChange={event =>
-            table.getColumn('client')?.setFilterValue(event.target.value)
-          }
-          className="text-secondary-foreground text-center font-bold  mx-32"
-        />
-      </div> */}
       <Table className="border-2 border-cyan-700">
         <TableHeader className="bg-cyan-700 text-gray-100">
           {table.getHeaderGroups().map(headerGroup => (
@@ -76,9 +65,9 @@ export function DashboardTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </TableHead>
                 )
               })}
@@ -88,7 +77,8 @@ export function DashboardTable<TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map(row => (
-              <TableRow className='border-cyan-700'
+              <TableRow
+                className="border-cyan-700"
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
@@ -112,7 +102,8 @@ export function DashboardTable<TData, TValue>({
         </TableBody>
       </Table>
       <div className="flex items-center justify-end space-x-2 py-4 mr-0">
-        <Button className='bg-tertiary border-gray-800'
+        <Button
+          className="bg-tertiary border-gray-800"
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
@@ -120,7 +111,8 @@ export function DashboardTable<TData, TValue>({
         >
           <ArrowBigLeft className="ml-2 mr-2 h-5 w-5" />
         </Button>
-        <Button className='bg-tertiary border-gray-800'
+        <Button
+          className="bg-tertiary border-gray-800"
           variant="outline"
           size="sm"
           onClick={() => table.nextPage()}

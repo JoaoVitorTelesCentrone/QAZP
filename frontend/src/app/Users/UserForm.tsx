@@ -1,17 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useAtom } from 'jotai'
-import { redirect } from 'next/navigation'
-import UserHeader from '../components/UserHeader'
-import { userInfoAtom } from '../atoms/userInfoAtom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
-import axios from 'axios'
-import Link from 'next/link'
 import { Toaster, toast } from 'sonner'
-import { authAtom } from '../atoms/authAtom'
-import { tree } from 'next/dist/build/templates/app-page'
 
 interface UserFormProps {
   closeModal: () => void

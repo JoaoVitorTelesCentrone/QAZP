@@ -1,24 +1,11 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { ColumnDef } from '@tanstack/react-table'
 import {
   ArrowUp,
   ArrowDown,
   ArrowUpDown,
-  ArrowBigLeft,
-  ArrowBigRight,
-  EditIcon,
-  Edit2Icon,
-  Edit3Icon,
 } from 'lucide-react'
-import { useState } from 'react'
-import EditUser from './EditUser'
-import DeleteUser from './DeleteUser'
-import { UUID } from 'crypto'
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 
 export type Users = {
   id: string

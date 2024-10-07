@@ -1,12 +1,6 @@
-import {
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { DropdownMenuContent } from '@radix-ui/react-dropdown-menu'
 import { Button, Input, Modal } from 'antd'
 import axios, { isAxiosError } from 'axios'
-import { ChevronDown, SearchIcon } from 'lucide-react'
+import { SearchIcon } from 'lucide-react'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -14,8 +8,8 @@ import { useAtom } from 'jotai'
 import { intl } from '@/i18n'
 import { redirect } from 'next/navigation'
 import { authAtom } from '../atoms/authAtom'
-import { userInfoAtom } from '../atoms/userInfoAtom'
 import { clientChangeAtom } from '../atoms/clientChangeAtom'
+import ValidatedInput from '../components/ValidatedInput'
 
 const ClientCategory: ClientCategoryProps[] = [
   { name: 'Comida', index: 1 },
@@ -55,10 +49,9 @@ const CreateClientModal: React.FC<createClientProps> = ({
   const [city, setCity] = useState('')
   const [change, setChange] = useAtom(clientChangeAtom)
 
-  const [loading, setLoading] = useState(false)
 
   if (!isLogged) {
-    redirect('/login')
+    redirect('/')
   }
 
   const handleSearchClick: React.MouseEventHandler<
@@ -130,7 +123,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
       <Modal
         title="Criar Cliente"
         visible={isVisible}
-        onCancel={onClose} // Close the modal when "X" is clicked
+        onCancel={onClose}
         footer={[]}
       >
         <form className="">
@@ -147,60 +140,66 @@ const CreateClientModal: React.FC<createClientProps> = ({
                     id: 'create.client.page.fullName.field.label',
                   })}
                 </h1>
-                <Input
-                  onChange={e => setFullName(e.target.value)}
-                  className="p-4 border-slate-500 bg-white mb-4"
+                <ValidatedInput
+                  onChange={setFullName}
+                  className="p-4 border-slate-500 bg-white mb-4 border rounded w-full"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.fullName.field.placeholder',
                   })}
+                  value={fullName}
+                  required
                 />
               </div>
             </div>
             <div className="w-full justify-between flex">
-              <div className="mr-2">
+              <div className="mr-2 mt-3 w-56">
                 <h1>
                   {intl.formatMessage({
                     id: 'create.client.page.document.field.label',
                   })}
                 </h1>
-                <Input
-                  onChange={e => setDocumentId(e.target.value)}
-                  className="p-4 border-slate-500 bg-white mb-4"
+                <ValidatedInput
+                  onChange={setDocumentId}
+                  className="p-4 border-slate-500 bg-white mb-4 border rounded w-full"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.document.field.placeholder',
                   })}
+                  value={documentId}
+                  required
                 />
               </div>
-              <div>
+              <div className="mt-3 w-56">
                 <h1>
                   {intl.formatMessage({
                     id: 'create.client.page.phoneNumber.field.label',
                   })}
                 </h1>
-                <Input
-                  onChange={e => setPhoneNumber(e.target.value)}
-                  className="p-4 border-slate-500 bg-white mb-4"
+                <ValidatedInput
+                  onChange={setPhoneNumber}
+                  className="p-2 border-slate-500 bg-white mb-4 border rounded w-full"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.phoneNumber.field.placeholder',
                   })}
+                  value={phoneNumber}
+                  type="text"
                 />
               </div>
             </div>
-            <h1>
+            <h1 className="mt-3">
               {intl.formatMessage({
                 id: 'create.client.page.email.field.label',
               })}
             </h1>
-            <Input
-              type="email"
-              onChange={e => setEmail(e.target.value)}
-              className="p-4 border-slate-500 bg-white mb-4"
+            <ValidatedInput
+              onChange={setEmail}
+              className="p-2 border-slate-500 bg-white mb-4 border rounded w-full"
               placeholder={intl.formatMessage({
                 id: 'create.client.page.email.field.placeholder',
               })}
+              value={email}
             />
           </div>
-          <h1 className="text-2xl font-bold my-2">
+          <h1 className="text-2xl font-bold mt-8 mb-4">
             {intl.formatMessage({
               id: 'create.client.page.localization.information.section',
             })}
@@ -214,13 +213,14 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   })}
                 </h1>
                 <div className="flex">
-                  <Input
-                    className="p-4 border-slate-500 bg-white mb-4"
+                  <ValidatedInput
+                    className="p-4 border-slate-500 bg-white mb-4 border rounded w-full"
                     placeholder={intl.formatMessage({
                       id: 'create.client.page.zipCode.field.placeholder',
                     })}
                     value={zipCode}
-                    onChange={e => setZipCode(e.target.value)}
+                    onChange={setZipCode}
+                    required
                   />
                   <SearchIcon
                     className="p-2 h-10 w-10 cursor-pointer"
@@ -235,44 +235,48 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   })}
                 </h1>
                 <Input
-                  className="p-4 border-slate-500 bg-neutral-300 mb-2"
+                  className="p-2 border-slate-500 bg-neutral-300 mb-2 border rounded w-full"
                   value={addressName}
                   onChange={e => setAddressName(e.target.value)}
                   readOnly={true}
+                  disabled
                 />
               </div>
             </div>
-            <div className="w-full justify-between flex">
-              <div className="mr-2">
+            <div className="w-full justify-between flex mt-3">
+              <div className="mr-0 w-[35%]">
                 <h1>
                   {intl.formatMessage({
                     id: 'create.client.page.streetNumber.field.label',
                   })}
                 </h1>
-                <Input
-                  onChange={e => setAddressNumber(e.target.value)}
-                  className="p-4 border-slate-500 bg-white mb-2"
+                <ValidatedInput
+                  onChange={setAddressNumber}
+                  className="p-2 border-slate-500 bg-white mb-2 border rounded w-full"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.streetNumber.field.placeholder',
                   })}
+                  value={addressNumber}
+                  required
                 />
               </div>
-              <div>
+              <div className="mr-0 w-[60%]">
                 <h1>
                   {intl.formatMessage({
                     id: 'create.client.page.streetComplement.field.label',
                   })}
                 </h1>
-                <Input
-                  onChange={e => setAddressComplement(e.target.value)}
-                  className="p-4 border-slate-500 bg-white mb-4"
+                <ValidatedInput
+                  onChange={setAddressComplement}
+                  className="p-2 border-slate-500 bg-white mb-4"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.streetComplement.field.placeholder',
                   })}
+                  value={addressComplement}
                 />
               </div>
             </div>
-            <div className="w-full flex justify-around">
+            <div className="w-full flex justify-around mt-3">
               <div className="mx-1">
                 <h1>
                   {intl.formatMessage({
@@ -280,10 +284,11 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   })}
                 </h1>
                 <Input
-                  className="p-2 border-slate-500 bg-neutral-300 mb-4"
+                  className="p-2 border-slate-500 bg-neutral-500 mb-4 border rounded w-full"
                   value={district}
                   onChange={e => setDistrict(e.target.value)}
                   readOnly={true}
+                  disabled={true}
                 />
               </div>
               <div className="mx-1">
@@ -297,6 +302,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   value={state}
                   onChange={e => setState(e.target.value)}
                   readOnly={true}
+                  disabled
                 />
               </div>
               <div className="mx-1">
@@ -310,15 +316,21 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   value={city}
                   onChange={e => setCity(e.target.value)}
                   readOnly={true}
+                  disabled
                 />
               </div>
             </div>
           </div>
-          <Button onClick={() => createClient()}>
-            {intl.formatMessage({
-              id: 'create.client.page.create.client.button',
-            })}
-          </Button>
+          <div className="flex justify-end mt-3 mr-1">
+            <Button
+              className="bg-primary text-white w-[30%]"
+              onClick={() => createClient()}
+            >
+              {intl.formatMessage({
+                id: 'create.client.page.create.client.button',
+              })}
+            </Button>
+          </div>
         </form>
       </Modal>
     </div>

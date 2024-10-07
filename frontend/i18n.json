@@ -54,6 +54,20 @@
         "event.type.campaign": "Campanha",
         "event.type.ceremony": "Cerimônia",
         "event.type.symposium": "Simpósio",
-        "event.type.ball": "Balé"
+        "event.type.ball": "Baile",
+        "create.quote.success.message": "Orçamento criado com sucesso",
+        "create.quote.error.message": "Erro ao criar orçamento",
+        "create.quote.page.title": "Solicite um orçamento",
+        "create.quote.page.name.field": "Nome",
+        "create.quote.page.email.field": "Email",
+        "create.quote.page.phone.field": "Telefone",
+        "create.quote.page.estimated.audience.field": "Público estimado",
+        "create.quote.page.event.type.field": "Tipo do evento",
+        "create.quote.page.name.placeholder": "Digite o nome completo",
+        "create.quote.page.email.placeholder": "Digite o email",
+        "create.quote.page.phone.placeholder": "Digite o telefone",
+        "create.quote.page.estimated.audience.placeholder": "Digite o público estimado",
+        "create.quote.page.event.type.placeholder": "Digite o tipo do evento"
+
     }
 }

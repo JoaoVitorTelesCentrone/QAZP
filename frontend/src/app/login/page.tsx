@@ -1,67 +1,61 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { useAtom } from 'jotai'
-import { authAtom } from '../atoms/authAtom'
-import { userInfoAtom } from '../atoms/userInfoAtom'
-import Header from '../components/Header'
-import { redirect, useRouter } from 'next/navigation'
-import { Input } from '@/components/ui/input'
-import axios from 'axios'
-import { Toaster, toast } from 'sonner'
-import Footer from '../components/Footer'
-import ClipLoader from 'react-spinners/ClipLoader'
+import { useAtom } from 'jotai';
+import { authAtom } from '../atoms/authAtom';
+import { userInfoAtom } from '../atoms/userInfoAtom';
+import Header from '../components/Header';
+import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import axios from 'axios';
+import { Toaster, toast } from 'sonner';
+import Footer from '../components/Footer';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { useState } from 'react';
+
+const API_URL = 'http://localhost:5196/api/User/login';
 
 const LoginPage = () => {
-  const router = useRouter()
-  const [userAuth, setUserAuth] = useAtom(authAtom)
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState(false)
-  const [logged, isLogged] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [userAuth, setUserAuth] = useAtom(authAtom);
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  async function verifyLogin(username: string, password: string) {
+  const verifyLogin = async () => {
+    setLoading(true)
     try {
-      setLoading(true)
-      const response = await axios.get(
-        `http://localhost:5196/api/User/${username}&${password}`,
-      )
-      const userName = response.data.name
-      const userData = response.data.username
-      const userPassword = response.data.password
+      const response = await axios.post(API_URL, { username, password }) 
       if (response.status === 200) {
-        isLogged(true)
-        setError(false)
+        const { name } = response.data
         setUserAuth(true)
-        toast.success(`Bem vindo ${username}`)
         setUserInfo({
-          name: userName,
+          name: name, 
           username: username,
-          password: userPassword,
+          password: password,
         })
-        setTimeout(() => {
-          router.push('/dashboard')
-          setLoading(false)
-        }, 1000)
+          toast.success(`Bem-vindo ${username}`);
+          router.push('/dashboard');
       }
     } catch (error) {
-      console.error('Erro ao fazer a requisição:', error)
-      toast.error('Usuário ou senha incorretos')
-      setError(true)
-      setLoading(false)
+      console.error('Erro ao fazer a requisição:', error);
+      toast.error('Usuário ou senha incorretos');
+      
+    } finally {
+        setTimeout(() => {
+        setLoading(false);
+      }, 4000); 
     }
-  }
+  };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    await verifyLogin(username, password)
-  }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    verifyLogin();
+  };
 
   return (
     <div>
+      <Toaster richColors />
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <ClipLoader size={50} color={'#123abc'} loading={loading} />
@@ -69,36 +63,35 @@ const LoginPage = () => {
       ) : (
         <>
           <Header />
-          <Toaster richColors />
           <div className="flex flex-col mx-auto py-14 bg-primary h-screen">
             <h1 className="mx-auto text-5xl text-secondary-foreground my-8 font-bold uppercase text-secondary">
               Faça seu login
             </h1>
-            <div className='mx-auto'>
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col rounded-xl bg-slate-400 p-6 bg-opacity-20 shadow-md shadow-slate-500"
-            >
-              <label className="text-white text-lg font-bold ">Usuário</label>
-              <Input
-                placeholder="Digite o usuário"
-                onChange={e => setUsername(e.target.value)}
-                className="p-2 bg-white border-slate-500 mb-8"
-                type="text"
-                id="email"
-              />
-
-              <label className="text-white text-lg font-bold" htmlFor="password">
-                Senha
-              </label>
-              <Input
-                placeholder="Digite a senha"
-                onChange={e => setPassword(e.target.value)}
-                className="p-2 border-slate-500 bg-white mb-8"
-                type="password"
-                id="password"
-              />
-              <div className="flex flex-col">
+            <div className="mx-auto">
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col rounded-xl bg-slate-400 p-6 bg-opacity-20 shadow-md shadow-slate-500"
+              >
+                <label className="text-white text-lg font-bold">Usuário</label>
+                <Input
+                  placeholder="Digite o usuário"
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="p-2 bg-white border-slate-500 mb-8"
+                  type="text"
+                  id="email"
+                  required
+                />
+                <label className="text-white text-lg font-bold" htmlFor="password">
+                  Senha
+                </label>
+                <Input
+                  placeholder="Digite a senha"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="p-2 border-slate-500 bg-white mb-8"
+                  type="password"
+                  id="password"
+                  required
+                />
                 <button
                   data-testid="login-button"
                   className="bg-primary text-secondary rounded-xl px-6 py-3 max-w-[150px] mx-auto"
@@ -106,15 +99,14 @@ const LoginPage = () => {
                 >
                   Entrar
                 </button>
-              </div>
-            </form>
+              </form>
             </div>
           </div>
           <Footer />
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

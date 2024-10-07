@@ -15,11 +15,32 @@ namespace ZventsApi.Controllers
         {
             var activeEvents = await _context
                 .Events.Where(dbEvent => dbEvent.IsDeleted == false)
-                .OrderBy(dbEvent => dbEvent.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeEvents);
         }
+
+        [HttpGet("active-events")]
+        public async Task<ActionResult<IEnumerable<ActiveEventDto>>> GetActiveEventsAsync()
+        {
+            var activeEvents = await _context.Events
+                .Include(e => e.Client)
+                .Where(e => e.IsDeleted == false)
+                .Select(e => new ActiveEventDto
+                {
+                    Name = e.Name,
+                    Type = e.Type,
+                    StartDate = e.StartDate,
+                    EndDate = e.EndDate,
+                    EstimatedAudience = e.EstimatedAudience,
+                    TotalAmount = e.TotalAmount,
+                    ClientFullName = e.Client.FullName,
+                })
+                .ToListAsync();
+
+            return Ok(activeEvents);
+        }
+
 
         [HttpPost]
         public async Task<ActionResult<Event>> PostEvent(CreateEventDto createEventDto)
@@ -27,7 +48,6 @@ namespace ZventsApi.Controllers
             bool eventExists = _context.Events.Any(dbEvent =>
                 (
                     dbEvent.Name == createEventDto.Name
-                    && dbEvent.Type == createEventDto.Type
                     && dbEvent.ClientId == createEventDto.ClientId
                     && dbEvent.IsDeleted == false
                 )
@@ -69,7 +89,9 @@ namespace ZventsApi.Controllers
                         {
                             Event = eventEntity,
                             Material = material,
-                            Quantity = materialDto.Quantity
+                            Quantity = materialDto.Quantity,
+                            MaterialPrice = material.Price,
+                            MaterialName = material.Name
                         }
                     );
                 }
@@ -146,9 +168,11 @@ namespace ZventsApi.Controllers
                 eventEntity.EventMaterials.Add(
                     new EventMaterial
                     {
-                        EventId = eventEntity.Id,
-                        MaterialId = material.Id,
-                        Quantity = materialDto.Quantity
+                        Event = eventEntity,
+                        Material = material,
+                        Quantity = materialDto.Quantity,
+                        MaterialPrice = material.Price,
+                        MaterialName = material.Name
                     }
                 );
             }

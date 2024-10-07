@@ -4,54 +4,56 @@ import React, { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import { authAtom } from '../atoms/authAtom'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import { clientColumns } from './columns'
 import { ClientTable } from './ClientTable'
 import axios from 'axios'
-import { intl } from '../../i18n'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { clientChangeAtom } from '../atoms/clientChangeAtom'
-import { IoPeopleOutline } from 'react-icons/io5'
-import { Button, Tooltip } from 'antd'
+import { Button } from 'antd'
 import UserSideMenu from '../components/UserHeader'
-import { FaUserPlus } from 'react-icons/fa'
-import { FaUsers } from 'react-icons/fa6'
+import { FaUserPlus, FaUsers } from 'react-icons/fa'
 import CreateClientModal from './CreateClientModal'
+import { documentIdConverter, formatPhoneNumber } from '@/functions/functions'
 
 const Clients = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
   const [clients, setClients] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [clientChange, setClientChange] = useAtom(clientChangeAtom)
   const [openModal, setOpenModal] = useState(false)
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5196/api/Client/active')
+        setClients(response.data)
+        const clients = response.data.map((client: any) => ({
+          fullName: client.fullName,
+          documentId: documentIdConverter(client.documentId),
+          id: client.id,
+          email: client.email,
+          phoneNumber: formatPhoneNumber(client.phoneNumber),
+        }))
+        console.log(response.data)
+        setClients(clients)
+      } catch (error) {
+        console.error('Error fetching client data:', error)
+      } finally {
+        setTimeout(()=>{
+          setLoading(false); 
+         },100)
+      }
+    }
+
     fetchUserData()
   }, [clientChange])
 
-  async function fetchUserData() {
-    try {
-      const response = await axios.get('http://localhost:5196/api/Client')
-      setClients(response.data)
-    } catch (error) {
-      console.error('Erro ao fazer a requisição:', error)
-      throw error
-    }
-  }
-
   useEffect(() => {
-    const fetch = async () => {
-      setLoading(true)
-      await new Promise(resolve => setTimeout(resolve, 500))
-      await Promise.all([fetchUserData()])
-      setLoading(false)
+    if (!isLogged) {
+      redirect('/')
     }
-    fetch()
-  }, [])
+  }, [isLogged])
 
-  if (!isLogged) {
-    redirect('/login')
-  }
   return (
     <div>
       {openModal && (
@@ -68,9 +70,9 @@ const Clients = () => {
         <>
           <UserSideMenu />
           <div className="bg-tertiary h-screen">
-            <div className="p-10 ">
+            <div className="p-10">
               <div className="flex mt-4 justify-between w-full">
-                <div className="flex ml-64">
+                <div className="flex ml-48">
                   <FaUsers className=" w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
 
                   <h1 className="font-monospace font-semibold text-primary text-7xl my-4 mx-4 text-secondary-foreground">
@@ -88,7 +90,7 @@ const Clients = () => {
                 </Button>
               </div>
             </div>
-            <div className="ml-72 mr-10">
+            <div className="ml-56 mr-10">
               <ClientTable columns={clientColumns} data={clients} />
             </div>
           </div>
