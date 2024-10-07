@@ -18,7 +18,7 @@ namespace ZventsApi.Controllers
         [HttpGet]
         public async Task<ActionResult<object>> GetDashboardData()
         {
-            // Contagem de clients, users e events
+
             var clientCount = await _context.Clients
                 .CountAsync(client => client.IsDeleted == false);
                 
@@ -28,18 +28,18 @@ namespace ZventsApi.Controllers
             var eventCount = await _context.Events
                 .CountAsync(eventItem => eventItem.IsDeleted == false);
 
-            // Obter eventos com campos específicos
             var events = await _context.Events
                 .Where(eventItem => eventItem.IsDeleted == false)
                 .Select(eventItem => new {
                     eventItem.Name,
-                    eventItem.EstimatedAudience,
+                    eventItem.Type,                    
                     eventItem.StartDate,
-                    eventItem.AddressName
+                    eventItem.EndDate,
+                    eventItem.EstimatedAudience,
+                    eventItem.TotalAmount
                 })
                 .ToListAsync();
 
-            // Consolidar resultados
             var result = new {
                 Clients = clientCount,
                 Users = userCount,

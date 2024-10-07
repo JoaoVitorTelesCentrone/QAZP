@@ -15,7 +15,6 @@ namespace ZventsApi.Controllers
         {
             var activeEvents = await _context
                 .Events.Where(dbEvent => dbEvent.IsDeleted == false)
-                .OrderBy(dbEvent => dbEvent.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeEvents);
@@ -25,17 +24,17 @@ namespace ZventsApi.Controllers
         public async Task<ActionResult<IEnumerable<ActiveEventDto>>> GetActiveEventsAsync()
         {
             var activeEvents = await _context.Events
-                .Include(e => e.Client) // Inclui os dados do cliente
+                .Include(e => e.Client)
                 .Where(e => e.IsDeleted == false)
                 .Select(e => new ActiveEventDto
                 {
-                    ClientFullName = e.Client.FullName,
-                    Title = e.Name,
+                    Name = e.Name,
                     Type = e.Type,
                     StartDate = e.StartDate,
                     EndDate = e.EndDate,
                     EstimatedAudience = e.EstimatedAudience,
-                    TotalAmount = e.TotalAmount
+                    TotalAmount = e.TotalAmount,
+                    ClientFullName = e.Client.FullName,
                 })
                 .ToListAsync();
 
@@ -49,7 +48,6 @@ namespace ZventsApi.Controllers
             bool eventExists = _context.Events.Any(dbEvent =>
                 (
                     dbEvent.Name == createEventDto.Name
-                    // && dbEvent.Type == createEventDto.Type
                     && dbEvent.ClientId == createEventDto.ClientId
                     && dbEvent.IsDeleted == false
                 )

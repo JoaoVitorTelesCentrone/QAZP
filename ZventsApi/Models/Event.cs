@@ -51,7 +51,7 @@ namespace ZventsApi.Models
     public class ActiveEventDto
     {
         public string ClientFullName { get; set; }
-        public string Title { get; set; }
+        public string Name { get; set; }
         public EventType Type { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }

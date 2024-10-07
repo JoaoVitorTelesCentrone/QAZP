@@ -10,6 +10,7 @@ import axios from 'axios'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { quoteChangeAtom } from '../atoms/changeQuoteAtom'
 import { GiTakeMyMoney } from 'react-icons/gi'
+import { formatPhoneNumber } from '@/functions/functions'
 
 const Page = () => {
   const [auth] = useAtom(authAtom)
@@ -25,7 +26,16 @@ const Page = () => {
     setLoading(true)
     try {
       const response = await axios.get('http://localhost:5196/api/Quote')
-      setQuote(response.data)
+
+      const quotes = response.data.map((quote: any) => ({
+        fullName: quote.fullName,
+        email: quote.email,
+        phoneNumber: formatPhoneNumber(quote.phoneNumber),
+        eventType: quote.eventType,
+        estimatedAudience: quote.estimatedAudience,
+      }))
+
+      setQuote(quotes)
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
     } finally {

@@ -13,7 +13,8 @@ import { TbCalendarPlus } from 'react-icons/tb'
 import { Button } from 'antd'
 import { GiGlassCelebration } from 'react-icons/gi'
 import UserSideMenu from '../components/UserHeader'
-import { documentIdConverter } from '@/functions/functions'
+import { documentIdConverter, eventTypeNameConverter, formatCurrency, formatDate } from '@/functions/functions'
+import { clientsAtom } from '../CreateEvent/page'
 
 const Page = () => {
   const [auth] = useAtom(authAtom)
@@ -28,16 +29,29 @@ const Page = () => {
 
   const fetchEvents = useCallback(async () => {
     try {
-      const eventsResponse = await axios.get('http://localhost:5196/api/Event/active-events') 
-      setEvents(eventsResponse.data) 
+      const eventsResponse = await axios.get('http://localhost:5196/api/Event/active-events');
+  
+      const events = eventsResponse.data.map((event: any) => ({
+        name: event.name,
+        type: eventTypeNameConverter(event.type),
+        startDate: event.startDate ? formatDate(event.startDate) : 'Data não disponível',
+        endDate: event.endDate ? formatDate(event.endDate) : 'Data não disponível',
+        estimatedAudience: event.estimatedAudience,
+        totalAmount: formatCurrency(event.totalAmount),
+        clientName: event.clientFullName, 
+      }));
+  
+      setEvents(events);
+      console.log(events)
     } catch (error) {
-      console.error('Error fetching data:', error)
+      console.error('Error fetching data:', error);
     } finally {
       setTimeout(() => {
-        setLoading(false)
+        setLoading(false);
       }, 500);
     }
-  }, [])
+  }, []);
+  
 
   useEffect(() => {
     fetchEvents()
