@@ -34,10 +34,8 @@ const LoginPage = () => {
           username: username,
           password: password,
         })
-        // setTimeout(() => {
           toast.success(`Bem-vindo ${username}`);
           router.push('/dashboard');
-        // }, 100);
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error);

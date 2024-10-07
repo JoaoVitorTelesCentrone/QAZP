@@ -73,7 +73,7 @@ const Dashboard = () => {
     } finally {
       setTimeout(() => {
         setLoading(false)
-      }, 500);
+      }, 100);
     }
   };
   

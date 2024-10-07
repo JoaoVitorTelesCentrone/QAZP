@@ -41,7 +41,7 @@ const Page = () => {
     } finally {
       setTimeout(() => {
         setLoading(false)
-      }, 500);
+      }, 100);
     }
   }, [])
 

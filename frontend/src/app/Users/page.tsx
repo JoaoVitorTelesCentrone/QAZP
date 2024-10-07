@@ -43,7 +43,7 @@ const Users = () => {
         setTimeout(() =>{
           setLoading(false)
         isFetching.current = false
-        },500)
+        },100)
       
     }
   }, [])

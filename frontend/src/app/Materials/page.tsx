@@ -50,7 +50,7 @@ const Materials = () => {
     } finally {
       setTimeout(() => {
         setLoading(false)
-      }, 500);
+      }, 100);
       
     }
   }, [])

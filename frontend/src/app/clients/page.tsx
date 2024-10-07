@@ -41,7 +41,7 @@ const Clients = () => {
       } finally {
         setTimeout(()=>{
           setLoading(false); 
-         },500)
+         },100)
       }
     }
 
