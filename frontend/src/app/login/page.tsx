@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useAtom } from 'jotai';
 import { authAtom } from '../atoms/authAtom';
 import { userInfoAtom } from '../atoms/userInfoAtom';
@@ -13,7 +12,7 @@ import Footer from '../components/Footer';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { useState } from 'react';
 
-const API_URL = 'http://localhost:5196/api/User';
+const API_URL = 'http://localhost:5196/api/User/login';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -24,22 +23,19 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
 
   const verifyLogin = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const response = await axios.get(`${API_URL}/${username}&${password}`);
+      const response = await axios.post(API_URL, { username, password }) 
       if (response.status === 200) {
-        const { name } = response.data;
-        setUserAuth(true);
+        const { name } = response.data
+        setUserAuth(true)
         setUserInfo({
-          name: username,
+          name: name, 
           username: username,
           password: password,
-        });
-
-        setTimeout(() => {
+        })
           toast.success(`Bem-vindo ${username}`);
           router.push('/dashboard');
-        }, 200);
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error);
@@ -48,7 +44,7 @@ const LoginPage = () => {
     } finally {
         setTimeout(() => {
         setLoading(false);
-      }, 2500); 
+      }, 4000); 
     }
   };
 

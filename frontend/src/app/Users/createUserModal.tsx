@@ -1,12 +1,7 @@
-import {
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { DropdownMenuContent } from '@radix-ui/react-dropdown-menu'
-import { Button, Input, Modal } from 'antd'
-import axios, { isAxiosError } from 'axios'
-import { ChevronDown, Eye, EyeOff, SearchIcon } from 'lucide-react'
+
+import { Button, Modal } from 'antd'
+import axios from 'axios'
+import {  Eye, EyeOff } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 

@@ -5,14 +5,11 @@ import React, { useState } from 'react'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import UserHeader from './UserHeader'
-import { Button } from 'antd' 
-import LoginModal from './LoginModal'
 
 const Header = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
   const [user, setUser] = useAtom(userInfoAtom)
-  const [isModalVisible, setIsModalVisible] = useState(false)
-
+  
   return (
     <div className=" flex p-8 bg-quartenary text-secondary justify-around">
       <Link
@@ -25,12 +22,6 @@ const Header = () => {
         <UserHeader />
       ) : (
         <>
-          {isModalVisible && (
-            <LoginModal
-              isModalVisible={isModalVisible}
-              setIsModalVisible={setIsModalVisible}
-            />
-          )}
           <ul className="flex justify-center mx-auto">
             <Link
               href="/"
@@ -51,7 +42,12 @@ const Header = () => {
               Solicite um orçamento
             </Link>
           </ul>
-          <Button onClick={() => setIsModalVisible(true)}>Login</Button>
+          <Link
+              href="/login"
+              className="mx-6 text-secondary font-montserrat font-medium"
+            >
+              Login
+            </Link>
         </>
       )}
     </div>

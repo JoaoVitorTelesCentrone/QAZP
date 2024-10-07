@@ -18,55 +18,44 @@ import { clientsAtom } from '../CreateEvent/page'
 
 const Page = () => {
   const [auth] = useAtom(authAtom)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true) 
   const [events, setEvents] = useState<Events[]>([])
   const [eventChange] = useAtom(eventChangeAtom)
-  const [clients, setClients] = useAtom(clientsAtom)
 
+  
   if (!auth) {
     redirect('/')
   }
 
-  const fetchClientsAndEvents = useCallback(async () => {
-    setLoading(true)
+  const fetchEvents = useCallback(async () => {
     try {
-      const [clientsResponse, eventsResponse] = await Promise.all([
-        axios.get('http://localhost:5196/api/Client'),
-        axios.get('http://localhost:5196/api/Event'),
-      ])
-
-      const clientNames = clientsResponse.data.map((client: any) => ({
-        name: client.fullName,
-        documentId: documentIdConverter(client.documentId),
-        id: client.id,
-        email: client.email,
-      }))
-
-      const events = eventsResponse.data.map((event: any) => ({        
+      const eventsResponse = await axios.get('http://localhost:5196/api/Event/active-events');
+  
+      const events = eventsResponse.data.map((event: any) => ({
         name: event.name,
         type: eventTypeNameConverter(event.type),
-        startDate: `${formatDate(event.startDate)} ${event.startTime}`,
-        endDate: `${formatDate(event.endDate)} ${event.endTime}`,
+        startDate: event.startDate ? formatDate(event.startDate) : 'Data não disponível',
+        endDate: event.endDate ? formatDate(event.endDate) : 'Data não disponível',
         estimatedAudience: event.estimatedAudience,
-        totalAmount: formatCurrency(event.estimatedAudience),
-        clientName: clientsResponse.data.find((client: any) => client.id == event.clientId)?.fullName
-      }))
-
-      setClients(clientNames)
-      setEvents(events)
+        totalAmount: formatCurrency(event.totalAmount),
+        clientName: event.clientFullName, 
+      }));
+  
+      setEvents(events);
+      console.log(events)
     } catch (error) {
-      console.error('Error fetching data:', error)
+      console.error('Error fetching data:', error);
     } finally {
-      setLoading(false)
+      setTimeout(() => {
+        setLoading(false);
+      }, 100);
     }
-  }, [setClients])
+  }, []);
+  
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchClientsAndEvents()
-    }
-    fetchData()
-  }, [eventChange, fetchClientsAndEvents])
+    fetchEvents()
+  }, [fetchEvents, eventChange])
 
   return (
     <div>
@@ -78,16 +67,16 @@ const Page = () => {
         <>
           <UserSideMenu />
           <div className="bg-tertiary h-screen">
-            <div className="p-10 ">
+            <div className="p-10">
               <div className="flex mt-4 justify-between w-full">
                 <div className="flex ml-48">
-                  <GiGlassCelebration className=" w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
+                  <GiGlassCelebration className="w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
                   <h1 className="font-monospace font-semibold text-7xl my-3 mx-4 text-secondary-foreground">
                     Eventos
                   </h1>
                 </div>
                 <Button
-                  icon={<TbCalendarPlus className="w-5 h-5 " />}
+                  icon={<TbCalendarPlus className="w-5 h-5" />}
                   type="primary"
                   className="mt-8"
                   size="large"

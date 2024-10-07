@@ -25,8 +25,8 @@ const Clients = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:5196/api/Client')
-
+        const response = await axios.get('http://localhost:5196/api/Client/active')
+        setClients(response.data)
         const clients = response.data.map((client: any) => ({
           fullName: client.fullName,
           documentId: documentIdConverter(client.documentId),
@@ -39,9 +39,9 @@ const Clients = () => {
       } catch (error) {
         console.error('Error fetching client data:', error)
       } finally {
-        setTimeout(() => {
-          setLoading(false) // Garante que o loading seja desativado no final
-        }, 3000)
+        setTimeout(()=>{
+          setLoading(false); 
+         },100)
       }
     }
 

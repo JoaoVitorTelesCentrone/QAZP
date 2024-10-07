@@ -167,6 +167,9 @@ export function documentIdConverter(documentId: string) {
 }
 
 export function formatDate(dateString: string): string {
+  if (!dateString) {
+    return 'Data inválida';
+  }
   const [year, month, day] = dateString.split('-')
   return `${day}/${month}/${year}`
 }

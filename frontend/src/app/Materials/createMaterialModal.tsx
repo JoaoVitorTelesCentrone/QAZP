@@ -4,7 +4,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { DropdownMenuContent } from '@radix-ui/react-dropdown-menu'
-import { Button, Input, Modal } from 'antd'
+import { Button, Modal } from 'antd'
 import axios from 'axios'
 import { ChevronDown } from 'lucide-react'
 import React, { useState } from 'react'

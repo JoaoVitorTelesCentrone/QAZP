@@ -4,7 +4,6 @@ import { Toaster } from 'sonner'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { useAtom } from 'jotai'
-import { clientChangeAtom } from '../atoms/clientChangeAtom'
 import { quoteChangeAtom } from '../atoms/changeQuoteAtom'
 
 type deleteQuoteProps = {

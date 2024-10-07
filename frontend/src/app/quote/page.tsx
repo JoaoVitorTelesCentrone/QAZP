@@ -18,7 +18,6 @@ const Page = () => {
   const [loading, setLoading] = useState(true)
   const [quoteChange] = useAtom(quoteChangeAtom)
 
-  // Redireciona se o usuário não estiver autenticado
   if (!auth) {
     redirect('/')
   }
@@ -26,7 +25,7 @@ const Page = () => {
   const fetchUserData = useCallback(async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://localhost:5196/api/Quote')
+      const response = await axios.get('http://localhost:5196/api/Quote/active-quotes')
 
       const quotes = response.data.map((quote: any) => ({
         fullName: quote.fullName,
@@ -40,7 +39,9 @@ const Page = () => {
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
     } finally {
-      setLoading(false)
+      setTimeout(() => {
+        setLoading(false)
+      }, 100);
     }
   }, [])
 

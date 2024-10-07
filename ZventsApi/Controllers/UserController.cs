@@ -23,6 +23,22 @@ namespace ZventsApi.Controllers
             return Ok(activeUsers);
         }
 
+        [HttpGet("activeUsers")]
+        public async Task<ActionResult<IEnumerable<object>>> GetActiveUsersAsync()
+        {
+            var activeUsers = await _context
+                .Users
+                .Where(dbUser => dbUser.IsDeleted == false && dbUser.UserStatus == UserStatus.Active)
+                .Select(dbUser => new {
+                    dbUser.Name,
+                    dbUser.UserName
+                })
+                .ToListAsync();
+
+            return Ok(activeUsers);
+        }
+
+
         [HttpPost]
         public ActionResult<User> PostUser(User user)
         {
@@ -38,6 +54,34 @@ namespace ZventsApi.Controllers
 
             return Conflict(new { message = "User already exists" });
         }
+
+        [HttpPost("login")]
+        public ActionResult<User> Login([FromBody] LoginRequest request)
+        {
+            var user = _context.Users.FirstOrDefault(dbUser =>
+                dbUser.UserName == request.Username && dbUser.Password == request.Password
+            );
+
+            if (user == null)
+            {
+                return NotFound(new { message = "Usuário não encontrado" });
+            }
+            else if (user.UserStatus == UserStatus.Inactive || user.IsDeleted == true) // Comparando com true
+            {
+                return Unauthorized("Usuário não autorizado");
+            }
+
+            return Ok(new { name = user.Name, message = "Login bem-sucedido" });
+        }
+
+
+        // Classe para encapsular as credenciais do login
+        public class LoginRequest
+        {
+            public string Username { get; set; }
+            public string Password { get; set; }
+        }
+
 
         [HttpGet("name/{name}")]
         public ActionResult<User> GetUserByName(string name)

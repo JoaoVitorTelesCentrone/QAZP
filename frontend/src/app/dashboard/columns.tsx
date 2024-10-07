@@ -3,8 +3,6 @@ import { Button } from '@/components/ui/button'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type Events = {
   id: string
   name: string

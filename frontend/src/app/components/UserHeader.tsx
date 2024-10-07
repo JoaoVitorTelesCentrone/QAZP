@@ -25,7 +25,7 @@ const UserSideMenu = () => {
     router.push(href); 
     setTimeout(() => {
       setLoading(false); 
-    }, 3500);
+    }, 5000);
   };
 
   return loading ? (
