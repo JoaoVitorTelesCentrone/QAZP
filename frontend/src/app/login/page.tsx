@@ -44,7 +44,7 @@ const LoginPage = () => {
     } finally {
         setTimeout(() => {
         setLoading(false);
-      }, 4500); 
+      }, 4000); 
     }
   };
 
