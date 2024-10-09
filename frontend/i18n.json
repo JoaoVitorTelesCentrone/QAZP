@@ -67,7 +67,25 @@
         "create.quote.page.email.placeholder": "Digite o email",
         "create.quote.page.phone.placeholder": "Digite o telefone",
         "create.quote.page.estimated.audience.placeholder": "Digite o público estimado",
-        "create.quote.page.event.type.placeholder": "Digite o tipo do evento"
-
+        "create.quote.page.event.type.placeholder": "Digite o tipo do evento",
+        "showroom.page.title": "Transforme seu evento em uma experiência inesquecível",
+        "showroom.page.subtitle": "Somos especialistas em criar momentos únicos que conectam pessoas e celebram cada detalhe, adaptando cada evento ao seu estilo e necessidade",
+        "showroom.page.request-quote-button-label": "Solicite um orçamento",
+        "showroom.page.design.title": "Design",
+        "showroom.page.design.subtitle": "Transformamos suas ideias em conceitos visuais que refletem sua personalidade e estilo, criando ambientes encantadores e memoráveis para o seu evento",
+        "showroom.page.plan.title": "Planejamento",
+        "showroom.page.plan.subtitle": "Organizamos cada detalhe com precisão e atenção, garantindo que tudo seja planejado conforme seus desejos e prazos, para que você possa curtir cada momento sem preocupações",
+        "showroom.page.execution.title": "Execução",
+        "showroom.page.execution.subtitle": "Com a organização que nosso serviço proporciona, você pode focar na execução do seu evento, sabendo que todos os detalhes e planejamentos estão perfeitamente alinhados e sob controle",
+        "showroom.page.what.we.do.title": "Como Criamos Momentos Inesquecíveis?",
+        "showroom.page.what.we.do.subtitle": "Na nossa empresa, planejamos e gerenciamos eventos que encantam e surpreendem. Com criatividade, atenção aos detalhes e uma abordagem personalizada, garantimos que cada ocasião se torne uma experiência memorável, única e cheia de significado para nossos clientes e seus convidados.",
+        "showroom.page.our.mission.title": "Nossa Missão",
+        "showroom.page.our.mission.subtitle": "Transformar Eventos em Experiências Extraordinárias",
+        "showroom.page.our.mission.description": "Nosso compromisso é criar atmosferas encantadoras que capturam a essência e o estilo único de cada cliente, tornando cada evento verdadeiramente especial.",
+        "showroom.page.how.we.work.title": "Como Trabalhamos",
+        "showroom.page.how.we.work.subtitle": "Criando Magia em Cada Detalhe",
+        "showroom.page.how.we.work.description": "Unimos criatividade, expertise e um olhar atento para cada detalhe, transformando suas ideias em experiências inesquecíveis que encantam e surpreendem.",
+        "showroom.page.results.title": "Resultados que Entregamos",
+        "showroom.page.results.description": "Nossos eventos são mais do que simples celebrações, são jornadas emocionantes cuidadosamente elaboradas para não apenas atender, mas superar as expectativas de nossos clientes."
     }
 }
