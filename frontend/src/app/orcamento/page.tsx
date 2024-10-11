@@ -145,7 +145,7 @@ const Page = () => {
                         })}`}{' '}
                     <ChevronDown />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-white mb-24 ml-96">
+                  <DropdownMenuContent className="bg-white mb-24 ml-96 w-96">
                     <DropdownMenuItem
                       onClick={() =>
                         setType(
