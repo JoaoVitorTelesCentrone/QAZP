@@ -16,41 +16,50 @@ const API_URL = 'http://localhost:5196/api/User/login';
 
 const LoginPage = () => {
   const router = useRouter();
-  const [userAuth, setUserAuth] = useAtom(authAtom);
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
+  const [userAuth, setUserAuth] = useAtom(authAtom); // Estado de autenticação
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom); // Estado de informações do usuário
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const verifyLogin = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const response = await axios.post(API_URL, { username, password }) 
+      const response = await axios.post(API_URL, { username, password });
+
       if (response.status === 200) {
-        const { name } = response.data
-        setUserAuth(true)
+        const { token, name } = response.data; // Supondo que o token e o nome sejam retornados na resposta
+
+        // Armazenar o token no localStorage
+        localStorage.setItem('token', token);
+
+        // Atualizar os átomos
+        setUserAuth(true); // Usuário autenticado
         setUserInfo({
-          name: name, 
+          name: name,
           username: username,
-          password: password,
-        })
-          toast.success(`Bem-vindo ${username}`);
-          router.push('/dashboard');
+          password: password, // Normalmente não armazenaríamos a senha assim
+        });
+
+        // Exibir mensagem de sucesso
+        toast.success(`Bem-vindo ${name}`);
+
+        // Redirecionar para a página da dashboard
+        router.push('/dashboard');
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error);
       toast.error('Usuário ou senha incorretos');
-      
     } finally {
-        setTimeout(() => {
-        setLoading(false);
-      }, 4000); 
+      setTimeout(() => {
+        setLoading(false); // Finalizar o loading após 3 segundos
+      }, 3000);
     }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    verifyLogin();
+    verifyLogin(); // Chama a função para verificar o login
   };
 
   return (
@@ -78,7 +87,7 @@ const LoginPage = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   className="p-2 bg-white border-slate-500 mb-8"
                   type="text"
-                  id="email"
+                  id="username"
                   required
                 />
                 <label className="text-white text-lg font-bold" htmlFor="password">

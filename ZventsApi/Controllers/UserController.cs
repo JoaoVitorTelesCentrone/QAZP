@@ -1,14 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ZventsApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
 
 namespace ZventsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(ZventsDbContext context) : ControllerBase
+    
+    public class UserController : ControllerBase
     {
-        private readonly ZventsDbContext _context = context;
+        private readonly ZventsDbContext _context;
+        private readonly IConfiguration _configuration;  // Adicionamos isso para acessar configurações
+
+        // Construtor que injeta o contexto e as configurações
+        public UserController(ZventsDbContext context, IConfiguration configuration)
+    {
+        _context = context;
+        _configuration = configuration;  // Atribui a configuração ao campo privado
+    }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUserAsync()
@@ -56,7 +70,7 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult<User> Login([FromBody] LoginRequest request)
+        public ActionResult Login([FromBody] LoginRequest request)
         {
             var user = _context.Users.FirstOrDefault(dbUser =>
                 dbUser.UserName == request.Username && dbUser.Password == request.Password
@@ -66,14 +80,46 @@ namespace ZventsApi.Controllers
             {
                 return NotFound(new { message = "Usuário não encontrado" });
             }
-            else if (user.UserStatus == UserStatus.Inactive || user.IsDeleted == true) // Comparando com true
+            else if (user.UserStatus == UserStatus.Inactive || user.IsDeleted == true) 
             {
                 return Unauthorized("Usuário não autorizado");
             }
 
-            return Ok(new { name = user.Name, message = "Login bem-sucedido" });
+            // Gerar o token JWT
+            var token = GenerateJwtToken(user);
+
+            return Ok(new 
+            { 
+                token = token, 
+                name = user.Name, 
+                message = "Login bem-sucedido" 
+            });
         }
 
+        // Método para gerar o token JWT
+        private string GenerateJwtToken(User user)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("name", user.Name),
+                new Claim("role", user.Role.ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddHours(1), // O token será válido por 3 horas
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
 
         // Classe para encapsular as credenciais do login
         public class LoginRequest

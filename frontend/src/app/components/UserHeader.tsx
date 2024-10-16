@@ -1,32 +1,50 @@
-'use client';
-import { useAtom } from 'jotai';
-import Link from 'next/link';
-import React, { useState } from 'react';
-import { userInfoAtom } from '../atoms/userInfoAtom';
-import { authAtom } from '../atoms/authAtom';
-import { redirect } from 'next/navigation';
-import { LogOut, TreePalm } from 'lucide-react';
-import AvatarUser from './Avatar';
-import ClipLoader from 'react-spinners/ClipLoader';
-import { useRouter } from 'next/navigation';
+'use client'
+import { useAtom } from 'jotai'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
+import { userInfoAtom } from '../atoms/userInfoAtom'
+import { authAtom } from '../atoms/authAtom'
+import { useRouter, usePathname } from 'next/navigation'
+import ClipLoader from 'react-spinners/ClipLoader'
+import { LogOut, TreePalm } from 'lucide-react'
+import AvatarUser from './Avatar'
+import Logout from './Logout'
 
 const UserSideMenu = () => {
-  const [loggedIn, setIsLogged] = useAtom(authAtom);
-  const [user] = useAtom(userInfoAtom);
-  const router = useRouter();
-  const [loading, setLoading] = useState(false); 
+  const [loggedIn, setIsLogged] = useAtom(authAtom)
+  const [user] = useAtom(userInfoAtom)
+  const router = useRouter()
+  const pathname = usePathname()
+  const [loading, setLoading] = useState(false)
 
-  if (!loggedIn) {
-    redirect('/')
-  }
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      setIsLogged(false)
+      router.push('/login')
+    }
+  }, [router, setIsLogged])
 
   const handleNavigation = (href: string) => {
-    setLoading(true); 
-    router.push(href); 
-    setTimeout(() => {
-      setLoading(false); 
-    }, 5000);
-  };
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      setIsLogged(false)
+      router.push('/login')
+    } else {
+      setLoading(true)
+
+      if (pathname === href) {
+        router.replace(href)
+      } else {
+        router.push(href)
+      }
+
+      setTimeout(() => {
+        setLoading(false)
+      }, 3500)
+    }
+  }
 
   return loading ? (
     <div className="flex justify-center items-center h-screen">
@@ -43,12 +61,22 @@ const UserSideMenu = () => {
         </div>
         <nav className="flex-1">
           <ul className="flex flex-col space-y-4">
-            {['dashboard', 'clients', 'Events', 'Materials', 'quote', 'Users'].map((page) => (
+            {[
+              'dashboard',
+              'clients',
+              'Events',
+              'Materials',
+              'quote',
+              'Users',
+            ].map(page => (
               <li key={page}>
-                <Link 
+                <Link
                   href={`/${page}`}
-                  onClick={() => handleNavigation(`/${page}`)} 
-                  data-testid={`link-${page}`} 
+                  onClick={e => {
+                    e.preventDefault()
+                    handleNavigation(`/${page}`)
+                  }}
+                  data-testid={`link-${page}`}
                   className="block py-2 px-3 rounded hover:bg-gray-700 w-full text-left"
                 >
                   {page.charAt(0).toUpperCase() + page.slice(1)}
@@ -63,7 +91,11 @@ const UserSideMenu = () => {
         <hr className="border-gray-600 my-4" />
         <button
           className="text-white items-center space-x-2 flex justify-center"
-          onClick={() => setIsLogged(false)}
+          onClick={() => {
+            localStorage.removeItem('token')
+            setIsLogged(false)
+            router.push('/login')
+          }}
           data-testid="logout-button"
         >
           <LogOut />
@@ -71,7 +103,7 @@ const UserSideMenu = () => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserSideMenu;
+export default UserSideMenu

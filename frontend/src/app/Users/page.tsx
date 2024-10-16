@@ -10,14 +10,15 @@ import { Button } from 'antd'
 import { userChangeAtom } from '../atoms/changeUserAtom'
 import { useAtom } from 'jotai'
 import CreateUserModal from './createUserModal'
+import withAuth from '../hoc/withAuth'; 
 
 const Users = () => {
+  console.log('Users renderizado');
   const [userData, setUserData] = useState<Users[]>([])
   const [loading, setLoading] = useState(true)
   const [change] = useAtom(userChangeAtom)
   const [openModal, setOpenModal] = useState(false)
 
-  // Usar um flag para evitar múltiplas execuções
   const isFetching = useRef(false)
 
   const fetchUserData = useCallback(async () => {
@@ -40,17 +41,16 @@ const Users = () => {
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
     } finally {
-        setTimeout(() =>{
-          setLoading(false)
+      setTimeout(() => {
+        setLoading(false)
         isFetching.current = false
-        },100)
-      
+      }, 100)
     }
   }, [])
 
   useEffect(() => {
     fetchUserData()
-  }, [fetchUserData, change])
+  }, [fetchUserData])
 
   const columns = useMemo(() => userColumns(), [])
 
@@ -99,4 +99,4 @@ const Users = () => {
   )
 }
 
-export default Users
+export default withAuth(Users);

@@ -15,22 +15,17 @@ import { GiGlassCelebration } from 'react-icons/gi'
 import UserSideMenu from '../components/UserHeader'
 import { documentIdConverter, eventTypeNameConverter, formatCurrency, formatDate } from '@/functions/functions'
 import { clientsAtom } from '../CreateEvent/page'
+import withAuth from '../hoc/withAuth'; // Ajuste o caminho conforme necessário
 
 const Page = () => {
-  const [auth] = useAtom(authAtom)
-  const [loading, setLoading] = useState(true) 
+  const [loading, setLoading] = useState(true)
   const [events, setEvents] = useState<Events[]>([])
   const [eventChange] = useAtom(eventChangeAtom)
 
-  
-  if (!auth) {
-    redirect('/')
-  }
-
   const fetchEvents = useCallback(async () => {
     try {
-      const eventsResponse = await axios.get('http://localhost:5196/api/Event/active-events');
-  
+      const eventsResponse = await axios.get('http://localhost:5196/api/Event/active-events')
+
       const events = eventsResponse.data.map((event: any) => ({
         name: event.name,
         type: eventTypeNameConverter(event.type),
@@ -38,63 +33,62 @@ const Page = () => {
         endDate: event.endDate ? formatDate(event.endDate) : 'Data não disponível',
         estimatedAudience: event.estimatedAudience,
         totalAmount: formatCurrency(event.totalAmount),
-        clientName: event.clientFullName, 
-      }));
-  
-      setEvents(events);
+        clientName: event.clientFullName,
+      }))
+
+      setEvents(events)
       console.log(events)
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching data:', error)
     } finally {
       setTimeout(() => {
-        setLoading(false);
-      }, 100);
+        setLoading(false)
+      }, 100)
     }
-  }, []);
-  
+  }, [])
 
   useEffect(() => {
     fetchEvents()
   }, [fetchEvents, eventChange])
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={'#123abc'} loading={loading} />
+      </div>
+    )
+  }
+
   return (
     <div>
-      {loading ? (
-        <div className="flex justify-center items-center h-screen">
-          <ClipLoader size={50} color={'#123abc'} loading={loading} />
-        </div>
-      ) : (
-        <>
-          <UserSideMenu />
-          <div className="bg-tertiary h-screen">
-            <div className="p-10">
-              <div className="flex mt-4 justify-between w-full">
-                <div className="flex ml-48">
-                  <GiGlassCelebration className="w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
-                  <h1 className="font-monospace font-semibold text-7xl my-3 mx-4 text-secondary-foreground">
-                    Eventos
-                  </h1>
-                </div>
-                <Button
-                  icon={<TbCalendarPlus className="w-5 h-5" />}
-                  type="primary"
-                  className="mt-8"
-                  size="large"
-                >
-                  <Link href="/CreateEvent" className="text-lg">
-                    Criar evento
-                  </Link>
-                </Button>
-              </div>
+      <UserSideMenu />
+      <div className="bg-tertiary h-screen">
+        <div className="p-10">
+          <div className="flex mt-4 justify-between w-full">
+            <div className="flex ml-48">
+              <GiGlassCelebration className="w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
+              <h1 className="font-monospace font-semibold text-7xl my-3 mx-4 text-secondary-foreground">
+                Eventos
+              </h1>
             </div>
-            <div className="ml-56 mr-10">
-              <EventTable columns={eventsColumns} data={events} />
-            </div>
+            <Button
+              icon={<TbCalendarPlus className="w-5 h-5" />}
+              type="primary"
+              className="mt-8"
+              size="large"
+            >
+              <Link href="/CreateEvent" className="text-lg">
+                Criar evento
+              </Link>
+            </Button>
           </div>
-        </>
-      )}
+        </div>
+        <div className="ml-56 mr-10">
+          <EventTable columns={eventsColumns} data={events} />
+        </div>
+      </div>
     </div>
   )
 }
 
-export default Page
+export default withAuth(Page); // Encapsulando com withAuth
