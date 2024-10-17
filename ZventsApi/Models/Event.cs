@@ -50,6 +50,7 @@ namespace ZventsApi.Models
 
     public class ActiveEventDto
     {
+        public Guid Id { get; set; }
         public string ClientFullName { get; set; }
         public string Name { get; set; }
         public EventType Type { get; set; }

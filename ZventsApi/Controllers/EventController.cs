@@ -28,6 +28,7 @@ namespace ZventsApi.Controllers
                 .Where(e => e.IsDeleted == false)
                 .Select(e => new ActiveEventDto
                 {
+                    Id = e.Id,
                     Name = e.Name,
                     Type = e.Type,
                     StartDate = e.StartDate,

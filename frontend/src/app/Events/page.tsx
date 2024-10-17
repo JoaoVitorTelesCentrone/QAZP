@@ -32,6 +32,7 @@ const Page = () => {
       const eventsResponse = await axios.get('http://localhost:5196/api/Event/active-events');
   
       const events = eventsResponse.data.map((event: any) => ({
+        id : event.id,
         name: event.name,
         type: eventTypeNameConverter(event.type),
         startDate: event.startDate ? formatDate(event.startDate) : 'Data não disponível',
