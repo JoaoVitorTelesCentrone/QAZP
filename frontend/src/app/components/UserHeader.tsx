@@ -8,7 +8,6 @@ import { useRouter, usePathname } from 'next/navigation'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { LogOut, TreePalm } from 'lucide-react'
 import AvatarUser from './Avatar'
-import Logout from './Logout'
 
 const UserSideMenu = () => {
   const [loggedIn, setIsLogged] = useAtom(authAtom)
