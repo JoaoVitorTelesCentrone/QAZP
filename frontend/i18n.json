@@ -86,6 +86,17 @@
         "showroom.page.how.we.work.subtitle": "Criando Magia em Cada Detalhe",
         "showroom.page.how.we.work.description": "Unimos criatividade, expertise e um olhar atento para cada detalhe, transformando suas ideias em experiências inesquecíveis que encantam e surpreendem.",
         "showroom.page.results.title": "Resultados que Entregamos",
-        "showroom.page.results.description": "Nossos eventos são mais do que simples celebrações, são jornadas emocionantes cuidadosamente elaboradas para não apenas atender, mas superar as expectativas de nossos clientes."
+        "showroom.page.results.description": "Nossos eventos são mais do que simples celebrações, são jornadas emocionantes cuidadosamente elaboradas para não apenas atender, mas superar as expectativas de nossos clientes.",
+        "showroom.page.about.us.title": "Idealizadores do projeto",
+        "showroom.page.about.us.uendell": "Uendell Rios",
+        "showroom.page.about.us.joao": "João Centrone",
+        "showroom.page.about.us.gustavo": "Gustavo Alves",
+        "showroom.page.about.us.sub.title": "Nosso Plano",
+        "showroom.page.about.us.begin.title": "O Começo",
+        "showroom.page.about.us.begin.sub.title": "Com o objetivo de expandir e desenvolver nossas habilidades além de nossa área de atuação, começamos a planejar o escopo de um projeto que, além de servir como um treinamento, também pudesse ser útil em outras aplicações, como estudos em testes automatizados.",
+        "showroom.page.about.us.develpoment.title": "Desenvolvimento",
+        "showroom.page.about.us.develpoment.sub.title": "Para este projeto, buscamos desenvolver não apenas um site, mas um software completo com backend e frontend. No backend, escolhemos C# devido à sua ampla utilização e robustez. No frontend, utilizamos Next.js com TypeScript, juntamente com o Tailwind para estilização e a biblioteca de componentes Shadcn UI para garantir uma interface moderna e eficiente.",
+        "showroom.page.about.us.goals.title": "Objetivos a serem alcançados",
+        "showroom.page.about.us.goals.sub.title": "Durante a construção deste projeto, tivemos em mente alguns objetivos, como utilizá-lo como um projeto piloto para a escrita e implementação de cobertura de testes automatizados. Além disso, o projeto serve como uma oportunidade para desenvolvedores juniors iniciarem sua jornada, permitindo que implementem novas funcionalidades, testem, e compreendam as regras de negócio em um ambiente prático."
     }
 }
