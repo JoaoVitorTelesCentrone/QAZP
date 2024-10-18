@@ -1,17 +1,18 @@
 'use client'
-import { useAtom } from 'jotai'
-import Link from 'next/link'
-import React, { useState } from 'react'
-import { authAtom } from '../atoms/authAtom'
-import { userInfoAtom } from '../atoms/userInfoAtom'
-import UserHeader from './UserHeader'
+
+import { useAtom } from 'jotai';
+import Link from 'next/link';
+import React from 'react';
+import { authAtom } from '../atoms/authAtom';
+import { userInfoAtom } from '../atoms/userInfoAtom';
+import UserHeader from './UserHeader';
 
 const Header = () => {
-  const [isLogged, setIsLogged] = useAtom(authAtom)
-  const [user, setUser] = useAtom(userInfoAtom)
-  
+  const [isLogged] = useAtom(authAtom); 
+  const [user] = useAtom(userInfoAtom); 
+
   return (
-    <div className=" flex p-8 bg-quartenary text-secondary justify-around">
+    <div className="flex p-8 bg-quartenary text-secondary justify-around">
       <Link
         href="/"
         className="text-2xl text-secondary font-extrabold font-montserrat"
@@ -43,15 +44,15 @@ const Header = () => {
             </Link>
           </ul>
           <Link
-              href="/login"
-              className="mx-6 text-secondary font-montserrat font-medium"
-            >
-              Login
-            </Link>
+            href="/login"
+            className="mx-6 text-secondary font-montserrat font-medium"
+          >
+            Login
+          </Link>
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

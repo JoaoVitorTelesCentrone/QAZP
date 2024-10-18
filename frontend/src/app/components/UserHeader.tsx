@@ -8,7 +8,6 @@ import { useRouter, usePathname } from 'next/navigation'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { LogOut, TreePalm } from 'lucide-react'
 import AvatarUser from './Avatar'
-import Logout from './Logout'
 
 const UserSideMenu = () => {
   const [loggedIn, setIsLogged] = useAtom(authAtom)
@@ -30,7 +29,7 @@ const UserSideMenu = () => {
 
     if (!token) {
       setIsLogged(false)
-      router.push('/login')
+      router.push('/')
     } else {
       setLoading(true)
 
@@ -42,7 +41,7 @@ const UserSideMenu = () => {
 
       setTimeout(() => {
         setLoading(false)
-      }, 3500)
+      }, 4500)
     }
   }
 

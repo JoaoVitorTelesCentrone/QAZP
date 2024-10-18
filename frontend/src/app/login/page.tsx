@@ -16,8 +16,8 @@ const API_URL = 'http://localhost:5196/api/User/login';
 
 const LoginPage = () => {
   const router = useRouter();
-  const [userAuth, setUserAuth] = useAtom(authAtom); // Estado de autenticação
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom); // Estado de informações do usuário
+  const [userAuth, setUserAuth] = useAtom(authAtom); 
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom); 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,23 +28,21 @@ const LoginPage = () => {
       const response = await axios.post(API_URL, { username, password });
 
       if (response.status === 200) {
-        const { token, name } = response.data; // Supondo que o token e o nome sejam retornados na resposta
+        const { token, name } = response.data; 
 
-        // Armazenar o token no localStorage
+        
         localStorage.setItem('token', token);
 
-        // Atualizar os átomos
-        setUserAuth(true); // Usuário autenticado
+       
+        setUserAuth(true); 
         setUserInfo({
           name: name,
           username: username,
-          password: password, // Normalmente não armazenaríamos a senha assim
         });
 
-        // Exibir mensagem de sucesso
+        
         toast.success(`Bem-vindo ${name}`);
 
-        // Redirecionar para a página da dashboard
         router.push('/dashboard');
       }
     } catch (error) {
@@ -52,14 +50,14 @@ const LoginPage = () => {
       toast.error('Usuário ou senha incorretos');
     } finally {
       setTimeout(() => {
-        setLoading(false); // Finalizar o loading após 3 segundos
-      }, 3000);
+        setLoading(false); 
+      }, 4000);
     }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    verifyLogin(); // Chama a função para verificar o login
+    verifyLogin(); 
   };
 
   return (
