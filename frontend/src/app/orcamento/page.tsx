@@ -141,8 +141,8 @@ const Page = () => {
                     {eventType
                       ? eventType
                       : `${intl.formatMessage({
-                          id: 'create.quote.page.event.type.placeholder',
-                        })}`}{' '}
+                        id: 'create.quote.page.event.type.placeholder',
+                      })}`}{' '}
                     <ChevronDown />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white mb-24 ml-96 w-96">
@@ -352,7 +352,9 @@ const Page = () => {
             onClick={handleSubmit}
             className="bg-primary border-[0.5px] border-white text-tertiary p-4 rounded-xl font-bold uppercase mx-10 shadow-lg"
           >
-            Enviar solicitação
+            {intl.formatMessage({
+              id: 'request.quote.button',
+            })}
           </Button>
         </div>
       </div>

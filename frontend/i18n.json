@@ -97,6 +97,18 @@
         "showroom.page.about.us.develpoment.title": "Desenvolvimento",
         "showroom.page.about.us.develpoment.sub.title": "Para este projeto, buscamos desenvolver não apenas um site, mas um software completo com backend e frontend. No backend, escolhemos C# devido à sua ampla utilização e robustez. No frontend, utilizamos Next.js com TypeScript, juntamente com o Tailwind para estilização e a biblioteca de componentes Shadcn UI para garantir uma interface moderna e eficiente.",
         "showroom.page.about.us.goals.title": "Objetivos a serem alcançados",
-        "showroom.page.about.us.goals.sub.title": "Durante a construção deste projeto, tivemos em mente alguns objetivos, como utilizá-lo como um projeto piloto para a escrita e implementação de cobertura de testes automatizados. Além disso, o projeto serve como uma oportunidade para desenvolvedores juniors iniciarem sua jornada, permitindo que implementem novas funcionalidades, testem, e compreendam as regras de negócio em um ambiente prático."
+        "showroom.page.about.us.goals.sub.title": "Durante a construção deste projeto, tivemos em mente alguns objetivos, como utilizá-lo como um projeto piloto para a escrita e implementação de cobertura de testes automatizados. Além disso, o projeto serve como uma oportunidade para desenvolvedores juniors iniciarem sua jornada, permitindo que implementem novas funcionalidades, testem, e compreendam as regras de negócio em um ambiente prático.",
+        "request.quote.button": "Enviar solicitação",
+        "header.title": "Z-Eventos",
+        "header.home.option": "Z-Eventos",
+        "header.about.us.option": "Sobre nós",
+        "header.quote.option": "Solicite um Orçamento",
+        "header.login.button.label": "Login",
+        "login.page.title": "Faça o seu Login",
+        "login.page.user.field.label": "Usuário",
+        "login.page.user.field.placeholder": "Digite o usuário",
+        "login.page.password.field.label": "Senha",
+        "login.page.password.field.placeholder": "Digite a senha",
+        "login.page.enter.button.label": "Entrar"
     }
 }
