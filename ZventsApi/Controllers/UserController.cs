@@ -114,7 +114,7 @@ namespace ZventsApi.Controllers
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddHours(1), // O token será válido por 3 horas
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: credentials
             );
 

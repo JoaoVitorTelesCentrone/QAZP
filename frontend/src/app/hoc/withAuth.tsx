@@ -13,14 +13,13 @@ const withAuth = (WrappedComponent: React.FC) => {
 
       if (!token) {
         toast.error('Sessão expirada, faça o login novamente');
-
         const timer = setTimeout(() => {
           router.push('/');
         }, 1000);
 
         return () => clearTimeout(timer);
       } else {
-        setLoading(false); 
+        setLoading(false);
       }
     }, [router]);
 

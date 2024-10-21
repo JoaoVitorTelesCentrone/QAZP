@@ -8,20 +8,24 @@ import { useRouter, usePathname } from 'next/navigation'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { LogOut, TreePalm } from 'lucide-react'
 import AvatarUser from './Avatar'
+import withAuth from '../hoc/withAuth'
 
 const UserSideMenu = () => {
   const [loggedIn, setIsLogged] = useAtom(authAtom)
   const [user] = useAtom(userInfoAtom)
   const router = useRouter()
   const pathname = usePathname()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (!token) {
       setIsLogged(false)
       router.push('/login')
+    } else {
+      setIsLogged(true);
     }
+    setLoading(false);
   }, [router, setIsLogged])
 
   const handleNavigation = (href: string) => {
@@ -44,6 +48,27 @@ const UserSideMenu = () => {
       }, 4500)
     }
   }
+
+  const handleLogout = () => {
+    setLoading(true)
+
+    localStorage.removeItem('token')
+    setIsLogged(false)
+
+    setTimeout(() => {
+      router.push('/login')
+    }, 1500)
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={'#123abc'} loading={loading} />
+      </div>
+    );
+  }
+
+  if (!loggedIn) return null;
 
   return loading ? (
     <div className="flex justify-center items-center h-screen">
@@ -90,11 +115,7 @@ const UserSideMenu = () => {
         <hr className="border-gray-600 my-4" />
         <button
           className="text-white items-center space-x-2 flex justify-center"
-          onClick={() => {
-            localStorage.removeItem('token')
-            setIsLogged(false)
-            router.push('/login')
-          }}
+          onClick={handleLogout}
           data-testid="logout-button"
         >
           <LogOut />
@@ -105,4 +126,4 @@ const UserSideMenu = () => {
   )
 }
 
-export default UserSideMenu
+export default withAuth(UserSideMenu)

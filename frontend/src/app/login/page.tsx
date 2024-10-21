@@ -10,7 +10,7 @@ import axios from 'axios';
 import { Toaster, toast } from 'sonner';
 import Footer from '../components/Footer';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const API_URL = 'http://localhost:5196/api/User/login';
 
@@ -22,6 +22,13 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      router.push('/dashboard');
+    }
+  }, [router]);
+
   const verifyLogin = async () => {
     setLoading(true);
     try {
@@ -29,20 +36,15 @@ const LoginPage = () => {
 
       if (response.status === 200) {
         const { token, name } = response.data; 
-
-        
         localStorage.setItem('token', token);
 
-       
         setUserAuth(true); 
         setUserInfo({
           name: name,
           username: username,
         });
 
-        
         toast.success(`Bem-vindo ${name}`);
-
         router.push('/dashboard');
       }
     } catch (error) {
@@ -69,7 +71,8 @@ const LoginPage = () => {
         </div>
       ) : (
         <>
-          <Header />
+          
+        <Header />
           <div className="flex flex-col mx-auto py-14 bg-primary h-screen">
             <h1 className="mx-auto text-5xl text-secondary-foreground my-8 font-bold uppercase text-secondary">
               Faça seu login
