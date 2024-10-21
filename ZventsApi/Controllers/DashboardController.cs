@@ -36,8 +36,10 @@ namespace ZventsApi.Controllers
                     eventItem.StartDate,
                     eventItem.EndDate,
                     eventItem.EstimatedAudience,
-                    eventItem.TotalAmount
+                    eventItem.TotalAmount,
+                    eventItem.CreatedDate
                 })
+                .OrderByDescending(dbEvent => dbEvent.CreatedDate)
                 .ToListAsync();
 
             var result = new {

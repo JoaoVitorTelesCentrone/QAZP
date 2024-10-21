@@ -50,7 +50,7 @@ const Users = () => {
 
   useEffect(() => {
     fetchUserData()
-  }, [fetchUserData])
+  }, [change, fetchUserData])
 
   const columns = useMemo(() => userColumns(), [])
 

@@ -30,9 +30,10 @@ namespace ZventsApi.Controllers
                     FullName = dbclient.FullName,
                     DocumentId = dbclient.DocumentId,
                     Email = dbclient.Email,
-                    PhoneNumber = dbclient.PhoneNumber
+                    PhoneNumber = dbclient.PhoneNumber,
+                    CreatedDate = dbclient.CreatedDate
                 })
-                .OrderBy(dbclient => dbclient.CreatedDate)
+                .OrderByDescending(dbclient => dbclient.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeClients);

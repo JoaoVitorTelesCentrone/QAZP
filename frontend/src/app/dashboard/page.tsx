@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import ClipLoader from 'react-spinners/ClipLoader';
 import UserSideMenu from '../components/UserHeader';
 import { eventTypeNameConverter, formatCurrency, formatDate } from '@/functions/functions';
-import withAuth from '../hoc/withAuth'; // Importe o HOC
+import withAuth from '../hoc/withAuth';
 import { toast } from 'sonner';
 
 const Dashboard = () => {
@@ -24,18 +24,18 @@ const Dashboard = () => {
   const router = useRouter();
 
   useEffect(() => {
-    fetchDashboardData(); // Busca os dados da Dashboard
-  }, []); // O efeito não depende de nada
+    fetchDashboardData(); 
+  }, []); 
 
   const fetchDashboardData = async () => {
     if (isDataFetchedRef.current) return;
 
-    setLoading(true); // Inicia o loading
+    setLoading(true); 
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get("http://localhost:5196/api/Dashboard", {
         headers: {
-          Authorization: `Bearer ${token}` // Adiciona o token ao cabeçalho
+          Authorization: `Bearer ${token}` 
         }
       });
 

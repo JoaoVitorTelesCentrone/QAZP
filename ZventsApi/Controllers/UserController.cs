@@ -15,9 +15,8 @@ namespace ZventsApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly ZventsDbContext _context;
-        private readonly IConfiguration _configuration;  // Adicionamos isso para acessar configurações
+        private readonly IConfiguration _configuration;  
 
-        // Construtor que injeta o contexto e as configurações
         public UserController(ZventsDbContext context, IConfiguration configuration)
     {
         _context = context;
@@ -45,9 +44,10 @@ namespace ZventsApi.Controllers
                 .Where(dbUser => dbUser.IsDeleted == false && dbUser.UserStatus == UserStatus.Active)
                 .Select(dbUser => new {
                     dbUser.Name,
-                    dbUser.UserName
+                    dbUser.UserName, 
+                    dbUser.CreatedDate
                 })
-                .OrderBy(dbUser => dbUser.CreatedDate)
+                .OrderByDescending(dbUser => dbUser.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeUsers);
