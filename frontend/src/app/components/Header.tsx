@@ -1,11 +1,11 @@
 'use client'
-
-import { useAtom } from 'jotai';
-import Link from 'next/link';
-import React from 'react';
-import { authAtom } from '../atoms/authAtom';
-import { userInfoAtom } from '../atoms/userInfoAtom';
-import UserHeader from './UserHeader';
+import { useAtom } from 'jotai'
+import Link from 'next/link'
+import React from 'react'
+import { authAtom } from '../atoms/authAtom'
+import { userInfoAtom } from '../atoms/userInfoAtom'
+import UserHeader from './UserHeader'
+import { intl } from '@/i18n'
 
 const Header = () => {
   const [isLogged] = useAtom(authAtom); 
@@ -17,7 +17,9 @@ const Header = () => {
         href="/"
         className="text-2xl text-secondary font-extrabold font-montserrat"
       >
-        Z-Eventos
+        {intl.formatMessage({
+          id: 'header.title',
+        })}
       </Link>
       {isLogged ? (
         <UserHeader />
@@ -28,26 +30,34 @@ const Header = () => {
               href="/"
               className="mx-6 text-secondary font-montserrat font-medium"
             >
-              Home
+              {intl.formatMessage({
+                id: 'header.home.option',
+              })}
             </Link>
             <Link
               href="/sobre"
               className="mx-6 text-secondary font-montserrat font-medium"
             >
-              Sobre
+              {intl.formatMessage({
+                id: 'header.about.us.option',
+              })}
             </Link>
             <Link
               href="/orcamento"
               className="mx-6 text-secondary font-montserrat font-medium"
             >
-              Solicite um orçamento
+              {intl.formatMessage({
+                id: 'header.quote.option',
+              })}
             </Link>
           </ul>
           <Link
             href="/login"
             className="mx-6 text-secondary font-montserrat font-medium"
           >
-            Login
+            {intl.formatMessage({
+              id: 'header.login.button.label',
+            })}
           </Link>
         </>
       )}
