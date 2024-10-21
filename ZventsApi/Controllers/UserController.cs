@@ -47,6 +47,7 @@ namespace ZventsApi.Controllers
                     dbUser.Name,
                     dbUser.UserName
                 })
+                .OrderBy(dbUser => dbUser.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeUsers);

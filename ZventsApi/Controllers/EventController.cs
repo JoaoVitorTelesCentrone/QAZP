@@ -37,6 +37,7 @@ namespace ZventsApi.Controllers
                     TotalAmount = e.TotalAmount,
                     ClientFullName = e.Client.FullName,
                 })
+                .OrderBy(dbEvent => dbEvent.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeEvents);

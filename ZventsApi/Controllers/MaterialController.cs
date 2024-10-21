@@ -62,6 +62,7 @@ namespace ZventsApi.Controllers
                     material.Category,
                     material.Price
                 })
+                .OrderBy(dbMaterial => dbMaterial.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeMaterials);
