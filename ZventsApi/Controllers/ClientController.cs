@@ -27,6 +27,7 @@ namespace ZventsApi.Controllers
                 .Where(dbclient => dbclient.IsDeleted == false)
                 .Select(dbclient => new ClientDto
                 {
+                    Id = dbclient.Id,
                     FullName = dbclient.FullName,
                     DocumentId = dbclient.DocumentId,
                     Email = dbclient.Email,

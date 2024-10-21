@@ -49,6 +49,7 @@ namespace ZventsApi.Models
     }
     public class ClientDto
     {
+        public Guid Id { get; set; }
         public string FullName { get; set; }
         public string DocumentId { get; set; }
         public string Email { get; set; }
