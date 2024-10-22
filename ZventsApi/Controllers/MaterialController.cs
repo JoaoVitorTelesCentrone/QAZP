@@ -60,8 +60,10 @@ namespace ZventsApi.Controllers
                 {
                     material.Name,
                     material.Category,
-                    material.Price
+                    material.Price,
+                    material.CreatedDate
                 })
+                .OrderByDescending(dbMaterial => dbMaterial.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeMaterials);

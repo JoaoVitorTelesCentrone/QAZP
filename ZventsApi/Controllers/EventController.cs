@@ -36,7 +36,9 @@ namespace ZventsApi.Controllers
                     EstimatedAudience = e.EstimatedAudience,
                     TotalAmount = e.TotalAmount,
                     ClientFullName = e.Client.FullName,
+                    CreatedDate = e.CreatedDate
                 })
+                .OrderByDescending(dbEvent => dbEvent.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeEvents);

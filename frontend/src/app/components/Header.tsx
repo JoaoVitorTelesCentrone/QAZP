@@ -8,11 +8,11 @@ import UserHeader from './UserHeader'
 import { intl } from '@/i18n'
 
 const Header = () => {
-  const [isLogged, setIsLogged] = useAtom(authAtom)
-  const [user, setUser] = useAtom(userInfoAtom)
+  const [isLogged] = useAtom(authAtom); 
+  const [user] = useAtom(userInfoAtom); 
 
   return (
-    <div className=" flex p-8 bg-quartenary text-secondary justify-around">
+    <div className="flex p-8 bg-quartenary text-secondary justify-around">
       <Link
         href="/"
         className="text-2xl text-secondary font-extrabold font-montserrat"
@@ -62,7 +62,7 @@ const Header = () => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

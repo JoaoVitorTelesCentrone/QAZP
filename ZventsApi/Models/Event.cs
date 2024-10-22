@@ -58,6 +58,7 @@ namespace ZventsApi.Models
         public DateOnly EndDate { get; set; }
         public int? EstimatedAudience { get; set; }
         public decimal? TotalAmount { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 
 

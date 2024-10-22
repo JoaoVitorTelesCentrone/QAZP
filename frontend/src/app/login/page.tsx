@@ -10,26 +10,36 @@ import axios from 'axios';
 import { Toaster, toast } from 'sonner';
 import Footer from '../components/Footer';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { intl } from '@/i18n';
 
 const API_URL = 'http://localhost:5196/api/User/login';
 
 const LoginPage = () => {
   const router = useRouter();
-  const [userAuth, setUserAuth] = useAtom(authAtom);
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
+  const [userAuth, setUserAuth] = useAtom(authAtom); 
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom); 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      router.push('/dashboard');
+    }
+  }, [router]);
+
   const verifyLogin = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const response = await axios.post(API_URL, { username, password })
+      const response = await axios.post(API_URL, { username, password });
+
       if (response.status === 200) {
-        const { name } = response.data
-        setUserAuth(true)
+        const { token, name } = response.data; 
+        localStorage.setItem('token', token);
+
+        setUserAuth(true); 
         setUserInfo({
           name: name,
           username: username,
@@ -44,14 +54,14 @@ const LoginPage = () => {
 
     } finally {
       setTimeout(() => {
-        setLoading(false);
+        setLoading(false); 
       }, 4000);
     }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    verifyLogin();
+    verifyLogin(); 
   };
 
   return (
@@ -63,7 +73,8 @@ const LoginPage = () => {
         </div>
       ) : (
         <>
-          <Header />
+          
+        <Header />
           <div className="flex flex-col mx-auto py-14 bg-primary h-screen">
             <h1 className="mx-auto text-5xl text-secondary-foreground my-8 font-bold uppercase text-secondary">
               {intl.formatMessage({
@@ -86,7 +97,7 @@ const LoginPage = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   className="p-2 bg-white border-slate-500 mb-8"
                   type="text"
-                  id="email"
+                  id="username"
                   required
                 />
                 <label className="text-white text-lg font-bold" htmlFor="password">

@@ -28,6 +28,7 @@ import { documentIdConverter, formatCurrency } from '@/functions/functions'
 import { Toaster, toast } from 'sonner'
 import { atom, useAtom } from 'jotai'
 import ValidatedInput from '../components/ValidatedInput'
+import withAuth from '../hoc/withAuth'
 
 type Mats = {
   materialId: string
@@ -651,4 +652,4 @@ const CreateEvent = () => {
   )
 }
 
-export default CreateEvent
+export default withAuth(CreateEvent)
