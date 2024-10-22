@@ -24,7 +24,6 @@ import { documentIdConverter, formatCurrency } from '@/functions/functions'
 import { eventIdAtom } from '../atoms/EventIdAtom'
 import { insertMaterialProps, MaterialType } from '../CreateEvent/utils'
 
-
 type EditEventProps = {
   eventId: string
 }
@@ -356,9 +355,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
 
           <h1 className="font-bold text-2xl mt-10 mb-2">Endereço</h1>
 
-          <div className="flex w-full flex-col md:flex-row">
-            <div className="flex justify-around mb-6">
-              <div className="flex flex-col flex-grow mr-4">
+          <div className="flex w-full flex-col">
+            <div className="xl:flex flex-col justify-around mb-6">
+              <div className="flex flex-col mr-4">
                 <label className="font-bold block mb-2">CEP</label>
                 <Input
                   value={zipCode}
@@ -397,9 +396,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
-              <div className="flex flex-col flex-grow">
+          <div className="flex flex-col  gap-4">
+            <div className="flex flex-col xl:flex-row">
+              <div className="flex flex-col ">
                 <label className="font-bold block mb-2">Bairro</label>
                 <Input
                   value={district}
@@ -446,7 +445,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
             </h1>
 
             <div className="flex flex-col justify-around mx-auto my-10">
-              <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
+              <div className="flex flex-col xl:flex-row">
                 <div className="flex flex-col flex-grow">
                   <h1 className="font-bold block mb-2">Categoria</h1>
                   <DropdownMenu>
@@ -545,7 +544,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
             </div>
 
             <div className="flex mt-4">
-              <button onClick={handleUpdate}>Atualizar</button>
+              <Button onClick={handleUpdate}>Atualizar</Button>
             </div>
           </div>
         </div>
