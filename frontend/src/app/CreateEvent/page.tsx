@@ -2,7 +2,7 @@
 import React, { useState, useEffect, SetStateAction } from 'react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
-import { Input } from '@/components/ui/input'
+import { Input } from 'antd'
 import {
   ChevronDown,
   LucideTrash2,
@@ -27,7 +27,7 @@ import UserSideMenu from '../components/UserHeader'
 import { documentIdConverter, formatCurrency } from '@/functions/functions'
 import { Toaster, toast } from 'sonner'
 import { atom, useAtom } from 'jotai'
-import ValidatedInput from '../components/ValidatedInput'
+
 import withAuth from '../hoc/withAuth'
 
 type Mats = {
@@ -295,9 +295,58 @@ const CreateEvent = () => {
       <UserSideMenu />
       <Toaster richColors />
       <div className="h-full bg-tertiary">
-        <form className="flex flex-col rounded-xl bg-opacity-30 bg-slate-400 p-6 mr-10 mt-10 mx-auto ml-64 space-y-4">
+        <form className="flex flex-col rounded-xl  bg-gray-300 p-6 mr-10 mt-10 mx-auto ml-64 space-y-4">
           <h1 className="text-3xl font-bold text-left text-primary">
-            Informações do Cliente
+            Criar evento
+          </h1>
+          <h1 className="text-2xl font-bold text-left text-primary">
+            Informações do Evento
+          </h1>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex space-y-4 sm:space-y-0 sm:space-x-6 mr-7">
+              <div className="flex flex-col xl:w-72">
+                <label className="font-bold block mb-2">Tipo</label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                    <span>{selectedType || 'Selecione um Tipo'}</span>
+                    <ChevronDown className="h-6 w-6" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-60 max-h-48 overflow-y-auto">
+                    {EventType.map((eventType, index) => (
+                      <div key={index}>
+                        <DropdownMenuItem
+                          className="cursor-pointer my-1"
+                          onClick={() =>
+                            getEventTypeNameAndIndex(
+                              eventType.index,
+                              eventType.name,
+                            )
+                          }
+                          key={index}
+                        >
+                          {eventType.name}
+                        </DropdownMenuItem>
+                        <hr className="my-1 border-gray-300" />
+                      </div>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <div className="flex flex-col xl:w-[300px]">
+                <label className="font-bold block mb-2">Título</label>
+                <Input
+                  value={eventName}
+                  onChange={setEventName}
+                  placeholder="Digite o Título do evento"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[40px] sm:w-[400px] md:w-[800px]"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <h1 className="text-2xl font-bold text-left text-primary">
+            Informações do cliente
           </h1>
           <div className="flex flex-col">
             <div className="flex Xl:w-full  space-y-4 ">
@@ -349,58 +398,17 @@ const CreateEvent = () => {
               </div>
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-left text-primary">
-            Informações do Evento
-          </h1>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex space-y-4 sm:space-y-0 sm:space-x-6 mr-7">
-              <div className="flex flex-col xl:w-72">
-                <label className="font-bold block mb-2">Tipo</label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
-                    <span>{selectedType || 'Selecione um Tipo'}</span>
-                    <ChevronDown className="h-6 w-6" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-60 max-h-48 overflow-y-auto">
-                    {EventType.map((eventType, index) => (
-                      <div key={index}>
-                        <DropdownMenuItem
-                          className="cursor-pointer my-1"
-                          onClick={() =>
-                            getEventTypeNameAndIndex(
-                              eventType.index,
-                              eventType.name,
-                            )
-                          }
-                          key={index}
-                        >
-                          {eventType.name}
-                        </DropdownMenuItem>
-                        <hr className="my-1 border-gray-300" />
-                      </div>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <div className="flex flex-col xl:w-[300px]">
-                <label className="font-bold block mb-2">Título</label>
-                <ValidatedInput
-                  value={eventName}
-                  onChange={setEventName}
-                  placeholder="Digite o Título do evento"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] sm:w-[400px] md:w-[800px]"
-                  required
-                />
-              </div>
-            </div>
-          </div>
 
-          <div>
-            <div className="flex">
+          <h1 className="text-3xl font-bold text-left text-primary">
+            Endereço
+          </h1>
+
+          <div className="xl:flex">
+            <div className="flex flex-col">
               <div className="flex items-center w-56">
                 <div className="flex flex-col">
                   <label className="font-bold">CEP</label>
-                  <ValidatedInput
+                  <Input
                     value={zipCode}
                     onChange={setZipCode}
                     placeholder="Digite o CEP"
@@ -413,24 +421,24 @@ const CreateEvent = () => {
                   onClick={handleSearchClick}
                 />
               </div>
-              <div className="flex flex-col xl:w-72 ml-6 mr-6">
+              <div className="flex flex-col  mr-6">
                 <label className="font-bold">Endereço</label>
                 <Input
                   value={addressName}
                   onChange={e => setAddressName(e.target.value)}
                   placeholder="Digite o endereço"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] "
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl  "
                   disabled
                   readOnly
                 />
               </div>
               <div className="flex flex-col w-32 mr-3">
                 <label className="font-bold ">Número</label>
-                <ValidatedInput
+                <Input
                   value={addressNumber}
-                  onChange={setAddressNumber}
+                  onChange={e => setAddressNumber}
                   placeholder="Número"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl "
                   required
                 />
               </div>
@@ -440,54 +448,54 @@ const CreateEvent = () => {
                   value={addressComplement}
                   onChange={e => setAddressComplement(e.target.value)}
                   placeholder="Digite o complemento"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl "
                 />
               </div>
             </div>
-          </div>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex  space-y-2 sm:space-y-0 sm:space-x-1">
-              <div className="flex flex-col flex-grow">
-                <label className="font-bold">Bairro</label>
-                <Input
-                  value={district}
-                  onChange={e => setDistrict(e.target.value)}
-                  placeholder="Digite o bairro"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] "
-                  disabled
-                  readOnly
-                />
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col ">
+                <div className="flex flex-col ">
+                  <label className="font-bold">Bairro</label>
+                  <Input
+                    value={district}
+                    onChange={e => setDistrict(e.target.value)}
+                    placeholder="Digite o bairro"
+                    className="bg-white text-gray-600 border border-gray-300 rounded-xl  "
+                    disabled
+                    readOnly
+                  />
+                </div>
+                <div className="flex flex-col  ">
+                  <label className="font-bold">Cidade</label>
+                  <Input
+                    value={city}
+                    onChange={e => setCity(e.target.value)}
+                    placeholder="Digite a Cidade"
+                    className="bg-white text-gray-600 border border-gray-300 rounded-xl "
+                    disabled
+                    readOnly
+                  />
+                </div>
+                <div className="flex flex-col ">
+                  <label className="font-bold">Estado</label>
+                  <Input
+                    value={state}
+                    onChange={e => setState(e.target.value)}
+                    placeholder="Digite o Estado"
+                    className="bg-white text-gray-600 border border-gray-300 rounded-xl  "
+                    disabled
+                    readOnly
+                  />
+                </div>
               </div>
-              <div className="flex flex-col flex-grow ">
-                <label className="font-bold">Cidade</label>
-                <Input
-                  value={city}
-                  onChange={e => setCity(e.target.value)}
-                  placeholder="Digite a Cidade"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px]"
-                  disabled
-                  readOnly
-                />
-              </div>
-              <div className="flex flex-col flex-grow">
-                <label className="font-bold">Estado</label>
-                <Input
-                  value={state}
-                  onChange={e => setState(e.target.value)}
-                  placeholder="Digite o Estado"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] "
-                  disabled
-                  readOnly
-                />
-              </div>
-              <div className="flex flex-col flex-grow ">
+              <div className="flex flex-col ">
                 <label className="font-bold">Público</label>
-                <ValidatedInput
+                <Input
                   type="number"
                   value={estimatedAudience}
-                  onChange={setEstimatedAudience}
+                  onChange={e => setEstimatedAudience}
                   placeholder="Público estimado"
-                  className="bg-white text-gray-600 border border-gray-300 h-[40px] "
+                  className="bg-white text-gray-600 border border-gray-300-xl  "
                   required
                 />
               </div>
@@ -501,7 +509,7 @@ const CreateEvent = () => {
                   onChange={date => handleDateChange(date, setStartDate)}
                   format="YYYY/MM/DD"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] "
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl  "
                   placeholder="Selecione uma data"
                 />
               </div>
@@ -511,7 +519,7 @@ const CreateEvent = () => {
                   onChange={time => handleTimeChange(time, setStartTime)}
                   format="HH:mm:ss"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl "
                   placeholder="Selecione um horário"
                 />
               </div>
@@ -595,7 +603,7 @@ const CreateEvent = () => {
               </div>
               <div className="flex flex-col xl:w-56 xl:mx-10 w-36">
                 <h1 className="font-bold ">Quantidade</h1>
-                <ValidatedInput
+                <Input
                   type="number"
                   value={materialQnt}
                   onChange={setMaterialQnt}
