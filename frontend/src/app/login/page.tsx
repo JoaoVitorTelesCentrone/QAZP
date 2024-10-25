@@ -1,17 +1,19 @@
 'use client'
 
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import Header from '../components/Header'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import axios from 'axios'
 import { Toaster, toast } from 'sonner'
 import Footer from '../components/Footer'
 import ClipLoader from 'react-spinners/ClipLoader'
+import { useState, useEffect } from 'react'
+import { intl } from '@/i18n'
+
+const API_URL = 'http://localhost:5196/api/User/login'
 
 const LoginPage = () => {
   const router = useRouter()
@@ -19,56 +21,46 @@ const LoginPage = () => {
   const [userInfo, setUserInfo] = useAtom(userInfoAtom)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState(false)
-  const [logged, isLogged] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const TOKEN_EXPIRATION_TIME = 60 * 60 * 1000 // 1 hour
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      router.push('/dashboard')
+    }
+  }, [router])
 
-  // Create token
-  const setToken = (token: string) => {
-    const expirationTime = Date.now() + TOKEN_EXPIRATION_TIME
-    localStorage.setItem('authToken', token)
-    localStorage.setItem('tokenExpiration', expirationTime.toString())
-  }
-
-  async function verifyLogin(username: string, password: string) {
+  const verifyLogin = async () => {
+    setLoading(true)
     try {
-      const response = await axios.get(
-        `http://localhost:5196/api/User/${username}&${password}`,
-      )
-      const userName = response.data.name
-      const userData = response.data.username
-      const userPassword = response.data.password
+      const response = await axios.post(API_URL, { username, password })
+
       if (response.status === 200) {
-        isLogged(true)
-        setError(false)
+        const { token, name } = response.data
+        localStorage.setItem('token', token)
+
         setUserAuth(true)
-        setLoading(true)
         setUserInfo({
-          name: userName,
+          name: name,
           username: username,
-          password: userPassword,
+          password: password,
         })
-
-        const token = 'dummy-token'
-        setToken(token)
-
-        await router.push('/dashboard')
-        toast.success(`Bem vindo ${username}`)
-        setLoading(false)
+        toast.success(`Bem-vindo ${username}`)
+        router.push('/dashboard')
       }
     } catch (error) {
-      setLoading(false)
       console.error('Erro ao fazer a requisição:', error)
       toast.error('Usuário ou senha incorretos')
-      setError(true)
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+      }, 4000)
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await verifyLogin(username, password)
+    verifyLogin()
   }
 
   return (
@@ -83,44 +75,57 @@ const LoginPage = () => {
           <Header />
           <div className="flex flex-col mx-auto py-14 bg-primary h-screen">
             <h1 className="mx-auto text-5xl text-secondary-foreground my-8 font-bold uppercase text-secondary">
-              Faça seu login
+              {intl.formatMessage({
+                id: 'login.page.title',
+              })}
             </h1>
             <div className="mx-auto">
               <form
                 onSubmit={handleSubmit}
                 className="flex flex-col rounded-xl bg-slate-400 p-6 bg-opacity-20 shadow-md shadow-slate-500"
               >
-                <label className="text-white text-lg font-bold ">Usuário</label>
+                <label className="text-white text-lg font-bold">
+                  {intl.formatMessage({
+                    id: 'login.page.user.field.label',
+                  })}
+                </label>
                 <Input
-                  placeholder="Digite o usuário"
+                  placeholder={intl.formatMessage({
+                    id: 'login.page.user.field.placeholder',
+                  })}
                   onChange={e => setUsername(e.target.value)}
                   className="p-2 bg-white border-slate-500 mb-8"
                   type="text"
-                  id="email"
+                  id="username"
+                  required
                 />
-
                 <label
                   className="text-white text-lg font-bold"
                   htmlFor="password"
                 >
-                  Senha
+                  {intl.formatMessage({
+                    id: 'login.page.password.field.label',
+                  })}
                 </label>
                 <Input
-                  placeholder="Digite a senha"
+                  placeholder={intl.formatMessage({
+                    id: 'login.page.password.field.placeholder',
+                  })}
                   onChange={e => setPassword(e.target.value)}
                   className="p-2 border-slate-500 bg-white mb-8"
                   type="password"
                   id="password"
+                  required
                 />
-                <div className="flex flex-col">
-                  <button
-                    data-testid="login-button"
-                    className="bg-primary text-secondary rounded-xl px-6 py-3 max-w-[150px] mx-auto"
-                    type="submit"
-                  >
-                    Entrar
-                  </button>
-                </div>
+                <button
+                  data-testid="login-button"
+                  className="bg-primary text-secondary rounded-xl px-6 py-3 max-w-[150px] mx-auto"
+                  type="submit"
+                >
+                  {intl.formatMessage({
+                    id: 'login.page.enter.button.label',
+                  })}
+                </button>
               </form>
             </div>
           </div>

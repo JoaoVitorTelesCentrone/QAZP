@@ -15,7 +15,6 @@ namespace ZventsApi.Controllers
         {
             var activeMaterials = await _context
                 .Materials.Where(dbMaterial => dbMaterial.IsDeleted == false)
-                .OrderBy(dbMaterial => dbMaterial.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeMaterials);
@@ -51,6 +50,25 @@ namespace ZventsApi.Controllers
                 .Materials.Where(dbMaterial => dbMaterial.Name == name)
                 .ToArrayAsync();
         }
+
+        [HttpGet("active-materials")]
+        public async Task<ActionResult<IEnumerable<object>>> GetActiveMaterialsAsync()
+        {
+            var activeMaterials = await _context.Materials
+                .Where(dbMaterial => dbMaterial.IsDeleted == false)
+                .Select(material => new 
+                {
+                    material.Name,
+                    material.Category,
+                    material.Price,
+                    material.CreatedDate
+                })
+                .OrderByDescending(dbMaterial => dbMaterial.CreatedDate)
+                .ToListAsync();
+
+            return Ok(activeMaterials);
+        }
+
 
         [HttpPost]
         public ActionResult<Material> PostMaterial(Material material)

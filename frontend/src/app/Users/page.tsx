@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { userColumns, type Users } from './columns'
 import { UsersTable } from './UsersTable'
 import axios from 'axios'
@@ -10,38 +10,50 @@ import { Button } from 'antd'
 import { userChangeAtom } from '../atoms/changeUserAtom'
 import { useAtom } from 'jotai'
 import CreateUserModal from './createUserModal'
+import withAuth from '../hoc/withAuth'; 
 
 const Users = () => {
-  const [userData, setUserData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [change, setChange] = useAtom(userChangeAtom)
+  console.log('Users renderizado');
+  const [userData, setUserData] = useState<Users[]>([])
+  const [loading, setLoading] = useState(true)
+  const [change] = useAtom(userChangeAtom)
   const [openModal, setOpenModal] = useState(false)
+
+  const isFetching = useRef(false)
+
+  const fetchUserData = useCallback(async () => {
+    if (isFetching.current) return
+    isFetching.current = true
+
+    setLoading(true)
+    try {
+      const response = await axios.get('http://localhost:5196/api/User/activeUsers')
+      
+      const filteredData = response.data
+        .filter((user: any) => !user.isDeleted)
+        .map((user: any) => ({
+          name: user.name,
+          userName: user.userName,
+        }))
+
+      setUserData(filteredData)
+      console.log(filteredData)
+    } catch (error) {
+      console.error('Erro ao fazer a requisição:', error)
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+        isFetching.current = false
+      }, 100)
+    }
+  }, [])
 
   useEffect(() => {
     fetchUserData()
-  }, [change])
-
-  async function fetchUserData() {
-    try {
-      const response = await axios.get('http://localhost:5196/api/User')
-
-      setUserData(response.data)
-    } catch (error) {
-      console.error('Erro ao fazer a requisição:', error)
-      throw error
-    }
-  }
-  useEffect(() => {
-    const fetch = async () => {
-      setLoading(true)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      await Promise.all([fetchUserData()])
-      setLoading(false)
-    }
-    fetch()
-  }, [])
+  }, [change, fetchUserData])
 
   const columns = useMemo(() => userColumns(), [])
+
   return (
     <div>
       {openModal && (
@@ -58,17 +70,16 @@ const Users = () => {
         <>
           <UserSideMenu />
           <div className="bg-tertiary h-screen">
-            <div className="p-10 ">
+            <div className="p-10">
               <div className="flex mt-4 justify-between w-full">
-                <div className="flex ml-48">
-                  <FaUser className=" w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
-
+                <div className="flex ml-64">
+                  <FaUser className="w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
                   <h1 className="font-monospace font-semibold text-7xl my-3 mx-4 text-secondary-foreground">
                     Usuários
                   </h1>
                 </div>
                 <Button
-                  icon={<FaUserPlus className="w-5 h-5 " />}
+                  icon={<FaUserPlus className="w-5 h-5" />}
                   type="primary"
                   className="mt-8"
                   size="large"
@@ -88,4 +99,4 @@ const Users = () => {
   )
 }
 
-export default Users
+export default withAuth(Users);

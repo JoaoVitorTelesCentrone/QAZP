@@ -15,11 +15,31 @@ namespace ZventsApi.Controllers
         {
             var activeClients = await _context
                 .Clients.Where(dbclient => dbclient.IsDeleted == false)
-                .OrderBy(dbclient => dbclient.CreatedDate)
                 .ToListAsync();
 
             return Ok(activeClients);
         }
+
+        [HttpGet("active")]
+        public async Task<ActionResult<IEnumerable<ClientDto>>> GetActiveClientsAsync()
+        {
+            var activeClients = await _context.Clients
+                .Where(dbclient => dbclient.IsDeleted == false)
+                .Select(dbclient => new ClientDto
+                {
+                    Id = dbclient.Id,
+                    FullName = dbclient.FullName,
+                    DocumentId = dbclient.DocumentId,
+                    Email = dbclient.Email,
+                    PhoneNumber = dbclient.PhoneNumber,
+                    CreatedDate = dbclient.CreatedDate
+                })
+                .OrderByDescending(dbclient => dbclient.CreatedDate)
+                .ToListAsync();
+
+            return Ok(activeClients);
+        }
+
 
         [HttpPost]
         public async Task<ActionResult<Client>> PostClientAsync(Client client)

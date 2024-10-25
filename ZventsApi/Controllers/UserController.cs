@@ -1,14 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ZventsApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
 
 namespace ZventsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(ZventsDbContext context) : ControllerBase
+    
+    public class UserController : ControllerBase
     {
-        private readonly ZventsDbContext _context = context;
+        private readonly ZventsDbContext _context;
+        private readonly IConfiguration _configuration;  
+
+        public UserController(ZventsDbContext context, IConfiguration configuration)
+    {
+        _context = context;
+        _configuration = configuration;  // Atribui a configuração ao campo privado
+    }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUserAsync()
@@ -22,6 +35,24 @@ namespace ZventsApi.Controllers
 
             return Ok(activeUsers);
         }
+
+        [HttpGet("activeUsers")]
+        public async Task<ActionResult<IEnumerable<object>>> GetActiveUsersAsync()
+        {
+            var activeUsers = await _context
+                .Users
+                .Where(dbUser => dbUser.IsDeleted == false && dbUser.UserStatus == UserStatus.Active)
+                .Select(dbUser => new {
+                    dbUser.Name,
+                    dbUser.UserName, 
+                    dbUser.CreatedDate
+                })
+                .OrderByDescending(dbUser => dbUser.CreatedDate)
+                .ToListAsync();
+
+            return Ok(activeUsers);
+        }
+
 
         [HttpPost]
         public ActionResult<User> PostUser(User user)
@@ -38,6 +69,66 @@ namespace ZventsApi.Controllers
 
             return Conflict(new { message = "User already exists" });
         }
+
+        [HttpPost("login")]
+        public ActionResult Login([FromBody] LoginRequest request)
+        {
+            var user = _context.Users.FirstOrDefault(dbUser =>
+                dbUser.UserName == request.Username && dbUser.Password == request.Password
+            );
+
+            if (user == null)
+            {
+                return NotFound(new { message = "Usuário não encontrado" });
+            }
+            else if (user.UserStatus == UserStatus.Inactive || user.IsDeleted == true) 
+            {
+                return Unauthorized("Usuário não autorizado");
+            }
+
+            // Gerar o token JWT
+            var token = GenerateJwtToken(user);
+
+            return Ok(new 
+            { 
+                token = token, 
+                name = user.Name, 
+                message = "Login bem-sucedido" 
+            });
+        }
+
+        // Método para gerar o token JWT
+        private string GenerateJwtToken(User user)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("name", user.Name),
+                new Claim("role", user.Role.ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        // Classe para encapsular as credenciais do login
+        public class LoginRequest
+        {
+            public string Username { get; set; }
+            public string Password { get; set; }
+        }
+
 
         [HttpGet("name/{name}")]
         public ActionResult<User> GetUserByName(string name)
