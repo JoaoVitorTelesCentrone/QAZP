@@ -49,6 +49,38 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
   const [state, setState] = useState(clientData?.state)
   const [city, setCity] = useState(clientData?.city)
 
+  const removeMask = (value: string): string => {
+    return value.replace(/\D/g, ''); // Remove tudo que não é dígito
+  };
+
+  const formatZipCode = (value: string) => {
+    return value.replace(/\D/g, '').replace(/^(\d{5})(\d{3})$/, '$1-$2')
+  }
+  const formatDocumentId = (value: string) => {
+    const numericValue = value.replace(/\D/g, '')
+
+    if (numericValue.length == 11) {
+      // CPF mask
+      return numericValue
+        .replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4')
+    } else if (numericValue.length == 14) {
+      // CNPJ mask
+      return numericValue
+        .replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5')
+    }
+    return numericValue
+  }
+
+  const handleDocumentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatDocumentId(e.target.value)
+    setDocumentId(formattedValue)
+  }
+
+  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatZipCode(e.target.value)
+    setZipCode(formattedValue)
+  }
+
   const updateClient = async (updatedData: ClientDataProps) => {
     try {
       console.log('Updating client with data:', updatedData)
@@ -79,18 +111,18 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     updateClient({
       id: clientData?.id,
       fullName: fullName,
-      documentId: documentId,
+      documentId: removeMask(documentId || ''), // Remove a máscara do documentId
       createdDate: clientData?.createdDate,
       email: email,
-      zipCode: zipCode,
+      zipCode: removeMask(zipCode || ''), // Remove a máscara do zipCode
       addressName: addressName,
       addressComplement: addressComplement,
-      addressNumber: addressNumber,
+      addressNumber: addressNumber || '', // Remove a máscara do addressNumber
       district: district,
       state: state,
       city: city,
       isActive: clientData?.isActive,
-      phoneNumber: phoneNumber,
+      phoneNumber: removeMask(phoneNumber || ''), // Remove a máscara do phoneNumber
     })
   }
 
@@ -149,7 +181,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
               </h1>
               <Input
                 value={documentId}
-                onChange={e => setDocumentId(e.target.value)}
+                maxLength={18}
+                onChange={handleDocumentIdChange}
                 className="p-2 border-slate-500 bg-white mb-4"
                 placeholder={intl.formatMessage({
                   id: 'create.client.page.document.field.placeholder',
@@ -204,7 +237,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                     id: 'create.client.page.zipCode.field.placeholder',
                   })}
                   value={zipCode}
-                  onChange={e => setZipCode(e.target.value)}
+                  maxLength={9}
+                  onChange={handleZipCodeChange}
                 />
                 <SearchIcon className="p-2 h-10 w-10 cursor-pointer" />
               </div>
@@ -263,9 +297,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 })}
               </h1>
               <Input
-                className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 value={district}
                 onChange={e => setDistrict(e.target.value)}
+                className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 readOnly={true}
               />
             </div>
@@ -276,9 +310,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 })}
               </h1>
               <Input
-                className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 value={state}
                 onChange={e => setState(e.target.value)}
+                className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 readOnly={true}
               />
             </div>
@@ -289,9 +323,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 })}
               </h1>
               <Input
-                className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 value={city}
                 onChange={e => setCity(e.target.value)}
+                className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 readOnly={true}
               />
             </div>
