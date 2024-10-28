@@ -24,7 +24,6 @@ import { documentIdConverter, formatCurrency } from '@/functions/functions'
 import { eventIdAtom } from '../atoms/EventIdAtom'
 import { insertMaterialProps, MaterialType } from '../CreateEvent/utils'
 
-
 type EditEventProps = {
   eventId: string
 }
@@ -285,7 +284,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
   return (
     <div>
       <UserSideMenu />
-      <div className="ml-56 mr-10 my-10">
+      <div className="ml-56 p-4 rounded-xl bg-gray-300 mr-10 my-10">
         <h1 className="text-3xl font-bold">Editar evento {name}</h1>
         <div className="my-4">
           <h1 className="font-bold text-2xl mb-2">Nome</h1>
@@ -297,10 +296,8 @@ const EditEvent: React.FC<EditEventProps> = () => {
 
           <div>
             <h1 className="text-2xl my-3 font-bold">Cliente</h1>
-            <div className="flex justify-ar">
-              <h1 className="mr-10 font-bold">{clientName}</h1>
+            <div className="flex">
               <div className="">
-                <h1 className="mb-2">Editar cliente</h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] md:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                     <span>{clientName || 'Selecione um Cliente'}</span>
@@ -336,29 +333,33 @@ const EditEvent: React.FC<EditEventProps> = () => {
               value={startDate}
               onChange={date => setStartDate(date)}
               format="YYYY/MM/DD"
+              className="xl:w-[250px]"
             />
             <DatePicker
               value={endDate}
               onChange={date => setEndDate(date)}
               format="YYYY/MM/DD"
+              className="xl:w-[250px]"
             />
             <TimePicker
               value={startTime}
               onChange={time => setStartTime(time)}
               format="HH:mm:ss"
+              className="xl:w-[250px]"
             />
             <TimePicker
               value={endTime}
               onChange={time => setEndTime(time)}
               format="HH:mm:ss"
+              className="xl:w-[250px]"
             />
           </div>
 
           <h1 className="font-bold text-2xl mt-10 mb-2">Endereço</h1>
 
-          <div className="flex w-full flex-col md:flex-row">
-            <div className="flex justify-around mb-6">
-              <div className="flex flex-col flex-grow mr-4">
+          <div className="flex sm:flex-col md:flex-col xl:flex-row w-full justify-between">
+            <div className="xl:flex flex-col justify-around mb-6">
+              <div className="flex flex-col mr-4">
                 <label className="font-bold block mb-2">CEP</label>
                 <Input
                   value={zipCode}
@@ -395,11 +396,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
                 />
               </div>
             </div>
-          </div>
 
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
-              <div className="flex flex-col flex-grow">
+            <div className="flex flex-col ">
+              <div className="flex flex-col ">
                 <label className="font-bold block mb-2">Bairro</label>
                 <Input
                   value={district}
@@ -446,8 +445,8 @@ const EditEvent: React.FC<EditEventProps> = () => {
             </h1>
 
             <div className="flex flex-col justify-around mx-auto my-10">
-              <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4">
-                <div className="flex flex-col flex-grow">
+              <div className="flex flex-col xl:flex-row">
+                <div className="flex flex-col ">
                   <h1 className="font-bold block mb-2">Categoria</h1>
                   <DropdownMenu>
                     <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
@@ -472,10 +471,10 @@ const EditEvent: React.FC<EditEventProps> = () => {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                <div className="flex flex-col flex-grow">
-                  <h1 className="font-bold block mb-2">Material</h1>
+                <div className="flex flex-col flex-grow my-3">
+                  <h1 className="font-bold block mb-2 xl:ml-10">Material</h1>
                   <DropdownMenu>
-                    <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                    <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] xl:mx-10 bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                       <span>{selectedMaterial || 'Selecione um Material'}</span>
                       <ChevronDown className="h-6 w-6" />
                     </DropdownMenuTrigger>
@@ -507,7 +506,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
                     value={materialQnt}
                     onChange={e => setMaterialQnt(e.target.value)}
                     placeholder="Quantidade"
-                    className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[150px]"
+                    className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px]  w-32"
                   />
                 </div>
                 <div className="flex flex-col flex-grow">
@@ -545,7 +544,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
             </div>
 
             <div className="flex mt-4">
-              <button onClick={handleUpdate}>Atualizar</button>
+              <Button onClick={handleUpdate}>Atualizar</Button>
             </div>
           </div>
         </div>

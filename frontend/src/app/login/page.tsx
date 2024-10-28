@@ -1,68 +1,67 @@
-'use client';
+'use client'
 
-import { useAtom } from 'jotai';
-import { authAtom } from '../atoms/authAtom';
-import { userInfoAtom } from '../atoms/userInfoAtom';
-import Header from '../components/Header';
-import { useRouter } from 'next/navigation';
-import { Input } from '@/components/ui/input';
-import axios from 'axios';
-import { Toaster, toast } from 'sonner';
-import Footer from '../components/Footer';
-import ClipLoader from 'react-spinners/ClipLoader';
-import { useState, useEffect } from 'react';
-import { intl } from '@/i18n';
+import { useAtom } from 'jotai'
+import { authAtom } from '../atoms/authAtom'
+import { userInfoAtom } from '../atoms/userInfoAtom'
+import Header from '../components/Header'
+import { useRouter } from 'next/navigation'
+import { Input } from '@/components/ui/input'
+import axios from 'axios'
+import { Toaster, toast } from 'sonner'
+import Footer from '../components/Footer'
+import ClipLoader from 'react-spinners/ClipLoader'
+import { useState, useEffect } from 'react'
+import { intl } from '@/i18n'
 
-const API_URL = 'http://localhost:5196/api/User/login';
+const API_URL = 'http://localhost:5196/api/User/login'
 
 const LoginPage = () => {
-  const router = useRouter();
-  const [userAuth, setUserAuth] = useAtom(authAtom); 
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom); 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const router = useRouter()
+  const [userAuth, setUserAuth] = useAtom(authAtom)
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token')
     if (token) {
-      router.push('/dashboard');
+      router.push('/dashboard')
     }
-  }, [router]);
+  }, [router])
 
   const verifyLogin = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const response = await axios.post(API_URL, { username, password });
+      const response = await axios.post(API_URL, { username, password })
 
       if (response.status === 200) {
-        const { token, name } = response.data; 
-        localStorage.setItem('token', token);
+        const { token, name } = response.data
+        localStorage.setItem('token', token)
 
-        setUserAuth(true); 
+        setUserAuth(true)
         setUserInfo({
           name: name,
           username: username,
           password: password,
         })
-        toast.success(`Bem-vindo ${username}`);
-        router.push('/dashboard');
+        toast.success(`Bem-vindo ${username}`)
+        router.push('/dashboard')
       }
     } catch (error) {
-      console.error('Erro ao fazer a requisição:', error);
-      toast.error('Usuário ou senha incorretos');
-
+      console.error('Erro ao fazer a requisição:', error)
+      toast.error('Usuário ou senha incorretos')
     } finally {
       setTimeout(() => {
-        setLoading(false); 
-      }, 4000);
+        setLoading(false)
+      }, 4000)
     }
-  };
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    verifyLogin(); 
-  };
+    e.preventDefault()
+    verifyLogin()
+  }
 
   return (
     <div>
@@ -73,8 +72,7 @@ const LoginPage = () => {
         </div>
       ) : (
         <>
-          
-        <Header />
+          <Header />
           <div className="flex flex-col mx-auto py-14 bg-primary h-screen">
             <h1 className="mx-auto text-5xl text-secondary-foreground my-8 font-bold uppercase text-secondary">
               {intl.formatMessage({
@@ -89,18 +87,22 @@ const LoginPage = () => {
                 <label className="text-white text-lg font-bold">
                   {intl.formatMessage({
                     id: 'login.page.user.field.label',
-                  })}</label>
+                  })}
+                </label>
                 <Input
                   placeholder={intl.formatMessage({
                     id: 'login.page.user.field.placeholder',
                   })}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={e => setUsername(e.target.value)}
                   className="p-2 bg-white border-slate-500 mb-8"
                   type="text"
                   id="username"
                   required
                 />
-                <label className="text-white text-lg font-bold" htmlFor="password">
+                <label
+                  className="text-white text-lg font-bold"
+                  htmlFor="password"
+                >
                   {intl.formatMessage({
                     id: 'login.page.password.field.label',
                   })}
@@ -109,7 +111,7 @@ const LoginPage = () => {
                   placeholder={intl.formatMessage({
                     id: 'login.page.password.field.placeholder',
                   })}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                   className="p-2 border-slate-500 bg-white mb-8"
                   type="password"
                   id="password"
@@ -131,7 +133,7 @@ const LoginPage = () => {
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage
