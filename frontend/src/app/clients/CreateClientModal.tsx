@@ -3,7 +3,6 @@ import axios, { isAxiosError } from 'axios'
 import { SearchIcon } from 'lucide-react'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
-
 import { useAtom } from 'jotai'
 import { intl } from '@/i18n'
 import { redirect } from 'next/navigation'
@@ -49,18 +48,44 @@ const CreateClientModal: React.FC<createClientProps> = ({
   const [city, setCity] = useState('')
   const [change, setChange] = useAtom(clientChangeAtom)
 
-
   if (!isLogged) {
     redirect('/')
   }
 
-  const handleSearchClick: React.MouseEventHandler<
-    SVGSVGElement
-  > = async event => {
+  const formatZipCode = (value: string) => {
+    return value.replace(/\D/g, '').replace(/^(\d{5})(\d{3})$/, '$1-$2')
+  }
+
+  const formatDocumentId = (value: string) => {
+    const numericValue = value.replace(/\D/g, '')
+
+    if (numericValue.length <= 11) {
+      // CPF mask
+      return numericValue
+        .replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4')
+    } else if (numericValue.length <= 14) {
+      // CNPJ mask
+      return numericValue
+        .replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5')
+    }
+    return numericValue
+  }
+
+  const handleDocumentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatDocumentId(e.target.value)
+    setDocumentId(formattedValue)
+  }
+
+  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatZipCode(e.target.value)
+    setZipCode(formattedValue)
+  }
+
+  const handleSearchClick: React.MouseEventHandler<SVGSVGElement> = async event => {
     try {
       event.preventDefault()
       const response = await axios.get(
-        `https://viacep.com.br/ws/${zipCode}/json/`,
+        `https://viacep.com.br/ws/${zipCode}/json/`
       )
 
       const cepData = response.data
@@ -73,13 +98,17 @@ const CreateClientModal: React.FC<createClientProps> = ({
     }
   }
 
+  function removeMask(value:string): string {
+    return value.replace(/\D/g, '');
+  }
+
   async function createClient() {
     const data = {
       fullName,
-      documentId,
-      phoneNumber,
+      documentId: removeMask(documentId),
+      phoneNumber: removeMask(phoneNumber),
       email,
-      zipCode,
+      zipCode: removeMask(zipCode),
       addressName,
       addressNumber,
       addressComplement,
@@ -87,25 +116,19 @@ const CreateClientModal: React.FC<createClientProps> = ({
       state,
       city,
     }
+    console.log("Dados do cliente:", data);
+
     try {
-      const response = await axios.post(
-        'http://localhost:5196/api/Client',
-        data,
-      )
-      const userData = response.data
+      const response = await axios.post('http://localhost:5196/api/Client', data)
       if (response.status === 201) {
         toast.success('Cliente criado')
         onClose()
         setChange(prev => prev + 1)
       }
-      if (response.status === 409) {
-        toast.error('Cliente criado')
-      }
     } catch (error: unknown) {
       if (isAxiosError(error)) {
         console.error('Erro ao fazer a requisição:', error)
         if (error.response) {
-          console.error('Código de status:', error.response.status)
           if (error.response.status === 409) {
             toast.error('Esse cliente já existe!')
           } else if (error.response.status === 400) {
@@ -117,7 +140,6 @@ const CreateClientModal: React.FC<createClientProps> = ({
       }
     }
   }
-
   return (
     <div>
       <Modal
@@ -126,7 +148,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
         onCancel={onClose}
         footer={[]}
       >
-        <form className="">
+        <form>
           <div>
             <h1 className="text-2xl font-bold mb-2">
               {intl.formatMessage({
@@ -158,13 +180,14 @@ const CreateClientModal: React.FC<createClientProps> = ({
                     id: 'create.client.page.document.field.label',
                   })}
                 </h1>
-                <ValidatedInput
-                  onChange={setDocumentId}
+                <Input
+                  onChange={handleDocumentIdChange}
                   className="p-4 border-slate-500 bg-white mb-4 border rounded w-full"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.document.field.placeholder',
                   })}
                   value={documentId}
+                  maxLength={18}
                   required
                 />
               </div>
@@ -213,13 +236,14 @@ const CreateClientModal: React.FC<createClientProps> = ({
                   })}
                 </h1>
                 <div className="flex">
-                  <ValidatedInput
+                  <Input
                     className="p-4 border-slate-500 bg-white mb-4 border rounded w-full"
                     placeholder={intl.formatMessage({
                       id: 'create.client.page.zipCode.field.placeholder',
                     })}
                     value={zipCode}
-                    onChange={setZipCode}
+                    maxLength={9}
+                    onChange={handleZipCodeChange}
                     required
                   />
                   <SearchIcon
