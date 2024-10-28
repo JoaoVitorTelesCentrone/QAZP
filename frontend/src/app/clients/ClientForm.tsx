@@ -117,59 +117,56 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
         className="mt-1 mb-2 flex-col flex border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-white p-10 max-w-[700px]"
       >
         <div className="flex justify-between">
-          <h1 className="text-2xl font-bold mb-6">Criar cliente</h1>
+          <h1 className="text-2xl font-bold mb-6">Editar cliente</h1>
           <X className="cursor-pointer" onClick={closeModal} />
         </div>
 
-        <div>
-          <div className="flex w-full justify-between">
-            <div className="w-full">
-              <h1 className="xl:mr-96 xl:w-48 mb-2 font-bold">
-                {intl.formatMessage({
-                  id: 'create.client.page.fullName.field.label',
-                })}
-              </h1>
-              <Input
-                value={fullName}
-                onChange={e => setFullName(e.target.value)}
-                className="p-2 border-slate-500 bg-white mb-4"
-                placeholder={intl.formatMessage({
-                  id: 'create.client.page.fullName.field.placeholder',
-                })}
-              />
-            </div>
+        <div className="flex w-full ">
+          <div className="w-[38%] mr-2">
+            <h1 className="font-bold mr-24">
+              {intl.formatMessage({
+                id: 'create.client.page.fullName.field.label',
+              })}
+            </h1>
+            <Input
+              value={fullName}
+              onChange={e => setFullName(e.target.value)}
+              className="p-2 border-slate-500  bg-white mb-4"
+              placeholder={intl.formatMessage({
+                id: 'create.client.page.fullName.field.placeholder',
+              })}
+            />
           </div>
-          <div className="w-full justify-around flex">
-            <div className="mr-2 w-[45%]">
-              <h1 className="xl:mr-40  font-bold">
-                {intl.formatMessage({
-                  id: 'create.client.page.document.field.label',
-                })}
-              </h1>
-              <Input
-                value={documentId}
-                onChange={e => setDocumentId(e.target.value)}
-                className="p-2 border-slate-500 bg-white mb-4"
-                placeholder={intl.formatMessage({
-                  id: 'create.client.page.document.field.placeholder',
-                })}
-              />
-            </div>
-            <div className="w-[45%]">
-              <h1 className="xl:mr-44  font-bold">
-                {intl.formatMessage({
-                  id: 'create.client.page.phoneNumber.field.label',
-                })}
-              </h1>
-              <Input
-                value={phoneNumber}
-                onChange={e => setPhoneNumber(e.target.value)}
-                className="p-2 border-slate-500 bg-white mb-4"
-                placeholder={intl.formatMessage({
-                  id: 'create.client.page.phoneNumber.field.placeholder',
-                })}
-              />
-            </div>
+
+          <div className="mr-2 w-[30%]">
+            <h1 className="xl:mr-40  font-bold">
+              {intl.formatMessage({
+                id: 'create.client.page.document.field.label',
+              })}
+            </h1>
+            <Input
+              value={documentId}
+              onChange={e => setDocumentId(e.target.value)}
+              className="p-2 border-slate-500 bg-white mb-4"
+              placeholder={intl.formatMessage({
+                id: 'create.client.page.document.field.placeholder',
+              })}
+            />
+          </div>
+          <div className="w-[30%]">
+            <h1 className="xl:mr-44  font-bold">
+              {intl.formatMessage({
+                id: 'create.client.page.phoneNumber.field.label',
+              })}
+            </h1>
+            <Input
+              value={phoneNumber}
+              onChange={e => setPhoneNumber(e.target.value)}
+              className="p-2 border-slate-500 bg-white mb-4"
+              placeholder={intl.formatMessage({
+                id: 'create.client.page.phoneNumber.field.placeholder',
+              })}
+            />
           </div>
         </div>
         <div className="flex justify-between">
