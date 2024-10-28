@@ -336,9 +336,9 @@ const CreateEvent = () => {
                 <label className="font-bold block mb-2">Título</label>
                 <Input
                   value={eventName}
-                  onChange={setEventName}
+                  onChange={e => setEventName(e.target.value)}
                   placeholder="Digite o Título do evento"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[40px] sm:w-[400px] md:w-[800px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[40px] sm:w-[400px] md:w-[600px]"
                   required
                 />
               </div>
@@ -353,7 +353,7 @@ const CreateEvent = () => {
               <div className="flex flex-col xl:w-[30%] xl:mr-2 mt-4 ">
                 <h1 className="font-bold block mb-2">Cliente</h1>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] text-sm bg-white rounded-xl flex items-center justify-between px-4 ">
                     <span>{clientName || 'Cliente'}</span>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
@@ -410,7 +410,7 @@ const CreateEvent = () => {
                   <label className="font-bold">CEP</label>
                   <Input
                     value={zipCode}
-                    onChange={setZipCode}
+                    onChange={e => setZipCode(e.target.value)}
                     placeholder="Digite o CEP"
                     className="bg-white text-gray-600 border border-gray-300 rounded"
                     required
@@ -436,7 +436,7 @@ const CreateEvent = () => {
                 <label className="font-bold ">Número</label>
                 <Input
                   value={addressNumber}
-                  onChange={e => setAddressNumber}
+                  onChange={e => setAddressNumber(e.target.value)}
                   placeholder="Número"
                   className="bg-white text-gray-600 border border-gray-300 rounded-xl "
                   required
@@ -493,7 +493,7 @@ const CreateEvent = () => {
                 <Input
                   type="number"
                   value={estimatedAudience}
-                  onChange={e => setEstimatedAudience}
+                  onChange={e => setEstimatedAudience(e.target.value)}
                   placeholder="Público estimado"
                   className="bg-white text-gray-600 border border-gray-300-xl  "
                   required
@@ -606,7 +606,7 @@ const CreateEvent = () => {
                 <Input
                   type="number"
                   value={materialQnt}
-                  onChange={setMaterialQnt}
+                  onChange={e => setMaterialQnt(e.target.value)}
                   placeholder="Quantidade"
                   className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 xl:w-48 "
                 />
