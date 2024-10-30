@@ -338,7 +338,7 @@ const CreateEvent = () => {
                   value={eventName}
                   onChange={e => setEventName(e.target.value)}
                   placeholder="Digite o Título do evento"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[40px] sm:w-[400px] md:w-[600px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[40px] sm:w-[250px] md:w-[500px]"
                   required
                 />
               </div>

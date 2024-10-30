@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useAtom } from 'jotai';
 import axios from 'axios';
 import { authAtom } from '../atoms/authAtom';
@@ -23,19 +23,15 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    fetchDashboardData(); 
-  }, []); 
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     if (isDataFetchedRef.current) return;
 
-    setLoading(true); 
+    setLoading(true);
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get("http://localhost:5196/api/Dashboard", {
         headers: {
-          Authorization: `Bearer ${token}` 
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -52,19 +48,24 @@ const Dashboard = () => {
           estimatedAudience: event.estimatedAudience,
           totalAmount: formatCurrency(event.totalAmount),
         }));
+        console.log(response.data)
 
         setEvents(formattedEvents || []);
-        isDataFetchedRef.current = true; // Marca que os dados já foram buscados
+        isDataFetchedRef.current = true; 
       } else {
         console.error(`Error: ${response.status} - ${response.statusText}`);
       }
     } catch (error) {
       console.error(`Error fetching dashboard data:`, error);
-      toast.error('Erro ao buscar dados da Dashboard'); // Notifica o erro ao usuário
+      toast.error('Erro ao buscar dados da Dashboard'); 
     } finally {
-      setLoading(false); // Finaliza o loading
+      setLoading(false); 
     }
-  };
+  }, []); 
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]); 
 
   return (
     <div>
@@ -112,4 +113,4 @@ const Dashboard = () => {
   );
 };
 
-export default withAuth(Dashboard); // Envolvendo o componente com a HOC
+export default withAuth(Dashboard); 
