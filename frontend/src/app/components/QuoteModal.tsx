@@ -1,16 +1,15 @@
 'use client'
 
-import { useAtom } from 'jotai'
 import { useRouter } from 'next/navigation'
-import { Input } from 'antd'
+import { Dropdown, Input, Menu, MenuProps, Space, Button, Modal } from 'antd'
 import axios from 'axios'
 import { Toaster, toast } from 'sonner'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { useState } from 'react'
-import { Modal, Button } from 'antd'
 import { intl } from '@/i18n'
+import { ChevronDown } from 'lucide-react'
 
-const API_URL = 'http://localhost:5196/api/Quote' // URL do endpoint de orçamento
+const API_URL = 'http://localhost:5196/api/Quote'
 
 const QuoteModal = ({
   isVisible,
@@ -26,6 +25,31 @@ const QuoteModal = ({
   const [phoneNumber, setPhoneNumber] = useState('')
   const [eventType, setEventType] = useState('')
   const [estimatedAudience, setEstimatedAudience] = useState(0)
+
+  const items: MenuProps['items'] = [
+    { key: 'Festival', label: 'Festival' },
+    { key: 'Festa', label: 'Festa' },
+    { key: 'Formatura', label: 'Formatura' },
+    { key: 'Workshop', label: 'Workshop' },
+    { key: 'Casamento', label: 'Casamento' },
+    { key: 'Campeonato', label: 'Campeonato' },
+    { key: 'Seminário', label: 'Seminário' },
+    { key: 'Convenção', label: 'Convenção' },
+    { key: 'Baile', label: 'Baile' },
+    { key: 'Cerimônia', label: 'Cerimônia' },
+  ]
+
+  const resetForm = () => {
+    setFullName('')
+    setEmail('')
+    setPhoneNumber('')
+    setEventType('')
+    setEstimatedAudience(0)
+  }
+
+  const handleMenuClick: MenuProps['onClick'] = e => {
+    setEventType(e.key)
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -46,10 +70,9 @@ const QuoteModal = ({
         },
       })
 
-      if (response.status === 200) {
-        toast.success(`Cotações enviadas com sucesso!`)
-        onClose()
-        // Opcional: redirecionar ou executar outra lógica aqui
+      if (response.status === 201) {
+        handleModalClose()
+        toast.success('Cotações enviadas com sucesso!') // Show success toast
       }
     } catch (error) {
       console.error('Erro ao enviar a cotação:', error)
@@ -59,12 +82,17 @@ const QuoteModal = ({
     }
   }
 
+  const handleModalClose = () => {
+    resetForm()
+    onClose()
+  }
+
   return (
     <>
       <Toaster richColors />
       <Modal
         visible={isVisible}
-        onCancel={onClose}
+        onCancel={handleModalClose}
         footer={null}
         title={intl.formatMessage({ id: 'create.quote.page.title' })}
         centered
@@ -77,6 +105,7 @@ const QuoteModal = ({
           <form onSubmit={handleSubmit} className="flex flex-col p-6">
             <label className="text-lg font-bold">Nome completo</label>
             <Input
+              value={fullName}
               placeholder={intl.formatMessage({
                 id: 'create.quote.page.name.placeholder',
               })}
@@ -86,6 +115,7 @@ const QuoteModal = ({
             />
             <label className="text-lg font-bold">Email</label>
             <Input
+              value={email}
               placeholder={intl.formatMessage({
                 id: 'create.quote.page.email.placeholder',
               })}
@@ -96,6 +126,7 @@ const QuoteModal = ({
             />
             <label className="text-lg font-bold">Celular</label>
             <Input
+              value={phoneNumber}
               placeholder={intl.formatMessage({
                 id: 'create.quote.page.phone.placeholder',
               })}
@@ -104,16 +135,20 @@ const QuoteModal = ({
               required
             />
             <label className="text-lg font-bold">Tipo</label>
-            <Input
-              placeholder={intl.formatMessage({
-                id: 'create.quote.page.event.type.placeholder',
-              })}
-              onChange={e => setEventType(e.target.value)}
-              className="mb-4"
-              required
-            />
+            <Dropdown
+              overlay={<Menu items={items} onClick={handleMenuClick} />}
+              trigger={['click']}
+            >
+              <a onClick={e => e.preventDefault()}>
+                <Space className="p-2 border-2 border-gray-200 rounded-xl">
+                  {eventType || 'Selecione o tipo do evento'}
+                  <ChevronDown />
+                </Space>
+              </a>
+            </Dropdown>
             <label className="text-lg font-bold">Público</label>
             <Input
+              value={estimatedAudience}
               type="number"
               placeholder={intl.formatMessage({
                 id: 'create.quote.page.estimated.audience.placeholder',

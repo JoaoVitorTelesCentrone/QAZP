@@ -47,14 +47,6 @@ const Header = () => {
         <>
           <ul className="flex justify-center mx-auto">
             <Link
-              href="/"
-              className="mx-6 text-secondary font-montserrat font-medium mt-1"
-            >
-              {intl.formatMessage({
-                id: 'header.home.option',
-              })}
-            </Link>
-            <Link
               href="/sobre"
               className="mx-6 text-secondary mt-1 font-montserrat font-medium"
             >
@@ -62,13 +54,13 @@ const Header = () => {
                 id: 'header.about.us.option',
               })}
             </Link>
-            <Button
+            {/* <Button
               type="link"
               className="text-white text-lg font-medium "
               onClick={handleOpenQuoteModal}
             >
               Orçamento
-            </Button>
+            </Button> */}
           </ul>
           <Button onClick={handleOpenLoginModal}>Login</Button>
         </>
