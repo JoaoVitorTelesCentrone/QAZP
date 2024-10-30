@@ -13,8 +13,8 @@ export default function RedirectIfLoggedIn() {
 
     if (token) {
       
-      if (window.location.pathname === '/login') {
-        router.push('/dashboard');
+      if (window.location.pathname === '/') {
+        router.push('/dashboard')
       }
     } else {
       const timeout = setTimeout(() => {
