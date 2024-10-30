@@ -8,9 +8,10 @@ import { userInfoAtom } from '../atoms/userInfoAtom'
 import UserHeader from './UserHeader'
 import { intl } from '@/i18n'
 import { Button } from 'antd'
-import LoginModal from './LoginModal'
+
 import ClipLoader from 'react-spinners/ClipLoader'
 import QuoteModal from './QuoteModal'
+import LoginModal from './LoginModal'
 
 const Header = () => {
   const [isLogged] = useAtom(authAtom)
@@ -20,13 +21,20 @@ const Header = () => {
   const [loading, setLoading] = useState(false) // Add this if loading state is required
 
   const handleOpenLoginModal = () => setOpenLoginModal(true)
-  const handleCloseLoginModal = () => setOpenLoginModal(false)
+  const handleCloseLoginModal = () => {
+    setLoading(true) // Set loading first for feedback
+    setTimeout(() => {
+      setOpenLoginModal(false) // Close modal after 5 seconds
+      setLoading(false) // Stop loading once modal closes
+      console.log('Modal closed after 5 seconds')
+    }, 4000) // Delay of 5000 ms (5 seconds)
+  }
 
   const handleOpenQuoteModal = () => setOpenQuoteModal(true)
   const handleCloseQuoteModal = () => setOpenQuoteModal(false)
 
   return loading ? (
-    <div className="flex justify-center items-center h-40">
+    <div className="flex justify-center items-center h-screen">
       <ClipLoader size={50} color="#123abc" loading={loading} />
     </div>
   ) : (
