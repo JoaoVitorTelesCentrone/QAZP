@@ -1,12 +1,12 @@
 'use client'
-import { Input } from '@/components/ui/input'
+import { Input } from 'antd'
 import { intl } from '@/i18n'
 import { useAtom } from 'jotai'
 import React, { useEffect, useState } from 'react'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { authAtom } from '../atoms/authAtom'
 import { SearchIcon, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Button } from 'antd'
 import axios, { isAxiosError } from 'axios'
 import { toast } from 'sonner'
 
@@ -146,105 +146,103 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     <div>
       <form
         onSubmit={handleSubmit}
-        className="mt-5 mb-8 flex-col flex mx-auto border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-white p-10 max-w-[500px]"
+        className="mt-1 mb-2 flex-col flex border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-white p-10 max-w-[700px]"
       >
-        <div>
+        <div className="flex justify-between">
+          <h1 className="text-2xl font-bold mb-6">Editar cliente</h1>
           <X className="cursor-pointer" onClick={closeModal} />
-          <h1 className="text-2xl font-bold mb-2">
-            {intl.formatMessage({
-              id: 'create.client.page.personal.information.section',
-            })}
-          </h1>
-          <div className="flex w-full justify-between">
-            <div className="w-full">
-              <h1>
-                {intl.formatMessage({
-                  id: 'create.client.page.fullName.field.label',
-                })}
-              </h1>
-              <Input
-                value={fullName}
-                onChange={e => setFullName(e.target.value)}
-                className="p-2 border-slate-500 bg-white mb-4"
-                placeholder={intl.formatMessage({
-                  id: 'create.client.page.fullName.field.placeholder',
-                })}
-              />
-            </div>
-          </div>
-          <div className="w-full justify-between flex">
-            <div className="mr-2">
-              <h1>
-                {intl.formatMessage({
-                  id: 'create.client.page.document.field.label',
-                })}
-              </h1>
-              <Input
-                value={documentId}
-                maxLength={18}
-                onChange={handleDocumentIdChange}
-                className="p-2 border-slate-500 bg-white mb-4"
-                placeholder={intl.formatMessage({
-                  id: 'create.client.page.document.field.placeholder',
-                })}
-              />
-            </div>
-            <div>
-              <h1>
-                {intl.formatMessage({
-                  id: 'create.client.page.phoneNumber.field.label',
-                })}
-              </h1>
-              <Input
-                value={phoneNumber}
-                onChange={e => setPhoneNumber(e.target.value)}
-                className="p-2 border-slate-500 bg-white mb-4"
-                placeholder={intl.formatMessage({
-                  id: 'create.client.page.phoneNumber.field.placeholder',
-                })}
-              />
-            </div>
-          </div>
-          <h1>
-            {intl.formatMessage({ id: 'create.client.page.email.field.label' })}
-          </h1>
-          <Input
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            className="p-2 border-slate-500 bg-white mb-4"
-            placeholder={intl.formatMessage({
-              id: 'create.client.page.email.field.placeholder',
-            })}
-          />
         </div>
-        <h1 className="text-2xl font-bold my-2">
-          {intl.formatMessage({
-            id: 'create.client.page.localization.information.section',
-          })}
-        </h1>
-        <div>
-          <div className="w-full flex justify-around">
-            <div className="flex flex-col w-[40%]">
-              <h1>
-                {intl.formatMessage({
-                  id: 'create.client.page.zipCode.field.label',
+
+        <div className="flex w-full ">
+          <div className="w-[38%] mr-2">
+            <h1 className="font-bold mr-24">
+              {intl.formatMessage({
+                id: 'create.client.page.fullName.field.label',
+              })}
+            </h1>
+            <Input
+              value={fullName}
+              onChange={e => setFullName(e.target.value)}
+              className="p-2 border-slate-500  bg-white mb-4"
+              placeholder={intl.formatMessage({
+                id: 'create.client.page.fullName.field.placeholder',
+              })}
+            />
+          </div>
+
+          <div className="mr-2 w-[30%]">
+            <h1 className="xl:mr-40  font-bold">
+              {intl.formatMessage({
+                id: 'create.client.page.document.field.label',
+              })}
+            </h1>
+            <Input
+              value={documentId}
+              onChange={handleDocumentIdChange}
+              maxLength={18}
+              className="p-2 border-slate-500 bg-white mb-4"
+              placeholder={intl.formatMessage({
+                id: 'create.client.page.document.field.placeholder',
+              })}
+            />
+          </div>
+          <div className="w-[30%]">
+            <h1 className="xl:mr-44  font-bold">
+              {intl.formatMessage({
+                id: 'create.client.page.phoneNumber.field.label',
+              })}
+            </h1>
+            <Input
+              value={phoneNumber}
+              onChange={e => setPhoneNumber(e.target.value)}
+              className="p-2 border-slate-500 bg-white mb-4"
+              placeholder={intl.formatMessage({
+                id: 'create.client.page.phoneNumber.field.placeholder',
+              })}
+            />
+          </div>
+        </div>
+        <div className="flex justify-between">
+          <div className="w-[60%]">
+            <h1 className="xl:mr-24  font-bold">
+              {intl.formatMessage({
+                id: 'create.client.page.email.field.label',
+              })}
+            </h1>
+            <Input
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              className="p-2 border-slate-500 bg-white mb-4"
+              placeholder={intl.formatMessage({
+                id: 'create.client.page.email.field.placeholder',
+              })}
+            />
+          </div>
+          <div className="flex flex-col w-[40%] ml-3">
+            <h1 className="xl:mr-24  font-bold">
+              {intl.formatMessage({
+                id: 'create.client.page.zipCode.field.label',
+              })}
+            </h1>
+            <div className="flex">
+              <Input
+                className="p-2 border-slate-500 bg-white mb-4"
+                placeholder={intl.formatMessage({
+                  id: 'create.client.page.zipCode.field.placeholder',
                 })}
-              </h1>
-              <div className="flex">
-                <Input
-                  className="p-2 border-slate-500 bg-white mb-4"
-                  placeholder={intl.formatMessage({
-                    id: 'create.client.page.zipCode.field.placeholder',
-                  })}
-                  value={zipCode}
-                  maxLength={9}
-                  onChange={handleZipCodeChange}
-                />
-                <SearchIcon className="p-2 h-10 w-10 cursor-pointer" />
-              </div>
+                value={zipCode}
+                onChange={handleZipCodeChange}
+                maxLength={9}
+              />
+              <SearchIcon className="p-2 h-10 w-10 cursor-pointer" />
             </div>
-            <div className="mx-1 w-[60%]">
-              <h1>
+          </div>
+        </div>
+
+        <div>
+          <div className=" flex justify-around">
+            <div className="mx-1 ">
+              <h1 className="xl:mr-24  font-bold">
                 {intl.formatMessage({
                   id: 'create.client.page.streetName.field.label',
                 })}
@@ -256,10 +254,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 readOnly={true}
               />
             </div>
-          </div>
-          <div className="w-full flex justify-around">
+
             <div className="mx-1">
-              <h1>
+              <h1 className="xl:mr-24  font-bold">
                 {intl.formatMessage({
                   id: 'create.client.page.streetNumber.field.label',
                 })}
@@ -274,7 +271,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
               />
             </div>
             <div className="mx-1">
-              <h1>
+              <h1 className="xl:mr-24  font-bold">
                 {intl.formatMessage({
                   id: 'create.client.page.streetComplement.field.label',
                 })}
@@ -291,7 +288,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
           </div>
           <div className="w-full flex justify-around">
             <div className="mx-1">
-              <h1>
+              <h1 className="xl:mr-24  font-bold">
                 {intl.formatMessage({
                   id: 'create.client.page.district.field.label',
                 })}
@@ -301,10 +298,11 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 onChange={e => setDistrict(e.target.value)}
                 className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 readOnly={true}
+                disabled
               />
             </div>
             <div className="mx-1">
-              <h1>
+              <h1 className="xl:mr-24  font-bold">
                 {intl.formatMessage({
                   id: 'create.client.page.state.field.label',
                 })}
@@ -314,10 +312,11 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 onChange={e => setState(e.target.value)}
                 className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 readOnly={true}
+                disabled
               />
             </div>
             <div className="mx-1">
-              <h1>
+              <h1 className="xl:mr-24  font-bold">
                 {intl.formatMessage({
                   id: 'create.client.page.city.field.label',
                 })}
@@ -327,22 +326,19 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 onChange={e => setCity(e.target.value)}
                 className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 readOnly={true}
+                disabled
               />
             </div>
           </div>
         </div>
         <div className="flex justify-between">
-          <Button className="text-secondary" variant="default">
+          <Button className="" onClick={closeModal} type="default">
+            Fechar
+          </Button>
+          <Button type="default">
             {intl.formatMessage({
               id: 'edit.client.page.create.client.button',
             })}
-          </Button>
-          <Button
-            className="text-secondary"
-            onClick={closeModal}
-            variant="default"
-          >
-            Fechar
           </Button>
         </div>
       </form>
