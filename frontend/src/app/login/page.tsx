@@ -13,7 +13,7 @@ import ClipLoader from 'react-spinners/ClipLoader'
 import { useState, useEffect } from 'react'
 import { intl } from '@/i18n'
 
-const API_URL = 'http://localhost:5196/api/User/login'
+const API_URL = 'http://localhost:5196/api/User/'
 
 const LoginPage = () => {
   const router = useRouter()

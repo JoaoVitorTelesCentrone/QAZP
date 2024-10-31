@@ -23,7 +23,7 @@ const UserSideMenu = () => {
     const token = localStorage.getItem('token')
     if (!token) {
       setIsLogged(false)
-      router.push('/login')
+      router.push('/')
     } else {
       setIsLogged(true)
     }
@@ -58,7 +58,7 @@ const UserSideMenu = () => {
     setIsLogged(false)
 
     setTimeout(() => {
-      router.push('/login')
+      router.push('/')
     }, 1500)
   }
 
