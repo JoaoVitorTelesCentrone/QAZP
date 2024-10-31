@@ -182,7 +182,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                 </h1>
                 <Input
                   onChange={handleDocumentIdChange}
-                  className="p-4 border-slate-500 bg-white mb-4 border rounded w-full"
+                  className="p-2 border-slate-500 bg-white mb-4 border rounded w-full"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.document.field.placeholder',
                   })}
@@ -237,7 +237,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                 </h1>
                 <div className="flex">
                   <Input
-                    className="p-4 border-slate-500 bg-white mb-4 border rounded w-full"
+                    className="p-2 border-slate-500 bg-white mb-4 border rounded w-full"
                     placeholder={intl.formatMessage({
                       id: 'create.client.page.zipCode.field.placeholder',
                     })}

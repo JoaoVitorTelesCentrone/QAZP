@@ -72,6 +72,15 @@ const CreateEvent = () => {
   const [totalAmount, setTotalAmount] = useState(0)
   const router = useRouter()
 
+  const formatZipCode = (value: string) => {
+    return value.replace(/\D/g, '').replace(/^(\d{5})(\d{3})$/, '$1-$2')
+  }
+
+  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatZipCode(e.target.value)
+    setZipCode(formattedValue)
+  }
+
   const handleSearchClick: React.MouseEventHandler<
     SVGSVGElement
   > = async event => {
@@ -89,6 +98,10 @@ const CreateEvent = () => {
     } catch (error) {
       console.error('Erro ao buscar o CEP:', error)
     }
+  }
+
+  function removeMask(value:string): string {
+    return value.replace(/\D/g, '');
   }
 
   useEffect(() => {
@@ -269,7 +282,7 @@ const CreateEvent = () => {
       startTime: startTime,
       endDate: endDate,
       endTime: endTime,
-      zipCode: zipCode,
+      zipCode: removeMask(zipCode),
       addressName: addressName,
       addressNumber: addressNumber,
       addressComplement: addressComplement,
@@ -410,7 +423,8 @@ const CreateEvent = () => {
                   <label className="font-bold">CEP</label>
                   <Input
                     value={zipCode}
-                    onChange={e => setZipCode(e.target.value)}
+                    onChange={handleZipCodeChange}
+                    maxLength={9}
                     placeholder="Digite o CEP"
                     className="bg-white text-gray-600 border border-gray-300 rounded"
                     required

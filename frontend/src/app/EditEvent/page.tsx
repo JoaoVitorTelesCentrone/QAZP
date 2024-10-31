@@ -6,6 +6,7 @@ import {
   Edit2Icon,
   LucideTrash2,
   PlusCircleIcon,
+  SearchIcon,
 } from 'lucide-react'
 import dayjs, { Dayjs } from 'dayjs'
 import axios from 'axios'
@@ -83,6 +84,25 @@ const EditEvent: React.FC<EditEventProps> = () => {
     setClientName(name)
   }
 
+  const handleSearchClick: React.MouseEventHandler<
+    SVGSVGElement
+  > = async event => {
+    try {
+      event.preventDefault()
+      const response = await axios.get(
+        `https://viacep.com.br/ws/${zipCode}/json/`,
+      )
+
+      const cepData = response.data
+      setAddressName(cepData.logradouro)
+      setDistrict(cepData.bairro)
+      setCity(cepData.localidade)
+      setState(cepData.uf)
+    } catch (error) {
+      console.error('Erro ao buscar o CEP:', error)
+    }
+  }
+
   const MaterialCategory = [
     { name: 'Comida', index: 0 },
     { name: 'Decoração', index: 1 },
@@ -121,6 +141,22 @@ const EditEvent: React.FC<EditEventProps> = () => {
       ),
     },
   ]
+
+  function applyMask(value: string, type: 'zip'): string {
+    return value.replace(/(\d{5})(\d{3})/, '$1-$2')
+  }
+
+  const removeMask = (value: string): string => {
+    return value.replace(/\D/g, '')
+  }
+  const formatZipCode = (value: string) => {
+    return value.replace(/\D/g, '').replace(/^(\d{5})(\d{3})$/, '$1-$2')
+  }
+
+  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatZipCode(e.target.value)
+    setZipCode(formattedValue)
+  }
 
   const removeMaterial = (index: number) => {
     const newInsertedMaterial = [...materials]
@@ -170,7 +206,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
             event.startTime ? dayjs(event.startTime, 'HH:mm:ss') : null,
           )
           setEndTime(event.endTime ? dayjs(event.endTime, 'HH:mm:ss') : null)
-          setZipCode(event.zipCode || '')
+          setZipCode(applyMask(event.zipCode || '', 'zip'))
           setAddressName(event.addressName || '')
           setAddressNumber(event.addressNumber || '')
           setAddressComplement(event.addressComplement || '')
@@ -234,7 +270,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
         endDate: endDate ? endDate.format('YYYY-MM-DD') : '',
         startTime: startTime ? startTime.format('HH:mm:ss') : '',
         endTime: endTime ? endTime.format('HH:mm:ss') : '',
-        zipCode,
+        zipCode: removeMask(zipCode),
         addressName,
         addressNumber,
         addressComplement,
@@ -359,13 +395,19 @@ const EditEvent: React.FC<EditEventProps> = () => {
 
           <div className="flex sm:flex-col md:flex-col xl:flex-row w-full justify-between">
             <div className="xl:flex flex-col justify-around mb-6">
+              <div className='flex items-center w-56'>
               <div className="flex flex-col mr-4">
                 <label className="font-bold block mb-2">CEP</label>
                 <Input
                   value={zipCode}
-                  onChange={e => setZipCode(e.target.value)}
+                  onChange={handleZipCodeChange}
+                  maxLength={9}
                   placeholder="Digite o CEP"
                   className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[210px]"
+                />
+              </div>
+              <SearchIcon className="h-30 w-30 cursor-pointer mt-5 text-blue-400 bg-white" 
+                  onClick={handleSearchClick}
                 />
               </div>
               <div className="flex flex-col  mr-4">
