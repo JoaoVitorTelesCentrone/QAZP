@@ -79,7 +79,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
       <Modal
         title="Criar Usuário"
         visible={isVisible}
-        onCancel={onClose} // Close the modal when "X" is clicked
+        onCancel={onClose}
         footer={[]}
       >
         <div className="">
