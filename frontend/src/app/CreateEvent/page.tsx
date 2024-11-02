@@ -514,7 +514,7 @@ const CreateEvent = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <label className="font-bold">Começo</label>
+                <label className="font-bold">Horário inicial</label>
                 <TimePicker
                   onChange={time => handleTimeChange(time, setStartTime)}
                   format="HH:mm:ss"
@@ -534,7 +534,7 @@ const CreateEvent = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <label className="font-bold">Fim do evento</label>
+                <label className="font-bold">Horário final</label>
                 <TimePicker
                   onChange={time => handleTimeChange(time, setEndTime)}
                   format="HH:mm:ss"
