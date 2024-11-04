@@ -138,7 +138,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
     <div>
       <Modal
         title="Criar material"
-        visible={isVisible}
+        open={isVisible}
         onCancel={onClose}
         footer={[]}
       >

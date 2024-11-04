@@ -265,7 +265,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
     <div>
       <Modal
         title="Criar Cliente"
-        visible={isVisible}
+        open={isVisible}
         onCancel={onClose}
         footer={[]}
       >

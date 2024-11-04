@@ -91,7 +91,7 @@ const QuoteModal = ({
     <>
       <Toaster richColors />
       <Modal
-        visible={isVisible}
+        open={isVisible}
         onCancel={handleModalClose}
         footer={null}
         title={intl.formatMessage({ id: 'create.quote.page.title' })}
