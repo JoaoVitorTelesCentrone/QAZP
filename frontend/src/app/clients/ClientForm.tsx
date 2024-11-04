@@ -61,26 +61,61 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     return value.replace(/\D/g, '')
   }
 
-  const formatZipCode = (value: string) => {
-    return value.replace(/\D/g, '').replace(/^(\d{5})(\d{3})$/, '$1-$2')
+  const formatPhoneNumber = (value: string) => {
+    const numericValue = value.replace(/\D/g, '')
+
+    if (numericValue.length === 0) return ''
+
+    if (numericValue.length <= 2) {
+      return `(${numericValue}`
+    } else if (numericValue.length <= 6) {
+      return numericValue.replace(/(\d{2})(\d{0,4})/, '($1) $2')
+    } else if (numericValue.length <= 10) {
+      // Padrão de telefone fixo (XX) XXXX-XXXX
+      return numericValue.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
+    } else {
+      // Padrão de celular (XX) XXXXX-XXXX
+      return numericValue.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+    }
   }
+
+  const formatZipCode = (value: string) => {
+    const numericValue = value.replace(/\D/g, '')
+
+    if (numericValue.length <= 5) {
+      // Adiciona apenas os primeiros dígitos, até 5, sem traço
+      return numericValue
+    } else {
+      // Adiciona o traço após os primeiros 5 dígitos
+      return numericValue.replace(/^(\d{5})(\d{0,3})$/, '$1-$2')
+    }
+  }
+
   const formatDocumentId = (value: string) => {
     const numericValue = value.replace(/\D/g, '')
 
-    if (numericValue.length == 11) {
-      // CPF mask
+    if (numericValue.length <= 3) {
+      // Exibe os primeiros 3 dígitos
+      return numericValue
+    } else if (numericValue.length <= 6) {
+      // Adiciona o primeiro ponto
+      return numericValue.replace(/(\d{3})(\d{0,3})/, '$1.$2')
+    } else if (numericValue.length <= 9) {
+      // Adiciona o segundo ponto
+      return numericValue.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3')
+    } else if (numericValue.length <= 11) {
+      // Aplica máscara completa para CPF (XXX.XXX.XXX-XX)
       return numericValue.replace(
-        /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+        /(\d{3})(\d{3})(\d{3})(\d{0,2})/,
         '$1.$2.$3-$4',
       )
-    } else if (numericValue.length == 14) {
-      // CNPJ mask
+    } else {
+      // Aplica máscara completa para CNPJ (XX.XXX.XXX/XXXX-XX)
       return numericValue.replace(
-        /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+        /(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/,
         '$1.$2.$3/$4-$5',
       )
     }
-    return numericValue
   }
 
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,7 +188,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const fieldsToValidate = [
       { value: addressName, errorSetter: setAddressNameError },
@@ -294,7 +329,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
             </h1>
             <Input
               value={phoneNumber}
-              onChange={e => setPhoneNumber(e.target.value)}
+              onChange={e => setPhoneNumber(formatPhoneNumber(e.target.value))}
               className="p-2 mb-4 border rounded w-full "
               placeholder={intl.formatMessage({
                 id: 'create.client.page.phoneNumber.field.placeholder',
