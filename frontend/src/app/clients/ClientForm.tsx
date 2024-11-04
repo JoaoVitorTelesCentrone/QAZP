@@ -153,6 +153,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     const fieldsToValidate = [
       { value: addressName, errorSetter: setAddressNameError },
       { value: documentId, errorSetter: setDocumentIdError },
@@ -176,8 +178,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     })
 
     if (!isValid) return
-    
-    e.preventDefault()
+
     updateClient({
       id: clientData?.id,
       fullName: fullName,
@@ -398,18 +399,18 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 required
               />
               {addressNumberError && (
-                  <div
-                    style={{
-                      color: 'red',
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      marginTop: -15,
-                    }}
-                  >
-                    {addressNumberError}
-                  </div>
-                )}
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {addressNumberError}
+                </div>
+              )}
             </div>
             <div className="mx-1">
               <h1 className="xl:mr-24  font-bold">
@@ -424,7 +425,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                   id: 'create.client.page.streetComplement.field.placeholder',
                 })}
                 className="p-2 mb-4 border rounded w-full "
-                />
+              />
             </div>
           </div>
           <div className="w-full flex justify-around mb-4">
@@ -442,18 +443,18 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 disabled
               />
               {districtError && (
-                  <div
-                    style={{
-                      color: 'red',
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      marginTop: -15,
-                    }}
-                  >
-                    {districtError}
-                  </div>
-                )}
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {districtError}
+                </div>
+              )}
             </div>
             <div className="mx-1">
               <h1 className="xl:mr-24  font-bold">
@@ -469,18 +470,18 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 disabled
               />
               {stateError && (
-                  <div
-                    style={{
-                      color: 'red',
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      marginTop: -15,
-                    }}
-                  >
-                    {stateError}
-                  </div>
-                )}
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {stateError}
+                </div>
+              )}
             </div>
             <div className="mx-1">
               <h1 className="xl:mr-24  font-bold">
@@ -496,18 +497,18 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 disabled
               />
               {cityError && (
-                  <div
-                    style={{
-                      color: 'red',
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      marginTop: -15,
-                    }}
-                  >
-                    {cityError}
-                  </div>
-                )}
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {cityError}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -515,7 +516,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
           <Button className="" onClick={closeModal} type="default">
             Fechar
           </Button>
-          <Button type="default">
+          <Button htmlType="submit" type="default">
             {intl.formatMessage({
               id: 'edit.client.page.create.client.button',
             })}
