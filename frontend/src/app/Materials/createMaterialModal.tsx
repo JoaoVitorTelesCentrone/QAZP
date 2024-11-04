@@ -188,10 +188,10 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
                   }`}
                   onBlur={() => setIsTouched(true)}
                 >
-                  <h1 className={`${!type ? 'text-gray-400' : 'text-black'}`}>
+                  <h1 className={`${!type ? 'text-gray-400' : 'text-black'} mt-1`}>
                     {type ? type : 'Categoria'}
                   </h1>
-                  <ChevronDown className="h-4 w-4 mt-1" />
+                  <ChevronDown className="h-4 w-4 mt-2" />
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent
