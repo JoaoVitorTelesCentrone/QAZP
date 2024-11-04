@@ -118,6 +118,30 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     }
   }
 
+  const handleSearchClick: React.MouseEventHandler<
+    SVGSVGElement
+  > = async event => {
+    try {
+      event.preventDefault()
+      const response = await axios.get(
+        `https://viacep.com.br/ws/${zipCode}/json/`,
+      )
+
+      const cepData = response.data
+      setAddressName(cepData.logradouro)
+      setDistrict(cepData.bairro)
+      setCity(cepData.localidade)
+      setState(cepData.uf)
+
+      if (cepData.logradouro) setAddressNameError('')
+      if (cepData.bairro) setDistrictError('')
+      if (cepData.localidade) setCityError('')
+      if (cepData.uf) setStateError('')
+    } catch (error) {
+      console.error('Erro ao buscar o CEP:', error)
+    }
+  }
+
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullName(e.target.value)
     setFullNameError('')
@@ -331,6 +355,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
               value={phoneNumber}
               onChange={e => setPhoneNumber(formatPhoneNumber(e.target.value))}
               className="p-2 mb-4 border rounded w-full "
+              maxLength={15}
               placeholder={intl.formatMessage({
                 id: 'create.client.page.phoneNumber.field.placeholder',
               })}
@@ -383,7 +408,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                   {zipCodeError}
                 </div>
               )}
-              <SearchIcon className="p-2 h-10 w-10 cursor-pointer" />
+              <SearchIcon className="p-2 h-10 w-10 cursor-pointer" 
+              onClick={handleSearchClick}/>
             </div>
           </div>
         </div>
