@@ -105,12 +105,10 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
     const quote = {
       fullName: fullName,
       email: email,
-      phoneNumber: phoneNumber,
+      phoneNumber: removeMask(phoneNumber),
       eventType: type,
       estimatedAudience: estimatedAudience,
     }
-
-    console.log('Quote Object:', quote)
 
     try {
       const response = await axios.post(API_URL, quote)
@@ -153,6 +151,28 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
     } else {
       field.setError('')
     }
+  }
+
+  const formatPhoneNumber = (value: string) => {
+    const numericValue = value.replace(/\D/g, '')
+
+    if (numericValue.length === 0) return ''
+
+    if (numericValue.length <= 2) {
+      return `(${numericValue}`
+    } else if (numericValue.length <= 6) {
+      return numericValue.replace(/(\d{2})(\d{0,4})/, '($1) $2')
+    } else if (numericValue.length <= 10) {
+      // Padrão de telefone fixo (XX) XXXX-XXXX
+      return numericValue.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
+    } else {
+      // Padrão de celular (XX) XXXXX-XXXX
+      return numericValue.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+    }
+  }
+
+  function removeMask(value: string): string {
+    return value.replace(/\D/g, '')
   }
 
   const getQuoteNameAndIndex = (type: string, categoryIndex: number) => {
@@ -248,7 +268,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             placeholder={intl.formatMessage({
               id: 'create.quote.page.phone.placeholder',
             })}
-            onChange={e => setPhoneNumber(e.target.value)}
+            onChange={e => setPhoneNumber(formatPhoneNumber(e.target.value))}
             onBlur={() => handleBlur('phoneNumber')}
             className={`p-2 mb-4 border rounded w-full ${phoneNumberError ? 'border-red-500' : 'border-slate-300'}`}
             required
