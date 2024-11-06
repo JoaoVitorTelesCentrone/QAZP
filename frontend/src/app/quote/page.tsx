@@ -23,13 +23,14 @@ const Page = () => {
       const response = await axios.get('http://localhost:5196/api/Quote/active-quotes')
 
       const quotes = response.data.map((quote: any) => ({
+        id: quote.id,
         fullName: quote.fullName,
         email: quote.email,
         phoneNumber: formatPhoneNumber(quote.phoneNumber),
         eventType: quote.eventType,
         estimatedAudience: quote.estimatedAudience,
       }))
-
+      
       setQuote(quotes)
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
