@@ -30,6 +30,29 @@ import { atom, useAtom } from 'jotai'
 
 import withAuth from '../hoc/withAuth'
 
+const EventTypes: EventTypesProps[] = [
+  { name: 'Casamento', index: 0 },
+  { name: 'Feira', index: 1 },
+  { name: 'Festa', index: 2 },
+  { name: 'Festival', index: 3 },
+  { name: 'Workshop', index: 4 },
+  { name: 'Exibição', index: 5 },
+  { name: 'Lançamento', index: 6 },
+  { name: 'Campeonato', index: 7 },
+  { name: 'Convenção', index: 8 },
+  { name: 'Baile', index: 9 },
+  { name: 'Seminário', index: 10 },
+  { name: 'Assembléia', index: 11 },
+  { name: 'Campanha', index: 12 },
+  { name: 'Cerimônia', index: 13 },
+  { name: 'Simpósio', index: 14 },
+]
+
+type EventTypesProps = {
+  name: string
+  index: number
+}
+
 type Mats = {
   materialId: string
   quantity: number
@@ -39,8 +62,8 @@ export const clientsAtom = atom<ClientProps[]>([])
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState('')
-  const [eventType, setEventType] = useState(0)
-  const [selectedType, setSelectedType] = useState('')
+  const [eventType, setEventType] = useState<number | null>(null) // igual category
+  const [selectedType, setSelectedType] = useState('') // igual o type
   const [startDate, setStartDate] = useState('')
   const [startTime, setStartTime] = useState('')
   const [endDate, setEndDate] = useState('')
@@ -79,6 +102,8 @@ const CreateEvent = () => {
   const [cityError, setCityError] = useState('')
   const [stateError, setStateError] = useState('')
   const [EstimatedAudienceError, setEstimatedAudienceError] = useState('')
+  const [isClientTouched, setIsClientTouched] = useState(false)
+  const [clientNameError, setClientNameError] = useState('')
 
   const [isTouched, setIsTouched] = useState(false)
   const router = useRouter()
@@ -219,11 +244,12 @@ const CreateEvent = () => {
   }
 
   const getEventTypeNameAndIndex = (
-    eventType: SetStateAction<number>,
+    eventType: number,
     stringEventType: string,
   ) => {
     setEventType(eventType)
     setSelectedType(stringEventType)
+    setIsTouched(false)
   }
 
   const getMaterialValues = (
@@ -338,7 +364,7 @@ const CreateEvent = () => {
 
     const body = {
       name: eventName,
-      type: eventType,
+      type: eventType as number,
       clientId: clientId,
       startDate: startDate,
       startTime: startTime,
@@ -398,7 +424,7 @@ const CreateEvent = () => {
     }
   }
 
-  const isTypeValid = selectedType !== null
+  const isTypeValid = eventType !== null
 
   return (
     <div className="h-full bg-tertiary">
@@ -414,7 +440,7 @@ const CreateEvent = () => {
           </h1>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex space-y-4 sm:space-y-0 sm:space-x-6 mr-7">
-              <div className="flex flex-col xl:w-72">
+              <div className="flex flex-col xl:w-72 relative">
                 <label className="font-bold block mb-2">Tipo</label>
                 <DropdownMenu
                   onOpenChange={open => {
@@ -434,9 +460,9 @@ const CreateEvent = () => {
                     onBlur={() => setIsTouched(true)}
                   >
                     <h1
-                      className={`${!eventType ? 'text-gray-400' : 'text-black'}`}
+                      className={`${!selectedType ? 'text-gray-400' : 'text-black'} mt-1`}
                     >
-                      {eventType ? eventType : 'Selecione um Tipo'}
+                      {selectedType ? selectedType : 'Selecione um Tipo'}
                     </h1>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
@@ -455,11 +481,21 @@ const CreateEvent = () => {
                         >
                           {eventType.name}
                         </DropdownMenuItem>
-                        <hr className="my-1 border-gray-300" />
+                        {index < EventType.length - 1 && (
+                          <hr className="my-1 border-gray-300" />
+                        )}
                       </React.Fragment>
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
+                {!isTypeValid && isTouched && (
+                  <span
+                    className="text-red-500 text-sm font-bold absolute"
+                    style={{ top: '100%', marginTop: -15 }}
+                  >
+                    Campo obrigatório *
+                  </span>
+                )}
               </div>
               <div className="flex flex-col xl:w-[300px] relative">
                 <label className="font-bold block mb-2">Título</label>
@@ -493,10 +529,27 @@ const CreateEvent = () => {
           </h1>
           <div className="flex flex-col">
             <div className="flex Xl:w-full  space-y-4 ">
-              <div className="flex flex-col xl:w-[30%] xl:mr-2 mt-4 ">
+              <div className="flex flex-col xl:w-[30%] xl:mr-2 mt-4 relative">
                 <h1 className="font-bold block mb-2">Cliente</h1>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] text-sm bg-white rounded-xl flex items-center justify-between px-4 ">
+                <DropdownMenu
+                  onOpenChange={open => {
+                    if (!open && !clientName) {
+                      setIsClientTouched(true)
+                      setClientNameError('Campo obrigatório *')
+                    }
+                  }}
+                >
+                  <DropdownMenuTrigger
+                    className={`border border-gray-300 h-[40px] text-sm bg-white rounded-xl flex items-center justify-between px-4 ${
+                      clientNameError ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    onBlur={() => {
+                      if (!clientName) {
+                        setIsClientTouched(true)
+                        setClientNameError('Campo obrigatório *')
+                      }
+                    }}
+                  >
                     <span>{clientName || 'Cliente'}</span>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
@@ -504,14 +557,16 @@ const CreateEvent = () => {
                     {clients.map((client, index) => (
                       <div key={index}>
                         <DropdownMenuItem
-                          onClick={() =>
+                          onClick={() => {
                             getClientValues(
                               client.name,
                               client.id,
                               client.documentId,
                               client.email,
                             )
-                          }
+                            setIsClientTouched(false)
+                            setClientNameError('')
+                          }}
                         >
                           {client.name}
                         </DropdownMenuItem>
@@ -520,6 +575,14 @@ const CreateEvent = () => {
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
+                {clientNameError && isClientTouched && (
+                  <span
+                    className="text-red-500 text-sm font-bold absolute"
+                    style={{ top: '100%', marginTop: -15 }}
+                  >
+                    {clientNameError}
+                  </span>
+                )}
               </div>
               <div className="flex flex-col xl:w-[30%] xl:mx-2 ">
                 <label className="font-bold block mb-2">Documento</label>
@@ -800,8 +863,8 @@ const CreateEvent = () => {
             </div>
           </div>
 
-          <h1 className="text-4xl font-extrabold text-left text-primary mt-4">
-            Selecione os Materiais
+          <h1 className="w-full p-4 mt-6 rounded-xl bg-cyan-900 text-white text-2xl font-bold text-center">
+            Materiais
           </h1>
           <div className="flex flex-col gap-4">
             <div className="flex space-y-4 ">
