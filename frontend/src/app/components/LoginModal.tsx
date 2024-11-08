@@ -18,9 +18,11 @@ const API_URL = 'http://localhost:5196/api/User/login'
 const LoginModal = ({
   isVisible,
   onClose,
+  onCancel,
 }: {
   isVisible: boolean
   onClose: () => void
+  onCancel: () =>void
 }) => {
   const router = useRouter()
   const [userAuth, setUserAuth] = useAtom(authAtom)
@@ -85,7 +87,6 @@ const LoginModal = ({
   };
 
   const verifyLogin = async () => {
-    setLoading(true)
     try {
       const response = await axios.post(API_URL, { username, password })
 
@@ -117,12 +118,21 @@ const LoginModal = ({
     setShowPassword1(prevState => !prevState)
   }
 
+  useEffect(() => {
+    if (!isVisible) {
+      setUsername('');
+      setPassword('');
+      setUsernameError('');
+      setPasswordError('');
+    }
+  }, [isVisible]);
+
   return (
     <>
       <Toaster richColors />
       <Modal
         open={isVisible}
-        onCancel={onClose}
+        onCancel={onCancel}
         footer={null}
         title={intl.formatMessage({ id: 'login.page.title' })}
         centered
