@@ -70,10 +70,29 @@ const CreateEvent = () => {
   >([])
   const [materialIdAndQuantity, setMaterialIdAndQuantity] = useState<Mats[]>([])
   const [totalAmount, setTotalAmount] = useState(0)
+  const [EventNameError, setEventNameError] = useState('')
+  const [clientDocumentError, setclientDocumentError] = useState('')
+  const [zipCodeError, setZipCodeError] = useState('')
+  const [addressNumberError, setAddressNumberError] = useState('')
+  const [addressNameError, setAddressNameError] = useState('')
+  const [districtError, setDistrictError] = useState('')
+  const [cityError, setCityError] = useState('')
+  const [stateError, setStateError] = useState('')
+  const [EstimatedAudienceError, setEstimatedAudienceError] = useState('')
+
+  const [isTouched, setIsTouched] = useState(false)
   const router = useRouter()
 
   const formatZipCode = (value: string) => {
-    return value.replace(/\D/g, '').replace(/^(\d{5})(\d{3})$/, '$1-$2')
+    const numericValue = value.replace(/\D/g, '')
+
+    if (numericValue.length <= 5) {
+      // Adiciona apenas os primeiros dígitos, até 5, sem traço
+      return numericValue
+    } else {
+      // Adiciona o traço após os primeiros 5 dígitos
+      return numericValue.replace(/^(\d{5})(\d{0,3})$/, '$1-$2')
+    }
   }
 
   const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,8 +119,21 @@ const CreateEvent = () => {
     }
   }
 
-  function removeMask(value:string): string {
-    return value.replace(/\D/g, '');
+  function removeMask(value: string): string {
+    return value.replace(/\D/g, '')
+  }
+
+  const handleEstimatedAudienceChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = e.target.value
+
+    if (!isNaN(Number(value)) || value === '') {
+      setEstimatedAudience(value)
+      setEstimatedAudienceError('')
+    } else {
+      setEstimatedAudienceError('Apenas números são permitidos')
+    }
   }
 
   useEffect(() => {
@@ -274,6 +306,36 @@ const CreateEvent = () => {
 
   const postEvent = async (event: React.FormEvent) => {
     event.preventDefault()
+
+    const fieldsToValidate = [
+      { value: eventName, errorSetter: setEventNameError },
+      { value: estimatedAudience, errorSetter: setEstimatedAudienceError },
+      { value: clientDocument, errorSetter: setclientDocumentError },
+      { value: zipCode, errorSetter: setZipCodeError },
+      { value: addressNumber, errorSetter: setAddressNumberError },
+      { value: district, errorSetter: setDistrictError },
+      { value: city, errorSetter: setCityError },
+      { value: state, errorSetter: setStateError },
+    ]
+
+    let isValid = true
+
+    fieldsToValidate.forEach(({ value, errorSetter }) => {
+      if (!value) {
+        errorSetter('Campo obrigatório *')
+        isValid = false
+      } else {
+        errorSetter('')
+      }
+    })
+
+    if (eventType === null) {
+      setIsTouched(true)
+      isValid = false
+    }
+
+    if (!isValid) return
+
     const body = {
       name: eventName,
       type: eventType,
@@ -289,7 +351,7 @@ const CreateEvent = () => {
       district: district,
       state: state,
       city: city,
-      estimatedAudience: Number(estimatedAudience),
+      estimatedAudience: estimatedAudience,
       materials: materialIdAndQuantity,
       totalAmount: totalAmount,
     }
@@ -302,6 +364,41 @@ const CreateEvent = () => {
       console.error('Error creating event:', error)
     }
   }
+
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
+    const fieldErrorMap = {
+      eventName: {
+        value: eventName,
+        setError: setEventNameError,
+      },
+      estimatedAudience: {
+        value: estimatedAudience,
+        setError: setEstimatedAudienceError,
+      },
+      clientDocument: {
+        value: clientDocument,
+        setError: setclientDocumentError,
+      },
+      zipCode: {
+        value: zipCode,
+        setError: setZipCodeError,
+      },
+      addressNumber: {
+        value: addressNumber,
+        setError: setAddressNumberError,
+      },
+    }
+
+    const field = fieldErrorMap[fieldName]
+
+    if (!field.value) {
+      field.setError('Campo obrigatório *')
+    } else {
+      field.setError('')
+    }
+  }
+
+  const isTypeValid = selectedType !== null
 
   return (
     <div className="h-full bg-tertiary">
@@ -319,41 +416,74 @@ const CreateEvent = () => {
             <div className="flex space-y-4 sm:space-y-0 sm:space-x-6 mr-7">
               <div className="flex flex-col xl:w-72">
                 <label className="font-bold block mb-2">Tipo</label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
-                    <span>{selectedType || 'Selecione um Tipo'}</span>
+                <DropdownMenu
+                  onOpenChange={open => {
+                    if (!open) {
+                      if (!isTypeValid) {
+                        setIsTouched(true)
+                      }
+                    }
+                  }}
+                >
+                  <DropdownMenuTrigger
+                    className={`flex border border-gray-300 h-[40px] bg-white items-center justify-between px-4 py-1 font-bold rounded-xl mr-6 ${
+                      !isTypeValid && isTouched
+                        ? 'border-red-500'
+                        : 'border-gray-300'
+                    }`}
+                    onBlur={() => setIsTouched(true)}
+                  >
+                    <h1
+                      className={`${!eventType ? 'text-gray-400' : 'text-black'}`}
+                    >
+                      {eventType ? eventType : 'Selecione um Tipo'}
+                    </h1>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-60 max-h-48 overflow-y-auto">
                     {EventType.map((eventType, index) => (
-                      <div key={index}>
+                      <React.Fragment key={index}>
                         <DropdownMenuItem
                           className="cursor-pointer my-1"
-                          onClick={() =>
+                          onClick={() => {
                             getEventTypeNameAndIndex(
                               eventType.index,
                               eventType.name,
                             )
-                          }
-                          key={index}
+                            setIsTouched(false)
+                          }}
                         >
                           {eventType.name}
                         </DropdownMenuItem>
                         <hr className="my-1 border-gray-300" />
-                      </div>
+                      </React.Fragment>
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="flex flex-col xl:w-[300px]">
+              <div className="flex flex-col xl:w-[300px] relative">
                 <label className="font-bold block mb-2">Título</label>
                 <Input
                   value={eventName}
                   onChange={e => setEventName(e.target.value)}
+                  onBlur={() => handleBlur('eventName')}
                   placeholder="Digite o Título do evento"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[40px] sm:w-[250px] md:w-[500px]"
+                  className={`p-2 mb-4 bg-white text-gray-600 border rounded w-full border-gray-300 h-[40px] sm:w-[250px] md:w-[500px] xl:w-[850px] ${EventNameError ? 'border-red-500' : 'border-slate-300'}`}
                   required
                 />
+                {EventNameError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: -15,
+                    }}
+                  >
+                    {EventNameError}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -397,8 +527,21 @@ const CreateEvent = () => {
                   value={clientDocument}
                   onChange={e => setClientDocument(e.target.value)}
                   disabled={true}
-                  className="bg-white text-gray-600 border-gray-300 h-[40px]  "
+                  className={`p-2 mb-4 border rounded w-full h-[40px] ${clientDocumentError ? 'border-red-500' : 'border-slate-300'}`}
                 />
+                {clientDocumentError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: -15,
+                    }}
+                  >
+                    {clientDocumentError}
+                  </div>
+                )}
               </div>
               <div className="flex flex-col xl:w-[30%] xl:mx-2 ">
                 <label className="font-bold block mb-2">Email</label>
@@ -418,43 +561,85 @@ const CreateEvent = () => {
 
           <div className="xl:flex">
             <div className="flex flex-col">
-              <div className="flex items-center w-56">
+              <div className="flex items-center w-56 relative mb-4">
                 <div className="flex flex-col">
                   <label className="font-bold">CEP</label>
                   <Input
                     value={zipCode}
                     onChange={handleZipCodeChange}
+                    onBlur={() => handleBlur('zipCode')}
                     maxLength={9}
                     placeholder="Digite o CEP"
-                    className="bg-white text-gray-600 border border-gray-300 rounded"
+                    className={`p-2 mb-4 border rounded w-full ${zipCodeError ? 'border-red-500' : 'border-slate-300'}`}
                     required
                   />
+                  {zipCodeError && (
+                    <div
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        top: '100%',
+                        left: 0,
+                        marginTop: -15,
+                      }}
+                    >
+                      {zipCodeError}
+                    </div>
+                  )}
                 </div>
                 <SearchIcon
                   className="p-2 h-12 w-12 cursor-pointer mt-3"
                   onClick={handleSearchClick}
                 />
               </div>
-              <div className="flex flex-col  mr-6">
+              <div className="flex flex-col  mr-3 mb-4">
                 <label className="font-bold">Endereço</label>
                 <Input
                   value={addressName}
                   onChange={e => setAddressName(e.target.value)}
                   placeholder="Digite o endereço"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl  "
+                  className={`p-2 mb-4 border rounded w-full ${addressNameError ? 'border-red-500' : 'border-slate-300'}`}
                   disabled
                   readOnly
                 />
+                {addressNameError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: -15,
+                    }}
+                  >
+                    {addressNameError}
+                  </div>
+                )}
               </div>
-              <div className="flex flex-col w-32 mr-3">
+              <div className="flex flex-col w-40 mr-3 relative mb-4">
                 <label className="font-bold ">Número</label>
                 <Input
                   value={addressNumber}
                   onChange={e => setAddressNumber(e.target.value)}
+                  onBlur={() => handleBlur('addressNumber')}
                   placeholder="Número"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl "
+                  className={`p-2 mb-4 border rounded w-full ${addressNumberError ? 'border-red-500' : 'border-slate-300'}`}
                   required
                 />
+
+                {addressNumberError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: -15,
+                    }}
+                  >
+                    {addressNumberError}
+                  </div>
+                )}
               </div>
               <div className="flex flex-col w-48 mr-3">
                 <label className="font-bold">Complemento</label>
@@ -462,103 +647,159 @@ const CreateEvent = () => {
                   value={addressComplement}
                   onChange={e => setAddressComplement(e.target.value)}
                   placeholder="Digite o complemento"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl "
+                  className="p-2 border-slate-500 bg-white mb-4"
                 />
               </div>
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col ">
-                <div className="flex flex-col ">
+                <div className="flex flex-col relative mb-4">
                   <label className="font-bold">Bairro</label>
                   <Input
                     value={district}
                     onChange={e => setDistrict(e.target.value)}
                     placeholder="Digite o bairro"
-                    className="bg-white text-gray-600 border border-gray-300 rounded-xl  "
+                    className={`p-2 mb-4 border rounded w-full ${districtError ? 'border-red-500' : 'border-slate-300'}`}
                     disabled
                     readOnly
                   />
+
+                  {districtError && (
+                    <div
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        top: '100%',
+                        left: 0,
+                        marginTop: -15,
+                      }}
+                    >
+                      {districtError}
+                    </div>
+                  )}
                 </div>
-                <div className="flex flex-col  ">
+                <div className="flex flex-col  relative mb-4">
                   <label className="font-bold">Cidade</label>
                   <Input
                     value={city}
                     onChange={e => setCity(e.target.value)}
                     placeholder="Digite a Cidade"
-                    className="bg-white text-gray-600 border border-gray-300 rounded-xl "
+                    className={`p-2 mb-4 border rounded w-full ${cityError ? 'border-red-500' : 'border-slate-300'}`}
                     disabled
                     readOnly
                   />
+
+                  {cityError && (
+                    <div
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        top: '100%',
+                        left: 0,
+                        marginTop: -15,
+                      }}
+                    >
+                      {cityError}
+                    </div>
+                  )}
                 </div>
-                <div className="flex flex-col ">
+                <div className="flex flex-col relative ">
                   <label className="font-bold">Estado</label>
                   <Input
                     value={state}
                     onChange={e => setState(e.target.value)}
                     placeholder="Digite o Estado"
-                    className="bg-white text-gray-600 border border-gray-300 rounded-xl  "
+                    className={`p-2 mb-4 border rounded w-full ${stateError ? 'border-red-500' : 'border-slate-300'}`}
                     disabled
                     readOnly
                   />
+
+                  {stateError && (
+                    <div
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        top: '100%',
+                        left: 0,
+                        marginTop: -15,
+                      }}
+                    >
+                      {stateError}
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="flex flex-col ">
+              <div className="flex flex-col relative">
                 <label className="font-bold">Público</label>
                 <Input
-                  type="number"
                   value={estimatedAudience}
-                  onChange={e => setEstimatedAudience(e.target.value)}
+                  onChange={handleEstimatedAudienceChange}
+                  onBlur={() => handleBlur('estimatedAudience')}
                   placeholder="Público estimado"
-                  className="bg-white text-gray-600 border border-gray-300-xl  "
+                  className={`p-2 mb-4 border rounded w-full ${EstimatedAudienceError ? 'border-red-500' : 'border-slate-300'}`}
                   required
                 />
+                {EstimatedAudienceError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: -15,
+                    }}
+                  >
+                    {EstimatedAudienceError}
+                  </div>
+                )}
               </div>
             </div>
           </div>
           <div className="flex flex-col gap-4 mb-4">
-            <div className="flex">
-              <div className="flex flex-col">
+            <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Data inicial</label>
                 <DatePicker
                   onChange={date => handleDateChange(date, setStartDate)}
                   format="YYYY/MM/DD"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl  "
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl"
                   placeholder="Selecione uma data"
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Começo</label>
                 <TimePicker
                   onChange={time => handleTimeChange(time, setStartTime)}
                   format="HH:mm:ss"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl "
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl"
                   placeholder="Selecione um horário"
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Data final</label>
                 <DatePicker
                   onChange={date => handleDateChange(date, setEndDate)}
                   format="YYYY/MM/DD"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] "
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl"
                   placeholder="Selecione uma data"
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Fim do evento</label>
                 <TimePicker
                   onChange={time => handleTimeChange(time, setEndTime)}
                   format="HH:mm:ss"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] "
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl"
                   placeholder="Selecione um horário"
                 />
               </div>
             </div>
           </div>
+
           <h1 className="text-4xl font-extrabold text-left text-primary mt-4">
             Selecione os Materiais
           </h1>

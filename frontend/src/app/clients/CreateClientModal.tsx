@@ -389,7 +389,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                 </h1>
                 <div className="flex">
                   <Input
-                    className={`p-2 mb-4 border rounded w-full ${DocumentIdError ? 'border-red-500' : 'border-slate-300'}`}
+                    className={`p-2 mb-4 border rounded w-full ${zipCodeError ? 'border-red-500' : 'border-slate-300'}`}
                     placeholder={intl.formatMessage({
                       id: 'create.client.page.zipCode.field.placeholder',
                     })}
