@@ -40,6 +40,7 @@ const Materials = () => {
     try {
       const response = await axios.get('http://localhost:5196/api/Material/active-materials')
       const materialNames = response.data.map((material: any) => ({
+        id: material.id,
         name: material.name,
         price: formatCurrency(material.price),
         category: materialCategoryNameConverter(material.category),
