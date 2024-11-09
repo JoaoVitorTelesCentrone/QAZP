@@ -18,7 +18,7 @@ const Header = () => {
   const [user] = useAtom(userInfoAtom)
   const [openLoginModal, setOpenLoginModal] = useState(false)
   const [openQuoteModal, setOpenQuoteModal] = useState(false)
-  const [loading, setLoading] = useState(false) 
+  const [loading, setLoading] = useState(false)
 
   const handleOpenLoginModal = () => setOpenLoginModal(true)
   const handleCloseLoginModal = () => {
@@ -27,7 +27,7 @@ const Header = () => {
       setOpenLoginModal(false) // Close modal after 5 seconds
       setLoading(false) // Stop loading once modal closes
       console.log('Modal closed after 5 seconds')
-    }, 4000) // Delay of 5000 ms (5 seconds)
+    }, 3000) // Delay of 5000 ms (5 seconds)
   }
   const handleCancelLoginModal = () => {
     setOpenLoginModal(false)
@@ -43,7 +43,11 @@ const Header = () => {
     </div>
   ) : (
     <div className="flex p-8 bg-quartenary text-secondary justify-around">
-      <LoginModal isVisible={openLoginModal} onClose={handleCloseLoginModal} onCancel={handleCancelLoginModal}/>
+      <LoginModal
+        isVisible={openLoginModal}
+        onClose={handleCloseLoginModal}
+        onCancel={handleCancelLoginModal}
+      />
       <QuoteModal isVisible={openQuoteModal} onClose={handleCloseQuoteModal} />
       <Link
         href="/"
@@ -74,7 +78,9 @@ const Header = () => {
               Orçamento
             </Button> */}
           </ul>
-          <Button onClick={handleOpenLoginModal}>Login</Button>
+          <Button onClick={handleOpenLoginModal}>
+            Login
+          </Button>
         </>
       )}
     </div>

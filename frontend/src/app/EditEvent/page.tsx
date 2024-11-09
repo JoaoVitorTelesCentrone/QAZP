@@ -395,18 +395,19 @@ const EditEvent: React.FC<EditEventProps> = () => {
 
           <div className="flex sm:flex-col md:flex-col xl:flex-row w-full justify-between">
             <div className="xl:flex flex-col justify-around mb-6">
-              <div className='flex items-center w-56'>
-              <div className="flex flex-col mr-4">
-                <label className="font-bold block mb-2">CEP</label>
-                <Input
-                  value={zipCode}
-                  onChange={handleZipCodeChange}
-                  maxLength={9}
-                  placeholder="Digite o CEP"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[210px]"
-                />
-              </div>
-              <SearchIcon className="h-30 w-30 cursor-pointer mt-5 text-blue-400 bg-white" 
+              <div className="flex items-center w-56">
+                <div className="flex flex-col mr-4 relative w-full sm:w-[100px] md:w-[100px]">
+                  <label className="font-bold block mb-2">CEP</label>
+                  <Input
+                    value={zipCode}
+                    onChange={handleZipCodeChange}
+                    maxLength={9}
+                    placeholder="Digite o CEP"
+                    className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full pr-10"
+                  />
+                </div>
+                <SearchIcon
+                  className="absolute right-2 top-10 h-30 w-30 cursor-pointer mt-5 text-blue-400 bg-white"
                   onClick={handleSearchClick}
                 />
               </div>
@@ -416,7 +417,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
                   value={addressName}
                   onChange={e => setAddressName(e.target.value)}
                   placeholder="Digite a Rua"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[340px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px]"
                 />
               </div>
               <div className="flex flex-col mr-10">
@@ -434,7 +435,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
                   value={addressComplement}
                   onChange={e => setAddressComplement(e.target.value)}
                   placeholder="Digite o complemento"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[350px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px]"
                 />
               </div>
             </div>
@@ -446,7 +447,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
                   value={district}
                   onChange={e => setDistrict(e.target.value)}
                   placeholder="Digite o bairro"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[315px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px]"
                 />
               </div>
               <div className="flex flex-col flex-grow">
@@ -455,7 +456,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
                   value={city}
                   onChange={e => setCity(e.target.value)}
                   placeholder="Digite a Cidade"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[315px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px]"
                 />
               </div>
               <div className="flex flex-col flex-grow">
@@ -464,7 +465,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
                   value={state}
                   onChange={e => setState(e.target.value)}
                   placeholder="Digite o Estado"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[220px]"
+                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px]"
                 />
               </div>
             </div>
@@ -477,7 +478,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
               value={estimatedAudience}
               onChange={e => setEstimatedAudience(Number(e.target.value))}
               placeholder="Público estimado"
-              className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] md:w-[150px]"
+              className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px]"
             />
           </div>
 
@@ -563,7 +564,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
                         selectedMaterialPrice,
                       )
                     }
-                    className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[120px] md:w-[155px]  mt-8"
+                    className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[120px] mt-8"
                   >
                     <PlusCircleIcon className="h-8 w-8" />
                   </Button>
