@@ -107,7 +107,8 @@ const CreateEvent = () => {
   const [clientNameError, setClientNameError] = useState('')
   const [startDateError, setStartDateError] = useState('')
   const [endDateError, setEndDateError] = useState('')
-  const [isDateTouched, setIsDateTouched] = useState(false)
+  const [isStartDateTouched, setIsStartDateTouched] = useState(false);
+  const [isEndDateTouched, setIsEndDateTouched] = useState(false);
 
   const [isTouched, setIsTouched] = useState(false)
   const router = useRouter()
@@ -191,7 +192,7 @@ const CreateEvent = () => {
     setTotalAmount(newTotalAmount)
   }, [insertedMaterial])
 
-  const handleDateChange = (
+  const handleStartDateChange = (
     date: Dayjs | null, 
     setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>
   ) => {
@@ -209,7 +210,7 @@ const CreateEvent = () => {
   };
   
   useEffect(() => {
-    if (isDateTouched) {
+    if (isStartDateTouched) {
       // Verifica se o campo foi tocado e está vazio
       if (!startDate) {
         setStartDateError('Campo obrigatório *');
@@ -217,9 +218,38 @@ const CreateEvent = () => {
         setStartDateError('');
       }
     }
-  }, [startDate, isDateTouched]); 
+  }, [startDate, isStartDateTouched]); 
+
+  const handleEndDateChange = (
+    date: Dayjs | null, 
+    setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>
+  ) => {
+    console.log("Novo valor de EndDate no onChange:", date);
+  
+    if (date && date.isValid()) {
+      // Se a data for válida, atualize o estado e remova a mensagem de erro
+      setDate(date);
+      setEndDateError('');
+    } else {
+      // Se não for válido ou estiver em branco, defina o estado como null e exiba a mensagem de erro
+      setDate(null);
+      setEndDateError('Campo obrigatório *');
+    }
+  };
+  
+  useEffect(() => {
+    if (isEndDateTouched) {
+      // Verifica se o campo foi tocado e está vazio
+      if (!endDate) {
+        setEndDateError('Campo obrigatório *');
+      } else {
+        setEndDateError('');
+      }
+    }
+  }, [endDate, isEndDateTouched]); 
 
   const formattedStartDate = startDate ? startDate.format('YYYY-MM-DD') : ''
+  const formattedEndDate = endDate ? endDate.format('YYYY-MM-DD') : ''
 
   const handleTimeChange = (
     time: any,
@@ -360,6 +390,7 @@ const CreateEvent = () => {
       { value: estimatedAudience, errorSetter: setEstimatedAudienceError },
       { value: clientDocument, errorSetter: setclientDocumentError },
       { value: zipCode, errorSetter: setZipCodeError },
+      { value: addressName, errorSetter: setAddressNameError },
       { value: addressNumber, errorSetter: setAddressNumberError },
       { value: district, errorSetter: setDistrictError },
       { value: city, errorSetter: setCityError },
@@ -431,6 +462,10 @@ const CreateEvent = () => {
         value: zipCode,
         setError: setZipCodeError,
       },
+      addressName: {
+        value: addressName,
+        setError: setAddressNameError,
+      },
       addressNumber: {
         value: addressNumber,
         setError: setAddressNumberError,
@@ -451,7 +486,6 @@ const CreateEvent = () => {
   }
 
   const isTypeValid = eventType !== null
-  const isDateValid = startDate !== null
 
   return (
     <div className="h-full bg-tertiary">
@@ -611,7 +645,7 @@ const CreateEvent = () => {
                   </span>
                 )}
               </div>
-              <div className="flex flex-col xl:w-[30%] xl:mx-2 ">
+              <div className="relative flex flex-col xl:w-[30%] xl:mx-2 ">
                 <label className="font-bold block mb-2">Documento</label>
                 <Input
                   value={clientDocument}
@@ -682,7 +716,7 @@ const CreateEvent = () => {
                   onClick={handleSearchClick}
                 />
               </div>
-              <div className="flex flex-col  mr-3 mb-4 relative">
+              <div className="flex flex-col mr-3 mb-4 relative">
                 <label className="font-bold">Endereço</label>
                 <Input
                   value={addressName}
@@ -852,7 +886,7 @@ const CreateEvent = () => {
                 <DatePicker                  
                   onChange={(date) => {
                     const formattedDate = date ? dayjs(date.format('YYYY-MM-DD')) : null;
-                    handleDateChange(formattedDate, setStartDate);
+                    handleStartDateChange(formattedDate, setStartDate);
                     if (formattedDate && formattedDate.isValid()) {
                       setStartDateError('');
                     } else {
@@ -860,13 +894,13 @@ const CreateEvent = () => {
                     }
                   }}
                   onBlur={() => {
-                    if (!isDateTouched) {
-                      setIsDateTouched(true);
+                    if (!isStartDateTouched) {
+                      setIsStartDateTouched(true);
                     }
                   }}
                   onOpenChange={(open) => {
-                    if (open && !isDateTouched) {
-                      setIsDateTouched(true)
+                    if (open && !isStartDateTouched) {
+                      setIsStartDateTouched(true)
                     }
                   }}
                   value={startDate}
@@ -894,26 +928,26 @@ const CreateEvent = () => {
                   placeholder="Selecione um horário"
                 />
               </div>
-              <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
+              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Data final</label>
                 <DatePicker
                   onChange={(date) => {
                     const formattedDate = date ? dayjs(date.format('YYYY-MM-DD')) : null;
-                    handleDateChange(formattedDate, setEndDate);
+                    handleEndDateChange(formattedDate, setEndDate);
                     if (formattedDate && formattedDate.isValid()) {
-                      setStartDateError('');
+                      setEndDateError('');
                     } else {
-                      setStartDateError('Campo obrigatório *');
+                      setEndDateError('Campo obrigatório *');
                     }
                   }}
                   onBlur={() => {
-                    if (!isDateTouched) {
-                      setIsDateTouched(true);
+                    if (!isEndDateTouched) {
+                      setIsEndDateTouched(true);
                     }
                   }}
                   onOpenChange={(open) => {
-                    if (open && !isDateTouched) {
-                      setIsDateTouched(true)
+                    if (open && !isEndDateTouched) {
+                      setIsEndDateTouched(true)
                     }
                   }}
                   value={endDate}
