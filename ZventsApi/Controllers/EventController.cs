@@ -23,8 +23,8 @@ namespace ZventsApi.Controllers
         [HttpGet("active-events")]
         public async Task<ActionResult<IEnumerable<ActiveEventDto>>> GetActiveEventsAsync()
         {
-            var activeEvents = await _context.Events
-                .Include(e => e.Client)
+            var activeEvents = await _context
+                .Events.Include(e => e.Client)
                 .Where(e => e.IsDeleted == false)
                 .Select(e => new ActiveEventDto
                 {
@@ -44,7 +44,6 @@ namespace ZventsApi.Controllers
             return Ok(activeEvents);
         }
 
-
         [HttpPost]
         public async Task<ActionResult<Event>> PostEvent(CreateEventDto createEventDto)
         {
@@ -52,6 +51,10 @@ namespace ZventsApi.Controllers
                 (
                     dbEvent.Name == createEventDto.Name
                     && dbEvent.ClientId == createEventDto.ClientId
+                    && dbEvent.Type == createEventDto.Type
+                    && dbEvent.ZipCode == createEventDto.ZipCode
+                    && dbEvent.StartDate == createEventDto.StartDate
+                    && dbEvent.StartTime == createEventDto.StartTime
                     && dbEvent.IsDeleted == false
                 )
             );
@@ -136,51 +139,69 @@ namespace ZventsApi.Controllers
                 .ThenInclude(dbMaterial => dbMaterial.Material)
                 .FirstOrDefaultAsync(dbEvent => dbEvent.Id == id);
 
+            bool duplicatedEvent = _context.Events.Any(dbEvent =>
+                (
+                    dbEvent.Name == updateEventDto.Name
+                    && dbEvent.ClientId == updateEventDto.ClientId
+                    && dbEvent.Type == updateEventDto.Type
+                    && dbEvent.ZipCode == updateEventDto.ZipCode
+                    && dbEvent.StartDate == updateEventDto.StartDate
+                    && dbEvent.StartTime == updateEventDto.StartTime
+                    && dbEvent.IsDeleted == false
+                )
+            );
+
             if (eventEntity == null)
             {
                 return NotFound($"Event with ID {id} not found.");
             }
-
-            eventEntity.Name = updateEventDto.Name;
-            eventEntity.Type = updateEventDto.Type;
-            eventEntity.Status = updateEventDto.Status;
-            eventEntity.ClientId = updateEventDto.ClientId;
-            eventEntity.StartDate = updateEventDto.StartDate;
-            eventEntity.StartTime = updateEventDto.StartTime;
-            eventEntity.EndDate = updateEventDto.EndDate;
-            eventEntity.EndTime = updateEventDto.EndTime;
-            eventEntity.ZipCode = updateEventDto.ZipCode;
-            eventEntity.AddressName = updateEventDto.AddressName;
-            eventEntity.AddressNumber = updateEventDto.AddressNumber;
-            eventEntity.AddressComplement = updateEventDto.AddressComplement;
-            eventEntity.District = updateEventDto.District;
-            eventEntity.State = updateEventDto.State;
-            eventEntity.City = updateEventDto.City;
-            eventEntity.EstimatedAudience = updateEventDto.EstimatedAudience;
-            eventEntity.TotalAmount = updateEventDto.TotalAmount;
-
-            eventEntity.EventMaterials.Clear();
-            foreach (var materialDto in updateEventDto.Materials)
+            if (duplicatedEvent)
             {
-                var material = await _context.Materials.FindAsync(materialDto.MaterialId);
-                if (material == null)
+                return Conflict(new { message = "There is already a Event in progress" });
+            }
+            else if (!duplicatedEvent)
+            {
+                eventEntity.Name = updateEventDto.Name;
+                eventEntity.Type = updateEventDto.Type;
+                eventEntity.Status = updateEventDto.Status;
+                eventEntity.ClientId = updateEventDto.ClientId;
+                eventEntity.StartDate = updateEventDto.StartDate;
+                eventEntity.StartTime = updateEventDto.StartTime;
+                eventEntity.EndDate = updateEventDto.EndDate;
+                eventEntity.EndTime = updateEventDto.EndTime;
+                eventEntity.ZipCode = updateEventDto.ZipCode;
+                eventEntity.AddressName = updateEventDto.AddressName;
+                eventEntity.AddressNumber = updateEventDto.AddressNumber;
+                eventEntity.AddressComplement = updateEventDto.AddressComplement;
+                eventEntity.District = updateEventDto.District;
+                eventEntity.State = updateEventDto.State;
+                eventEntity.City = updateEventDto.City;
+                eventEntity.EstimatedAudience = updateEventDto.EstimatedAudience;
+                eventEntity.TotalAmount = updateEventDto.TotalAmount;
+
+                eventEntity.EventMaterials.Clear();
+                foreach (var materialDto in updateEventDto.Materials)
                 {
-                    return NotFound($"Material with ID {materialDto.MaterialId} not found.");
+                    var material = await _context.Materials.FindAsync(materialDto.MaterialId);
+                    if (material == null)
+                    {
+                        return NotFound($"Material with ID {materialDto.MaterialId} not found.");
+                    }
+
+                    eventEntity.EventMaterials.Add(
+                        new EventMaterial
+                        {
+                            Event = eventEntity,
+                            Material = material,
+                            Quantity = materialDto.Quantity,
+                            MaterialPrice = material.Price,
+                            MaterialName = material.Name
+                        }
+                    );
                 }
 
-                eventEntity.EventMaterials.Add(
-                    new EventMaterial
-                    {
-                        Event = eventEntity,
-                        Material = material,
-                        Quantity = materialDto.Quantity,
-                        MaterialPrice = material.Price,
-                        MaterialName = material.Name
-                    }
-                );
+                _context.Entry(eventEntity).State = EntityState.Modified;
             }
-
-            _context.Entry(eventEntity).State = EntityState.Modified;
 
             try
             {
