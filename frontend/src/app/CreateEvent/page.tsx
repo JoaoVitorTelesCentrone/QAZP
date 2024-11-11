@@ -605,7 +605,7 @@ const CreateEvent = () => {
                   onChange={e => setEventName(e.target.value)}
                   onBlur={() => handleBlur('eventName')}
                   placeholder="Digite o Título do evento"
-                  className={`p-2 mb-4 bg-white text-gray-600 border rounded w-full border-gray-300 h-[40px] sm:w-[250px] md:w-[500px] xl:w-[850px] ${EventNameError ? 'border-red-500' : 'border-slate-300'}`}
+                  className={`p-2 mb-4 bg-white text-gray-600 border rounded w-full border-gray-300 h-[40px] sm:w-[150px] md:w-[250px] lg:w-[500px] xl:w-[600px]  ${EventNameError ? 'border-red-500' : 'border-slate-300'}`}
                   required
                 />
                 {EventNameError && (
@@ -921,7 +921,7 @@ const CreateEvent = () => {
           </div>
           <div className="flex flex-col gap-4 mb-4">
             <div className="flex flex-wrap gap-4">
-              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
+              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[225px] xl:mr-8 2xl:w-[250px] 2xl:mr-10">
                 <label className="font-bold">Data inicial</label>
                 <DatePicker
                   onChange={date => {
@@ -960,7 +960,7 @@ const CreateEvent = () => {
                   </span>
                 )}
               </div>
-              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
+              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[225px] xl:mr-8 2xl:w-[250px] 2xl:mr-10">
                 <label className="font-bold">Começo</label>
                 <TimePicker
                   onChange={time => {
@@ -997,7 +997,7 @@ const CreateEvent = () => {
                   </span>
                 )}
               </div>
-              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
+              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[225px] xl:mr-8 2xl:w-[250px] 2xl:mr-10">
                 <label className="font-bold">Data final</label>
                 <DatePicker
                   onChange={date => {
@@ -1036,7 +1036,7 @@ const CreateEvent = () => {
                   </span>
                 )}
               </div>
-              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
+              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[225px] 2xl:w-[250px]">
                 <label className="font-bold">Fim do evento</label>
                 <TimePicker
                   onChange={time => {
@@ -1081,10 +1081,10 @@ const CreateEvent = () => {
           </h1>
           <div className="flex flex-col gap-4">
             <div className="flex space-y-4 xl:w-full">
-              <div className="flex flex-col sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[400px] mt-4 xl:mr-12">
+              <div className="flex flex-col sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[400px] mt-4 sm:mr-2 md:mr-4 lg:mr-6 xl:mr-12 2xl:w-[500px] 2xl:mr-16">
                 <h1 className="font-bold">Categoria</h1>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[40px]  bg-white rounded flex items-center justify-between px-4 font-bold">
+                  <DropdownMenuTrigger className="border border-gray-300 h-[40px]  bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                     <span>{selectedCategory || 'Categoria'}</span>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
@@ -1104,10 +1104,10 @@ const CreateEvent = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="flex flex-col sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[350px]">
+              <div className="flex flex-col sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[400px] sm:mr-2 md:mr-4 lg:mr-6 xl:mr-12 2xl:w-[500px] 2xl:mr-16">
                 <h1 className="font-bold">Material</h1>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded flex items-center justify-between px-4 font-bold">
+                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                     <span>{selectedMaterial || 'Material'}</span>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
@@ -1132,13 +1132,13 @@ const CreateEvent = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="flex flex-col xl:w-56 xl:mx-10 w-36">
+              <div className="flex flex-col xl:w-56 xl:mx-10 w-36 sm:mr-2 md:mr-4 lg:mr-6 xl:mr-12 2xl:w-[200px] 2xl:mr-16">
                 <h1 className="font-bold ">Quantidade</h1>
                 <Input
                   value={materialQnt}
                   onChange={handleMaterialQuantityChange}
                   placeholder="Quantidade"
-                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 xl:w-48 "
+                  className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 xl:w-56 "
                 />
               </div>
               <div className="flex flex-col">
