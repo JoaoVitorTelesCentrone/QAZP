@@ -29,6 +29,7 @@ import { Toaster, toast } from 'sonner'
 import { atom, useAtom } from 'jotai'
 
 import withAuth from '../hoc/withAuth'
+import dayjs, { Dayjs } from 'dayjs'
 
 const EventTypes: EventTypesProps[] = [
   { name: 'Casamento', index: 0 },
@@ -64,9 +65,9 @@ const CreateEvent = () => {
   const [eventName, setEventName] = useState('')
   const [eventType, setEventType] = useState<number | null>(null) // igual category
   const [selectedType, setSelectedType] = useState('') // igual o type
-  const [startDate, setStartDate] = useState('')
+  const [startDate, setStartDate] = useState<Dayjs | null>(null)
   const [startTime, setStartTime] = useState('')
-  const [endDate, setEndDate] = useState('')
+  const [endDate, setEndDate] = useState<Dayjs | null>(null)
   const [endTime, setEndTime] = useState('')
   const [zipCode, setZipCode] = useState('')
   const [addressName, setAddressName] = useState('')
@@ -104,6 +105,9 @@ const CreateEvent = () => {
   const [EstimatedAudienceError, setEstimatedAudienceError] = useState('')
   const [isClientTouched, setIsClientTouched] = useState(false)
   const [clientNameError, setClientNameError] = useState('')
+  const [startDateError, setStartDateError] = useState('')
+  const [endDateError, setEndDateError] = useState('')
+  const [isDateTouched, setIsDateTouched] = useState(false)
 
   const [isTouched, setIsTouched] = useState(false)
   const router = useRouter()
@@ -188,16 +192,34 @@ const CreateEvent = () => {
   }, [insertedMaterial])
 
   const handleDateChange = (
-    date: any,
-    setDate: React.Dispatch<React.SetStateAction<string>>,
+    date: Dayjs | null, 
+    setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>
   ) => {
-    if (date) {
-      const formattedDate = date.format('YYYY-MM-DD')
-      setDate(formattedDate)
+    console.log("Novo valor de startDate no onChange:", date);
+  
+    if (date && date.isValid()) {
+      // Se a data for válida, atualize o estado e remova a mensagem de erro
+      setDate(date);
+      setStartDateError('');
     } else {
-      setDate('')
+      // Se não for válido ou estiver em branco, defina o estado como null e exiba a mensagem de erro
+      setDate(null);
+      setStartDateError('Campo obrigatório *');
     }
-  }
+  };
+  
+  useEffect(() => {
+    if (isDateTouched) {
+      // Verifica se o campo foi tocado e está vazio
+      if (!startDate) {
+        setStartDateError('Campo obrigatório *');
+      } else {
+        setStartDateError('');
+      }
+    }
+  }, [startDate, isDateTouched]); 
+
+  const formattedStartDate = startDate ? startDate.format('YYYY-MM-DD') : ''
 
   const handleTimeChange = (
     time: any,
@@ -413,6 +435,10 @@ const CreateEvent = () => {
         value: addressNumber,
         setError: setAddressNumberError,
       },
+      startDate: {
+        value: startDate,
+        setError: setStartDateError,
+      },
     }
 
     const field = fieldErrorMap[fieldName]
@@ -425,6 +451,7 @@ const CreateEvent = () => {
   }
 
   const isTypeValid = eventType !== null
+  const isDateValid = startDate !== null
 
   return (
     <div className="h-full bg-tertiary">
@@ -528,7 +555,7 @@ const CreateEvent = () => {
             Informações do cliente
           </h1>
           <div className="flex flex-col">
-            <div className="flex Xl:w-full  space-y-4 ">
+            <div className="flex xl:w-full  space-y-4 ">
               <div className="flex flex-col xl:w-[30%] xl:mr-2 mt-4 relative">
                 <h1 className="font-bold block mb-2">Cliente</h1>
                 <DropdownMenu
@@ -655,7 +682,7 @@ const CreateEvent = () => {
                   onClick={handleSearchClick}
                 />
               </div>
-              <div className="flex flex-col  mr-3 mb-4">
+              <div className="flex flex-col  mr-3 mb-4 relative">
                 <label className="font-bold">Endereço</label>
                 <Input
                   value={addressName}
@@ -820,15 +847,42 @@ const CreateEvent = () => {
           </div>
           <div className="flex flex-col gap-4 mb-4">
             <div className="flex flex-wrap gap-4">
-              <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
+              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Data inicial</label>
-                <DatePicker
-                  onChange={date => handleDateChange(date, setStartDate)}
+                <DatePicker                  
+                  onChange={(date) => {
+                    const formattedDate = date ? dayjs(date.format('YYYY-MM-DD')) : null;
+                    handleDateChange(formattedDate, setStartDate);
+                    if (formattedDate && formattedDate.isValid()) {
+                      setStartDateError('');
+                    } else {
+                      setStartDateError('Campo obrigatório *');
+                    }
+                  }}
+                  onBlur={() => {
+                    if (!isDateTouched) {
+                      setIsDateTouched(true);
+                    }
+                  }}
+                  onOpenChange={(open) => {
+                    if (open && !isDateTouched) {
+                      setIsDateTouched(true)
+                    }
+                  }}
+                  value={startDate}
                   format="YYYY/MM/DD"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl"
+                  className={`bg-white text-gray-600 border ${startDateError ? 'border-red-500' : 'border-gray-300'} rounded-xl`}
                   placeholder="Selecione uma data"
                 />
+                {startDateError && (
+                  <span
+                  className="text-red-500 text-sm mt-1"
+                  style={{ position: 'absolute', top: '100%', left: '0' }}
+                >
+                  {startDateError}
+                </span>
+                )}
               </div>
               <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Começo</label>
@@ -843,12 +897,39 @@ const CreateEvent = () => {
               <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Data final</label>
                 <DatePicker
-                  onChange={date => handleDateChange(date, setEndDate)}
+                  onChange={(date) => {
+                    const formattedDate = date ? dayjs(date.format('YYYY-MM-DD')) : null;
+                    handleDateChange(formattedDate, setEndDate);
+                    if (formattedDate && formattedDate.isValid()) {
+                      setStartDateError('');
+                    } else {
+                      setStartDateError('Campo obrigatório *');
+                    }
+                  }}
+                  onBlur={() => {
+                    if (!isDateTouched) {
+                      setIsDateTouched(true);
+                    }
+                  }}
+                  onOpenChange={(open) => {
+                    if (open && !isDateTouched) {
+                      setIsDateTouched(true)
+                    }
+                  }}
+                  value={endDate}
                   format="YYYY/MM/DD"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl"
+                  className={`bg-white text-gray-600 border ${endDateError ? 'border-red-500' : 'border-gray-300'} rounded-xl`}
                   placeholder="Selecione uma data"
                 />
+                {endDateError && (
+                  <span
+                  className="text-red-500 text-sm mt-1"
+                  style={{ position: 'absolute', top: '100%', left: '0' }}
+                >
+                  {endDateError}
+                </span>
+                )}
               </div>
               <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Fim do evento</label>
@@ -867,7 +948,7 @@ const CreateEvent = () => {
             Materiais
           </h1>
           <div className="flex flex-col gap-4">
-            <div className="flex space-y-4 ">
+            <div className="flex space-y-4 xl:w-full">
               <div className="flex flex-col xl:w-56 xl:mr-10 mt-4">
                 <h1 className="font-bold">Categoria</h1>
                 <DropdownMenu>
