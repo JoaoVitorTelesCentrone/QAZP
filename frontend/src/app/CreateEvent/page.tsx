@@ -167,6 +167,14 @@ const CreateEvent = () => {
     }
   }
 
+  const handleMaterialQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+
+    if (!isNaN(Number(value)) || value === '') {
+      setMaterialQnt(value)
+    }
+  }
+
   useEffect(() => {
     const fetchClients = async () => {
       try {
@@ -416,12 +424,17 @@ const CreateEvent = () => {
       { value: eventName, errorSetter: setEventNameError },
       { value: estimatedAudience, errorSetter: setEstimatedAudienceError },
       { value: clientDocument, errorSetter: setclientDocumentError },
+      { value: clientName, errorSetter: setClientNameError },
       { value: zipCode, errorSetter: setZipCodeError },
       { value: addressName, errorSetter: setAddressNameError },
       { value: addressNumber, errorSetter: setAddressNumberError },
       { value: district, errorSetter: setDistrictError },
       { value: city, errorSetter: setCityError },
       { value: state, errorSetter: setStateError },
+      { value: startDate, errorSetter: setStartDateError },
+      { value: startTime, errorSetter: setStartTimeError },
+      { value: endDate, errorSetter: setEndDateError },
+      { value: endTime, errorSetter: setEndTimeError },
     ]
 
     let isValid = true
@@ -1068,7 +1081,7 @@ const CreateEvent = () => {
           </h1>
           <div className="flex flex-col gap-4">
             <div className="flex space-y-4 xl:w-full">
-              <div className="flex flex-col xl:w-56 xl:mr-10 mt-4">
+              <div className="flex flex-col sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[400px] mt-4 xl:mr-12">
                 <h1 className="font-bold">Categoria</h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[40px]  bg-white rounded flex items-center justify-between px-4 font-bold">
@@ -1091,7 +1104,7 @@ const CreateEvent = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="flex flex-col xl:w-56 xl:mx-10">
+              <div className="flex flex-col sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[350px]">
                 <h1 className="font-bold">Material</h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded flex items-center justify-between px-4 font-bold">
@@ -1122,9 +1135,8 @@ const CreateEvent = () => {
               <div className="flex flex-col xl:w-56 xl:mx-10 w-36">
                 <h1 className="font-bold ">Quantidade</h1>
                 <Input
-                  type="number"
                   value={materialQnt}
-                  onChange={e => setMaterialQnt(e.target.value)}
+                  onChange={handleMaterialQuantityChange}
                   placeholder="Quantidade"
                   className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 xl:w-48 "
                 />
