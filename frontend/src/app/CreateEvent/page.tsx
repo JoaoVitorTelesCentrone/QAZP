@@ -107,8 +107,8 @@ const CreateEvent = () => {
   const [clientNameError, setClientNameError] = useState('')
   const [startDateError, setStartDateError] = useState('')
   const [endDateError, setEndDateError] = useState('')
-  const [isStartDateTouched, setIsStartDateTouched] = useState(false);
-  const [isEndDateTouched, setIsEndDateTouched] = useState(false);
+  const [isStartDateTouched, setIsStartDateTouched] = useState(false)
+  const [isEndDateTouched, setIsEndDateTouched] = useState(false)
 
   const [isTouched, setIsTouched] = useState(false)
   const router = useRouter()
@@ -193,63 +193,60 @@ const CreateEvent = () => {
   }, [insertedMaterial])
 
   const handleStartDateChange = (
-    date: Dayjs | null, 
-    setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>
+    date: Dayjs | null,
+    setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>,
   ) => {
-    console.log("Novo valor de startDate no onChange:", date);
-  
+    console.log('Novo valor de startDate no onChange:', date)
+
     if (date && date.isValid()) {
       // Se a data for válida, atualize o estado e remova a mensagem de erro
-      setDate(date);
-      setStartDateError('');
+      setDate(date)
+      setStartDateError('')
     } else {
       // Se não for válido ou estiver em branco, defina o estado como null e exiba a mensagem de erro
-      setDate(null);
-      setStartDateError('Campo obrigatório *');
+      setDate(null)
+      setStartDateError('Campo obrigatório *')
     }
-  };
-  
+  }
+
   useEffect(() => {
     if (isStartDateTouched) {
       // Verifica se o campo foi tocado e está vazio
       if (!startDate) {
-        setStartDateError('Campo obrigatório *');
+        setStartDateError('Campo obrigatório *')
       } else {
-        setStartDateError('');
+        setStartDateError('')
       }
     }
-  }, [startDate, isStartDateTouched]); 
+  }, [startDate, isStartDateTouched])
 
   const handleEndDateChange = (
-    date: Dayjs | null, 
-    setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>
+    date: Dayjs | null,
+    setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>,
   ) => {
-    console.log("Novo valor de EndDate no onChange:", date);
-  
+    console.log('Novo valor de EndDate no onChange:', date)
+
     if (date && date.isValid()) {
       // Se a data for válida, atualize o estado e remova a mensagem de erro
-      setDate(date);
-      setEndDateError('');
+      setDate(date)
+      setEndDateError('')
     } else {
       // Se não for válido ou estiver em branco, defina o estado como null e exiba a mensagem de erro
-      setDate(null);
-      setEndDateError('Campo obrigatório *');
+      setDate(null)
+      setEndDateError('Campo obrigatório *')
     }
-  };
-  
+  }
+
   useEffect(() => {
     if (isEndDateTouched) {
       // Verifica se o campo foi tocado e está vazio
       if (!endDate) {
-        setEndDateError('Campo obrigatório *');
+        setEndDateError('Campo obrigatório *')
       } else {
-        setEndDateError('');
+        setEndDateError('')
       }
     }
-  }, [endDate, isEndDateTouched]); 
-
-  const formattedStartDate = startDate ? startDate.format('YYYY-MM-DD') : ''
-  const formattedEndDate = endDate ? endDate.format('YYYY-MM-DD') : ''
+  }, [endDate, isEndDateTouched])
 
   const handleTimeChange = (
     time: any,
@@ -383,6 +380,9 @@ const CreateEvent = () => {
   const totalAmountConverted = formatCurrency(Number(totalAmount.toFixed(2)))
 
   const postEvent = async (event: React.FormEvent) => {
+    const formattedStartDate = startDate ? startDate.format('YYYY-MM-DD') : ''
+    const formattedEndDate = endDate ? endDate.format('YYYY-MM-DD') : ''
+
     event.preventDefault()
 
     const fieldsToValidate = [
@@ -419,9 +419,9 @@ const CreateEvent = () => {
       name: eventName,
       type: eventType as number,
       clientId: clientId,
-      startDate: startDate,
+      startDate: formattedStartDate,
       startTime: startTime,
-      endDate: endDate,
+      endDate: formattedEndDate,
       endTime: endTime,
       zipCode: removeMask(zipCode),
       addressName: addressName,
@@ -434,6 +434,7 @@ const CreateEvent = () => {
       materials: materialIdAndQuantity,
       totalAmount: totalAmount,
     }
+    console.log('Dados do evento antes de enviar:', body)
     try {
       await axios.post('http://localhost:5196/api/Event', body)
       toast.success('Evento criado com sucesso')
@@ -883,22 +884,24 @@ const CreateEvent = () => {
             <div className="flex flex-wrap gap-4">
               <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Data inicial</label>
-                <DatePicker                  
-                  onChange={(date) => {
-                    const formattedDate = date ? dayjs(date.format('YYYY-MM-DD')) : null;
-                    handleStartDateChange(formattedDate, setStartDate);
+                <DatePicker
+                  onChange={date => {
+                    const formattedDate = date
+                      ? dayjs(date.format('YYYY-MM-DD'))
+                      : null
+                    handleStartDateChange(formattedDate, setStartDate)
                     if (formattedDate && formattedDate.isValid()) {
-                      setStartDateError('');
+                      setStartDateError('')
                     } else {
-                      setStartDateError('Campo obrigatório *');
+                      setStartDateError('Campo obrigatório *')
                     }
                   }}
                   onBlur={() => {
                     if (!isStartDateTouched) {
-                      setIsStartDateTouched(true);
+                      setIsStartDateTouched(true)
                     }
                   }}
-                  onOpenChange={(open) => {
+                  onOpenChange={open => {
                     if (open && !isStartDateTouched) {
                       setIsStartDateTouched(true)
                     }
@@ -911,11 +914,11 @@ const CreateEvent = () => {
                 />
                 {startDateError && (
                   <span
-                  className="text-red-500 text-sm mt-1"
-                  style={{ position: 'absolute', top: '100%', left: '0' }}
-                >
-                  {startDateError}
-                </span>
+                    className="text-red-500 text-sm mt-1"
+                    style={{ position: 'absolute', top: '100%', left: '0' }}
+                  >
+                    {startDateError}
+                  </span>
                 )}
               </div>
               <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
@@ -931,21 +934,23 @@ const CreateEvent = () => {
               <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Data final</label>
                 <DatePicker
-                  onChange={(date) => {
-                    const formattedDate = date ? dayjs(date.format('YYYY-MM-DD')) : null;
-                    handleEndDateChange(formattedDate, setEndDate);
+                  onChange={date => {
+                    const formattedDate = date
+                      ? dayjs(date.format('YYYY-MM-DD'))
+                      : null
+                    handleEndDateChange(formattedDate, setEndDate)
                     if (formattedDate && formattedDate.isValid()) {
-                      setEndDateError('');
+                      setEndDateError('')
                     } else {
-                      setEndDateError('Campo obrigatório *');
+                      setEndDateError('Campo obrigatório *')
                     }
                   }}
                   onBlur={() => {
                     if (!isEndDateTouched) {
-                      setIsEndDateTouched(true);
+                      setIsEndDateTouched(true)
                     }
                   }}
-                  onOpenChange={(open) => {
+                  onOpenChange={open => {
                     if (open && !isEndDateTouched) {
                       setIsEndDateTouched(true)
                     }
@@ -958,11 +963,11 @@ const CreateEvent = () => {
                 />
                 {endDateError && (
                   <span
-                  className="text-red-500 text-sm mt-1"
-                  style={{ position: 'absolute', top: '100%', left: '0' }}
-                >
-                  {endDateError}
-                </span>
+                    className="text-red-500 text-sm mt-1"
+                    style={{ position: 'absolute', top: '100%', left: '0' }}
+                  >
+                    {endDateError}
+                  </span>
                 )}
               </div>
               <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
