@@ -63,12 +63,12 @@ export const clientsAtom = atom<ClientProps[]>([])
 
 const CreateEvent = () => {
   const [eventName, setEventName] = useState('')
-  const [eventType, setEventType] = useState<number | null>(null) // igual category
-  const [selectedType, setSelectedType] = useState('') // igual o type
+  const [eventType, setEventType] = useState<number | null>(null)
+  const [selectedType, setSelectedType] = useState('')
   const [startDate, setStartDate] = useState<Dayjs | null>(null)
-  const [startTime, setStartTime] = useState('')
+  const [startTime, setStartTime] = useState<Dayjs | null>(null)
   const [endDate, setEndDate] = useState<Dayjs | null>(null)
-  const [endTime, setEndTime] = useState('')
+  const [endTime, setEndTime] = useState<Dayjs | null>(null)
   const [zipCode, setZipCode] = useState('')
   const [addressName, setAddressName] = useState('')
   const [addressNumber, setAddressNumber] = useState('')
@@ -107,9 +107,12 @@ const CreateEvent = () => {
   const [clientNameError, setClientNameError] = useState('')
   const [startDateError, setStartDateError] = useState('')
   const [endDateError, setEndDateError] = useState('')
+  const [startTimeError, setStartTimeError] = useState('')
+  const [endTimeError, setEndTimeError] = useState('')
   const [isStartDateTouched, setIsStartDateTouched] = useState(false)
   const [isEndDateTouched, setIsEndDateTouched] = useState(false)
-
+  const [isStartTimeTouched, setIsStartTimeTouched] = useState(false)
+  const [isEndTimeTouched, setIsEndTimeTouched] = useState(false)
   const [isTouched, setIsTouched] = useState(false)
   const router = useRouter()
 
@@ -117,10 +120,8 @@ const CreateEvent = () => {
     const numericValue = value.replace(/\D/g, '')
 
     if (numericValue.length <= 5) {
-      // Adiciona apenas os primeiros dígitos, até 5, sem traço
       return numericValue
     } else {
-      // Adiciona o traço após os primeiros 5 dígitos
       return numericValue.replace(/^(\d{5})(\d{0,3})$/, '$1-$2')
     }
   }
@@ -192,18 +193,60 @@ const CreateEvent = () => {
     setTotalAmount(newTotalAmount)
   }, [insertedMaterial])
 
+  const handleStartTimeChange = (
+    time: Dayjs | null,
+    setTime: React.Dispatch<React.SetStateAction<Dayjs | null>>,
+  ) => {
+    if (time && time.isValid()) {
+      setTime(time)
+      setStartTimeError('')
+    } else {
+      setTime(null)
+      setStartTimeError('Campo obrigatório *')
+    }
+  }
+
+  useEffect(() => {
+    if (isStartTimeTouched) {
+      if (!startTime) {
+        setStartTimeError('Campo obrigatório *')
+      } else {
+        setStartTimeError('')
+      }
+    }
+  }, [startTime, isStartTimeTouched])
+
+  const handleEndTimeChange = (
+    time: Dayjs | null,
+    setTime: React.Dispatch<React.SetStateAction<Dayjs | null>>,
+  ) => {
+    if (time && time.isValid()) {
+      setTime(time)
+      setEndTimeError('')
+    } else {
+      setTime(null)
+      setEndTimeError('Campo obrigatório *')
+    }
+  }
+
+  useEffect(() => {
+    if (isEndTimeTouched) {
+      if (!endTime) {
+        setEndTimeError('Campo obrigatório *')
+      } else {
+        setEndTimeError('')
+      }
+    }
+  }, [endTime, isEndTimeTouched])
+
   const handleStartDateChange = (
     date: Dayjs | null,
     setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>,
   ) => {
-    console.log('Novo valor de startDate no onChange:', date)
-
     if (date && date.isValid()) {
-      // Se a data for válida, atualize o estado e remova a mensagem de erro
       setDate(date)
       setStartDateError('')
     } else {
-      // Se não for válido ou estiver em branco, defina o estado como null e exiba a mensagem de erro
       setDate(null)
       setStartDateError('Campo obrigatório *')
     }
@@ -211,7 +254,6 @@ const CreateEvent = () => {
 
   useEffect(() => {
     if (isStartDateTouched) {
-      // Verifica se o campo foi tocado e está vazio
       if (!startDate) {
         setStartDateError('Campo obrigatório *')
       } else {
@@ -224,14 +266,10 @@ const CreateEvent = () => {
     date: Dayjs | null,
     setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>,
   ) => {
-    console.log('Novo valor de EndDate no onChange:', date)
-
     if (date && date.isValid()) {
-      // Se a data for válida, atualize o estado e remova a mensagem de erro
       setDate(date)
       setEndDateError('')
     } else {
-      // Se não for válido ou estiver em branco, defina o estado como null e exiba a mensagem de erro
       setDate(null)
       setEndDateError('Campo obrigatório *')
     }
@@ -239,7 +277,6 @@ const CreateEvent = () => {
 
   useEffect(() => {
     if (isEndDateTouched) {
-      // Verifica se o campo foi tocado e está vazio
       if (!endDate) {
         setEndDateError('Campo obrigatório *')
       } else {
@@ -247,18 +284,6 @@ const CreateEvent = () => {
       }
     }
   }, [endDate, isEndDateTouched])
-
-  const handleTimeChange = (
-    time: any,
-    setTime: React.Dispatch<React.SetStateAction<string>>,
-  ) => {
-    if (time) {
-      const formattedTime = time.format('HH:mm:ss')
-      setTime(formattedTime)
-    } else {
-      setTime('')
-    }
-  }
 
   const getMaterialsByCategory = async (
     categoryName: string,
@@ -382,6 +407,8 @@ const CreateEvent = () => {
   const postEvent = async (event: React.FormEvent) => {
     const formattedStartDate = startDate ? startDate.format('YYYY-MM-DD') : ''
     const formattedEndDate = endDate ? endDate.format('YYYY-MM-DD') : ''
+    const formattedStartTime = startTime ? startTime.format('HH:mm:ss') : ''
+    const formattedEndTime = endTime ? endTime.format('HH:mm:ss') : ''
 
     event.preventDefault()
 
@@ -420,9 +447,9 @@ const CreateEvent = () => {
       type: eventType as number,
       clientId: clientId,
       startDate: formattedStartDate,
-      startTime: startTime,
+      startTime: formattedStartTime,
       endDate: formattedEndDate,
-      endTime: endTime,
+      endTime: formattedEndTime,
       zipCode: removeMask(zipCode),
       addressName: addressName,
       addressNumber: addressNumber,
@@ -434,7 +461,6 @@ const CreateEvent = () => {
       materials: materialIdAndQuantity,
       totalAmount: totalAmount,
     }
-    console.log('Dados do evento antes de enviar:', body)
     try {
       await axios.post('http://localhost:5196/api/Event', body)
       toast.success('Evento criado com sucesso')
@@ -921,15 +947,42 @@ const CreateEvent = () => {
                   </span>
                 )}
               </div>
-              <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
+              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Começo</label>
                 <TimePicker
-                  onChange={time => handleTimeChange(time, setStartTime)}
-                  format="HH:mm:ss"
+                  onChange={time => {
+                    const formattedTime = time ? dayjs(time) : null
+                    handleStartTimeChange(formattedTime, setStartTime)
+                    if (formattedTime && formattedTime.isValid()) {
+                      setStartTimeError('')
+                    } else {
+                      setStartTimeError('Campo obrigatório *')
+                    }
+                  }}
+                  onBlur={() => {
+                    if (!isStartTimeTouched) {
+                      setIsStartTimeTouched(true)
+                    }
+                  }}
+                  onOpenChange={open => {
+                    if (open && !isStartTimeTouched) {
+                      setIsStartTimeTouched(true)
+                    }
+                  }}
+                  value={startTime}
+                  format="HH:mm"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl"
+                  className={`bg-white text-gray-600 border ${startTimeError ? 'border-red-500' : 'border-gray-300'} rounded-xl`}
                   placeholder="Selecione um horário"
                 />
+                {startTimeError && (
+                  <span
+                    className="text-red-500 text-sm mt-1"
+                    style={{ position: 'absolute', top: '100%', left: '0' }}
+                  >
+                    {startTimeError}
+                  </span>
+                )}
               </div>
               <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Data final</label>
@@ -970,15 +1023,42 @@ const CreateEvent = () => {
                   </span>
                 )}
               </div>
-              <div className="flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
+              <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[250px]">
                 <label className="font-bold">Fim do evento</label>
                 <TimePicker
-                  onChange={time => handleTimeChange(time, setEndTime)}
-                  format="HH:mm:ss"
+                  onChange={time => {
+                    const formattedTime = time ? dayjs(time) : null
+                    handleEndTimeChange(formattedTime, setEndTime)
+                    if (formattedTime && formattedTime.isValid()) {
+                      setEndTimeError('')
+                    } else {
+                      setEndTimeError('Campo obrigatório *')
+                    }
+                  }}
+                  onBlur={() => {
+                    if (!isEndTimeTouched) {
+                      setIsEndTimeTouched(true)
+                    }
+                  }}
+                  onOpenChange={open => {
+                    if (open && !isEndTimeTouched) {
+                      setIsEndTimeTouched(true)
+                    }
+                  }}
+                  value={endTime}
+                  format="HH:mm"
                   size="large"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl"
+                  className={`bg-white text-gray-600 border ${endTimeError ? 'border-red-500' : 'border-gray-300'} rounded-xl`}
                   placeholder="Selecione um horário"
                 />
+                {endTimeError && (
+                  <span
+                    className="text-red-500 text-sm mt-1"
+                    style={{ position: 'absolute', top: '100%', left: '0' }}
+                  >
+                    {endTimeError}
+                  </span>
+                )}
               </div>
             </div>
           </div>
