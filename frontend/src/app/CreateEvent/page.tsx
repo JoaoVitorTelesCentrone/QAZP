@@ -961,7 +961,7 @@ const CreateEvent = () => {
                 )}
               </div>
               <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[225px] xl:mr-8 2xl:w-[250px] 2xl:mr-10">
-                <label className="font-bold">Começo</label>
+                <label className="font-bold">Horário inicial</label>
                 <TimePicker
                   onChange={time => {
                     const formattedTime = time ? dayjs(time) : null
@@ -1037,7 +1037,7 @@ const CreateEvent = () => {
                 )}
               </div>
               <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[225px] 2xl:w-[250px]">
-                <label className="font-bold">Fim do evento</label>
+                <label className="font-bold">Horário final</label>
                 <TimePicker
                   onChange={time => {
                     const formattedTime = time ? dayjs(time) : null

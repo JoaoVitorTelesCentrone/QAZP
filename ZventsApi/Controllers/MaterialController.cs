@@ -70,7 +70,6 @@ namespace ZventsApi.Controllers
             return Ok(activeMaterials);
         }
 
-
         [HttpPost]
         public ActionResult<Material> PostMaterial(Material material)
         {

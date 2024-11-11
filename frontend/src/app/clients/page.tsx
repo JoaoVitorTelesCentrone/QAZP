@@ -75,7 +75,7 @@ const Clients = () => {
                   size="large"
                   onClick={() => setOpenModal(true)}
                 >
-                  <h1 className="text-lg">Criar novo cliente</h1>
+                  <h1 className="text-lg">Criar cliente</h1>
                 </Button>
               </div>
             </div>

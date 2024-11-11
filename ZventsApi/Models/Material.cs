@@ -35,6 +35,7 @@ namespace ZventsApi.Models
         public MaterialCategory Category { get; set; }
 
         [Required(ErrorMessage = "Price is required")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be bigger than 0")]
         public decimal Price { get; set; }
         public virtual ICollection<EventMaterial> EventMaterials { get; set; } =
             new List<EventMaterial>();
