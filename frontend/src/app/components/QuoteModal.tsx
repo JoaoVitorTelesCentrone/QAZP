@@ -270,6 +270,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             })}
             onChange={e => setPhoneNumber(formatPhoneNumber(e.target.value))}
             onBlur={() => handleBlur('phoneNumber')}
+            maxLength={15}
             className={`p-2 mb-4 border rounded w-full ${phoneNumberError ? 'border-red-500' : 'border-slate-300'}`}
             required
           />
