@@ -77,6 +77,7 @@ const Dashboard = () => {
           </div>
         ) : (
           <>
+          <div className='bg-tertiary'>
             <div className="flex ml-56">
               <LucideLineChart className="w-12 h-12 xl:w-16 xl:h-16 p-1 rounded-full my-12 mx-2 text-primary border-2 border-primary" />
               <h1 className="font-monospace font-semibold text-6xl my-12 text-secondary-foreground">
@@ -105,6 +106,7 @@ const Dashboard = () => {
             </div>
             <div className="ml-56 mr-10">
               <DashboardTable columns={eventsColumns} data={events} />
+            </div>
             </div>
           </>
         )}
