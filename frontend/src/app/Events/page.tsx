@@ -1,8 +1,6 @@
 'use client'
 import React, { useEffect, useState, useCallback } from 'react'
 import { useAtom } from 'jotai'
-import { authAtom } from '../atoms/authAtom'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { EventTable } from './EventTable'
@@ -13,10 +11,12 @@ import { TbCalendarPlus } from 'react-icons/tb'
 import { Button } from 'antd'
 import { GiGlassCelebration } from 'react-icons/gi'
 import UserSideMenu from '../components/UserHeader'
-import { documentIdConverter, eventTypeNameConverter, formatCurrency, formatDate } from '@/functions/functions'
-import { clientsAtom } from '../CreateEvent/page'
-import withAuth from '../hoc/withAuth'; // Ajuste o caminho conforme necessário
-
+import {
+  eventTypeNameConverter,
+  formatCurrency,
+  formatDate,
+} from '@/functions/functions'
+import withAuth from '../hoc/withAuth'
 const Page = () => {
   const [loading, setLoading] = useState(true)
   const [events, setEvents] = useState<Events[]>([])
@@ -24,14 +24,20 @@ const Page = () => {
 
   const fetchEvents = useCallback(async () => {
     try {
-      const eventsResponse = await axios.get('http://localhost:5196/api/Event/active-events')
+      const eventsResponse = await axios.get(
+        'http://localhost:5196/api/Event/active-events',
+      )
 
       const events = eventsResponse.data.map((event: any) => ({
-        id : event.id,
+        id: event.id,
         name: event.name,
         type: eventTypeNameConverter(event.type),
-        startDate: event.startDate ? formatDate(event.startDate) : 'Data não disponível',
-        endDate: event.endDate ? formatDate(event.endDate) : 'Data não disponível',
+        startDate: event.startDate
+          ? formatDate(event.startDate)
+          : 'Data não disponível',
+        endDate: event.endDate
+          ? formatDate(event.endDate)
+          : 'Data não disponível',
         estimatedAudience: event.estimatedAudience,
         totalAmount: formatCurrency(event.totalAmount),
         clientName: event.clientFullName,
@@ -84,12 +90,14 @@ const Page = () => {
             </Button>
           </div>
         </div>
-        <div className="ml-56 mr-10">
-          <EventTable columns={eventsColumns} data={events} />
+        <div className="bg-tertiary">
+          <div className="ml-56 mr-10">
+            <EventTable columns={eventsColumns} data={events} />
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-export default withAuth(Page); // Encapsulando com withAuth
+export default withAuth(Page) // Encapsulando com withAuth
