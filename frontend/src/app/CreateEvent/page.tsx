@@ -9,7 +9,7 @@ import {
   PlusCircleIcon,
   SearchIcon,
 } from 'lucide-react'
-import { Button, DatePicker, TimePicker, message, Table } from 'antd'
+import { Button, DatePicker, TimePicker, Table } from 'antd'
 import {
   ClientProps,
   EventType,
@@ -102,7 +102,7 @@ const CreateEvent = () => {
   const [districtError, setDistrictError] = useState('')
   const [cityError, setCityError] = useState('')
   const [stateError, setStateError] = useState('')
-  const [EstimatedAudienceError, setEstimatedAudienceError] = useState('')
+  const [estimatedAudienceError, setEstimatedAudienceError] = useState('')
   const [isClientTouched, setIsClientTouched] = useState(false)
   const [clientNameError, setClientNameError] = useState('')
   const [startDateError, setStartDateError] = useState('')
@@ -900,10 +900,10 @@ const CreateEvent = () => {
                   onChange={handleEstimatedAudienceChange}
                   onBlur={() => handleBlur('estimatedAudience')}
                   placeholder="Público estimado"
-                  className={`p-2 mb-4 border rounded w-full ${EstimatedAudienceError ? 'border-red-500' : 'border-slate-300'}`}
+                  className={`p-2 mb-4 border rounded w-full ${estimatedAudienceError ? 'border-red-500' : 'border-slate-300'}`}
                   required
                 />
-                {EstimatedAudienceError && (
+                {estimatedAudienceError && (
                   <div
                     style={{
                       color: 'red',
@@ -913,7 +913,7 @@ const CreateEvent = () => {
                       marginTop: -15,
                     }}
                   >
-                    {EstimatedAudienceError}
+                    {estimatedAudienceError}
                   </div>
                 )}
               </div>
