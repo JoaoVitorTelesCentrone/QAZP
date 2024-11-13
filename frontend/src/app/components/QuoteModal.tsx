@@ -300,7 +300,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             }}
           >
             <DropdownMenuTrigger
-              className={`flex border-2 bg-white justify-between px-2 py-1 rounded h-10 ${
+              className={`flex border bg-white justify-between px-2 py-1 rounded h-10 ${
                 !isCategoryValid && isTouched
                   ? 'border-red-500'
                   : 'border-gray-300'
