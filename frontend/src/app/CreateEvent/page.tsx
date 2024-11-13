@@ -811,7 +811,7 @@ const CreateEvent = () => {
                   value={addressComplement}
                   onChange={e => setAddressComplement(e.target.value)}
                   placeholder="Digite o complemento"
-                  className="p-2 border-slate-500 bg-white mb-4"
+                  className="p-2 border-slate-300 bg-white mb-4"
                 />
               </div>
             </div>
