@@ -181,7 +181,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
                 }}
               >
                 <DropdownMenuTrigger
-                  className={`flex border-2 bg-white justify-between px-2 py-1 rounded mr-6 h-10 ${
+                  className={`flex border bg-white justify-between px-2 py-1 rounded mr-6 h-10 ${
                     !isCategoryValid && isTouched
                       ? 'border-red-500'
                       : 'border-gray-300'
