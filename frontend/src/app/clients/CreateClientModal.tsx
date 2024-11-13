@@ -485,7 +485,7 @@ const CreateClientModal: React.FC<createClientProps> = ({
                 </h1>
                 <Input
                   onChange={e => setAddressComplement(e.target.value)}
-                  className="p-2 border-slate-500 bg-white mb-4"
+                  className="p-2 border-slate-300 bg-white mb-4"
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.streetComplement.field.placeholder',
                   })}
