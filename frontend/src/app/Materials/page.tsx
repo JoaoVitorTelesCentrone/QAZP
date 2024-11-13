@@ -77,7 +77,7 @@ const Materials = () => {
       ) : (
         <>
           <UserSideMenu />
-          <div className="bg-tertiary h-full">
+          <div className="bg-tertiary h-screen">
             <div className="p-10">
               <div className="flex mt-4 justify-between w-full">
                 <div className="flex ml-48">
@@ -97,9 +97,11 @@ const Materials = () => {
                 </Button>
               </div>
             </div>
+            <div className="bg-tertiary">
             <div className="ml-56 mr-10">
               <MaterialTable columns={columns} data={materials} />
             </div>
+          </div>
           </div>
         </>
       )}
