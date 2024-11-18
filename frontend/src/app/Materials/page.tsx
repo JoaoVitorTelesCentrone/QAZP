@@ -40,6 +40,7 @@ const Materials = () => {
     try {
       const response = await axios.get('http://localhost:5196/api/Material/active-materials')
       const materialNames = response.data.map((material: any) => ({
+        id: material.id,
         name: material.name,
         price: formatCurrency(material.price),
         category: materialCategoryNameConverter(material.category),
@@ -76,7 +77,7 @@ const Materials = () => {
       ) : (
         <>
           <UserSideMenu />
-          <div className="bg-tertiary h-full">
+          <div className="bg-tertiary h-screen">
             <div className="p-10">
               <div className="flex mt-4 justify-between w-full">
                 <div className="flex ml-48">
@@ -96,9 +97,11 @@ const Materials = () => {
                 </Button>
               </div>
             </div>
+            <div className="bg-tertiary">
             <div className="ml-56 mr-10">
               <MaterialTable columns={columns} data={materials} />
             </div>
+          </div>
           </div>
         </>
       )}

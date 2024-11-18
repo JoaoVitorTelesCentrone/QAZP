@@ -79,8 +79,10 @@ const Clients = () => {
                 </Button>
               </div>
             </div>
+            <div className='bg-tertiary'>
             <div className="ml-56 mr-10">
               <ClientTable columns={clientColumns} data={clients} />
+            </div>
             </div>
           </div>
         </>

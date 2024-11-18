@@ -48,6 +48,143 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
   const [district, setDistrict] = useState(clientData?.district)
   const [state, setState] = useState(clientData?.state)
   const [city, setCity] = useState(clientData?.city)
+  const [fullNameError, setFullNameError] = useState('')
+  const [DocumentIdError, setDocumentIdError] = useState('')
+  const [zipCodeError, setZipCodeError] = useState('')
+  const [addressNumberError, setAddressNumberError] = useState('')
+  const [addressNameError, setAddressNameError] = useState('')
+  const [districtError, setDistrictError] = useState('')
+  const [cityError, setCityError] = useState('')
+  const [stateError, setStateError] = useState('')
+
+  const removeMask = (value: string): string => {
+    return value.replace(/\D/g, '')
+  }
+
+  const formatPhoneNumber = (value: string) => {
+    const numericValue = value.replace(/\D/g, '')
+
+    if (numericValue.length === 0) return ''
+
+    if (numericValue.length <= 2) {
+      return `(${numericValue}`
+    } else if (numericValue.length <= 6) {
+      return numericValue.replace(/(\d{2})(\d{0,4})/, '($1) $2')
+    } else if (numericValue.length <= 10) {
+      // Padrão de telefone fixo (XX) XXXX-XXXX
+      return numericValue.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
+    } else {
+      // Padrão de celular (XX) XXXXX-XXXX
+      return numericValue.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+    }
+  }
+
+  const formatZipCode = (value: string) => {
+    const numericValue = value.replace(/\D/g, '')
+
+    if (numericValue.length <= 5) {
+      // Adiciona apenas os primeiros dígitos, até 5, sem traço
+      return numericValue
+    } else {
+      // Adiciona o traço após os primeiros 5 dígitos
+      return numericValue.replace(/^(\d{5})(\d{0,3})$/, '$1-$2')
+    }
+  }
+
+  const formatDocumentId = (value: string) => {
+    const numericValue = value.replace(/\D/g, '')
+
+    if (numericValue.length <= 3) {
+      // Exibe os primeiros 3 dígitos
+      return numericValue
+    } else if (numericValue.length <= 6) {
+      // Adiciona o primeiro ponto
+      return numericValue.replace(/(\d{3})(\d{0,3})/, '$1.$2')
+    } else if (numericValue.length <= 9) {
+      // Adiciona o segundo ponto
+      return numericValue.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3')
+    } else if (numericValue.length <= 11) {
+      // Aplica máscara completa para CPF (XXX.XXX.XXX-XX)
+      return numericValue.replace(
+        /(\d{3})(\d{3})(\d{3})(\d{0,2})/,
+        '$1.$2.$3-$4',
+      )
+    } else {
+      // Aplica máscara completa para CNPJ (XX.XXX.XXX/XXXX-XX)
+      return numericValue.replace(
+        /(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/,
+        '$1.$2.$3/$4-$5',
+      )
+    }
+  }
+
+  const handleSearchClick: React.MouseEventHandler<
+    SVGSVGElement
+  > = async event => {
+    try {
+      event.preventDefault()
+      const response = await axios.get(
+        `https://viacep.com.br/ws/${zipCode}/json/`,
+      )
+
+      const cepData = response.data
+      setAddressName(cepData.logradouro)
+      setDistrict(cepData.bairro)
+      setCity(cepData.localidade)
+      setState(cepData.uf)
+
+      if (cepData.logradouro) setAddressNameError('')
+      if (cepData.bairro) setDistrictError('')
+      if (cepData.localidade) setCityError('')
+      if (cepData.uf) setStateError('')
+    } catch (error) {
+      console.error('Erro ao buscar o CEP:', error)
+    }
+  }
+
+  const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFullName(e.target.value)
+    setFullNameError('')
+  }
+
+  const handleDocumentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatDocumentId(e.target.value)
+    setDocumentId(formattedValue)
+  }
+
+  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatZipCode(e.target.value)
+    setZipCode(formattedValue)
+  }
+
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
+    const fieldErrorMap = {
+      fullName: {
+        value: fullName,
+        setError: setFullNameError,
+      },
+      documentId: {
+        value: documentId,
+        setError: setDocumentIdError,
+      },
+      zipCode: {
+        value: zipCode,
+        setError: setZipCodeError,
+      },
+      addressNumber: {
+        value: addressNumber,
+        setError: setAddressNumberError,
+      },
+    }
+
+    const field = fieldErrorMap[fieldName]
+
+    if (!field.value) {
+      field.setError('Campo obrigatório *')
+    } else {
+      field.setError('')
+    }
+  }
 
   const updateClient = async (updatedData: ClientDataProps) => {
     try {
@@ -76,21 +213,46 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    const fieldsToValidate = [
+      { value: addressName, errorSetter: setAddressNameError },
+      { value: documentId, errorSetter: setDocumentIdError },
+      { value: zipCode, errorSetter: setZipCodeError },
+      { value: fullName, errorSetter: setFullNameError },
+      { value: addressNumber, errorSetter: setAddressNumberError },
+      { value: district, errorSetter: setDistrictError },
+      { value: city, errorSetter: setCityError },
+      { value: state, errorSetter: setStateError },
+    ]
+
+    let isValid = true
+
+    fieldsToValidate.forEach(({ value, errorSetter }) => {
+      if (!value) {
+        errorSetter('Campo obrigatório *')
+        isValid = false
+      } else {
+        errorSetter('')
+      }
+    })
+
+    if (!isValid) return
+
     updateClient({
       id: clientData?.id,
       fullName: fullName,
-      documentId: documentId,
+      documentId: removeMask(documentId || ''),
       createdDate: clientData?.createdDate,
       email: email,
-      zipCode: zipCode,
+      zipCode: removeMask(zipCode || ''),
       addressName: addressName,
       addressComplement: addressComplement,
-      addressNumber: addressNumber,
+      addressNumber: addressNumber || '',
       district: district,
       state: state,
       city: city,
       isActive: clientData?.isActive,
-      phoneNumber: phoneNumber,
+      phoneNumber: removeMask(phoneNumber || ''),
     })
   }
 
@@ -121,8 +283,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
           <X className="cursor-pointer" onClick={closeModal} />
         </div>
 
-        <div className="flex w-full ">
-          <div className="w-[38%] mr-2">
+        <div className="flex w-full mb-4">
+          <div className="w-[38%] mr-2 relative">
             <h1 className="font-bold mr-24">
               {intl.formatMessage({
                 id: 'create.client.page.fullName.field.label',
@@ -130,15 +292,30 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
             </h1>
             <Input
               value={fullName}
-              onChange={e => setFullName(e.target.value)}
-              className="p-2 border-slate-500  bg-white mb-4"
+              onChange={handleFullNameChange}
+              onBlur={() => handleBlur('fullName')}
+              className={`p-2 mb-4 border rounded w-full ${fullNameError ? 'border-red-500' : 'border-slate-300'}`}
               placeholder={intl.formatMessage({
                 id: 'create.client.page.fullName.field.placeholder',
               })}
+              required
             />
+            {fullNameError && (
+              <div
+                style={{
+                  color: 'red',
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  marginTop: -15,
+                }}
+              >
+                {fullNameError}
+              </div>
+            )}
           </div>
 
-          <div className="mr-2 w-[30%]">
+          <div className="mr-2 w-[30%] relative">
             <h1 className="xl:mr-40  font-bold">
               {intl.formatMessage({
                 id: 'create.client.page.document.field.label',
@@ -146,12 +323,27 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
             </h1>
             <Input
               value={documentId}
-              onChange={e => setDocumentId(e.target.value)}
-              className="p-2 border-slate-500 bg-white mb-4"
+              onChange={handleDocumentIdChange}
+              onBlur={() => handleBlur('documentId')}
+              maxLength={18}
+              className={`p-2 mb-4 border rounded w-full ${DocumentIdError ? 'border-red-500' : 'border-slate-300'}`}
               placeholder={intl.formatMessage({
                 id: 'create.client.page.document.field.placeholder',
               })}
             />
+            {DocumentIdError && (
+              <div
+                style={{
+                  color: 'red',
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  marginTop: -15,
+                }}
+              >
+                {DocumentIdError}
+              </div>
+            )}
           </div>
           <div className="w-[30%]">
             <h1 className="xl:mr-44  font-bold">
@@ -161,15 +353,16 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
             </h1>
             <Input
               value={phoneNumber}
-              onChange={e => setPhoneNumber(e.target.value)}
-              className="p-2 border-slate-500 bg-white mb-4"
+              onChange={e => setPhoneNumber(formatPhoneNumber(e.target.value))}
+              className="p-2 mb-4 border rounded w-full "
+              maxLength={15}
               placeholder={intl.formatMessage({
                 id: 'create.client.page.phoneNumber.field.placeholder',
               })}
             />
           </div>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between mb-4">
           <div className="w-[60%]">
             <h1 className="xl:mr-24  font-bold">
               {intl.formatMessage({
@@ -179,13 +372,13 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
             <Input
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="p-2 border-slate-500 bg-white mb-4"
+              className="p-2 mb-4 border rounded w-full "
               placeholder={intl.formatMessage({
                 id: 'create.client.page.email.field.placeholder',
               })}
             />
           </div>
-          <div className="flex flex-col w-[40%] ml-3">
+          <div className="flex flex-col w-[40%] ml-3 relative">
             <h1 className="xl:mr-24  font-bold">
               {intl.formatMessage({
                 id: 'create.client.page.zipCode.field.label',
@@ -193,20 +386,36 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
             </h1>
             <div className="flex">
               <Input
-                className="p-2 border-slate-500 bg-white mb-4"
+                className={`p-2 mb-4 border rounded w-full ${zipCodeError ? 'border-red-500' : 'border-slate-300'}`}
                 placeholder={intl.formatMessage({
                   id: 'create.client.page.zipCode.field.placeholder',
                 })}
                 value={zipCode}
-                onChange={e => setZipCode(e.target.value)}
+                onChange={handleZipCodeChange}
+                onBlur={() => handleBlur('zipCode')}
+                maxLength={9}
               />
-              <SearchIcon className="p-2 h-10 w-10 cursor-pointer" />
+              {zipCodeError && (
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {zipCodeError}
+                </div>
+              )}
+              <SearchIcon className="p-2 h-10 w-10 cursor-pointer" 
+              onClick={handleSearchClick}/>
             </div>
           </div>
         </div>
 
         <div>
-          <div className=" flex justify-around">
+          <div className=" flex justify-around mb-4">
             <div className="mx-1 ">
               <h1 className="xl:mr-24  font-bold">
                 {intl.formatMessage({
@@ -214,14 +423,27 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 })}
               </h1>
               <Input
-                className="p-2 border-slate-500 bg-neutral-300 mb-4"
+                className={`p-2 mb-4 border rounded w-full ${addressNameError ? 'border-red-500' : 'border-slate-300'}`}
                 value={addressName}
                 onChange={e => setAddressName(e.target.value)}
                 readOnly={true}
+                disabled
               />
+              {addressNameError && (
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {addressNameError}
+                </div>
+              )}
             </div>
-
-            <div className="mx-1">
+            <div className="mx-1 relative">
               <h1 className="xl:mr-24  font-bold">
                 {intl.formatMessage({
                   id: 'create.client.page.streetNumber.field.label',
@@ -230,11 +452,26 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
               <Input
                 value={addressNumber}
                 onChange={e => setAddressNumber(e.target.value)}
+                onBlur={() => handleBlur('addressNumber')}
                 placeholder={intl.formatMessage({
                   id: 'create.client.page.streetNumber.field.placeholder',
                 })}
-                className="p-2 border-slate-500 bg-white mb-4"
+                className={`p-2 mb-4 border rounded w-full ${addressNumberError ? 'border-red-500' : 'border-slate-300'}`}
+                required
               />
+              {addressNumberError && (
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {addressNumberError}
+                </div>
+              )}
             </div>
             <div className="mx-1">
               <h1 className="xl:mr-24  font-bold">
@@ -248,11 +485,11 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 placeholder={intl.formatMessage({
                   id: 'create.client.page.streetComplement.field.placeholder',
                 })}
-                className="p-2 border-slate-500 bg-white mb-4"
+                className="p-2 mb-4 border rounded w-full "
               />
             </div>
           </div>
-          <div className="w-full flex justify-around">
+          <div className="w-full flex justify-around mb-4">
             <div className="mx-1">
               <h1 className="xl:mr-24  font-bold">
                 {intl.formatMessage({
@@ -260,12 +497,25 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 })}
               </h1>
               <Input
-                className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 value={district}
                 onChange={e => setDistrict(e.target.value)}
+                className={`p-2 mb-4 border rounded w-full ${districtError ? 'border-red-500' : 'border-slate-300'}`}
                 readOnly={true}
                 disabled
               />
+              {districtError && (
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {districtError}
+                </div>
+              )}
             </div>
             <div className="mx-1">
               <h1 className="xl:mr-24  font-bold">
@@ -274,12 +524,25 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 })}
               </h1>
               <Input
-                className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 value={state}
                 onChange={e => setState(e.target.value)}
+                className={`p-2 mb-4 border rounded w-full ${stateError ? 'border-red-500' : 'border-slate-300'}`}
                 readOnly={true}
                 disabled
               />
+              {stateError && (
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {stateError}
+                </div>
+              )}
             </div>
             <div className="mx-1">
               <h1 className="xl:mr-24  font-bold">
@@ -288,12 +551,25 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                 })}
               </h1>
               <Input
-                className="p-2 border-slate-500 bg-neutral-300 mb-4"
                 value={city}
                 onChange={e => setCity(e.target.value)}
+                className={`p-2 mb-4 border rounded w-full ${cityError ? 'border-red-500' : 'border-slate-300'}`}
                 readOnly={true}
                 disabled
               />
+              {cityError && (
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {cityError}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -301,7 +577,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
           <Button className="" onClick={closeModal} type="default">
             Fechar
           </Button>
-          <Button type="default">
+          <Button htmlType="submit" type="default">
             {intl.formatMessage({
               id: 'edit.client.page.create.client.button',
             })}

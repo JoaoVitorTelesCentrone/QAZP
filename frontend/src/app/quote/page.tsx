@@ -10,7 +10,7 @@ import ClipLoader from 'react-spinners/ClipLoader'
 import { quoteChangeAtom } from '../atoms/changeQuoteAtom'
 import { GiTakeMyMoney } from 'react-icons/gi'
 import { formatPhoneNumber } from '@/functions/functions'
-import withAuth from '../hoc/withAuth';
+import withAuth from '../hoc/withAuth'
 
 const Page = () => {
   const [quote, setQuote] = useState([])
@@ -20,9 +20,12 @@ const Page = () => {
   const fetchUserData = useCallback(async () => {
     setLoading(true)
     try {
-      const response = await axios.get('http://localhost:5196/api/Quote/active-quotes')
+      const response = await axios.get(
+        'http://localhost:5196/api/Quote/active-quotes',
+      )
 
       const quotes = response.data.map((quote: any) => ({
+        id: quote.id,
         fullName: quote.fullName,
         email: quote.email,
         phoneNumber: formatPhoneNumber(quote.phoneNumber),
@@ -36,7 +39,7 @@ const Page = () => {
     } finally {
       setTimeout(() => {
         setLoading(false)
-      }, 100);
+      }, 100)
     }
   }, [])
 
@@ -64,8 +67,10 @@ const Page = () => {
                 </div>
               </div>
             </div>
-            <div className="ml-56 mr-10">
-              <QuoteTable columns={quoteColumns} data={quote} />
+            <div className="bg-tertiary">
+              <div className="ml-56 mr-10">
+                <QuoteTable columns={quoteColumns} data={quote} />
+              </div>
             </div>
           </div>
         </>
@@ -74,4 +79,4 @@ const Page = () => {
   )
 }
 
-export default withAuth(Page);
+export default withAuth(Page)

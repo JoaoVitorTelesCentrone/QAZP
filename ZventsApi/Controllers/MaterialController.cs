@@ -58,6 +58,7 @@ namespace ZventsApi.Controllers
                 .Where(dbMaterial => dbMaterial.IsDeleted == false)
                 .Select(material => new 
                 {
+                    material.Id,
                     material.Name,
                     material.Category,
                     material.Price,
@@ -73,7 +74,7 @@ namespace ZventsApi.Controllers
         public ActionResult<Material> PostMaterial(Material material)
         {
             bool materialExists = _context.Materials.Any(dbMaterial =>
-                dbMaterial.Name == material.Name && dbMaterial.Category == material.Category
+                dbMaterial.Name == material.Name && dbMaterial.Category == material.Category && dbMaterial.IsDeleted == false
             );
 
             if (!materialExists)

@@ -6,13 +6,13 @@ namespace ZventsApi.Models
     public class CreateEventDto
     {
         public required string Name { get; set; }
-        public EventType Type { get; set; }
+        public required EventType Type { get; set; }
         public EventStatus Status { get; set; }
         public Guid ClientId { get; set; }
-        public DateOnly StartDate { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public DateOnly EndDate { get; set; }
-        public TimeOnly EndTime { get; set; }
+        public required DateOnly StartDate { get; set; }
+        public required TimeOnly StartTime { get; set; }
+        public required DateOnly EndDate { get; set; }
+        public required TimeOnly EndTime { get; set; }
         public required string ZipCode { get; set; }
         public required string AddressName { get; set; }
         public required string AddressNumber { get; set; }

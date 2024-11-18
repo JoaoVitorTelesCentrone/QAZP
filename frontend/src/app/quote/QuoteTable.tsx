@@ -57,10 +57,10 @@ export function QuoteTable<TData, TValue>({
         <Input
           placeholder="Filtrar por nome"
           value={
-            (table.getColumn('firstName')?.getFilterValue() as string) ?? ''
+            (table.getColumn('fullName')?.getFilterValue() as string) ?? ''
           }
           onChange={event =>
-            table.getColumn('firstName')?.setFilterValue(event.target.value)
+            table.getColumn('fullName')?.setFilterValue(event.target.value)
           }
           className="max-w-sm border-primary font-bold text-center my-10"
         />

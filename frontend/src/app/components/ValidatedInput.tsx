@@ -18,7 +18,7 @@ const ValidatedInput: React.FC<ValidatedInputProps> = ({
   placeholder,
   label,
   required = false,
-  type = 'text', // Tipo padrão é texto
+  type = 'text', 
 }) => {
   const [isTouched, setIsTouched] = useState(false)
 
@@ -54,7 +54,7 @@ const ValidatedInput: React.FC<ValidatedInputProps> = ({
       />
       {!isValid && isTouched && (
         <span className="text-red-500 text-sm absolute -bottom-5 left-0">
-          Campo obrigatório
+          Campo obrigatório *
         </span>
       )}
     </div>

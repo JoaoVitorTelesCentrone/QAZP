@@ -29,6 +29,7 @@ namespace ZventsApi.Controllers
                 .Quotes.Where(dbQuote => dbQuote.IsDeleted == false)
                 .Select(quote => new
                 {
+                    quote.Id,
                     quote.FullName,
                     quote.Email,
                     quote.PhoneNumber,

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useAtom } from 'jotai';
 import axios from 'axios';
 import { authAtom } from '../atoms/authAtom';
@@ -23,19 +23,15 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    fetchDashboardData(); 
-  }, []); 
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     if (isDataFetchedRef.current) return;
 
-    setLoading(true); 
+    setLoading(true);
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get("http://localhost:5196/api/Dashboard", {
         headers: {
-          Authorization: `Bearer ${token}` 
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -52,19 +48,24 @@ const Dashboard = () => {
           estimatedAudience: event.estimatedAudience,
           totalAmount: formatCurrency(event.totalAmount),
         }));
+        console.log(response.data)
 
         setEvents(formattedEvents || []);
-        isDataFetchedRef.current = true; // Marca que os dados já foram buscados
+        isDataFetchedRef.current = true; 
       } else {
         console.error(`Error: ${response.status} - ${response.statusText}`);
       }
     } catch (error) {
       console.error(`Error fetching dashboard data:`, error);
-      toast.error('Erro ao buscar dados da Dashboard'); // Notifica o erro ao usuário
+      toast.error('Erro ao buscar dados da Dashboard'); 
     } finally {
-      setLoading(false); // Finaliza o loading
+      setLoading(false); 
     }
-  };
+  }, []); 
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]); 
 
   return (
     <div>
@@ -76,6 +77,7 @@ const Dashboard = () => {
           </div>
         ) : (
           <>
+          <div className='bg-tertiary'>
             <div className="flex ml-56">
               <LucideLineChart className="w-12 h-12 xl:w-16 xl:h-16 p-1 rounded-full my-12 mx-2 text-primary border-2 border-primary" />
               <h1 className="font-monospace font-semibold text-6xl my-12 text-secondary-foreground">
@@ -105,6 +107,7 @@ const Dashboard = () => {
             <div className="ml-56 mr-10">
               <DashboardTable columns={eventsColumns} data={events} />
             </div>
+            </div>
           </>
         )}
       </div>
@@ -112,4 +115,4 @@ const Dashboard = () => {
   );
 };
 
-export default withAuth(Dashboard); // Envolvendo o componente com a HOC
+export default withAuth(Dashboard); 
