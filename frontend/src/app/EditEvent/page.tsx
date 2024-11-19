@@ -390,7 +390,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
       0,
     )
     setTotalAmount(newTotalAmount)
-  }, [sendMaterial])
+  }, [materials])
 
   const handleUpdate = async () => {
     const fieldsToValidate = [
@@ -668,74 +668,74 @@ const EditEvent: React.FC<EditEventProps> = () => {
             <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[225px] xl:mr-8 2xl:w-[250px] 2xl:mr-10">
               <label className="font-bold">Horário inicial</label>
               <TimePicker
-              onChange={time => {
-                const formattedTime = time ? dayjs(time) : null
-                handleStartTimeChange(formattedTime, setStartTime)
-                if (formattedTime && formattedTime.isValid()) {
-                  setStartTimeError('')
-                } else {
-                  setStartTimeError('Campo obrigatório *')
-                }
-              }}
-              onBlur={() => {
-                if (!isStartTimeTouched) {
-                  setIsStartTimeTouched(true)
-                }
-              }}
-              onOpenChange={open => {
-                if (open && !isStartTimeTouched) {
-                  setIsStartTimeTouched(true)
-                }
-              }}
+                onChange={time => {
+                  const formattedTime = time ? dayjs(time) : null
+                  handleStartTimeChange(formattedTime, setStartTime)
+                  if (formattedTime && formattedTime.isValid()) {
+                    setStartTimeError('')
+                  } else {
+                    setStartTimeError('Campo obrigatório *')
+                  }
+                }}
+                onBlur={() => {
+                  if (!isStartTimeTouched) {
+                    setIsStartTimeTouched(true)
+                  }
+                }}
+                onOpenChange={open => {
+                  if (open && !isStartTimeTouched) {
+                    setIsStartTimeTouched(true)
+                  }
+                }}
                 value={startTime}
                 format="HH:mm"
                 placeholder="Selecione um horário"
                 className={`xl:w-[250px] xl:h-[40px] bg-white text-gray-600 border ${startTimeError ? 'border-red-500' : 'border-gray-300'} rounded-xl`}
               />
               {startTimeError && (
-                  <span
-                    className="text-red-500 text-sm mt-1"
-                    style={{ position: 'absolute', top: '100%', left: '0' }}
-                  >
-                    {startTimeError}
-                  </span>
-                )}
+                <span
+                  className="text-red-500 text-sm mt-1"
+                  style={{ position: 'absolute', top: '100%', left: '0' }}
+                >
+                  {startTimeError}
+                </span>
+              )}
             </div>
             <div className="relative mb-6 flex flex-col w-full sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[225px] xl:mr-8 2xl:w-[250px] 2xl:mr-10">
               <label className="font-bold">Horário final</label>
               <TimePicker
-              onChange={time => {
-                const formattedTime = time ? dayjs(time) : null
-                handleEndTimeChange(formattedTime, setEndTime)
-                if (formattedTime && formattedTime.isValid()) {
-                  setEndTimeError('')
-                } else {
-                  setEndTimeError('Campo obrigatório *')
-                }
-              }}
-              onBlur={() => {
-                if (!isEndTimeTouched) {
-                  setIsEndTimeTouched(true)
-                }
-              }}
-              onOpenChange={open => {
-                if (open && !isEndTimeTouched) {
-                  setIsEndTimeTouched(true)
-                }
-              }}
+                onChange={time => {
+                  const formattedTime = time ? dayjs(time) : null
+                  handleEndTimeChange(formattedTime, setEndTime)
+                  if (formattedTime && formattedTime.isValid()) {
+                    setEndTimeError('')
+                  } else {
+                    setEndTimeError('Campo obrigatório *')
+                  }
+                }}
+                onBlur={() => {
+                  if (!isEndTimeTouched) {
+                    setIsEndTimeTouched(true)
+                  }
+                }}
+                onOpenChange={open => {
+                  if (open && !isEndTimeTouched) {
+                    setIsEndTimeTouched(true)
+                  }
+                }}
                 value={endTime}
                 format="HH:mm"
                 placeholder="Selecione um horário"
                 className={`xl:w-[250px] xl:h-[40px] bg-white text-gray-600 border ${endTimeError ? 'border-red-500' : 'border-gray-300'} rounded-xl`}
               />
               {endTimeError && (
-                  <span
-                    className="text-red-500 text-sm mt-1"
-                    style={{ position: 'absolute', top: '100%', left: '0' }}
-                  >
-                    {endTimeError}
-                  </span>
-                )}
+                <span
+                  className="text-red-500 text-sm mt-1"
+                  style={{ position: 'absolute', top: '100%', left: '0' }}
+                >
+                  {endTimeError}
+                </span>
+              )}
             </div>
           </div>
 
