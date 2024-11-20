@@ -1,6 +1,6 @@
 import { TrashIcon } from 'lucide-react'
 import React, { useState } from 'react'
-import { Toaster } from 'sonner'
+import { toast, Toaster } from 'sonner'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { useAtom } from 'jotai'
@@ -21,6 +21,7 @@ const DeleteMaterial: React.FC<deleteMaterialProps> = ({ materialId }) => {
       console.log('Dados deletados com sucesso.')
       setDeleteModal(false)
       setMaterialChange(prev => prev + 1)
+      toast.success('Material excluído com sucesso')
     } catch (error) {
       console.error('Erro ao deletar os dados:', error)
     }
