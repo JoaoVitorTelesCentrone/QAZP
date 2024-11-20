@@ -1,6 +1,6 @@
 import { TrashIcon } from 'lucide-react'
 import React, { useState } from 'react'
-import { Toaster } from 'sonner'
+import { toast, Toaster } from 'sonner'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { useAtom } from 'jotai'
@@ -18,9 +18,9 @@ const DeleteClient: React.FC<deleteClientProps> = ({ userId }) => {
       await axios.patch(`http://localhost:5196/api/Client/${userId}`, {
         isDeleted: true,
       })
-      console.log('Dados deletados com sucesso.')
       setDeleteModal(false)
       setClientChange(prev => prev + 1)
+      toast.success('Cliente excluído com sucesso')
     } catch (error) {
       console.error('Erro ao deletar os dados:', error)
     }

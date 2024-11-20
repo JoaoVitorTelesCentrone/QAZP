@@ -93,18 +93,18 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
-                href="/clients"
+                href="/quote"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
-                Clientes
+                Orçamentos
               </Link>
             </li>
             <li>
               <Link
-                href="/Events"
+                href="/clients"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
-                Eventos
+                Clientes
               </Link>
             </li>
             <li>
@@ -117,10 +117,10 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
-                href="/quote"
+                href="/Events"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
-                Orçamentos
+                Eventos
               </Link>
             </li>
             <li>
