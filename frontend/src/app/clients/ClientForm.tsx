@@ -180,7 +180,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
@@ -229,7 +231,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
 
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter('Campo obrigatório *')
+        errorSetter(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
         isValid = false
       } else {
         errorSetter('')
@@ -408,8 +412,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                   {zipCodeError}
                 </div>
               )}
-              <SearchIcon className="p-2 h-10 w-10 cursor-pointer" 
-              onClick={handleSearchClick}/>
+              <SearchIcon className="p-2 h-10 w-10 cursor-pointer"
+                onClick={handleSearchClick} />
             </div>
           </div>
         </div>

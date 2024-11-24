@@ -84,7 +84,9 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
 
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter('Campo obrigatório *')
+        errorSetter(`${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`)
         isValid = false
       } else {
         errorSetter('')
@@ -148,7 +150,9 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
@@ -301,11 +305,10 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             }}
           >
             <DropdownMenuTrigger
-              className={`flex border bg-white justify-between px-2 py-1 rounded h-10 ${
-                !isCategoryValid && isTouched
+              className={`flex border bg-white justify-between px-2 py-1 rounded h-10 ${!isCategoryValid && isTouched
                   ? 'border-red-500'
                   : 'border-gray-300'
-              }`}
+                }`}
               onBlur={() => setIsTouched(true)}
             >
               <h1 className={`${!type ? 'text-gray-400' : 'text-black'} mt-1`}>
@@ -340,7 +343,9 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
               className="text-red-500 text-sm absolute"
               style={{ top: '100%' }}
             >
-              Campo obrigatório *
+              `${intl.formatMessage({
+                id: 'required.field.error.message',
+              })}`
             </span>
           )}
         </div>

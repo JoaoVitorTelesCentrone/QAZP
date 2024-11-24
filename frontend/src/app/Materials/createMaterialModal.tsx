@@ -11,6 +11,7 @@ import { ChevronDown } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAtom } from 'jotai'
 import { materialChangeAtom } from '../atoms/materialChange'
+import { intl } from '@/i18n'
 
 const MaterialCategory: MaterialCategoryProps[] = [
   { name: 'Comida', index: 0 },
@@ -56,7 +57,9 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
 
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter('Campo obrigatório *')
+        errorSetter(`${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`)
         isValid = false
       } else {
         errorSetter('')
@@ -110,7 +113,9 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
@@ -181,11 +186,10 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
                 }}
               >
                 <DropdownMenuTrigger
-                  className={`flex border bg-white justify-between px-2 py-1 rounded mr-6 h-10 ${
-                    !isCategoryValid && isTouched
-                      ? 'border-red-500'
-                      : 'border-gray-300'
-                  }`}
+                  className={`flex border bg-white justify-between px-2 py-1 rounded mr-6 h-10 ${!isCategoryValid && isTouched
+                    ? 'border-red-500'
+                    : 'border-gray-300'
+                    }`}
                   onBlur={() => setIsTouched(true)}
                 >
                   <h1 className={`${!type ? 'text-gray-400' : 'text-black'} mt-1`}>
@@ -221,7 +225,9 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
                   className="text-red-500 text-sm absolute"
                   style={{ top: '100%', marginTop: -15 }}
                 >
-                  Campo obrigatório *
+                  `${intl.formatMessage({
+                    id: 'required.field.error.message',
+                  })}`
                 </span>
               )}
             </div>

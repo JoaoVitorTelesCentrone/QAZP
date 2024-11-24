@@ -1,3 +1,4 @@
+import { intl } from '@/i18n'
 import { useState } from 'react'
 
 interface ValidatedInputProps {
@@ -18,7 +19,7 @@ const ValidatedInput: React.FC<ValidatedInputProps> = ({
   placeholder,
   label,
   required = false,
-  type = 'text', 
+  type = 'text',
 }) => {
   const [isTouched, setIsTouched] = useState(false)
 
@@ -47,14 +48,15 @@ const ValidatedInput: React.FC<ValidatedInputProps> = ({
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}
-        className={`p-2 border rounded w-full ${
-          !isValid && isTouched ? 'border-red-500' : 'border-gray-300'
-        }`}
+        className={`p-2 border rounded w-full ${!isValid && isTouched ? 'border-red-500' : 'border-gray-300'
+          }`}
         placeholder={placeholder}
       />
       {!isValid && isTouched && (
         <span className="text-red-500 text-sm absolute -bottom-5 left-0">
-          Campo obrigatório *
+          `${intl.formatMessage({
+            id: 'required.field.error.message',
+          })}`
         </span>
       )}
     </div>

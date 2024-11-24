@@ -109,6 +109,7 @@
         "login.page.user.field.placeholder": "Digite o usuário",
         "login.page.password.field.label": "Senha",
         "login.page.password.field.placeholder": "Digite a senha",
-        "login.page.enter.button.label": "Entrar"
+        "login.page.enter.button.label": "Entrar",
+        "required.field.error.message": "Campo obrigatório *"
     }
 }

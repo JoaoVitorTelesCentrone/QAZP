@@ -87,7 +87,9 @@ const CreateClientModal: React.FC<createClientProps> = ({
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
@@ -212,7 +214,9 @@ const CreateClientModal: React.FC<createClientProps> = ({
 
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter('Campo obrigatório *')
+        errorSetter(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
         isValid = false
       } else {
         errorSetter('')

@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { userChangeAtom } from '../atoms/changeUserAtom'
+import { intl } from '@/i18n'
 
 export type createUserProps = {
   isVisible: boolean
@@ -61,7 +62,9 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
@@ -79,7 +82,9 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
 
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter('Campo obrigatório *')
+        errorSetter(`${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`)
         isValid = false
       } else {
         errorSetter('')
