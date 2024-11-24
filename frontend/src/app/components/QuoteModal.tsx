@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu'
 import React from 'react'
+import { EventType } from '../CreateEvent/utils'
 
 const API_URL = 'http://localhost:5196/api/Quote'
 
@@ -316,7 +317,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
               style={{ zIndex: 1000 }}
               className="border-2 p-2 bg-white my-1 rounded-xl w-96"
             >
-              {items.map((category, index) => (
+              {EventType.map((category, index) => (
                 <React.Fragment key={index}>
                   <DropdownMenuItem
                     className="cursor-pointer my-1"
