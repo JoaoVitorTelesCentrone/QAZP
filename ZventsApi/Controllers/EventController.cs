@@ -139,8 +139,23 @@ namespace ZventsApi.Controllers
                 .ThenInclude(dbMaterial => dbMaterial.Material)
                 .FirstOrDefaultAsync(dbEvent => dbEvent.Id == id);
 
-            bool duplicatedEvent = _context.Events.Any(dbEvent =>
-                (
+            if (eventEntity == null)
+            {
+                return NotFound($"Event with ID {id} not found.");
+            }
+
+            bool isCriticalFieldChanged =
+                eventEntity.Name != updateEventDto.Name
+                || eventEntity.ClientId != updateEventDto.ClientId
+                || eventEntity.Type != updateEventDto.Type
+                || eventEntity.ZipCode != updateEventDto.ZipCode
+                || eventEntity.StartDate != updateEventDto.StartDate
+                || eventEntity.StartTime != updateEventDto.StartTime;
+
+            bool duplicatedEvent = false;
+            if (isCriticalFieldChanged)
+            {
+                duplicatedEvent = _context.Events.Any(dbEvent =>
                     dbEvent.Name == updateEventDto.Name
                     && dbEvent.ClientId == updateEventDto.ClientId
                     && dbEvent.Type == updateEventDto.Type
@@ -148,60 +163,54 @@ namespace ZventsApi.Controllers
                     && dbEvent.StartDate == updateEventDto.StartDate
                     && dbEvent.StartTime == updateEventDto.StartTime
                     && dbEvent.IsDeleted == false
-                )
-            );
-
-            if (eventEntity == null)
-            {
-                return NotFound($"Event with ID {id} not found.");
+                );
             }
+
             if (duplicatedEvent)
             {
-                return Conflict(new { message = "There is already a Event in progress" });
+                return Conflict(new { message = "There is already an Event in progress" });
             }
-            else if (!duplicatedEvent)
+
+            eventEntity.Name = updateEventDto.Name;
+            eventEntity.Type = updateEventDto.Type;
+            eventEntity.Status = updateEventDto.Status;
+            eventEntity.ClientId = updateEventDto.ClientId;
+            eventEntity.StartDate = updateEventDto.StartDate;
+            eventEntity.StartTime = updateEventDto.StartTime;
+            eventEntity.EndDate = updateEventDto.EndDate;
+            eventEntity.EndTime = updateEventDto.EndTime;
+            eventEntity.ZipCode = updateEventDto.ZipCode;
+            eventEntity.AddressName = updateEventDto.AddressName;
+            eventEntity.AddressNumber = updateEventDto.AddressNumber;
+            eventEntity.AddressComplement = updateEventDto.AddressComplement;
+            eventEntity.District = updateEventDto.District;
+            eventEntity.State = updateEventDto.State;
+            eventEntity.City = updateEventDto.City;
+            eventEntity.EstimatedAudience = updateEventDto.EstimatedAudience;
+            eventEntity.TotalAmount = updateEventDto.TotalAmount;
+
+            eventEntity.EventMaterials.Clear();
+            foreach (var materialDto in updateEventDto.Materials)
             {
-                eventEntity.Name = updateEventDto.Name;
-                eventEntity.Type = updateEventDto.Type;
-                eventEntity.Status = updateEventDto.Status;
-                eventEntity.ClientId = updateEventDto.ClientId;
-                eventEntity.StartDate = updateEventDto.StartDate;
-                eventEntity.StartTime = updateEventDto.StartTime;
-                eventEntity.EndDate = updateEventDto.EndDate;
-                eventEntity.EndTime = updateEventDto.EndTime;
-                eventEntity.ZipCode = updateEventDto.ZipCode;
-                eventEntity.AddressName = updateEventDto.AddressName;
-                eventEntity.AddressNumber = updateEventDto.AddressNumber;
-                eventEntity.AddressComplement = updateEventDto.AddressComplement;
-                eventEntity.District = updateEventDto.District;
-                eventEntity.State = updateEventDto.State;
-                eventEntity.City = updateEventDto.City;
-                eventEntity.EstimatedAudience = updateEventDto.EstimatedAudience;
-                eventEntity.TotalAmount = updateEventDto.TotalAmount;
-
-                eventEntity.EventMaterials.Clear();
-                foreach (var materialDto in updateEventDto.Materials)
+                var material = await _context.Materials.FindAsync(materialDto.MaterialId);
+                if (material == null)
                 {
-                    var material = await _context.Materials.FindAsync(materialDto.MaterialId);
-                    if (material == null)
-                    {
-                        return NotFound($"Material with ID {materialDto.MaterialId} not found.");
-                    }
-
-                    eventEntity.EventMaterials.Add(
-                        new EventMaterial
-                        {
-                            Event = eventEntity,
-                            Material = material,
-                            Quantity = materialDto.Quantity,
-                            MaterialPrice = material.Price,
-                            MaterialName = material.Name
-                        }
-                    );
+                    return NotFound($"Material with ID {materialDto.MaterialId} not found.");
                 }
 
-                _context.Entry(eventEntity).State = EntityState.Modified;
+                eventEntity.EventMaterials.Add(
+                    new EventMaterial
+                    {
+                        Event = eventEntity,
+                        Material = material,
+                        Quantity = materialDto.Quantity,
+                        MaterialPrice = material.Price,
+                        MaterialName = material.Name
+                    }
+                );
             }
+
+            _context.Entry(eventEntity).State = EntityState.Modified;
 
             try
             {
