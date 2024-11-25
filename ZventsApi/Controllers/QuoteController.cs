@@ -45,9 +45,10 @@ namespace ZventsApi.Controllers
         public ActionResult<Quote> PostQuote(Quote quote)
         {
             bool quoteExists = _context.Quotes.Any(dbQuote =>
-                (dbQuote.Email == quote.Email || dbQuote.PhoneNumber == quote.PhoneNumber)
+                dbQuote.FullName == quote.FullName
+                && (dbQuote.Email == quote.Email || dbQuote.PhoneNumber == quote.PhoneNumber)
                 && dbQuote.EventType == quote.EventType
-                && dbQuote.IsDeleted == true
+                && dbQuote.IsDeleted == false
             );
 
             if (!quoteExists)

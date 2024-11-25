@@ -10,6 +10,7 @@ import { LogOut } from 'lucide-react'
 import AvatarUser from './Avatar'
 import withAuth from '../hoc/withAuth'
 import { TbCircleLetterZ } from 'react-icons/tb'
+import { intl } from '@/i18n'
 
 const UserSideMenu = () => {
   const router = useRouter()
@@ -78,7 +79,10 @@ const UserSideMenu = () => {
         <div className="flex items-center justify-between mb-6">
           <TbCircleLetterZ />
           <ul>
-            <li>Zventos</li>
+            <li>{intl.formatMessage({
+              id: 'side.nav.title',
+            })}
+            </li>
           </ul>
         </div>
         <nav className="flex-1">
@@ -88,7 +92,9 @@ const UserSideMenu = () => {
                 href="/dashboard"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
-                Dashboard
+                {intl.formatMessage({
+                  id: 'side.nav.dashboard.option.label',
+                })}
               </Link>
             </li>
             <li>
@@ -96,7 +102,9 @@ const UserSideMenu = () => {
                 href="/quote"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
-                Orçamentos
+                {intl.formatMessage({
+                  id: 'side.nav.quotes.option.label',
+                })}
               </Link>
             </li>
             <li>
@@ -104,7 +112,9 @@ const UserSideMenu = () => {
                 href="/clients"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
-                Clientes
+                {intl.formatMessage({
+                  id: 'side.nav.clients.option.label',
+                })}
               </Link>
             </li>
             <li>
@@ -112,7 +122,9 @@ const UserSideMenu = () => {
                 href="/Materials"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
-                Materiais
+                {intl.formatMessage({
+                  id: 'side.nav.materials.option.label',
+                })}
               </Link>
             </li>
             <li>
@@ -120,7 +132,9 @@ const UserSideMenu = () => {
                 href="/Events"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
-                Eventos
+                {intl.formatMessage({
+                  id: 'side.nav.events.option.label',
+                })}
               </Link>
             </li>
             <li>
@@ -128,7 +142,9 @@ const UserSideMenu = () => {
                 href="/Users"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
-                Usuários
+                {intl.formatMessage({
+                  id: 'side.nav.users.option.label',
+                })}
               </Link>
             </li>
           </ul>
@@ -142,7 +158,10 @@ const UserSideMenu = () => {
           onClick={handleLogout}
         >
           <LogOut />
-          <span>Logout</span>
+          <span>{intl.formatMessage({
+            id: 'side.nav.logout.button.label',
+          })}
+          </span>
         </button>
       </div>
     </div>

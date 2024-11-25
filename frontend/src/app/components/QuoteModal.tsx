@@ -1,7 +1,5 @@
-'use client'
-
 import { Input, Button, Modal } from 'antd'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Toaster, toast } from 'sonner'
 import { useState } from 'react'
 import { intl } from '@/i18n'
@@ -16,23 +14,8 @@ import React from 'react'
 import { EventType } from '../CreateEvent/utils'
 
 const API_URL = 'http://localhost:5196/api/Quote'
-
-const items: MenuProps[] = [
-  { name: 'Festival', index: 0 },
-  { name: 'Festa', index: 1 },
-  { name: 'Formatura', index: 2 },
-  { name: 'Workshop', index: 3 },
-  { name: 'Casamento', index: 4 },
-  { name: 'Campeonato', index: 5 },
-  { name: 'Seminário', index: 6 },
-  { name: 'Convenção', index: 7 },
-  { name: 'Baile', index: 8 },
-  { name: 'Cerimônia', index: 9 },
-]
-
-type MenuProps = {
-  name: string
-  index: number
+interface ErrorResponse {
+  message: string;
 }
 
 export type QuoteModalProps = {
@@ -114,17 +97,17 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
     }
 
     try {
-      const response = await axios.post(API_URL, quote)
+      const response = await axios.post(API_URL, quote);
+
       if (response.status === 201) {
-        toast.success('Cotações enviadas com sucesso!')
-        onClose()
-        resetForm()
+        toast.success(intl.formatMessage({ id: 'create.quote.success.message' }));
+        onClose();
+        resetForm();
       }
-    } catch (error) {
-      console.error('Erro ao enviar a cotação:', error)
-      toast.error('Erro ao enviar a cotação. Tente novamente.')
+    } catch (error: unknown) {
+      handleSaveQuoteError(error);
     }
-    return true
+    return true;
   }
 
   const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
@@ -168,10 +151,8 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
     } else if (numericValue.length <= 6) {
       return numericValue.replace(/(\d{2})(\d{0,4})/, '($1) $2')
     } else if (numericValue.length <= 10) {
-      // Padrão de telefone fixo (XX) XXXX-XXXX
       return numericValue.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
     } else {
-      // Padrão de celular (XX) XXXXX-XXXX
       return numericValue.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
     }
   }
@@ -203,6 +184,27 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
     onClose()
   }
 
+  function isAxiosError(error: unknown): error is AxiosError {
+    return (error as AxiosError).isAxiosError !== undefined
+  }
+
+  const handleSaveQuoteError = (error: unknown) => {
+    if (!isAxiosError(error)) {
+      console.error('Erro inesperado:', error);
+      toast.error(intl.formatMessage({ id: 'create.quote.error.message' }));
+      return;
+    }
+
+    if (error.response) {
+      const { data, status } = error.response;
+
+      if (status === 409 && (data as ErrorResponse)?.message === 'There is already a quote in progress') {
+        toast.error(intl.formatMessage({ id: 'create.quote.in.progress.message' }));
+      } else {
+        toast.error(intl.formatMessage({ id: 'create.quote.error.message' }));
+      }
+    }
+  }
   return (
     <>
       <Toaster richColors />
@@ -214,7 +216,10 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
         centered
       >
         <div className="flex flex-col relative mb-4">
-          <label className="text-lg font-bold">Nome completo</label>
+          <label className="text-lg font-bold">{intl.formatMessage({
+            id: 'create.quote.page.name.field',
+          })}
+          </label>
           <Input
             value={fullName}
             placeholder={intl.formatMessage({
@@ -240,7 +245,10 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           )}
         </div>
         <div className="flex flex-col relative mb-4">
-          <label className="text-lg font-bold">Email</label>
+          <label className="text-lg font-bold">{intl.formatMessage({
+            id: 'create.quote.page.email.field',
+          })}
+          </label>
           <Input
             value={email}
             placeholder={intl.formatMessage({
@@ -267,7 +275,9 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           )}
         </div>
         <div className="flex flex-col relative mb-4">
-          <label className="text-lg font-bold">Celular</label>
+          <label className="text-lg font-bold">{intl.formatMessage({
+            id: 'create.quote.page.phone.field',
+          })}</label>
           <Input
             value={phoneNumber}
             placeholder={intl.formatMessage({
@@ -294,7 +304,10 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           )}
         </div>
         <div className="flex flex-col w-full relative mb-6">
-          <label className="text-lg font-bold">Tipo</label>
+          <label className="text-lg font-bold">{intl.formatMessage({
+            id: 'create.quote.page.event.type.field',
+          })}
+          </label>
           <DropdownMenu
             onOpenChange={open => {
               if (!open) {
@@ -306,8 +319,8 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           >
             <DropdownMenuTrigger
               className={`flex border bg-white justify-between px-2 py-1 rounded h-10 ${!isCategoryValid && isTouched
-                  ? 'border-red-500'
-                  : 'border-gray-300'
+                ? 'border-red-500'
+                : 'border-gray-300'
                 }`}
               onBlur={() => setIsTouched(true)}
             >
@@ -331,7 +344,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
                   >
                     {category.name}
                   </DropdownMenuItem>
-                  {index < items.length - 1 && (
+                  {index < EventType.length - 1 && (
                     <hr className="bg-primary h-[0.4px]" />
                   )}
                 </React.Fragment>
@@ -350,7 +363,10 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           )}
         </div>
         <div className="relative mb-4">
-          <label className="text-lg font-bold">Público</label>
+          <label className="text-lg font-bold">{intl.formatMessage({
+            id: 'create.quote.page.estimated.audience.field',
+          })}
+          </label>
           <Input
             value={estimatedAudience}
             placeholder={intl.formatMessage({
@@ -388,3 +404,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
 }
 
 export default QuoteModal
+function handleSaveQuoteError(error: unknown) {
+  throw new Error('Function not implemented.')
+}
+

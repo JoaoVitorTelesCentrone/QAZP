@@ -54,9 +54,9 @@ const ValidatedInput: React.FC<ValidatedInputProps> = ({
       />
       {!isValid && isTouched && (
         <span className="text-red-500 text-sm absolute -bottom-5 left-0">
-          `${intl.formatMessage({
+          {intl.formatMessage({
             id: 'required.field.error.message',
-          })}`
+          })}
         </span>
       )}
     </div>
