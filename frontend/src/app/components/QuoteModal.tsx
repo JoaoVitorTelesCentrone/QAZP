@@ -343,9 +343,9 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
               className="text-red-500 text-sm absolute"
               style={{ top: '100%' }}
             >
-              `${intl.formatMessage({
+              {intl.formatMessage({
                 id: 'required.field.error.message',
-              })}`
+              })}
             </span>
           )}
         </div>

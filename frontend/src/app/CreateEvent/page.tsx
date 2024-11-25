@@ -614,9 +614,9 @@ const CreateEvent = () => {
                     className="text-red-500 text-sm font-bold absolute"
                     style={{ top: '100%', marginTop: -15 }}
                   >
-                    `${intl.formatMessage({
+                    {intl.formatMessage({
                       id: 'required.field.error.message',
-                    })}`
+                    })}
                   </span>
                 )}
               </div>

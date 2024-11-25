@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { useAtom } from 'jotai'
 import { clientChangeAtom } from '../atoms/clientChangeAtom'
+import { intl } from '@/i18n'
 
 type deleteClientProps = {
   userId: string
@@ -20,9 +21,10 @@ const DeleteClient: React.FC<deleteClientProps> = ({ userId }) => {
       })
       setDeleteModal(false)
       setClientChange(prev => prev + 1)
-      toast.success('Cliente excluído com sucesso')
+      toast.success(intl.formatMessage({ id: 'delete.client.success.message' }))
     } catch (error) {
       console.error('Erro ao deletar os dados:', error)
+      toast.error(intl.formatMessage({ id: 'delete.client.error.message' }))
     }
   }
   return (
@@ -35,22 +37,31 @@ const DeleteClient: React.FC<deleteClientProps> = ({ userId }) => {
       {deleteModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white shadow-lg shadow-slate-600 rounded-lg p-8">
-            <h2 className="text-2xl font-bold mb-4">Deletar Cliente</h2>
+            <h2 className="text-2xl font-bold mb-4">{intl.formatMessage({
+              id: 'delete.client.modal.title',
+            })}
+            </h2>
             <p className="text-gray-700">
-              Você tem certeza que deseja deletar este cliente ?
+              {intl.formatMessage({
+                id: 'delete.client.confirmation.message',
+              })}
             </p>
             <div className="justify-between">
               <Button
                 onClick={() => deleteData()}
                 className="mt-6 px-4 py-2 mx-4 bg-red-950 text-white border-2 border-red-950 rounded hover:bg-red-950 hover:text-white hover:border-0"
               >
-                Deletar
+                {intl.formatMessage({
+                  id: 'delete.button.label',
+                })}
               </Button>
               <Button
                 onClick={prev => setDeleteModal(!prev)}
                 className="mt-6 mx-4 px-4 py-2 bg-white text-red-950 rounded hover:bg-white hover:text-red-950"
               >
-                Fechar
+                {intl.formatMessage({
+                  id: 'close.modal.button.label',
+                })}
               </Button>
             </div>
           </div>

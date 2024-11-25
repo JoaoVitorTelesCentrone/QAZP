@@ -30,7 +30,7 @@
         "create.client.page.state.field.label": "Estado",
         "create.client.page.city.field.label": "Cidade",
         "create.client.page.create.client.button": "Criar cliente",
-        "edit.client.page.create.client.button": "Salvar",
+        "save.client.button.label": "Salvar",
         "datagrid.empty.message": "Nenhum resultado foi encontrado.",
         "material.category.food": "Comida",
         "material.category.decoration": "Decoração",
@@ -110,6 +110,20 @@
         "login.page.password.field.label": "Senha",
         "login.page.password.field.placeholder": "Digite a senha",
         "login.page.enter.button.label": "Entrar",
-        "required.field.error.message": "Campo obrigatório *"
+        "required.field.error.message": "Campo obrigatório *",
+        "update.client.success.message": "Os dados do cliente foram alterados com sucesso",
+        "create.client.success.message": "Cliente criado com sucesso",
+        "update.client.error.message": "Erro ao atualizar os dados do cliente",
+        "update.client.invalid.document": "Erro ao salvar os dados do cliente. O documento informado é inválido",
+        "update.client.document.exists": "Erro ao salvar os dados do cliente. Já existe um cliente cadastrado com o documento informado",
+        "update.client.modal.title": "Editar cliente",
+        "create.client.modal.title": "Criar cliente",
+        "delete.client.modal.title": "Deletar cliente",
+        "close.modal.button.label": "Fechar",
+        "delete.client.success.message": "Cliente excluído com sucesso",
+        "delete.client.error.message": "Erro ao excluir cliente",
+        "delete.client.confirmation.message": "Você tem certeza que deseja deletar este cliente ?",
+        "delete.button.label": "Deletar",
+        "create.client.button.label": "Criar cliente"
     }
 }
