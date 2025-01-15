@@ -1,22 +1,61 @@
 'use client'
+
 import { useAtom } from 'jotai'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import UserHeader from './UserHeader'
+import { intl } from '@/i18n'
+import { Button } from 'antd'
+
+import ClipLoader from 'react-spinners/ClipLoader'
+import QuoteModal from './QuoteModal'
+import LoginModal from './LoginModal'
 
 const Header = () => {
-  const [isLogged, setIsLogged] = useAtom(authAtom)
-  const [user, setUser] = useAtom(userInfoAtom)
-  
-  return (
-    <div className=" flex p-8 bg-quartenary text-secondary justify-around">
+  const [isLogged] = useAtom(authAtom)
+  const [user] = useAtom(userInfoAtom)
+  const [openLoginModal, setOpenLoginModal] = useState(false)
+  const [openQuoteModal, setOpenQuoteModal] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const handleOpenLoginModal = () => setOpenLoginModal(true)
+  const handleCloseLoginModal = () => {
+    setLoading(true) // Set loading first for feedback
+    setTimeout(() => {
+      setOpenLoginModal(false) // Close modal after 5 seconds
+      setLoading(false) // Stop loading once modal closes
+      console.log('Modal closed after 5 seconds')
+    }, 3000) // Delay of 5000 ms (5 seconds)
+  }
+  const handleCancelLoginModal = () => {
+    setOpenLoginModal(false)
+    setLoading(false)
+  }
+
+  const handleOpenQuoteModal = () => setOpenQuoteModal(true)
+  const handleCloseQuoteModal = () => setOpenQuoteModal(false)
+
+  return loading ? (
+    <div className="flex justify-center items-center h-screen">
+      <ClipLoader size={50} color="#123abc" loading={loading} />
+    </div>
+  ) : (
+    <div className="flex p-8 bg-quartenary text-secondary justify-around">
+      <LoginModal
+        isVisible={openLoginModal}
+        onClose={handleCloseLoginModal}
+        onCancel={handleCancelLoginModal}
+      />
+      <QuoteModal isVisible={openQuoteModal} onClose={handleCloseQuoteModal} />
       <Link
         href="/"
         className="text-2xl text-secondary font-extrabold font-montserrat"
       >
-        Z-Eventos
+        {intl.formatMessage({
+          id: 'header.title',
+        })}
       </Link>
       {isLogged ? (
         <UserHeader />
@@ -24,30 +63,24 @@ const Header = () => {
         <>
           <ul className="flex justify-center mx-auto">
             <Link
-              href="/"
-              className="mx-6 text-secondary font-montserrat font-medium"
-            >
-              Home
-            </Link>
-            <Link
               href="/sobre"
-              className="mx-6 text-secondary font-montserrat font-medium"
+              className="mx-6 text-secondary mt-1 font-montserrat font-medium"
             >
-              Sobre
+              {intl.formatMessage({
+                id: 'header.about.us.option',
+              })}
             </Link>
-            <Link
-              href="/orcamento"
-              className="mx-6 text-secondary font-montserrat font-medium"
+            {/* <Button
+              type="link"
+              className="text-white text-lg font-medium "
+              onClick={handleOpenQuoteModal}
             >
-              Solicite um orçamento
-            </Link>
+              Orçamento
+            </Button> */}
           </ul>
-          <Link
-              href="/login"
-              className="mx-6 text-secondary font-montserrat font-medium"
-            >
-              Login
-            </Link>
+          <Button onClick={handleOpenLoginModal}>
+            Login
+          </Button>
         </>
       )}
     </div>

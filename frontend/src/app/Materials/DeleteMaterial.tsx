@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { Toaster } from 'sonner'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
+import { useAtom } from 'jotai'
+import { materialChangeAtom } from '../atoms/materialChange'
 
 type deleteMaterialProps = {
   materialId: string
@@ -10,13 +12,15 @@ type deleteMaterialProps = {
 
 const DeleteMaterial: React.FC<deleteMaterialProps> = ({ materialId }) => {
   const [deleteModal, setDeleteModal] = useState(false)
+  const [materialChange, setMaterialChange] = useAtom(materialChangeAtom)
   const deleteData = async (): Promise<void> => {
     try {
-      await axios.patch(`http://localhost:5196/api/Material/${materialId}`, {
-        isActive: false,
+      await axios.patch(`http://localhost:5196/api/Material?id=${materialId}`, {
+        isDelete: true,
       })
       console.log('Dados deletados com sucesso.')
       setDeleteModal(false)
+      setMaterialChange(prev => prev + 1)
     } catch (error) {
       console.error('Erro ao deletar os dados:', error)
     }

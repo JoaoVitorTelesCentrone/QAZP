@@ -1,7 +1,6 @@
-
-import { Button, Modal } from 'antd'
+import { Button, Input, Modal } from 'antd'
 import axios from 'axios'
-import {  Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -11,7 +10,6 @@ import { redirect } from 'next/navigation'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { userChangeAtom } from '../atoms/changeUserAtom'
-import ValidatedInput from '../components/ValidatedInput'
 
 export type createUserProps = {
   isVisible: boolean
@@ -31,12 +29,63 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
   const [showPassword2, setShowPassword2] = useState(false)
   const [different, setDifferent] = useState(false)
   const [change, setChange] = useAtom(userChangeAtom)
+  const [nameError, setNameError] = useState('')
+  const [usernameError, setUsernameError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [confirmedPasswordError, setConfirmPasswordError] = useState('')
 
   if (!isLogged) {
     redirect('/')
   }
 
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
+    const fieldErrorMap = {
+      name: {
+        value: name,
+        setError: setNameError,
+      },
+      username: {
+        value: username,
+        setError: setUsernameError,
+      },
+      password: {
+        value: password,
+        setError: setPasswordError,
+      },
+      confirmedPassword: {
+        value: confirmedPassword,
+        setError: setConfirmPasswordError,
+      },
+    }
+
+    const field = fieldErrorMap[fieldName]
+
+    if (!field.value) {
+      field.setError('Campo obrigatório *')
+    } else {
+      field.setError('')
+    }
+  }
+
   async function verifyCreation() {
+    const fieldsToValidate = [
+      { value: name, errorSetter: setNameError },
+      { value: username, errorSetter: setUsernameError },
+      { value: password, errorSetter: setPasswordError },
+      { value: confirmedPassword, errorSetter: setConfirmPasswordError },
+    ]
+
+    let isValid = true
+
+    fieldsToValidate.forEach(({ value, errorSetter }) => {
+      if (!value) {
+        errorSetter('Campo obrigatório *')
+        isValid = false
+      } else {
+        errorSetter('')
+      }
+    })
+
     const data = {
       name,
       username,
@@ -78,45 +127,86 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
     <div>
       <Modal
         title="Criar Usuário"
-        visible={isVisible}
-        onCancel={onClose} // Close the modal when "X" is clicked
+        open={isVisible}
+        onCancel={onClose}
         footer={[]}
       >
         <div className="">
           <form className="">
-            <div className="mx-auto">
+            <div className="mx-auto relative">
               <h1>Nome</h1>
-              <ValidatedInput
-                onChange={setName}
+              <Input
+                onChange={e => setName(e.target.value)}
+                onBlur={() => handleBlur('name')}
                 required
                 placeholder="Digite o nome completo"
-                className="bg-white border-slate-500 border rounded w-full"
+                className={`p-2 mb-4 border rounded w-full ${nameError ? 'border-red-500' : 'border-slate-300'}`}
                 value={name}
               />
+              {nameError && (
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {nameError}
+                </div>
+              )}
             </div>
-
-            <div className="mx-auto w-full mt-6">
+            <div className="mx-auto w-full mt-6 relative">
               <h1>Usuário</h1>
-              <ValidatedInput
-                onChange={setUsername}
+              <Input
+                onChange={e => setUsername(e.target.value)}
+                onBlur={() => handleBlur('username')}
                 required
                 placeholder="Digite o nome do usuário"
-                className="bg-white border-slate-500 mx-auto border rounded w-full "
+                className={`p-2 mb-4 border rounded w-full ${usernameError ? 'border-red-500' : 'border-slate-300'}`}
                 value={username}
               />
+              {usernameError && (
+                <div
+                  style={{
+                    color: 'red',
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    marginTop: -15,
+                  }}
+                >
+                  {usernameError}
+                </div>
+              )}
             </div>
 
-            <div className="relative mx-auto mt-6 w-full">
+            <div className="mx-auto mt-6 w-full relative">
               <h1>Senha</h1>
               <div className="flex items-center">
-                <ValidatedInput
+                <Input
                   type={showPassword1 ? 'text' : 'password'}
-                  onChange={setPassword}
+                  onChange={e => setPassword(e.target.value)}
+                  onBlur={() => handleBlur('password')}
                   required
                   placeholder="Digite a senha"
-                  className="bg-white border-slate-500 pr-12 my-2"
+                  className={`p-2 mb-4 border rounded w-full ${passwordError ? 'border-red-500' : 'border-slate-300'}`}
                   value={password}
                 />
+                {passwordError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: -15,
+                    }}
+                  >
+                    {passwordError}
+                  </div>
+                )}
                 <div className="absolute right-0 flex items-center px-3 -mt-3">
                   {showPassword1 ? (
                     <EyeOff onClick={changeState1} className="cursor-pointer" />
@@ -130,14 +220,28 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
             <div className="relative mx-auto mt-3 w-full mb-4">
               <h1>Confirme a senha</h1>
               <div className="flex items-center">
-                <ValidatedInput
+                <Input
                   type={showPassword2 ? 'text' : 'password'}
-                  onChange={setConfirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  onBlur={() => handleBlur('confirmedPassword')}
                   required
                   placeholder="Confirme a senha"
-                  className="bg-white border-slate-500 pr-12"
+                  className={`p-2 mb-4 border rounded w-full ${confirmedPasswordError ? 'border-red-500' : 'border-slate-300'}`}
                   value={confirmedPassword}
                 />
+                {confirmedPasswordError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: -15,
+                    }}
+                  >
+                    {confirmedPasswordError}
+                  </div>
+                )}
                 <div className="absolute right-0 flex items-center px-3 -mt-3">
                   {showPassword2 ? (
                     <EyeOff onClick={changeState2} className="cursor-pointer" />

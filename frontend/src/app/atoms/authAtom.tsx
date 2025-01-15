@@ -1,3 +1,10 @@
-import { Atom, atom } from 'jotai'
+import { atom } from 'jotai';
 
-export const authAtom = atom(false)
+const getTokenFromLocalStorage = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('token'); 
+  }
+  return null;
+};
+
+export const authAtom = atom(!!getTokenFromLocalStorage());

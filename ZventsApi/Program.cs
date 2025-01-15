@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens; // Adicione esta linha
+using Microsoft.AspNetCore.Authentication.JwtBearer; // Adicione esta linha
+using System.Text; // Adicione esta linha
 using ZventsApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +33,26 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Configuração do JWT
+var key = Encoding.ASCII.GetBytes("sua_chave_secreta_aqui"); // Substitua pela sua chave secreta
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false; // Mantenha como false em desenvolvimento
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,7 +68,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
+
+// Adicione autenticação e autorização
+app.UseAuthentication(); 
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

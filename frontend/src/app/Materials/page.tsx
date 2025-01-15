@@ -4,7 +4,6 @@ import React, {
   useMemo,
   useState,
   useCallback,
-  Suspense,
 } from 'react'
 import UserSideMenu from '../components/UserHeader'
 import { Button } from 'antd'
@@ -21,6 +20,7 @@ import {
 import { useAtom } from 'jotai'
 import { materialChangeAtom } from '../atoms/materialChange'
 import CreateMaterialModal from './createMaterialModal'
+import withAuth from '../hoc/withAuth';
 
 export type MaterialProps = {
   id: string
@@ -40,6 +40,7 @@ const Materials = () => {
     try {
       const response = await axios.get('http://localhost:5196/api/Material/active-materials')
       const materialNames = response.data.map((material: any) => ({
+        id: material.id,
         name: material.name,
         price: formatCurrency(material.price),
         category: materialCategoryNameConverter(material.category),
@@ -76,34 +77,36 @@ const Materials = () => {
       ) : (
         <>
           <UserSideMenu />
-            <div className="bg-tertiary h-full">
-              <div className="p-10">
-                <div className="flex mt-4 justify-between w-full">
-                  <div className="flex ml-48">
-                    <CiPenpot className="w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
-                    <h1 className="font-monospace font-semibold text-7xl my-3 ml-6 text-secondary-foreground">
-                      Materiais
-                    </h1>
-                  </div>
-                  <Button
-                    icon={<TbBasketPlus className="w-5 h-5 " />}
-                    type="primary"
-                    className="mt-8"
-                    size="large"
-                    onClick={() => setOpenModal(true)}
-                  >
-                    <h1 className="text-lg">Criar material</h1>
-                  </Button>
+          <div className="bg-tertiary h-screen">
+            <div className="p-10">
+              <div className="flex mt-4 justify-between w-full">
+                <div className="flex ml-48">
+                  <CiPenpot className="w-16 h-16 p-1 rounded-full my-4 text-primary border-2 border-primary" />
+                  <h1 className="font-monospace font-semibold text-7xl my-3 ml-6 text-secondary-foreground">
+                    Materiais
+                  </h1>
                 </div>
-              </div>
-              <div className="ml-56 mr-10">
-                <MaterialTable columns={columns} data={materials} />
+                <Button
+                  icon={<TbBasketPlus className="w-5 h-5 " />}
+                  type="primary"
+                  className="mt-8"
+                  size="large"
+                  onClick={() => setOpenModal(true)}
+                >
+                  <h1 className="text-lg">Criar material</h1>
+                </Button>
               </div>
             </div>
+            <div className="bg-tertiary">
+            <div className="ml-56 mr-10">
+              <MaterialTable columns={columns} data={materials} />
+            </div>
+          </div>
+          </div>
         </>
       )}
     </div>
   )
 }
 
-export default Materials
+export default withAuth(Materials); 

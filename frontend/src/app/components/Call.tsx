@@ -1,28 +1,42 @@
+'use client'
 import { Button } from 'antd'
-import Link from 'next/link'
 import Image from 'next/image'
-import foto from '../../assets/foto-1.png'
-
-import React from 'react'
+import foto from '../../assets/event.png'
+import React, { useState } from 'react'
+import { intl } from '@/i18n'
+import QuoteModal from './QuoteModal'
 
 const Call = () => {
+  const [openQuoteModal, setOpenQuoteModal] = useState(false)
+  const handleOpenQuoteModal = () => setOpenQuoteModal(true)
+  const handleCloseQuoteModal = () => setOpenQuoteModal(false)
   return (
-    <div className="flex justify-between w-full">
-      <div className="flex flex-col xl:py-40 py-24 xl:w-[65%] w-[50%] px-12 bg-primary">
-        <h1 className="font-montserrat xl:text-8xl text-7xl max-w-[1200px] text-center text-secondary mx-auto uppercase font-bold">
-          O lugar certo para seu evento
+    <div className="bg-primary flex justify-between w-full">
+      <QuoteModal isVisible={openQuoteModal} onClose={handleCloseQuoteModal} />
+      <div className="flex flex-col xl:py-12 py-24 xl:w-[65%] w-[50%] px-12 bg-primary">
+        <h1 className="font-montserrat xl:text-8xl text-7xl max-w-[1200px] text-center text-secondary mx-auto font-bold">
+          {intl.formatMessage({
+            id: 'showroom.page.title',
+          })}
         </h1>
-        <p className="max-w-[800px] text-center py-6 font-montserrat text-2xl text-secondary mx-auto lowercase font-medium">
-          nossa empresa de eventos oferece experiências únicas e diversificadas
-          para todos os gostos, conectando pessoas e celebrando momentos
-          especiais.
+        <p className="max-w-[900px] text-center py-6 font-montserrat text-2xl text-secondary mx-auto font-medium">
+          {intl.formatMessage({
+            id: 'showroom.page.subtitle',
+          })}
         </p>
-        <Link href="/orcamento" className="mx-auto">
-          <Button>Solicite um orçamento</Button>
-        </Link>
+        <Button
+          type="primary"
+          ghost
+          shape="round"
+          size="large"
+          className="w-64 mx-auto"
+          onClick={handleOpenQuoteModal}
+        >
+          Solicite um Orçamento
+        </Button>
       </div>
-      <div className="bg-primary xl:w-[35%] w-[50%]">
-        <Image className="xl:mt-12 mt-24" alt="foto" src={foto} />
+      <div className="bg-primary mr-10 ml-10 mt-10 m-10 xl:w-[25%]">
+        <Image alt="foto" src={foto} />
       </div>
     </div>
   )
