@@ -141,7 +141,29 @@
         "side.nav.materials.option.label": "Materiais",
         "side.nav.events.option.label": "Eventos",
         "side.nav.users.option.label": "Usuários",
-        "side.nav.logout.button.label": "Logout"
-
+        "side.nav.logout.button.label": "Logout",
+        "dashboard.page.title": "Dashboards operacionais",
+        "dashboard.page.total.clients": "Número de Clientes",
+        "dashboard.page.total.users": "Número de Usuários",
+        "dashboard.page.total.events": "Número de Eventos",
+        "dashboard.page.next.events.datagrid.title": "Próximos eventos",
+        "create.event.error.message": "Erro ao criar evento",
+        "create.event.success.message": "Evento criado com sucesso",
+        "save.event.in.progress.error": "Erro ao salvar o evento. Já existe um evento com as mesmas informações em progresso",
+        "create.user.success.message": "Usuário criado com sucesso",
+        "create.user.already.exists.error": "Erro ao salvar usuário. Já existe um usuário cadastrado com o Usuário informado",
+        "create.user.error.message": "Erro ao criar usuário",
+        "create.user.name.label": "Nome",
+        "create.user.name.placeholder": "Digite o nome completo",
+        "create.user.username.label": "Usuário",
+        "create.user.username.placeholder": "Digite o nome do usuário",
+        "create.user.password.label": "Senha",
+        "create.user.password.passoword": "Digite a senha",
+        "create.user.confirmPassword.label": "Confirme a senha",
+        "create.user.confirmPassword.placeholder": "Confirme a senha",
+        "create.user.required.field.error": "Este campo é obrigatório.",
+        "create.user.passwords.mismatch": "As senhas são diferentes",
+        "create.user.modal.title": "Criar Usuário",
+        "create.user.create.button": "Criar usuário"
     }
 }

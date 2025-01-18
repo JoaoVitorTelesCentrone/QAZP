@@ -24,6 +24,7 @@ import { useState } from 'react'
 import { ArrowBigLeft, ArrowBigRight } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { intl } from '@/i18n'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -106,7 +107,7 @@ export function EventTable<TData, TValue>({
                 colSpan={columns.length}
                 className="h-24 text-center text-2xl font-bold"
               >
-                Nenhum resultado foi encontrado.
+                {intl.formatMessage({ id: 'datagrid.empty.message' })}
               </TableCell>
             </TableRow>
           )}
