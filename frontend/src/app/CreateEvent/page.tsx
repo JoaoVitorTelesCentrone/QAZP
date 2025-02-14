@@ -168,7 +168,9 @@ const CreateEvent = () => {
     }
   }
 
-  const handleMaterialQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMaterialQuantityChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const value = e.target.value
 
     if (!isNaN(Number(value)) || value === '') {
@@ -553,7 +555,7 @@ const CreateEvent = () => {
       <UserSideMenu />
       <Toaster richColors />
       <div className="h-full bg-tertiary">
-        <form className="flex flex-col rounded-xl  bg-gray-300 p-6 mr-10 mt-10 mx-auto ml-64 space-y-4">
+        <form className="flex flex-col rounded-xl  border-gray-200 border-2 bg-gray-300 p-6 mr-10 mt-10 mx-auto ml-64 space-y-4">
           <h1 className="text-3xl font-bold text-left text-primary">
             Criar evento
           </h1>

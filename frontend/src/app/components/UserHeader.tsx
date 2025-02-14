@@ -58,14 +58,12 @@ const UserSideMenu = () => {
     localStorage.removeItem('token')
     setIsLogged(false)
 
-    setTimeout(() => {
-      router.push('/')
-    }, 1500)
+    router.push('/')
   }
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-full">
         <ClipLoader size={50} color={'#123abc'} loading={loading} />
       </div>
     )

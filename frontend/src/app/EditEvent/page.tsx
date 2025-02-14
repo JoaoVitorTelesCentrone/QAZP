@@ -548,17 +548,17 @@ const EditEvent: React.FC<EditEventProps> = () => {
   return (
     <div>
       <UserSideMenu />
-      <div className="ml-56 p-4 rounded-xl bg-gray-300 mr-10 my-10">
+      <div className="ml-56 p-3 rounded-xl bg-gray-300 border-2 border-gray-200 mr-10 my-10">
         <h1 className="text-3xl font-bold">Editar evento {name}</h1>
         <div className="my-4">
           <div className="relative">
-            <h1 className="font-bold text-2xl mb-2">Nome</h1>
+            <h1 className="font-bold text-2xl mb-2">Título</h1>
             <Input
               value={name}
               onChange={e => setName(e.target.value)}
               onBlur={() => handleBlur('name')}
               placeholder="Nome do Evento"
-              className={`p-2 mb-4 bg-white text-gray-600 border rounded-xl w-full border-gray-300 h-[40px]   ${NameError ? 'border-red-500' : 'border-slate-300'}`}
+              className={`p-2 mb-4 bg-white text-gray-600 border  w-[800px] border-gray-300 h-[40px]   ${NameError ? 'border-red-500' : 'border-slate-300'}`}
               required
             />
             {NameError && (
@@ -580,7 +580,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
             <div className="flex">
               <div className="">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] md:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                  <DropdownMenuTrigger className="border border-gray-300 h-[40px] w-full sm:w-[300px] md:w-[400px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                     <span>{clientName || 'Selecione um Cliente'}</span>
                     <ChevronDown className="h-6 w-6" />
                   </DropdownMenuTrigger>
@@ -606,6 +606,194 @@ const EditEvent: React.FC<EditEventProps> = () => {
                 </DropdownMenu>
               </div>
             </div>
+          </div>
+
+          <h1 className="font-bold text-2xl mt-10 mb-2">Endereço</h1>
+
+          <div className="flex sm:flex-col md:flex-col xl:flex-row w-full">
+            <div className="xl:flex flex-col justify-around mb-8 mr-10">
+              <div className="flex items-center w-72">
+                <div className="relative flex flex-col mb-6 sm:w-[300px] md:w-[500px]">
+                  <label className="font-bold block mb-2">CEP</label>
+                  <Input
+                    value={zipCode}
+                    onChange={handleZipCodeChange}
+                    onBlur={() => handleBlur('zipCode')}
+                    maxLength={9}
+                    placeholder="Digite o CEP"
+                    className={`p-2 mb-4 border rounded w-full ${addressNameError ? 'border-red-500' : 'border-slate-300'}`}
+                    required
+                  />
+                  {zipCodeError && (
+                    <div
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        top: '100%',
+                        left: 0,
+                      }}
+                    >
+                      {zipCodeError}
+                    </div>
+                  )}
+                </div>
+                <SearchIcon
+                  className="h-12 w-12 cursor-pointer "
+                  onClick={handleSearchClick}
+                />
+              </div>
+              <div className="flex flex-col mb-8 mr-4 relative">
+                <label className="font-bold block mb-2">Endereço</label>
+                <Input
+                  value={addressName}
+                  onChange={e => setAddressName(e.target.value)}
+                  placeholder="Digite a Rua"
+                  className={`p-2 mb-4 border rounded w-full ${addressNameError ? 'border-red-500' : 'border-slate-300'}`}
+                  disabled
+                  readOnly
+                />
+                {addressNameError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: -15,
+                    }}
+                  >
+                    {addressNameError}
+                  </div>
+                )}
+              </div>
+              <div className="relative flex flex-col mr-10 mb-8">
+                <label className="font-bold block mb-2">Número</label>
+                <Input
+                  value={addressNumber}
+                  onChange={e => setAddressNumber(e.target.value)}
+                  onBlur={() => handleBlur('addressNumber')}
+                  placeholder="Número"
+                  className={`p-2 mb-4 border rounded w-full ${addressNameError ? 'border-red-500' : 'border-slate-300'}`}
+                />
+                {addressNumberError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                    }}
+                  >
+                    {addressNumberError}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col ">
+                <label className="font-bold block mb-2">Complemento</label>
+                <Input
+                  value={addressComplement}
+                  onChange={e => setAddressComplement(e.target.value)}
+                  placeholder="Digite o complemento"
+                  className={`p-2 mb-4 border rounded w-full ${addressNameError ? 'border-red-500' : 'border-slate-300'}`}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col ">
+              <div className="flex flex-col relative mb-8">
+                <label className="font-bold block mb-2">Bairro</label>
+                <Input
+                  value={district}
+                  onChange={e => setDistrict(e.target.value)}
+                  placeholder="Digite o bairro"
+                  className={`p-2 mb-4 border rounded w-full ${addressNameError ? 'border-red-500' : 'border-slate-300'}`}
+                  disabled
+                  readOnly
+                />
+                {districtError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                    }}
+                  >
+                    {districtError}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col flex-grow relative">
+                <label className="font-bold block mb-2">Cidade</label>
+                <Input
+                  value={city}
+                  onChange={e => setCity(e.target.value)}
+                  placeholder="Digite a Cidade"
+                  className={`p-2 mb-4 border rounded w-full ${addressNameError ? 'border-red-500' : 'border-slate-300'}`}
+                  disabled
+                  readOnly
+                />
+                {cityError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                    }}
+                  >
+                    {cityError}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col flex-grow relative">
+                <label className="font-bold block mb-2">Estado</label>
+                <Input
+                  value={state}
+                  onChange={e => setState(e.target.value)}
+                  placeholder="Digite o Estado"
+                  className={`p-2 mb-4 border rounded w-full ${addressNameError ? 'border-red-500' : 'border-slate-300'}`}
+                  disabled
+                  readOnly
+                />
+                {stateError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: -15,
+                    }}
+                  >
+                    {stateError}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col mt-6 relative mb-8">
+            <label className="font-bold mb-2 text-2xl ">Público estimado</label>
+            <Input
+              value={estimatedAudience}
+              onChange={handleEstimatedAudienceChange}
+              onBlur={() => handleBlur('estimatedAudience')}
+              placeholder="Público estimado"
+              className={`bg-white text-gray-600 border border-gray-300  h-[40px] w-full sm:w-[300px] md:w-[420px] ${estimatedAudienceError ? 'border-red-500' : 'border-slate-300'}`}
+            />
+            {estimatedAudienceError && (
+              <div
+                style={{
+                  color: 'red',
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                }}
+              >
+                {estimatedAudienceError}
+              </div>
+            )}
           </div>
 
           <h1 className="font-bold text-2xl mt-4">Data</h1>
@@ -766,194 +954,6 @@ const EditEvent: React.FC<EditEventProps> = () => {
                 </span>
               )}
             </div>
-          </div>
-
-          <h1 className="font-bold text-2xl mt-10 mb-2">Endereço</h1>
-
-          <div className="flex sm:flex-col md:flex-col xl:flex-row w-full justify-between">
-            <div className="xl:flex flex-col justify-around mb-8">
-              <div className="flex items-center w-72">
-                <div className="relative flex flex-col mb-6 sm:w-[300px] md:w-[500px]">
-                  <label className="font-bold block mb-2">CEP</label>
-                  <Input
-                    value={zipCode}
-                    onChange={handleZipCodeChange}
-                    onBlur={() => handleBlur('zipCode')}
-                    maxLength={9}
-                    placeholder="Digite o CEP"
-                    className={`bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full pr-10 ${zipCodeError ? 'border-red-500' : 'border-slate-300'}`}
-                    required
-                  />
-                  {zipCodeError && (
-                    <div
-                      style={{
-                        color: 'red',
-                        position: 'absolute',
-                        top: '100%',
-                        left: 0,
-                      }}
-                    >
-                      {zipCodeError}
-                    </div>
-                  )}
-                </div>
-                <SearchIcon
-                  className="h-12 w-12 cursor-pointer mt-5"
-                  onClick={handleSearchClick}
-                />
-              </div>
-              <div className="flex flex-col mb-8 mr-4 relative">
-                <label className="font-bold block mb-2">Endereço</label>
-                <Input
-                  value={addressName}
-                  onChange={e => setAddressName(e.target.value)}
-                  placeholder="Digite a Rua"
-                  className={`bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] ${addressNameError ? 'border-red-500' : 'border-slate-300'}`}
-                  disabled
-                  readOnly
-                />
-                {addressNameError && (
-                  <div
-                    style={{
-                      color: 'red',
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      marginTop: -15,
-                    }}
-                  >
-                    {addressNameError}
-                  </div>
-                )}
-              </div>
-              <div className="relative flex flex-col mr-10 mb-8">
-                <label className="font-bold block mb-2">Número</label>
-                <Input
-                  value={addressNumber}
-                  onChange={e => setAddressNumber(e.target.value)}
-                  onBlur={() => handleBlur('addressNumber')}
-                  placeholder="Número"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-64 md:w-[100px]"
-                />
-                {addressNumberError && (
-                  <div
-                    style={{
-                      color: 'red',
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                    }}
-                  >
-                    {addressNumberError}
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col ">
-                <label className="font-bold block mb-2">Complemento</label>
-                <Input
-                  value={addressComplement}
-                  onChange={e => setAddressComplement(e.target.value)}
-                  placeholder="Digite o complemento"
-                  className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px]"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col ">
-              <div className="flex flex-col relative mb-8">
-                <label className="font-bold block mb-2">Bairro</label>
-                <Input
-                  value={district}
-                  onChange={e => setDistrict(e.target.value)}
-                  placeholder="Digite o bairro"
-                  className={`bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] ${districtError ? 'border-red-500' : 'border-slate-300'}`}
-                  disabled
-                  readOnly
-                />
-                {districtError && (
-                  <div
-                    style={{
-                      color: 'red',
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                    }}
-                  >
-                    {districtError}
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col flex-grow relative">
-                <label className="font-bold block mb-2">Cidade</label>
-                <Input
-                  value={city}
-                  onChange={e => setCity(e.target.value)}
-                  placeholder="Digite a Cidade"
-                  className={`"bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] ${cityError ? 'border-red-500' : 'border-slate-300'}`}
-                  disabled
-                  readOnly
-                />
-                {cityError && (
-                  <div
-                    style={{
-                      color: 'red',
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                    }}
-                  >
-                    {cityError}
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col flex-grow relative">
-                <label className="font-bold block mb-2">Estado</label>
-                <Input
-                  value={state}
-                  onChange={e => setState(e.target.value)}
-                  placeholder="Digite o Estado"
-                  className={`bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] ${stateError ? 'border-red-500' : 'border-slate-300'}`}
-                  disabled
-                  readOnly
-                />
-                {stateError && (
-                  <div
-                    style={{
-                      color: 'red',
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      marginTop: -15,
-                    }}
-                  >
-                    {stateError}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col mt-6 relative mb-8">
-            <label className="font-bold mb-2 text-2xl ">Público estimado</label>
-            <Input
-              value={estimatedAudience}
-              onChange={handleEstimatedAudienceChange}
-              onBlur={() => handleBlur('estimatedAudience')}
-              placeholder="Público estimado"
-              className={`bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[420px] ${estimatedAudienceError ? 'border-red-500' : 'border-slate-300'}`}
-            />
-            {estimatedAudienceError && (
-              <div
-                style={{
-                  color: 'red',
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                }}
-              >
-                {estimatedAudienceError}
-              </div>
-            )}
           </div>
 
           <div>
