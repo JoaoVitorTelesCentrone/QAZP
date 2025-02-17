@@ -32,7 +32,9 @@ const Call = () => {
           className="w-64 mx-auto"
           onClick={handleOpenQuoteModal}
         >
-          Solicite um Orçamento
+          {intl.formatMessage({
+            id: 'showroom.page.request-quote-button-label',
+          })}
         </Button>
       </div>
       <div className="bg-primary mr-10 ml-10 mt-10 m-10 xl:w-[25%]">

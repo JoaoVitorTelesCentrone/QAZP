@@ -23,6 +23,7 @@ import {
 import { useState } from 'react'
 import { ArrowBigLeft, ArrowBigRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { intl } from '@/i18n'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -65,9 +66,9 @@ export function DashboardTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                   </TableHead>
                 )
               })}
@@ -95,7 +96,7 @@ export function DashboardTable<TData, TValue>({
                 colSpan={columns.length}
                 className="h-24 text-center text-2xl font-bold"
               >
-                Nenhum resultado foi encontrado.
+                {intl.formatMessage({ id: 'datagrid.empty.message' })}
               </TableCell>
             </TableRow>
           )}

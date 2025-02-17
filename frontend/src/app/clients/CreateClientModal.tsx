@@ -87,7 +87,9 @@ const CreateClientModal: React.FC<createClientProps> = ({
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
@@ -206,20 +208,21 @@ const CreateClientModal: React.FC<createClientProps> = ({
       { value: district, errorSetter: setDistrictError },
       { value: city, errorSetter: setCityError },
       { value: state, errorSetter: setStateError },
-    ]
+    ];
 
-    let isValid = true
+    let isValid = true;
 
+    // Validação dos campos obrigatórios
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter('Campo obrigatório *')
-        isValid = false
+        errorSetter(intl.formatMessage({ id: 'required.field.error.message' }));
+        isValid = false;
       } else {
-        errorSetter('')
+        errorSetter('');
       }
-    })
+    });
 
-    if (!isValid) return
+    if (!isValid) return;
 
     const data = {
       fullName,
@@ -233,38 +236,53 @@ const CreateClientModal: React.FC<createClientProps> = ({
       district,
       state,
       city,
-    }
-    console.log('Dados do cliente:', data)
+    };
+
+    console.log('Dados do cliente:', data);
 
     try {
-      const response = await axios.post(
-        'http://localhost:5196/api/Client',
-        data,
-      )
+      const response = await axios.post('http://localhost:5196/api/Client', data);
+
       if (response.status === 201) {
-        toast.success('Cliente criado')
-        onClose()
-        setChange(prev => prev + 1)
+        toast.success(intl.formatMessage({ id: 'create.client.success.message' }));
+        onClose();
+        setChange(prev => prev + 1);
       }
     } catch (error: unknown) {
-      if (isAxiosError(error)) {
-        console.error('Erro ao fazer a requisição:', error)
-        if (error.response) {
-          if (error.response.status === 409) {
-            toast.error('Esse cliente já existe!')
-          } else if (error.response.status === 400) {
-            toast.error('Erro de requisição. Verifique os dados enviados.')
-          } else {
-            toast.error('Erro desconhecido.')
-          }
-        }
+      handleCreateClientError(error);
+    }
+  }
+
+  const showGenericError = () => {
+    toast.error(intl.formatMessage({ id: 'update.client.error.message' }));
+  };
+
+  const handleCreateClientError = (error: unknown) => {
+    if (!isAxiosError(error)) {
+      console.error('Erro inesperado:', error);
+      showGenericError();
+      return;
+    }
+
+    console.error('Erro ao fazer a requisição:', error.message);
+
+    if (error.response) {
+      const { data, status } = error.response;
+      if (data.errors && data.errors.DocumentId && data.errors.DocumentId.includes('Invalid DocumentId')) {
+        toast.error(intl.formatMessage({ id: 'update.client.invalid.document' }));
+      } else if (status === 409 && data?.message && data.message.includes('There is already a Client with the same DocumentId')) {
+        toast.error(intl.formatMessage({ id: 'update.client.document.exists' }));
+      } else {
+        showGenericError();
       }
     }
   }
   return (
     <div>
       <Modal
-        title="Criar Cliente"
+        title={intl.formatMessage({
+          id: 'create.client.modal.title',
+        })}
         open={isVisible}
         onCancel={onClose}
         footer={[]}

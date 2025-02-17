@@ -12,7 +12,8 @@ import UserSideMenu from '../components/UserHeader'
 import { FaUserPlus, FaUsers } from 'react-icons/fa'
 import CreateClientModal from './CreateClientModal'
 import { documentIdConverter, formatPhoneNumber } from '@/functions/functions'
-import withAuth from '../hoc/withAuth'; 
+import withAuth from '../hoc/withAuth';
+import { intl } from '@/i18n'
 const Clients = () => {
   const [clients, setClients] = useState([])
   const [loading, setLoading] = useState(true)
@@ -65,7 +66,9 @@ const Clients = () => {
                 <div className="flex ml-48">
                   <FaUsers className=" w-16 h-16 p-1 rounded-full my-5 text-primary border-2 border-primary" />
                   <h1 className="font-monospace font-semibold text-primary text-7xl my-4 mx-4 text-secondary-foreground">
-                    Clientes
+                    {intl.formatMessage({
+                      id: 'client.page.title',
+                    })}
                   </h1>
                 </div>
                 <Button
@@ -75,14 +78,17 @@ const Clients = () => {
                   size="large"
                   onClick={() => setOpenModal(true)}
                 >
-                  <h1 className="text-lg">Criar cliente</h1>
+                  <h1 className="text-lg">{intl.formatMessage({
+                    id: 'create.client.button.label',
+                  })}
+                  </h1>
                 </Button>
               </div>
             </div>
             <div className='bg-tertiary'>
-            <div className="ml-56 mr-10">
-              <ClientTable columns={clientColumns} data={clients} />
-            </div>
+              <div className="ml-56 mr-10">
+                <ClientTable columns={clientColumns} data={clients} />
+              </div>
             </div>
           </div>
         </>

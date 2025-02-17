@@ -1,5 +1,4 @@
 'use client'
-
 import { useAtom } from 'jotai'
 import Link from 'next/link'
 import React, { useState } from 'react'
@@ -8,7 +7,6 @@ import { userInfoAtom } from '../atoms/userInfoAtom'
 import UserHeader from './UserHeader'
 import { intl } from '@/i18n'
 import { Button } from 'antd'
-
 import ClipLoader from 'react-spinners/ClipLoader'
 import QuoteModal from './QuoteModal'
 import LoginModal from './LoginModal'
@@ -70,16 +68,14 @@ const Header = () => {
                 id: 'header.about.us.option',
               })}
             </Link>
-            {/* <Button
-              type="link"
-              className="text-white text-lg font-medium "
-              onClick={handleOpenQuoteModal}
-            >
-              Orçamento
-            </Button> */}
           </ul>
-          <Button onClick={handleOpenLoginModal}>
-            Login
+          <Button type="primary"
+            ghost
+            shape="round"
+            onClick={handleOpenLoginModal}>
+            {intl.formatMessage({
+              id: 'header.login.button.label',
+            })}
           </Button>
         </>
       )}

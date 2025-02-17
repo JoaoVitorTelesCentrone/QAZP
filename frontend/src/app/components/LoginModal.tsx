@@ -22,7 +22,7 @@ const LoginModal = ({
 }: {
   isVisible: boolean
   onClose: () => void
-  onCancel: () =>void
+  onCancel: () => void
 }) => {
   const router = useRouter()
   const [userAuth, setUserAuth] = useAtom(authAtom)
@@ -56,33 +56,37 @@ const LoginModal = ({
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); 
-    
+    e.preventDefault();
+
     const fieldsToValidate = [
       { value: username, errorSetter: setUsernameError },
       { value: password, errorSetter: setPasswordError },
     ];
-  
+
     let isValid = true;
-  
+
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter('Campo obrigatório *');
+        errorSetter(`${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`);
         isValid = false;
       } else {
         errorSetter('');
       }
     });
-  
+
     if (isValid) {
-      verifyLogin(); 
+      verifyLogin();
     }
   };
 
@@ -100,13 +104,15 @@ const LoginModal = ({
           username: username,
           password: password,
         })
-        toast.success(`Bem-vindo ${username}`)
+        toast.success(intl.formatMessage({ id: 'login.success.message' }, { name }))
         router.push('/dashboard')
         onClose()
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
-      toast.error('Usuário ou senha incorretos')
+      toast.error(`${intl.formatMessage({
+        id: 'login.error.message',
+      })}`)
     } finally {
       setTimeout(() => {
         setLoading(false)
@@ -142,7 +148,7 @@ const LoginModal = ({
             <ClipLoader size={50} color={'#123abc'} loading={loading} />
           </div>
         ) : (
-          <form  onSubmit={handleSubmit} className="flex flex-col p-6 relative">
+          <form onSubmit={handleSubmit} className="flex flex-col p-6 relative">
             <label className="text-lg font-bold">
               {intl.formatMessage({
                 id: 'login.page.user.field.label',

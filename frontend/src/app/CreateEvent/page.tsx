@@ -30,6 +30,7 @@ import { atom, useAtom } from 'jotai'
 
 import withAuth from '../hoc/withAuth'
 import dayjs, { Dayjs } from 'dayjs'
+import { intl } from '@/i18n'
 
 const EventTypes: EventTypesProps[] = [
   { name: 'Casamento', index: 0 },
@@ -212,14 +213,18 @@ const CreateEvent = () => {
       setStartTimeError('')
     } else {
       setTime(null)
-      setStartTimeError('Campo obrigatório *')
+      setStartTimeError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     }
   }
 
   useEffect(() => {
     if (isStartTimeTouched) {
       if (!startTime) {
-        setStartTimeError('Campo obrigatório *')
+        setStartTimeError(`${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`)
       } else {
         setStartTimeError('')
       }
@@ -235,14 +240,18 @@ const CreateEvent = () => {
       setEndTimeError('')
     } else {
       setTime(null)
-      setEndTimeError('Campo obrigatório *')
+      setEndTimeError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     }
   }
 
   useEffect(() => {
     if (isEndTimeTouched) {
       if (!endTime) {
-        setEndTimeError('Campo obrigatório *')
+        setEndTimeError(`${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`)
       } else {
         setEndTimeError('')
       }
@@ -258,14 +267,18 @@ const CreateEvent = () => {
       setStartDateError('')
     } else {
       setDate(null)
-      setStartDateError('Campo obrigatório *')
+      setStartDateError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     }
   }
 
   useEffect(() => {
     if (isStartDateTouched) {
       if (!startDate) {
-        setStartDateError('Campo obrigatório *')
+        setStartDateError(`${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`)
       } else {
         setStartDateError('')
       }
@@ -281,14 +294,18 @@ const CreateEvent = () => {
       setEndDateError('')
     } else {
       setDate(null)
-      setEndDateError('Campo obrigatório *')
+      setEndDateError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     }
   }
 
   useEffect(() => {
     if (isEndDateTouched) {
       if (!endDate) {
-        setEndDateError('Campo obrigatório *')
+        setEndDateError(`${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`)
       } else {
         setEndDateError('')
       }
@@ -443,7 +460,9 @@ const CreateEvent = () => {
 
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter('Campo obrigatório *')
+        errorSetter(`${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`)
         isValid = false
       } else {
         errorSetter('')
@@ -521,7 +540,9 @@ const CreateEvent = () => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
@@ -555,11 +576,10 @@ const CreateEvent = () => {
                   }}
                 >
                   <DropdownMenuTrigger
-                    className={`flex border border-gray-300 h-[40px] bg-white items-center justify-between px-4 py-1 font-bold rounded-xl mr-6 ${
-                      !isTypeValid && isTouched
+                    className={`flex border border-gray-300 h-[40px] bg-white items-center justify-between px-4 py-1 font-bold rounded-xl mr-6 ${!isTypeValid && isTouched
                         ? 'border-red-500'
                         : 'border-gray-300'
-                    }`}
+                      }`}
                     onBlur={() => setIsTouched(true)}
                   >
                     <h1
@@ -596,7 +616,9 @@ const CreateEvent = () => {
                     className="text-red-500 text-sm font-bold absolute"
                     style={{ top: '100%', marginTop: -15 }}
                   >
-                    Campo obrigatório *
+                    {intl.formatMessage({
+                      id: 'required.field.error.message',
+                    })}
                   </span>
                 )}
               </div>
@@ -638,18 +660,21 @@ const CreateEvent = () => {
                   onOpenChange={open => {
                     if (!open && !clientName) {
                       setIsClientTouched(true)
-                      setClientNameError('Campo obrigatório *')
+                      setClientNameError(`${intl.formatMessage({
+                        id: 'required.field.error.message',
+                      })}`)
                     }
                   }}
                 >
                   <DropdownMenuTrigger
-                    className={`border border-gray-300 h-[40px] text-sm bg-white rounded-xl flex items-center justify-between px-4 ${
-                      clientNameError ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`border border-gray-300 h-[40px] text-sm bg-white rounded-xl flex items-center justify-between px-4 ${clientNameError ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     onBlur={() => {
                       if (!clientName) {
                         setIsClientTouched(true)
-                        setClientNameError('Campo obrigatório *')
+                        setClientNameError(`${intl.formatMessage({
+                          id: 'required.field.error.message',
+                        })}`)
                       }
                     }}
                   >
@@ -934,7 +959,9 @@ const CreateEvent = () => {
                     if (formattedDate && formattedDate.isValid()) {
                       setStartDateError('')
                     } else {
-                      setStartDateError('Campo obrigatório *')
+                      setStartDateError(`${intl.formatMessage({
+                        id: 'required.field.error.message',
+                      })}`)
                     }
                   }}
                   onBlur={() => {
@@ -971,7 +998,9 @@ const CreateEvent = () => {
                     if (formattedTime && formattedTime.isValid()) {
                       setStartTimeError('')
                     } else {
-                      setStartTimeError('Campo obrigatório *')
+                      setStartTimeError(`${intl.formatMessage({
+                        id: 'required.field.error.message',
+                      })}`)
                     }
                   }}
                   onBlur={() => {
@@ -1010,7 +1039,9 @@ const CreateEvent = () => {
                     if (formattedDate && formattedDate.isValid()) {
                       setEndDateError('')
                     } else {
-                      setEndDateError('Campo obrigatório *')
+                      setEndDateError(`${intl.formatMessage({
+                        id: 'required.field.error.message',
+                      })}`)
                     }
                   }}
                   onBlur={() => {
@@ -1047,7 +1078,9 @@ const CreateEvent = () => {
                     if (formattedTime && formattedTime.isValid()) {
                       setEndTimeError('')
                     } else {
-                      setEndTimeError('Campo obrigatório *')
+                      setEndTimeError(`${intl.formatMessage({
+                        id: 'required.field.error.message',
+                      })}`)
                     }
                   }}
                   onBlur={() => {

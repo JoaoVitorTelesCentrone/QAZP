@@ -3,13 +3,13 @@ import axios from 'axios'
 import { Eye, EyeOff } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-
+import { AxiosError } from 'axios';
 import { useAtom } from 'jotai'
-
 import { redirect } from 'next/navigation'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { userChangeAtom } from '../atoms/changeUserAtom'
+import { intl } from '@/i18n'
 
 export type createUserProps = {
   isVisible: boolean
@@ -61,11 +61,26 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
   }
+
+  const validateFields = (fields: { value: string; errorSetter: React.Dispatch<React.SetStateAction<string>> }[]): boolean => {
+    let isValid = true;
+    fields.forEach(({ value, errorSetter }) => {
+      if (!value) {
+        errorSetter(`${intl.formatMessage({ id: 'required.field.error.message' })}`);
+        isValid = false;
+      } else {
+        errorSetter('');
+      }
+    });
+    return isValid;
+  };
 
   async function verifyCreation() {
     const fieldsToValidate = [
@@ -73,37 +88,32 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
       { value: username, errorSetter: setUsernameError },
       { value: password, errorSetter: setPasswordError },
       { value: confirmedPassword, errorSetter: setConfirmPasswordError },
-    ]
+    ];
 
-    let isValid = true
+    if (!validateFields(fieldsToValidate)) return;
+    const data = { name, username, password, role: 0 };
 
-    fieldsToValidate.forEach(({ value, errorSetter }) => {
-      if (!value) {
-        errorSetter('Campo obrigatório *')
-        isValid = false
-      } else {
-        errorSetter('')
-      }
-    })
-
-    const data = {
-      name,
-      username,
-      password,
-      role: 0,
-    }
     try {
-      const response = await axios.post('http://localhost:5196/api/User', data)
-      const userData = response.data
+      const response = await axios.post('http://localhost:5196/api/User', data);
+
       if (response.status === 201) {
-        toast.success('Usuário criado')
-        onClose()
-        setChange(prev => prev + 1)
+        toast.success(intl.formatMessage({ id: 'create.user.success.message' }));
+        onClose();
+        setChange(prev => prev + 1);
       }
-    } catch (error) {
-      console.error('Erro ao fazer a requisição:', error)
-      toast.error('Esse usuário já existe!')
-      setError(true)
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          if (error.response.status === 409) {
+            toast.error(intl.formatMessage({ id: 'create.user.already.exists.error' }));
+          } else {
+            toast.error(intl.formatMessage({ id: 'create.user.error.message' }));
+          }
+        }
+      }
+
+      setError(true);
+      console.error('Erro ao fazer a requisição:', error);
     }
   }
 
@@ -126,7 +136,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
   return (
     <div>
       <Modal
-        title="Criar Usuário"
+        title={intl.formatMessage({ id: "create.user.modal.title" })}
         open={isVisible}
         onCancel={onClose}
         footer={[]}
@@ -134,12 +144,12 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
         <div className="">
           <form className="">
             <div className="mx-auto relative">
-              <h1>Nome</h1>
+              <h1>{intl.formatMessage({ id: "create.user.name.label" })}</h1>
               <Input
                 onChange={e => setName(e.target.value)}
                 onBlur={() => handleBlur('name')}
                 required
-                placeholder="Digite o nome completo"
+                placeholder={intl.formatMessage({ id: "create.user.name.placeholder" })}
                 className={`p-2 mb-4 border rounded w-full ${nameError ? 'border-red-500' : 'border-slate-300'}`}
                 value={name}
               />
@@ -158,12 +168,12 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
               )}
             </div>
             <div className="mx-auto w-full mt-6 relative">
-              <h1>Usuário</h1>
+              <h1>{intl.formatMessage({ id: "create.user.username.label" })}</h1>
               <Input
                 onChange={e => setUsername(e.target.value)}
                 onBlur={() => handleBlur('username')}
                 required
-                placeholder="Digite o nome do usuário"
+                placeholder={intl.formatMessage({ id: "create.user.username.placeholder" })}
                 className={`p-2 mb-4 border rounded w-full ${usernameError ? 'border-red-500' : 'border-slate-300'}`}
                 value={username}
               />
@@ -183,14 +193,14 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
             </div>
 
             <div className="mx-auto mt-6 w-full relative">
-              <h1>Senha</h1>
+              <h1>{intl.formatMessage({ id: "create.user.password.label" })}</h1>
               <div className="flex items-center">
                 <Input
                   type={showPassword1 ? 'text' : 'password'}
                   onChange={e => setPassword(e.target.value)}
                   onBlur={() => handleBlur('password')}
                   required
-                  placeholder="Digite a senha"
+                  placeholder={intl.formatMessage({ id: "create.user.password.passoword" })}
                   className={`p-2 mb-4 border rounded w-full ${passwordError ? 'border-red-500' : 'border-slate-300'}`}
                   value={password}
                 />
@@ -218,14 +228,14 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
             </div>
 
             <div className="relative mx-auto mt-3 w-full mb-4">
-              <h1>Confirme a senha</h1>
+              <h1>{intl.formatMessage({ id: "create.user.confirmPassword.label" })}</h1>
               <div className="flex items-center">
                 <Input
                   type={showPassword2 ? 'text' : 'password'}
                   onChange={e => setConfirmPassword(e.target.value)}
                   onBlur={() => handleBlur('confirmedPassword')}
                   required
-                  placeholder="Confirme a senha"
+                  placeholder={intl.formatMessage({ id: "create.user.confirmPassword.placeholder" })}
                   className={`p-2 mb-4 border rounded w-full ${confirmedPasswordError ? 'border-red-500' : 'border-slate-300'}`}
                   value={confirmedPassword}
                 />
@@ -254,7 +264,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
 
             {different && (
               <h1 className="text-red-700 font-bold">
-                As senhas são diferentes
+                {intl.formatMessage({ id: "create.user.passwords.mismatch" })}
               </h1>
             )}
             <div className="flex justify-end mt-3">
@@ -262,7 +272,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
                 className="bg-primary text-white w-[30%]"
                 onClick={() => verifyCreation()}
               >
-                Criar usuário
+                {intl.formatMessage({ id: "create.user.create.button" })}
               </Button>
             </div>
           </form>

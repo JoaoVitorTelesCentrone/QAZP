@@ -1,4 +1,4 @@
-import { Atom, atom } from 'jotai'
+import { atom } from 'jotai'
 
 export const getQuoteAtom = atom({
   firstName: '',
