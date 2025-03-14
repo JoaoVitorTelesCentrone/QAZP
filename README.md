@@ -1,4 +1,4 @@
-# Zventos - Sistema de Gestão de Eventos
+# QAZP - Sistema de Gestão de Eventos
 
 ## Instruções para Subir a Aplicação
 
