@@ -1,5 +1,14 @@
 # QAZP - Sistema de Gestão de Eventos
 
+## Instruçoes para instalar a Aplicação
+1. Baixar e Instalar o .net: https://dotnet.microsoft.com/pt-br/download/dotnet/thank-you/sdk-8.0.204-windows-x64-installer
+2. Navegue até o diretório do ZventsApi
+3. Instale as tools do .net: 'dotnet tool install --global dotnet-ef'
+4. Reinicie o vsCode
+5. Navegue até o diretório do frontend
+6. Instale as dependências do projeto: npm i
+7. Inicie a aplicação em modo de desenvolvimento: npm rum start:dev
+
 ## Instruções para Subir a Aplicação
 
 1. Abra o terminal.
