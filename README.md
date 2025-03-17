@@ -1,6 +1,6 @@
 # QAZP - Sistema de Gestão de Eventos
 
-## Instruçoes para instalar a Aplicação
+## Instruções para instalar a Aplicação
 1. Baixar e Instalar o .net: https://dotnet.microsoft.com/pt-br/download/dotnet/thank-you/sdk-8.0.204-windows-x64-installer
 2. Abra o projeto no vsCode
 3. Navegue até o diretório do ZventsApi
