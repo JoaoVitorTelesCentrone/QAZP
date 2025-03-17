@@ -8,7 +8,7 @@
 5. Reinicie o vsCode
 6. Navegue até o diretório do frontend
 7. Instale as dependências do projeto: npm i
-8. Inicie a aplicação em modo de desenvolvimento: npm rum start:dev
+8. Inicie a aplicação em modo de desenvolvimento: npm run start:dev
 
 ## Instruções para Subir a Aplicação
 
