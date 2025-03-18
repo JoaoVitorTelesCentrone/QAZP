@@ -23,6 +23,8 @@ import { clientsAtom } from '@/app/CreateEvent/page'
 import { formatCurrency } from '@/functions/functions'
 import { eventIdAtom } from '../atoms/EventIdAtom'
 import { insertMaterialProps, MaterialType } from '../CreateEvent/utils'
+import { toast } from 'sonner'
+import { intl } from '@/i18n'
 
 type EditEventProps = {
   eventId: string
@@ -72,6 +74,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
   const [endDateError, setEndDateError] = useState('')
   const [startTimeError, setStartTimeError] = useState('')
   const [endTimeError, setEndTimeError] = useState('')
+  const [type, setType] = useState('')
   const [isStartDateTouched, setIsStartDateTouched] = useState(false)
   const [isEndDateTouched, setIsEndDateTouched] = useState(false)
   const [isStartTimeTouched, setIsStartTimeTouched] = useState(false)
@@ -206,14 +209,18 @@ const EditEvent: React.FC<EditEventProps> = () => {
       setStartTimeError('')
     } else {
       setTime(null)
-      setStartTimeError('Campo obrigatório *')
+      setStartTimeError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     }
   }
 
   useEffect(() => {
     if (isStartTimeTouched) {
       if (!startTime) {
-        setStartTimeError('Campo obrigatório *')
+        setStartTimeError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
       } else {
         setStartTimeError('')
       }
@@ -229,14 +236,18 @@ const EditEvent: React.FC<EditEventProps> = () => {
       setEndTimeError('')
     } else {
       setTime(null)
-      setEndTimeError('Campo obrigatório *')
+      setEndTimeError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     }
   }
 
   useEffect(() => {
     if (isEndTimeTouched) {
       if (!endTime) {
-        setEndTimeError('Campo obrigatório *')
+        setEndTimeError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
       } else {
         setEndTimeError('')
       }
@@ -252,14 +263,18 @@ const EditEvent: React.FC<EditEventProps> = () => {
       setStartDateError('')
     } else {
       setDate(null)
-      setStartDateError('Campo obrigatório *')
+      setStartDateError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     }
   }
 
   useEffect(() => {
     if (isStartDateTouched) {
       if (!startDate) {
-        setStartDateError('Campo obrigatório *')
+        setStartDateError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
       } else {
         setStartDateError('')
       }
@@ -275,14 +290,18 @@ const EditEvent: React.FC<EditEventProps> = () => {
       setEndDateError('')
     } else {
       setDate(null)
-      setEndDateError('Campo obrigatório *')
+      setEndDateError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     }
   }
 
   useEffect(() => {
     if (isEndDateTouched) {
       if (!endDate) {
-        setEndDateError('Campo obrigatório *')
+        setEndDateError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
       } else {
         setEndDateError('')
       }
@@ -304,6 +323,11 @@ const EditEvent: React.FC<EditEventProps> = () => {
     price: number,
   ) => {
     event.preventDefault()
+
+    if (!materialName || !materialId || quantity <= 0 || isNaN(quantity)) {
+      toast.error('Preencha todos os campos corretamente antes de adicionar o material.')
+      return;
+  }
     const newMaterialInsert = {
       materialName: materialName,
       quantity: quantity,
@@ -344,6 +368,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
           setDistrict(event.district || '')
           setState(event.state || '')
           setCity(event.city || '')
+          setType(event.type)
           setEstimatedAudience(event.estimatedAudience || 0)
           setTotalAmount(event.totalAmount)
 
@@ -414,7 +439,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
 
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter('Campo obrigatório *')
+        errorSetter(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
         isValid = false
       } else {
         errorSetter('')
@@ -446,7 +473,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
         estimatedAudience,
         materials: sendMaterial,
         totalAmount: totalAmount,
-        type: 0,
+        type,
         status: 0,
       }
       console.log(body)
@@ -518,7 +545,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
@@ -788,7 +817,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
                   if (formattedDate && formattedDate.isValid()) {
                     setStartDateError('')
                   } else {
-                    setStartDateError('Campo obrigatório *')
+                    setStartDateError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
                   }
                 }}
                 onBlur={() => {
@@ -826,7 +857,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
                   if (formattedDate && formattedDate.isValid()) {
                     setEndDateError('')
                   } else {
-                    setEndDateError('Campo obrigatório *')
+                    setEndDateError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
                   }
                 }}
                 onBlur={() => {
@@ -862,7 +895,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
                   if (formattedTime && formattedTime.isValid()) {
                     setStartTimeError('')
                   } else {
-                    setStartTimeError('Campo obrigatório *')
+                    setStartTimeError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
                   }
                 }}
                 onBlur={() => {
@@ -898,7 +933,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
                   if (formattedTime && formattedTime.isValid()) {
                     setEndTimeError('')
                   } else {
-                    setEndTimeError('Campo obrigatório *')
+                    setEndTimeError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
                   }
                 }}
                 onBlur={() => {

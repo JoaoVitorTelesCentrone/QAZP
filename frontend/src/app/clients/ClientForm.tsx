@@ -180,7 +180,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError('Campo obrigatório *')
+      field.setError(`${intl.formatMessage({
+        id: 'required.field.error.message',
+      })}`)
     } else {
       field.setError('')
     }
@@ -188,28 +190,45 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
 
   const updateClient = async (updatedData: ClientDataProps) => {
     try {
-      console.log('Updating client with data:', updatedData)
+      console.log('Updating client with data:', updatedData);
       const response = await axios.put(
         `http://localhost:5196/api/Client/${clientData?.id}`,
-        updatedData,
-      )
-      console.log('Update response:', response)
-      toast.success('Cliente alterado com sucesso')
-      closeModal()
+        updatedData
+      );
+      console.log('Update response:', response);
+      toast.success(intl.formatMessage({ id: 'update.client.success.message' }));
+      closeModal();
     } catch (error) {
-      if (isAxiosError(error)) {
-        console.error('Error message:', error.message)
-        if (error.response) {
-          console.error('Response data:', error.response.data)
-          console.error('Response status:', error.response.status)
-          console.error('Response headers:', error.response.headers)
-        }
-      } else {
-        console.error('Unexpected error:', error)
-      }
-      toast.error('Falha ao atualizar cliente')
+      handleError(error);
     }
-  }
+  };
+
+  const handleError = (error: unknown) => {
+    if (!isAxiosError(error)) {
+      console.error('Unexpected error:', error);
+      showGenericError();
+      return;
+    }
+
+    console.error('Error message:', error.message);
+
+    if (error.response) {
+      const { data, status, headers } = error.response;
+      console.error('Response data:', data);
+      console.error('Response status:', status);
+      console.error('Response headers:', headers);
+
+      if (data.errors?.DocumentId?.includes('Invalid DocumentId')) {
+        toast.error(intl.formatMessage({ id: 'update.client.invalid.document' }));
+      } else {
+        showGenericError();
+      }
+    }
+  };
+
+  const showGenericError = () => {
+    toast.error(intl.formatMessage({ id: 'update.client.error.message' }));
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -229,7 +248,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
 
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter('Campo obrigatório *')
+        errorSetter(`${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`)
         isValid = false
       } else {
         errorSetter('')
@@ -279,10 +300,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
         className="mt-1 mb-2 flex-col flex border-2 rounded-xl border-secondary-foreground shadow-lg shadow-slate-500 border-slate-200 bg-white p-10 max-w-[700px]"
       >
         <div className="flex justify-between">
-          <h1 className="text-2xl font-bold mb-6">Editar cliente</h1>
+          <h1 className="text-2xl font-bold mb-6">{intl.formatMessage({ id: 'update.client.modal.title' })}</h1>
           <X className="cursor-pointer" onClick={closeModal} />
         </div>
-
         <div className="flex w-full mb-4">
           <div className="w-[38%] mr-2 relative">
             <h1 className="font-bold mr-24">
@@ -408,8 +428,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
                   {zipCodeError}
                 </div>
               )}
-              <SearchIcon className="p-2 h-10 w-10 cursor-pointer" 
-              onClick={handleSearchClick}/>
+              <SearchIcon className="p-2 h-10 w-10 cursor-pointer"
+                onClick={handleSearchClick} />
             </div>
           </div>
         </div>
@@ -575,11 +595,13 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
         </div>
         <div className="flex justify-between">
           <Button className="" onClick={closeModal} type="default">
-            Fechar
+            {intl.formatMessage({
+              id: 'close.modal.button.label',
+            })}
           </Button>
           <Button htmlType="submit" type="default">
             {intl.formatMessage({
-              id: 'edit.client.page.create.client.button',
+              id: 'save.client.button.label',
             })}
           </Button>
         </div>
