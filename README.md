@@ -1,21 +1,33 @@
 # QAZP - Sistema de Gestão de Eventos
 
 ## Instruções para instalar a Aplicação
-1. Baixar e Instalar o .net: https://dotnet.microsoft.com/pt-br/download/dotnet/thank-you/sdk-8.0.204-windows-x64-installer
+1. Baixar e Instalar o [.net sdk-8.0.204](https://dotnet.microsoft.com/pt-br/download/dotnet/thank-you/sdk-8.0.204-windows-x64-installer)
 2. Abra o projeto no vsCode
-3. Navegue até o diretório do ZventsApi
-4. Instale as tools do .net: 'dotnet tool install --global dotnet-ef'
+3. Navegue até o diretório do `ZventsApi`
+4. Instale as tools do .net:
+   ```
+   dotnet tool install --global dotnet-ef
+   ```
 5. Reinicie o vsCode
-6. Navegue até o diretório do frontend
-7. Instale as dependências do projeto: npm i
-8. Inicie a aplicação em modo de desenvolvimento: npm run start:dev
+6. Navegue até o diretório do `frontend`
+7. Instale as dependências do projeto:
+   ```
+   npm i
+   ```
+8. Inicie a aplicação em modo de desenvolvimento:
+    ```
+    npm run start:dev
+    ```
 
 ## Instruções para Subir a Aplicação
 
 1. Abra o terminal.
-2. Navegue até o diretório do frontend.
-3. Instale as dependências do projeto: npm i
-4. Inicie a aplicação em modo de desenvolvimento: npm run start:dev
+2. Navegue até o diretório do `frontend`.
+3. Instale as dependências do projeto: `npm i`
+4. Inicie a aplicação em modo de desenvolvimento:
+   ```
+   npm run start:dev
+   ```
 
 # Visão Geral do Sistema
 O Zventos é um site desenvolvido para uma empresa fictícia especializada em gestão e organização de eventos. A Zventos se concentra em oferecer uma experiência completa de organização, onde os clientes podem delegar toda a gestão e planejamento dos eventos, permitindo que foquem na execução. O site oferece uma landing page para apresentar a empresa e captar orçamentos, além de uma área logada para a gestão de clientes, eventos, materiais e usuários.
@@ -23,17 +35,20 @@ O Zventos é um site desenvolvido para uma empresa fictícia especializada em ge
 # Objetivos Principais
 Oferecer uma plataforma para facilitar a gestão de eventos, focando na organização de clientes, eventos e materiais.
 Proporcionar uma interface intuitiva para que clientes e administradores possam gerenciar seus dados de forma eficaz.
-Funcionalidades do Sistema
-Landing Page
+
+# Funcionalidades do Sistema
+
+## Landing Page
 Apresentação da Empresa: Informações detalhadas sobre a Zventos, seus valores e a proposta de serviço oferecida.
 Captação de Orçamentos: Formulário para potenciais clientes solicitarem orçamento e informações para seus eventos.
-Área Logada
+
+## Área Logada
 A área logada é dividida em diferentes módulos de gestão, cada um com funcionalidades específicas para manipulação dos dados.
 
-## Gestão de Clientes
+### Gestão de Clientes
 Módulo para gerenciar clientes cadastrados na plataforma.
 
-### Funcionalidades:
+#### Funcionalidades:
 Criar: Permite adicionar novos clientes.
 Deletar: Exclui clientes existentes.
 Editar: Atualiza informações dos clientes.
@@ -43,10 +58,10 @@ Não é permitido adicionar clientes com o mesmo documento.
 Apenas documentos válidos são aceitos (CPF e CNPJ).
 Os campos Nome Completo, Documento, CEP e Número são obrigatórios.
 
-## Gestão de Eventos
+### Gestão de Eventos
 Módulo para gerenciar eventos cadastrados e organizados pela Zventos.
 
-### Funcionalidades:
+#### Funcionalidades:
 Criar: Permite adicionar novos eventos.
 Deletar: Exclui eventos existentes.
 Editar: Atualiza informações dos eventos.
@@ -55,10 +70,10 @@ Regras de Validação:
 Não é permitido adicionar eventos com os mesmos valores para os campos: Título, Cliente, Tipo, CEP, Data de Início e Horário de Início.
 Os campos Tipo, Título, Cliente, CEP, Número, Público, Data Inicial, Horário Inicial, Data Final e Horário Final são obrigatórios.
 
-## Gestão de Materiais
+### Gestão de Materiais
 Módulo para gerenciar materiais utilizados nos eventos organizados.
 
-### Funcionalidades:
+#### Funcionalidades:
 Criar: Permite adicionar novos materiais.
 Deletar: Exclui materiais existentes.
 Pesquisar: Localiza materiais com base em critérios específicos.
@@ -67,10 +82,10 @@ Não é permitido adicionar materiais com o mesmo nome e categoria.
 O valor mínimo permitido para um material é R$ 0,01.
 Todos os campos são obrigatórios.
 
-## Gestão de Usuários
+### Gestão de Usuários
 Módulo para gerenciar usuários da plataforma, destinado a administradores.
 
-### Funcionalidades:
+#### Funcionalidades:
 Criar: Permite adicionar novos usuários.
 Deletar: Exclui usuários existentes.
 Pesquisar: Localiza usuários com base em critérios específicos.
@@ -87,6 +102,6 @@ Caso haja apenas um usuário cadastrado, ele não poderá ser excluído.
 - A landing page deve estar acessível para apresentação da empresa e captação de orçamentos.
 
 ## Requisitos Não Funcionais
-- Segurança: O sistema deve garantir que apenas usuários autorizados possam acessar a área logada.
-- Usabilidade: A interface do sistema deve ser intuitiva e fácil de usar.
-- Desempenho: O sistema deve suportar o gerenciamento de múltiplos registros sem perda significativa de desempenho.
+- **Segurança**: O sistema deve garantir que apenas usuários autorizados possam acessar a área logada.
+- **Usabilidade**: A interface do sistema deve ser intuitiva e fácil de usar.
+- **Desempenho**: O sistema deve suportar o gerenciamento de múltiplos registros sem perda significativa de desempenho.
