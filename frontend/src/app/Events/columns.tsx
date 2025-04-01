@@ -5,6 +5,7 @@ import { ArrowUp, ArrowDown, ArrowUpDown, Edit2Icon } from 'lucide-react'
 import DeleteEvent from './deleteEvent'
 import { useRouter } from 'next/router' // Import useRouter correctly
 import EditButton from './EditButton'
+import EditEvent from './EditEvent'
 
 export type Events = {
   id: string
@@ -149,7 +150,8 @@ export const eventsColumns: ColumnDef<Events>[] = [
   {
     id: 'edit',
     cell: ({ row }) => (
-      <EditButton eventId={row.original.id} /> // Use the EditButton component here
+      // <EditButton eventId={row.original.id} /> // Use the EditButton component here
+      <EditEvent eventId={row.original.id} />
     ),
   },
   {
