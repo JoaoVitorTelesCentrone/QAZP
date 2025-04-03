@@ -7,7 +7,7 @@ import RedirectIfLoggedIn from './components/RedirectIfLoggedIn';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Z-Eventos',
+  title: 'QAZP',
   description: 'Sua página de criação de eventos',
 };
 

@@ -374,6 +374,11 @@ const CreateEvent = () => {
     price: number,
   ) => {
     event.preventDefault()
+
+    if (!materialName || !materialId || quantity <= 0 || isNaN(quantity)) {
+      toast.error('Preencha todos os campos corretamente antes de adicionar o material.')
+      return;
+  }
     const newMaterialInsert: insertMaterialProps = {
       name: materialName,
       quantity,
