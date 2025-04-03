@@ -23,6 +23,7 @@ import { clientsAtom } from '@/app/CreateEvent/page'
 import { formatCurrency } from '@/functions/functions'
 import { eventIdAtom } from '../atoms/EventIdAtom'
 import { insertMaterialProps, MaterialType } from '../CreateEvent/utils'
+import { toast } from 'sonner'
 import { intl } from '@/i18n'
 
 type EditEventProps = {
@@ -73,6 +74,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
   const [endDateError, setEndDateError] = useState('')
   const [startTimeError, setStartTimeError] = useState('')
   const [endTimeError, setEndTimeError] = useState('')
+  const [type, setType] = useState('')
   const [isStartDateTouched, setIsStartDateTouched] = useState(false)
   const [isEndDateTouched, setIsEndDateTouched] = useState(false)
   const [isStartTimeTouched, setIsStartTimeTouched] = useState(false)
@@ -321,6 +323,11 @@ const EditEvent: React.FC<EditEventProps> = () => {
     price: number,
   ) => {
     event.preventDefault()
+
+    if (!materialName || !materialId || quantity <= 0 || isNaN(quantity)) {
+      toast.error('Preencha todos os campos corretamente antes de adicionar o material.')
+      return;
+  }
     const newMaterialInsert = {
       materialName: materialName,
       quantity: quantity,
@@ -361,6 +368,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
           setDistrict(event.district || '')
           setState(event.state || '')
           setCity(event.city || '')
+          setType(event.type)
           setEstimatedAudience(event.estimatedAudience || 0)
           setTotalAmount(event.totalAmount)
 
@@ -465,7 +473,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
         estimatedAudience,
         materials: sendMaterial,
         totalAmount: totalAmount,
-        type: 0,
+        type,
         status: 0,
       }
       console.log(body)
