@@ -240,3 +240,4 @@ node_modules/
 
 # bin
 /ZventsApi/bin
+/ZventsApi/obj
