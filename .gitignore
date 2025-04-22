@@ -241,4 +241,4 @@ node_modules/
 # bin
 /ZventsApi/bin
 /ZventsApi/obj
-/ZventsApi/ZventsApi.db*
+/ZventsApi/Zvents.db*
