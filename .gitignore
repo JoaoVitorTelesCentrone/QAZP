@@ -230,3 +230,13 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# bin
+/ZventsApi/bin
