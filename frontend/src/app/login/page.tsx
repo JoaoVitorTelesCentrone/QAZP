@@ -118,10 +118,9 @@ const LoginPage = () => {
                   required
                 />
                 <button
-                  data-testid="login-button"
-                  className="bg-primary text-secondary rounded-xl px-6 py-3 max-w-[150px] mx-auto"
+                  className="bg-primary text-secondary rounded-xl px-6 py-3 max-w-[150px] mx-auto" 
                   type="submit"
-                >
+                  >
                   {intl.formatMessage({
                     id: 'login.page.enter.button.label',
                   })}

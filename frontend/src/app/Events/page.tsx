@@ -79,6 +79,7 @@ const Page = () => {
               </h1>
             </div>
             <Button
+              data-testid='create-event-events-btn'
               icon={<TbCalendarPlus className="w-5 h-5" />}
               type="primary"
               className="mt-8"
@@ -86,13 +87,14 @@ const Page = () => {
             >
               <Link href="/CreateEvent" className="text-lg">
                 Criar evento
+                
               </Link>
             </Button>
           </div>
         </div>
         <div className="bg-tertiary">
           <div className="ml-56 mr-10">
-            <EventTable columns={eventsColumns} data={events} />
+            <EventTable columns={eventsColumns} data={events} data-testid={`data-testid-${eventsColumns}-${events}`} />
           </div>
         </div>
       </div>

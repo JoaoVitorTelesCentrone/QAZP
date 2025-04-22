@@ -572,6 +572,7 @@ const CreateEvent = () => {
               <div className="flex flex-col xl:w-72 relative">
                 <label className="font-bold block mb-2">Tipo</label>
                 <DropdownMenu
+                  data-testid="peteca"
                   onOpenChange={open => {
                     if (!open) {
                       if (!isTypeValid) {
@@ -585,6 +586,7 @@ const CreateEvent = () => {
                         ? 'border-red-500'
                         : 'border-gray-300'
                       }`}
+                    data-testid='type-create-event'
                     onBlur={() => setIsTouched(true)}
                   >
                     <h1
@@ -599,6 +601,7 @@ const CreateEvent = () => {
                       <React.Fragment key={index}>
                         <DropdownMenuItem
                           className="cursor-pointer my-1"
+                          data-testid={`type-event-option-${index}`}
                           onClick={() => {
                             getEventTypeNameAndIndex(
                               eventType.index,
@@ -628,6 +631,7 @@ const CreateEvent = () => {
                 )}
               </div>
               <div className="flex flex-col xl:w-[300px] relative">
+                
                 <label className="font-bold block mb-2">Título</label>
                 <Input
                   value={eventName}
@@ -636,6 +640,7 @@ const CreateEvent = () => {
                   placeholder="Digite o Título do evento"
                   className={`p-2 mb-4 bg-white text-gray-600 border rounded w-full border-gray-300 h-[40px] sm:w-[150px] md:w-[250px] lg:w-[500px] xl:w-[600px]  ${EventNameError ? 'border-red-500' : 'border-slate-300'}`}
                   required
+                  data-testid="event-create-title-form"
                 />
                 {EventNameError && (
                   <div
@@ -682,6 +687,7 @@ const CreateEvent = () => {
                         })}`)
                       }
                     }}
+                    data-testid="client-create-event"
                   >
                     <span>{clientName || 'Cliente'}</span>
                     <ChevronDown className="h-6 w-6" />
@@ -700,6 +706,7 @@ const CreateEvent = () => {
                             setIsClientTouched(false)
                             setClientNameError('')
                           }}
+                          data-testid="client-event-option"
                         >
                           {client.name}
                         </DropdownMenuItem>
@@ -768,6 +775,7 @@ const CreateEvent = () => {
                     placeholder="Digite o CEP"
                     className={`p-2 mb-4 border rounded w-full ${zipCodeError ? 'border-red-500' : 'border-slate-300'}`}
                     required
+                    data-testid="cep-create-event-form"
                   />
                   {zipCodeError && (
                     <div
@@ -786,6 +794,7 @@ const CreateEvent = () => {
                 <SearchIcon
                   className="p-2 h-12 w-12 cursor-pointer mt-3"
                   onClick={handleSearchClick}
+                  data-testid="search-createEvent"
                 />
               </div>
               <div className="flex flex-col mr-3 mb-4 relative">
@@ -821,6 +830,7 @@ const CreateEvent = () => {
                   placeholder="Número"
                   className={`p-2 mb-4 border rounded w-full ${addressNumberError ? 'border-red-500' : 'border-slate-300'}`}
                   required
+                  data-testid="numero-createEvent"
                 />
 
                 {addressNumberError && (
@@ -934,6 +944,7 @@ const CreateEvent = () => {
                   placeholder="Público estimado"
                   className={`p-2 mb-4 border rounded w-full ${estimatedAudienceError ? 'border-red-500' : 'border-slate-300'}`}
                   required
+                  data-testid="publico-createEvent"
                 />
                 {estimatedAudienceError && (
                   <div
@@ -984,6 +995,7 @@ const CreateEvent = () => {
                   size="large"
                   className={`bg-white text-gray-600 border ${startDateError ? 'border-red-500' : 'border-gray-300'} rounded-xl`}
                   placeholder="Selecione uma data"
+                  data-testid="inicialDate-event-form"
                 />
                 {startDateError && (
                   <span
@@ -1023,6 +1035,7 @@ const CreateEvent = () => {
                   size="large"
                   className={`bg-white text-gray-600 border ${startTimeError ? 'border-red-500' : 'border-gray-300'} rounded-xl`}
                   placeholder="Selecione um horário"
+                  data-testid="inicialTimePicker-createEvent"
                 />
                 {startTimeError && (
                   <span
@@ -1064,6 +1077,7 @@ const CreateEvent = () => {
                   size="large"
                   className={`bg-white text-gray-600 border ${endDateError ? 'border-red-500' : 'border-gray-300'} rounded-xl`}
                   placeholder="Selecione uma data"
+                  data-testid="finalDate-createEvent"
                 />
                 {endDateError && (
                   <span
@@ -1103,6 +1117,7 @@ const CreateEvent = () => {
                   size="large"
                   className={`bg-white text-gray-600 border ${endTimeError ? 'border-red-500' : 'border-gray-300'} rounded-xl`}
                   placeholder="Selecione um horário"
+                  data-testid="finalTimePicker-createEvent"
                 />
                 {endTimeError && (
                   <span
@@ -1126,9 +1141,13 @@ const CreateEvent = () => {
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[40px]  bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                     <span>{selectedCategory || 'Categoria'}</span>
-                    <ChevronDown className="h-6 w-6" />
+                    
+                    <ChevronDown className="h-6 w-6" data-testid="category-createEvent" />
+                    
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-white border border-gray-300 rounded w-72 xl:w-96 max-h-48 overflow-y-auto">
+                  <DropdownMenuContent className="bg-white border border-gray-300 rounded w-72 xl:w-96 max-h-48 overflow-y-auto"
+                    data-testid="category-createEvent-option"
+                  >
                     {MaterialCategory.map((category, index) => (
                       <div key={index}>
                         <DropdownMenuItem
@@ -1140,6 +1159,7 @@ const CreateEvent = () => {
                         </DropdownMenuItem>
                         <hr className="my-1 border-gray-300" />
                       </div>
+                      
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -1149,7 +1169,7 @@ const CreateEvent = () => {
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                     <span>{selectedMaterial || 'Material'}</span>
-                    <ChevronDown className="h-6 w-6" />
+                    <ChevronDown className="h-6 w-6" data-testid="material-createEvent-trigger"/>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white border border-gray-300 rounded w-96 max-h-48 overflow-y-auto">
                     {materials.map((material, index) => (
@@ -1163,6 +1183,7 @@ const CreateEvent = () => {
                               material.price,
                             )
                           }
+                          data-testid="material-createEvent-option"
                         >
                           {material.name}
                         </DropdownMenuItem>
@@ -1179,6 +1200,7 @@ const CreateEvent = () => {
                   onChange={handleMaterialQuantityChange}
                   placeholder="Quantidade"
                   className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 xl:w-56 "
+                  data-testid="quantity-createEvent"
                 />
               </div>
               <div className="flex flex-col">
@@ -1194,6 +1216,7 @@ const CreateEvent = () => {
                     )
                   }
                   className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] mt-6 xl:w-24"
+                  data-testid="insertMaterial-createEvent"
                 >
                   <PlusCircleIcon className="h-8 w-8" />
                 </Button>
@@ -1220,6 +1243,7 @@ const CreateEvent = () => {
             <Button
               onClick={postEvent}
               className="bg-primary mt-4 font-bold text-tertiary w-[20%]"
+              data-testid="createEvent-form-btn"
             >
               Criar evento
             </Button>

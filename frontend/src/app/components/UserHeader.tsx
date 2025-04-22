@@ -129,6 +129,7 @@ const UserSideMenu = () => {
               <Link
                 href="/Events"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
+                data-testid="events-nav-btn"
               >
                 {intl.formatMessage({
                   id: 'side.nav.events.option.label',

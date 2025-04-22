@@ -47,6 +47,7 @@ const DeleteEventModal: React.FC<DeleteEventModalProps> = ({
           type="primary"
           loading={loading}
           onClick={handleConfirm}
+          data-testid="confirm-delete-event-modal-btn"
         >
           Confirm
         </Button>,

@@ -165,6 +165,7 @@ const LoginModal = ({
                 id="username"
                 value={username}
                 onBlur={() => handleBlur('name')}
+                data-testid="username-login-form"
               />
               {usernameError && (
                 <div
@@ -196,6 +197,7 @@ const LoginModal = ({
                 className={`p-2 mb-4 border rounded w-full ${passwordError ? 'border-red-500' : 'border-slate-300'}`}
                 id="password"
                 value={password}
+                data-testid="password-login-form"
               />
               {passwordError && (
                 <div
@@ -219,7 +221,7 @@ const LoginModal = ({
               </div>
             </div>
             <Button
-              data-testid="login-button"
+              data-testid="enter-form-btn"
               className="bg-primary text-secondary w-full mt-4"
               htmlType="submit"
             >
