@@ -11,4 +11,4 @@ describe('Login', () => {
     cy.get('[data-content=""] > div').should('be.visible').should('have.text', 'Bem-vindo, Administrador!')
     cy.url().should('equal', 'http://localhost:3000/dashboard')
   })
-})
+}) 
