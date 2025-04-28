@@ -1,14 +1,34 @@
+import { LoginPage } from '../../support/pageObjects/LoginPage';
+import { Toast } from '../../support/pageObjects/Components';
+import { DashboardPage } from '../../support/pageObjects/DashboardsPage';
+
+const dashboardPage: DashboardPage = new DashboardPage();
+const loginPage: LoginPage = new LoginPage();
+const toast: Toast = new Toast();
+
+beforeEach(() => {
+  loginPage.visitForm()
+})
+
 describe('Login', () => {
   it('Should login on QAZP successfully', () => {
-    cy.visit('http://localhost:3000/')
-    cy.get('.p-8 > .ant-btn').click()
-
-    cy.get('[id="username"]').type('admin')
-    cy.get('[id="password"]').type('123')
-    cy.get('[data-testid="login-button"]').click()
-
-    cy.get('[class="ant-modal-title"]').should('not.exist')
-    cy.get('[data-content=""] > div').should('be.visible').should('have.text', 'Bem-vindo, Administrador!')
-    cy.url().should('equal', 'http://localhost:3000/dashboard')
+    loginPage.submit('admin', '123')
+    dashboardPage.isLoggedIn()
   })
-}) 
+
+  it('should not login in with incorrect username', () => {
+
+    const message: string = 'Usuário ou senha incorretos. Verifique as informações e tente novamente'
+    loginPage.submit('adminn', '123')
+    toast.haveText(message)
+  })
+
+  it('should not login in with incorrect password', () => {
+
+    const message: string = 'Usuário ou senha incorretos. Verifique as informações e tente novamente'
+    loginPage.submit('admin', '1234')
+    toast.haveText(message)
+  })
+})
+
+
