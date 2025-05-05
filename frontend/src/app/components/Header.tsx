@@ -70,6 +70,7 @@ const Header = () => {
             </Link>
           </ul>
           <Button type="primary"
+            data-testid="login-button"
             ghost
             shape="round"
             onClick={handleOpenLoginModal}>

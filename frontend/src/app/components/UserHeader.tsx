@@ -97,6 +97,7 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
+                data-testid='nav-orcamento-page'
                 href="/quote"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >

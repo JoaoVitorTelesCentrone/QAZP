@@ -221,6 +221,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           })}
           </label>
           <Input
+            data-testid="quote-modal-name"
             value={fullName}
             placeholder={intl.formatMessage({
               id: 'create.quote.page.name.placeholder',
@@ -250,6 +251,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           })}
           </label>
           <Input
+            data-testid="quote-modal-email"
             value={email}
             placeholder={intl.formatMessage({
               id: 'create.quote.page.email.placeholder',
@@ -279,6 +281,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             id: 'create.quote.page.phone.field',
           })}</label>
           <Input
+            data-testid="quote-modal-phone"
             value={phoneNumber}
             placeholder={intl.formatMessage({
               id: 'create.quote.page.phone.placeholder',
@@ -318,6 +321,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             }}
           >
             <DropdownMenuTrigger
+              data-testid="quote-modal-type"
               className={`flex border bg-white justify-between px-2 py-1 rounded h-10 ${!isCategoryValid && isTouched
                 ? 'border-red-500'
                 : 'border-gray-300'
@@ -336,6 +340,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
               {EventType.map((category, index) => (
                 <React.Fragment key={index}>
                   <DropdownMenuItem
+                    data-testid="quote-modal-type-dropdown"
                     className="cursor-pointer my-1"
                     onClick={() => {
                       getQuoteNameAndIndex(category.name, category.index)
@@ -368,6 +373,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           })}
           </label>
           <Input
+            data-testid="quote-modal-estimated-audience"
             value={estimatedAudience}
             placeholder={intl.formatMessage({
               id: 'create.quote.page.estimated.audience.placeholder',
@@ -392,6 +398,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           )}
         </div>
         <Button
+          data-testid="quote-modal-button"
           className="bg-primary text-secondary w-full mt-4"
           type="primary"
           onClick={() => quoteModelRequest()}

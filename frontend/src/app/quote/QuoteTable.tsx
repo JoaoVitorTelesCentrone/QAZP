@@ -96,7 +96,7 @@ export function QuoteTable<TData, TValue>({
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map(cell => (
-                  <TableCell className="text-center" key={cell.id}>
+                  <TableCell className="text-center" key={cell.id} data-testid={`quote-table-${cell.id}`}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

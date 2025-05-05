@@ -10,5 +10,8 @@
     "react-spinners": "^0.14.1",
     "shadcn-ui": "^0.2.3",
     "styled-components": "^6.1.8"
+  },
+  "devDependencies": {
+    "cypress": "^14.3.2"
   }
 }
