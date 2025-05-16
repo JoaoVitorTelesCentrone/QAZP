@@ -87,6 +87,7 @@ const UserSideMenu = () => {
           <ul className="flex flex-col space-y-4">
             <li>
               <Link
+                data-testid="dashboard-nav-btn"
                 href="/dashboard"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
@@ -97,6 +98,7 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
+                data-testid="quote-nav-btn"
                 href="/quote"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
@@ -107,6 +109,7 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
+                data-testid="clients-nav-btn"
                 href="/clients"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
@@ -117,6 +120,7 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
+                data-testid="materials-nav-btn"
                 href="/Materials"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
@@ -127,9 +131,9 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
+                data-testid="events-nav-btn"
                 href="/Events"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
-                data-testid="events-nav-btn"
               >
                 {intl.formatMessage({
                   id: 'side.nav.events.option.label',
@@ -138,6 +142,7 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
+                data-testid="users-nav-btn"
                 href="/Users"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
@@ -157,7 +162,9 @@ const UserSideMenu = () => {
           onClick={handleLogout}
         >
           <LogOut />
-          <span>{intl.formatMessage({
+          <span
+            data-testid="logout-button"
+          >{intl.formatMessage({
             id: 'side.nav.logout.button.label',
           })}
           </span>

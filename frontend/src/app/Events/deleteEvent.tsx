@@ -19,7 +19,10 @@ const DeleteEvent: React.FC<DeleteEventProps> = ({ eventId }) => {
 
   return (
     <>
-      <TrashIcon className="cursor-pointer w-4 h-4" onClick={showModal} />
+      <TrashIcon 
+        className="cursor-pointer w-4 h-4" 
+        onClick={showModal} 
+      />
       <DeleteEventModal
         isVisible={isModalVisible}
         onClose={closeModal}

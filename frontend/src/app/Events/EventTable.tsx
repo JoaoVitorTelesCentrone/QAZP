@@ -76,7 +76,7 @@ export function EventTable<TData, TValue>({
                   <TableHead
                     key={header.id}
                     className="py-2 text-secondary-foreground text-center"
-                    data-testid={`data-testid-${header.id}"`}
+                    data-testid={`table-header-event-${header.id}"`}
                   >
                     {header.isPlaceholder
                       ? null
@@ -98,7 +98,9 @@ export function EventTable<TData, TValue>({
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map(cell => (
-                  <TableCell className="text-center" key={cell.id}>
+                  <TableCell className="text-center" key={cell.id}
+                  data-testid={`event-table-row-${cell.id}`}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

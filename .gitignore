@@ -242,3 +242,4 @@ node_modules/
 /ZventsApi/bin
 /ZventsApi/obj
 /ZventsApi/Zvents.db*
+/cypress/fixtures/*

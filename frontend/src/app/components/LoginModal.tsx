@@ -137,6 +137,7 @@ const LoginModal = ({
     <>
       <Toaster richColors />
       <Modal
+        data-testid="login-modal"
         open={isVisible}
         onCancel={onCancel}
         footer={null}
@@ -165,7 +166,7 @@ const LoginModal = ({
                 id="username"
                 value={username}
                 onBlur={() => handleBlur('name')}
-                data-testid="username-login-form"
+                data-testid="username-loginInput-form"
               />
               {usernameError && (
                 <div
@@ -188,6 +189,7 @@ const LoginModal = ({
                 })}
               </label>
               <Input
+                data-testid="password-loginInput-form"
                 placeholder={intl.formatMessage({
                   id: 'login.page.password.field.placeholder',
                 })}
@@ -197,7 +199,6 @@ const LoginModal = ({
                 className={`p-2 mb-4 border rounded w-full ${passwordError ? 'border-red-500' : 'border-slate-300'}`}
                 id="password"
                 value={password}
-                data-testid="password-login-form"
               />
               {passwordError && (
                 <div
@@ -221,7 +222,7 @@ const LoginModal = ({
               </div>
             </div>
             <Button
-              data-testid="enter-form-btn"
+              data-testid="enter-login-form-btn"
               className="bg-primary text-secondary w-full mt-4"
               htmlType="submit"
             >

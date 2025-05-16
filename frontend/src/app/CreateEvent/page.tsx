@@ -696,6 +696,7 @@ const CreateEvent = () => {
                     {clients.map((client, index) => (
                       <div key={index}>
                         <DropdownMenuItem
+                          data-testid={`client-create-event-option-${index}`}   
                           onClick={() => {
                             getClientValues(
                               client.name,
@@ -705,8 +706,7 @@ const CreateEvent = () => {
                             )
                             setIsClientTouched(false)
                             setClientNameError('')
-                          }}
-                          data-testid="client-event-option"
+                          }}                
                         >
                           {client.name}
                         </DropdownMenuItem>
@@ -1146,11 +1146,11 @@ const CreateEvent = () => {
                     
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white border border-gray-300 rounded w-72 xl:w-96 max-h-48 overflow-y-auto"
-                    data-testid="category-createEvent-option"
                   >
                     {MaterialCategory.map((category, index) => (
                       <div key={index}>
                         <DropdownMenuItem
+                          data-testid={`category-createEvent-option-${index}`}
                           onClick={() =>
                             getMaterialsByCategory(category.name, index)
                           }
@@ -1175,6 +1175,7 @@ const CreateEvent = () => {
                     {materials.map((material, index) => (
                       <div key={index}>
                         <DropdownMenuItem
+                          data-testid={`material-createEvent-option-${index}`}
                           onClick={() =>
                             getMaterialValues(
                               material.id,
@@ -1183,7 +1184,6 @@ const CreateEvent = () => {
                               material.price,
                             )
                           }
-                          data-testid="material-createEvent-option"
                         >
                           {material.name}
                         </DropdownMenuItem>

@@ -94,7 +94,11 @@ const Page = () => {
         </div>
         <div className="bg-tertiary">
           <div className="ml-56 mr-10">
-            <EventTable columns={eventsColumns} data={events} data-testid={`data-testid-${eventsColumns}-${events}`} />
+            <EventTable 
+              data-testid={`event-table-${eventsColumns}-${events}`}
+              columns={eventsColumns} 
+              data={events} 
+             />
           </div>
         </div>
       </div>
