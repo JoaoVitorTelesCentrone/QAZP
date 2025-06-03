@@ -105,7 +105,11 @@ export function UsersTable<TData, TValue>({
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map(cell => (
-                  <TableCell className="text-center" key={cell.id}>
+                  <TableCell 
+                    className="text-center" 
+                    key={cell.id}
+                    data-testid={`user-index-${cell.id}`}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

@@ -214,6 +214,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
         footer={null}
         title={intl.formatMessage({ id: 'create.quote.page.title' })}
         centered
+        data-testid='quote-modal'
       >
         <div className="flex flex-col relative mb-4">
           <label className="text-lg font-bold">{intl.formatMessage({
@@ -221,6 +222,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           })}
           </label>
           <Input
+            data-testid='quote-inputName'
             value={fullName}
             placeholder={intl.formatMessage({
               id: 'create.quote.page.name.placeholder',
@@ -250,6 +252,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           })}
           </label>
           <Input
+            data-testid='quote-inputEmail'
             value={email}
             placeholder={intl.formatMessage({
               id: 'create.quote.page.email.placeholder',
@@ -279,6 +282,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             id: 'create.quote.page.phone.field',
           })}</label>
           <Input
+            data-testid='quote-inputPhone'
             value={phoneNumber}
             placeholder={intl.formatMessage({
               id: 'create.quote.page.phone.placeholder',
@@ -318,6 +322,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             }}
           >
             <DropdownMenuTrigger
+              data-testid='quote-type-trigger'
               className={`flex border bg-white justify-between px-2 py-1 rounded h-10 ${!isCategoryValid && isTouched
                 ? 'border-red-500'
                 : 'border-gray-300'
@@ -330,6 +335,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
               <ChevronDown className="h-4 w-4 mt-2" />
             </DropdownMenuTrigger>
             <DropdownMenuContent
+              data-testid='quote-type-menu'
               style={{ zIndex: 1000 }}
               className="border-2 p-2 bg-white my-1 rounded-xl w-96"
             >
@@ -341,6 +347,8 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
                       getQuoteNameAndIndex(category.name, category.index)
                       setIsTouched(false)
                     }}
+                    // data-testid={`quote-type-${index}`}
+                    data-testid='quote-type-item'
                   >
                     {category.name}
                   </DropdownMenuItem>
@@ -368,6 +376,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           })}
           </label>
           <Input
+            data-testid='quote-estimated-publicInput'
             value={estimatedAudience}
             placeholder={intl.formatMessage({
               id: 'create.quote.page.estimated.audience.placeholder',
@@ -392,6 +401,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           )}
         </div>
         <Button
+          data-testid='quote-modal-button'
           className="bg-primary text-secondary w-full mt-4"
           type="primary"
           onClick={() => quoteModelRequest()}

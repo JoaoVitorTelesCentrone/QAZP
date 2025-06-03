@@ -136,6 +136,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
   return (
     <div>
       <Modal
+        data-testid='create-user-modal'
         title={intl.formatMessage({ id: "create.user.modal.title" })}
         open={isVisible}
         onCancel={onClose}
@@ -146,6 +147,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
             <div className="mx-auto relative">
               <h1>{intl.formatMessage({ id: "create.user.name.label" })}</h1>
               <Input
+                data-testid='create-user-name-input'
                 onChange={e => setName(e.target.value)}
                 onBlur={() => handleBlur('name')}
                 required
@@ -170,6 +172,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
             <div className="mx-auto w-full mt-6 relative">
               <h1>{intl.formatMessage({ id: "create.user.username.label" })}</h1>
               <Input
+                data-testid='create-user-input'
                 onChange={e => setUsername(e.target.value)}
                 onBlur={() => handleBlur('username')}
                 required
@@ -196,6 +199,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
               <h1>{intl.formatMessage({ id: "create.user.password.label" })}</h1>
               <div className="flex items-center">
                 <Input
+                  data-testid='create-user-password-input'
                   type={showPassword1 ? 'text' : 'password'}
                   onChange={e => setPassword(e.target.value)}
                   onBlur={() => handleBlur('password')}
@@ -231,6 +235,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
               <h1>{intl.formatMessage({ id: "create.user.confirmPassword.label" })}</h1>
               <div className="flex items-center">
                 <Input
+                  data-testid='create-user-confirm-password-input'
                   type={showPassword2 ? 'text' : 'password'}
                   onChange={e => setConfirmPassword(e.target.value)}
                   onBlur={() => handleBlur('confirmedPassword')}
@@ -269,6 +274,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
             )}
             <div className="flex justify-end mt-3">
               <Button
+                data-testid='create-user-btn'
                 className="bg-primary text-white w-[30%]"
                 onClick={() => verifyCreation()}
               >

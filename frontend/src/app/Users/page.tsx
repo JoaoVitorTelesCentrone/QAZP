@@ -81,6 +81,7 @@ const Users = () => {
                   </h1>
                 </div>
                 <Button
+                  data-testid='create-user-openModal-btn'
                   icon={<FaUserPlus className="w-5 h-5" />}
                   type="primary"
                   className="mt-8"

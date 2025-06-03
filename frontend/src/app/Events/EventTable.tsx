@@ -76,7 +76,7 @@ export function EventTable<TData, TValue>({
                   <TableHead
                     key={header.id}
                     className="py-2 text-secondary-foreground text-center"
-                    data-testid={`table-header-event-${header.id}"`}
+                    data-testid={`table-header-event-${header.id}`}
                   >
                     {header.isPlaceholder
                       ? null

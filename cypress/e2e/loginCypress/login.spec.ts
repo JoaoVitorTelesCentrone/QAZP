@@ -1,3 +1,5 @@
+import loginModalPageObject from "../../page-object/modals/login-modal.page-object";
+
 describe('Login', () => 
 {
   it('Should login on QAZP successfully', () => 
@@ -5,9 +7,10 @@ describe('Login', () =>
     //act
     cy.visit('http://localhost:3000/');
     cy.clickOn('login-button');
-    cy.writeInputText('username-loginInput-form', 'admin');
-    cy.writeInputText('password-loginInput-form', '123');
-    cy.clickOn('enter-login-form-btn');
+
+    const loginModal = new loginModalPageObject();
+    // loginModal.login();
+    loginModal.loginWithParameters('admin', '123');
 
     //assert
     cy.getByTestId('login-modal').should('not.exist');

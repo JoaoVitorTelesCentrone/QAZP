@@ -69,7 +69,9 @@ export function QuoteTable<TData, TValue>({
       <Table className="border-2 border-cyan-700">
         <TableHeader className="bg-cyan-700 text-gray-100">
           {table.getHeaderGroups().map(headerGroup => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id}
+              
+            >
               {headerGroup.headers.map(header => {
                 return (
                   <TableHead
@@ -82,6 +84,7 @@ export function QuoteTable<TData, TValue>({
                           header.column.columnDef.header,
                           header.getContext(),
                         )}
+                    
                   </TableHead>
                 )
               })}
@@ -96,7 +99,11 @@ export function QuoteTable<TData, TValue>({
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map(cell => (
-                  <TableCell className="text-center" key={cell.id}>
+                  <TableCell 
+                    data-testid={`quote-table-row-${cell.id}`}
+                    className="text-center" 
+                    key={cell.id}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
