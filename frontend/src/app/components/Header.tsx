@@ -72,6 +72,7 @@ const Header = () => {
           <Button type="primary"
             ghost
             shape="round"
+            data-testid="header-login-button"
             onClick={handleOpenLoginModal}>
             {intl.formatMessage({
               id: 'header.login.button.label',

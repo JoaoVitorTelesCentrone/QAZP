@@ -983,3 +983,6 @@ C:\CYPRESS\QAZP\ZventsApi\obj\Debug\net8.0\refint\ZventsApi.dll
 C:\CYPRESS\QAZP\ZventsApi\obj\Debug\net8.0\ZventsApi.pdb
 C:\CYPRESS\QAZP\ZventsApi\obj\Debug\net8.0\ZventsApi.genruntimeconfig.cache
 C:\CYPRESS\QAZP\ZventsApi\obj\Debug\net8.0\ref\ZventsApi.dll
+C:\CYPRESS\QAZP\ZventsApi\bin\Debug\net8.0\ZventsApi.staticwebassets.endpoints.json
+C:\CYPRESS\QAZP\ZventsApi\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\CYPRESS\QAZP\ZventsApi\obj\Debug\net8.0\staticwebassets\msbuild.ZventsApi.Microsoft.AspNetCore.StaticWebAssetEndpoints.props

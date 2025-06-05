@@ -29,6 +29,14 @@ describe('Login', () => {
     loginPage.submit('admin', '1234')
     toast.haveText(message)
   })
+
+  it('should not login in if no fields are filled in', () => {
+
+    const message: string = 'Campo obrigatório *'
+    loginPage.submit('', '')
+    loginPage.requiredFieldsError('required-username-field-error', message)
+    loginPage.requiredFieldsError('required-password-field-error', message)
+  })
 })
 
 

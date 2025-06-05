@@ -163,11 +163,13 @@ const LoginModal = ({
                 className={`p-2 mb-4 border rounded w-full ${usernameError ? 'border-red-500' : 'border-slate-300'}`}
                 type="text"
                 id="username"
+                data-testid="login-modal-username-field"
                 value={username}
                 onBlur={() => handleBlur('name')}
               />
               {usernameError && (
                 <div
+                data-testid="required-username-field-error"
                   style={{
                     color: 'red',
                     position: 'absolute',
@@ -195,10 +197,12 @@ const LoginModal = ({
                 onBlur={() => handleBlur('password')}
                 className={`p-2 mb-4 border rounded w-full ${passwordError ? 'border-red-500' : 'border-slate-300'}`}
                 id="password"
+                data-testid="login-modal-password-field"
                 value={password}
               />
               {passwordError && (
                 <div
+                 data-testid="required-password-field-error"
                   style={{
                     color: 'red',
                     position: 'absolute',
