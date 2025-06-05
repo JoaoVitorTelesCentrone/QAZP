@@ -26,7 +26,7 @@ describe('Login', () => {
   it('should not login in with incorrect password', () => {
 
     const message: string = 'Usuário ou senha incorretos. Verifique as informações e tente novamente'
-    loginPage.submit('admin', '1234')
+    loginPage.submit('admin', '12345')
     toast.haveText(message)
   })
 
