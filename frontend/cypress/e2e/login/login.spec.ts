@@ -1,11 +1,11 @@
 describe('Login', () => {
   it('Should Login on QAZP successfully', () => {
     cy.visit('http://localhost:3000/')
-    cy.get('.p-8 > .ant-btn').click()
+    cy.clickOn('header-login-button')
 
-    cy.get('[id="username"]').type('admin')
-    cy.get('[id="password"]').type('123')
-    cy.get('[data-testid="login-button"]').click()
+    cy.writeInputText('login-modal-username-field', 'admin')
+    cy.writeInputText('login-modal-password-field', '123')
+    cy.clickOn('data-testid="login-button')
 
     cy.get('[class="ant-modal-title"]').should('not.exist')
     cy.get('[data-content=""] > div').should('be.visible').should('have.text', 'Bem-vindo, Administrador!')
