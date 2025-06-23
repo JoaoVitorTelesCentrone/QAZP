@@ -28,11 +28,11 @@ function composeBaseId(values: Array<string>): string
 
 Cypress.Commands.add('login', (username: string, password: string) => 
 {
-    cy.visit('http://localhost:3000/');
-    cy.clickOn('login-button');
-    cy.writeInputText('username-loginInput-form', username);
-    cy.writeInputText('password-loginInput-form', password);
-    cy.clickOn('enter-login-form-btn');
+    cy.visit('http://localhost:3000/')
+        .clickOn('login-button')
+        .writeInputText('username-loginInput-form', username)
+        .writeInputText('password-loginInput-form', password)
+        .clickOn('enter-login-form-btn');
 });
 
 Cypress.Commands.add('getSessionStorage', (key) => 

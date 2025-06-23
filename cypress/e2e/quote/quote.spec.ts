@@ -10,7 +10,7 @@ describe('Quote feature', () =>
         cy.visit('http://localhost:3000/');
     })
     
-    it('Create a new quote without being logged', () => {
+    it('Create and validate a quote was created', () => {
         //When
         const quoteModal = new quoteModalPageObject();
         const loginModal = new loginModalPageObject();
