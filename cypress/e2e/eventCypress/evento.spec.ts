@@ -9,13 +9,14 @@ describe('Eventos', () =>
 
     beforeEach(() => 
     {
+        //Given
         cy.login('admin', '123');
         navigateToEvents();
     });
 
     it('Should create an event successfully', () => 
     {      
-        //Act
+        //When
         cy.clickOn('type-create-event');
         cy.clickOn('type-event-option-0');
         cy.getByTestId('event-create-title-form')
@@ -51,16 +52,22 @@ describe('Eventos', () =>
         cy.clickOn('insertMaterial-createEvent');
         cy.clickOn('createEvent-form-btn');
 
-        //Assert
+        //Then
         cy.url().should('eq', 'http://localhost:3000/Events');
-        //toast needed
-        cy.get('[data-testid="event-table-row-0_name"]').should('eq', 'casamento1');
-        // cy.getByTestId('event-table-row-0_type').should('eq', 'Casamento');
-        // cy.getByTestId('event-table-row-0_clientName').should('equal', 'Vaas Montenegro');
-        // cy.getByTestId('event-table-row-0_startDate').should('equal', '05/05/2027');
-        // cy.getByTestId('event-table-row-0_endDate').should('equal', '06/05/2027');
-        // cy.getByTestId('event-table-row-0_estimatedAudience').should('equal', '200');
-        // cy.getByTestId('event-table-row-0_totalAmount').should('equal', '50,00')
+        cy.getByTestId('create-event-toast-success')
+            .should('be.visible')
+            .should('have.text', 'Evento criado com sucesso');
+        cy.getByTestId('event-table-row-0_name').should('have.text', 'casamento1');
+        cy.getByTestId('event-table-row-0_type').should('have.text', 'Casamento');
+        cy.getByTestId('event-table-row-0_clientName').should('have.text', 'Vaas Montenegro');
+        cy.getByTestId('event-table-row-0_startDate').should('have.text', '05/05/2027');
+        cy.getByTestId('event-table-row-0_endDate').should('have.text', '06/05/2027');
+        cy.getByTestId('event-table-row-0_estimatedAudience').should('have.text', '200');
+        cy.getByTestId('event-table-row-0_totalAmount').should('contain.text', '50,00');
+        // cy.getByTestId('event-table-row-0_totalAmount')
+        //     .invoke('text').then((text) => {
+        //         expect(text.replace(/\u00a0/g, ' ')).equal('R$ 50,00');
+        //     })
     });
 
     afterEach(() => 

@@ -378,7 +378,7 @@ const CreateEvent = () => {
     if (!materialName || !materialId || quantity <= 0 || isNaN(quantity)) {
       toast.error('Preencha todos os campos corretamente antes de adicionar o material.')
       return;
-  }
+    }
     const newMaterialInsert: insertMaterialProps = {
       name: materialName,
       quantity,
@@ -502,7 +502,11 @@ const CreateEvent = () => {
     }
     try {
       await axios.post('http://localhost:5196/api/Event', body)
-      toast.success('Evento criado com sucesso')
+      toast.success(<div
+        data-testid='create-event-toast-success'
+      >
+        Evento criado com sucesso
+      </div>)
       router.push('/Events')
     } catch (error) {
       toast.error('Erro ao criar evento')
@@ -583,8 +587,8 @@ const CreateEvent = () => {
                 >
                   <DropdownMenuTrigger
                     className={`flex border border-gray-300 h-[40px] bg-white items-center justify-between px-4 py-1 font-bold rounded-xl mr-6 ${!isTypeValid && isTouched
-                        ? 'border-red-500'
-                        : 'border-gray-300'
+                      ? 'border-red-500'
+                      : 'border-gray-300'
                       }`}
                     data-testid='type-create-event'
                     onBlur={() => setIsTouched(true)}
@@ -631,7 +635,7 @@ const CreateEvent = () => {
                 )}
               </div>
               <div className="flex flex-col xl:w-[300px] relative">
-                
+
                 <label className="font-bold block mb-2">Título</label>
                 <Input
                   value={eventName}
@@ -651,6 +655,7 @@ const CreateEvent = () => {
                       left: 0,
                       marginTop: -15,
                     }}
+                    data-testid='create-event-title-error'
                   >
                     {EventNameError}
                   </div>
@@ -696,7 +701,7 @@ const CreateEvent = () => {
                     {clients.map((client, index) => (
                       <div key={index}>
                         <DropdownMenuItem
-                          data-testid={`client-create-event-option-${index}`}   
+                          data-testid={`client-create-event-option-${index}`}
                           onClick={() => {
                             getClientValues(
                               client.name,
@@ -706,7 +711,7 @@ const CreateEvent = () => {
                             )
                             setIsClientTouched(false)
                             setClientNameError('')
-                          }}                
+                          }}
                         >
                           {client.name}
                         </DropdownMenuItem>
@@ -1141,9 +1146,9 @@ const CreateEvent = () => {
                 <DropdownMenu>
                   <DropdownMenuTrigger className="border border-gray-300 h-[40px]  bg-white rounded-xl flex items-center justify-between px-4 font-bold">
                     <span>{selectedCategory || 'Categoria'}</span>
-                    
+
                     <ChevronDown className="h-6 w-6" data-testid="category-createEvent" />
-                    
+
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white border border-gray-300 rounded w-72 xl:w-96 max-h-48 overflow-y-auto"
                   >
@@ -1159,7 +1164,7 @@ const CreateEvent = () => {
                         </DropdownMenuItem>
                         <hr className="my-1 border-gray-300" />
                       </div>
-                      
+
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>

@@ -100,7 +100,10 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
       const response = await axios.post(API_URL, quote);
 
       if (response.status === 201) {
-        toast.success(intl.formatMessage({ id: 'create.quote.success.message' }));
+        toast.success(
+          <div data-testid='toast-quote-success'>
+            {intl.formatMessage({ id: 'create.quote.success.message' })}
+          </div>);
         onClose();
         resetForm();
       }

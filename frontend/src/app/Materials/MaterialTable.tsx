@@ -89,12 +89,17 @@ export function MaterialTable<TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map(row => (
-              <TableRow className='border-cyan-700'
+              <TableRow 
+                className='border-cyan-700'
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map(cell => (
-                  <TableCell className="text-center" key={cell.id}>
+                  <TableCell 
+                    className="text-center" 
+                    key={cell.id}
+                    data-testid={`material-table-row-${cell.id}`}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

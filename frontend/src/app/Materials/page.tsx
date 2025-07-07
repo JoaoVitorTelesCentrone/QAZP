@@ -87,6 +87,7 @@ const Materials = () => {
                   </h1>
                 </div>
                 <Button
+                  data-testid='create-material-btn'
                   icon={<TbBasketPlus className="w-5 h-5 " />}
                   type="primary"
                   className="mt-8"
@@ -99,7 +100,11 @@ const Materials = () => {
             </div>
             <div className="bg-tertiary">
             <div className="ml-56 mr-10">
-              <MaterialTable columns={columns} data={materials} />
+              <MaterialTable 
+                data-testid={`material-table-${columns}-${materials}`}
+                columns={columns} 
+                data={materials}
+               />
             </div>
           </div>
           </div>

@@ -20,6 +20,10 @@ export default class quoteModalPageObject
         return cy.getByTestId('quote-estimated-publicInput');
     }
 
+    private get quoteSuccessToast (){
+        return cy.getByTestId('toast-quote-success');
+    }
+
     public addNewQuote(): quoteModalPageObject 
     {
         this.name.type('newQuote');
@@ -27,8 +31,18 @@ export default class quoteModalPageObject
         this.phone.type('11940028922');
         this.quoteType.click();
         cy.getByTestId('quote-type-menu').contains("Cerimônia").click();
-        // cy.clickOn('quote-type-0');
         this.quoteEstimatedPublic.type('200');
+        cy.clickOn('quote-modal-button');
+        return this;
+    }
+
+    public addNewQuoteWithParams(name: string, email: string, phone: string, estimatedPublic: string): quoteModalPageObject{
+        this.name.type(name);
+        this.email.type(email);
+        this.phone.type(phone);
+        this.quoteType.click();
+        cy.getByTestId('quote-type-menu').contains("Festa").click();
+        this.quoteEstimatedPublic.type(estimatedPublic);
         cy.clickOn('quote-modal-button');
         return this;
     }

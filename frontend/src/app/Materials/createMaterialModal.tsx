@@ -86,13 +86,19 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
         data,
       )
       if (response.status === 201) {
-        toast.success('Material criado')
+        toast.success(<div
+          data-testid='toast-create-material-success'
+        >
+          Material criado
+        </div>, { duration: 800000 })
         setChange(prev => prev + 1)
         onClose()
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
-      toast.error('Deu erro!')
+      toast.error(<div
+        data-testid='toast-create-material-error'>Deu erro!
+      </div>, { duration: 80000 })
     }
 
     return true
@@ -146,11 +152,13 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
         open={isVisible}
         onCancel={onClose}
         footer={[]}
+        data-testid='create-material-modal'
       >
         <div className="flex flex-col my-8 rounded-xl justify-around">
           <div className="flex flex-col relative">
             <h1>Digite o nome do material</h1>
             <Input
+              data-testid='create-material-modal-name'
               type="name"
               onChange={e => setName(e.target.value)}
               onBlur={() => handleBlur('name')}
@@ -191,6 +199,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
                     : 'border-gray-300'
                     }`}
                   onBlur={() => setIsTouched(true)}
+                  data-testid='create-material-category'
                 >
                   <h1 className={`${!type ? 'text-gray-400' : 'text-black'} mt-1`}>
                     {type ? type : 'Categoria'}
@@ -205,6 +214,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
                   {MaterialCategory.map((category, index) => (
                     <React.Fragment key={index}>
                       <DropdownMenuItem
+                        data-testid={`create-material-category-option-${index}`}
                         className="cursor-pointer my-1"
                         onClick={() => {
                           getCategoryNameAndIndex(category.name, category.index)
@@ -234,6 +244,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
             <div className="w-[50%] relative">
               <h1>Digite o preço</h1>
               <Input
+                data-testid='create-material-modal-price'
                 onChange={handlePriceChange}
                 onBlur={() => handleBlur('price')}
                 className={`p-2 mb-4 border rounded w-full ${priceError ? 'border-red-500' : 'border-slate-300'}`}
@@ -258,6 +269,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
           </div>
           <div className="w-full flex justify-end mt-3">
             <Button
+              data-testid='create-material-modal-btn'
               className="bg-primary text-white w-[30%]"
               onClick={() => createMaterialRequest()}
             >

@@ -104,15 +104,23 @@ const LoginModal = ({
           username: username,
           password: password,
         })
-        toast.success(intl.formatMessage({ id: 'login.success.message' }, { name }))
+
+        toast.success(
+          <div data-testid="toast-login-success">
+            {intl.formatMessage({ id: 'login.success.message' }, { name })}
+          </div>
+        );
         router.push('/dashboard')
         onClose()
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
-      toast.error(`${intl.formatMessage({
-        id: 'login.error.message',
-      })}`)
+      toast.error(
+        <div data-testid='toast-login-error'>
+          {intl.formatMessage({
+            id: 'login.error.message',
+          })}
+        </div>)
     } finally {
       setTimeout(() => {
         setLoading(false)
@@ -135,7 +143,9 @@ const LoginModal = ({
 
   return (
     <>
-      <Toaster richColors />
+      <Toaster richColors
+        duration={8000000000}
+      />
       <Modal
         data-testid="login-modal"
         open={isVisible}
@@ -177,6 +187,7 @@ const LoginModal = ({
                     left: 0,
                     marginTop: -15,
                   }}
+                  data-testid='login-modal-username-error'
                 >
                   {usernameError}
                 </div>
@@ -209,6 +220,7 @@ const LoginModal = ({
                     left: 0,
                     marginTop: -15,
                   }}
+                  data-testid='login-modal-password-error'
                 >
                   {passwordError}
                 </div>

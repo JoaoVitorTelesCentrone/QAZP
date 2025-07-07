@@ -9,14 +9,30 @@ describe('Quote feature', () =>
         //Given
         cy.visit('http://localhost:3000/');
     })
+
+    it('Create and validate the quote was created', () => {
+        const quoteModal = new quoteModalPageObject();
+        
+        //When
+        cy.clickOn('quote-request-button');
+        quoteModal.addNewQuoteWithParams('cotação', 'dummyEmail@gmail.com', '11995554666', '500');
+
+        //Then
+        cy.getByTestId('toast-quote-success')
+            .should('be.visible')
+            .should('contain.text', 'Seu orçamento foi criado com sucesso! Em breve nossa equipe entrará em contato para fornecer mais informações.');
+    })
     
-    it('Create and validate a quote was created', () => {
+    it('Create and validate a quote was created on the quote page', () => {
         //When
         const quoteModal = new quoteModalPageObject();
         const loginModal = new loginModalPageObject();
         
         cy.clickOn('quote-request-button');
         quoteModal.addNewQuote();
+        cy.getByTestId('toast-quote-success')
+            .should('be.visible')
+            .should('contain.text', 'Seu orçamento foi criado com sucesso! Em breve nossa equipe entrará em contato para fornecer mais informações.');
         cy.clickOn('login-button');
         loginModal.login();
         cy.clickOn('quote-nav-btn');
