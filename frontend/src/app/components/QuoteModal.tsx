@@ -100,7 +100,10 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
       const response = await axios.post(API_URL, quote);
 
       if (response.status === 201) {
-        toast.success(intl.formatMessage({ id: 'create.quote.success.message' }));
+        toast.success(
+          <span data-testid="toast-quote-sent-success">
+          {intl.formatMessage({ id: 'create.quote.success.message' })}
+          </span>);
         onClose();
         resetForm();
       }
@@ -219,8 +222,10 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           <label className="text-lg font-bold">{intl.formatMessage({
             id: 'create.quote.page.name.field',
           })}
+          
           </label>
           <Input
+          data-testid="nome-quote"
             value={fullName}
             placeholder={intl.formatMessage({
               id: 'create.quote.page.name.placeholder',
@@ -327,6 +332,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
               <h1 className={`${!type ? 'text-gray-400' : 'text-black'} mt-1`}>
                 {type ? type : 'Selecione o tipo do evento'}
               </h1>
+             
               <ChevronDown className="h-4 w-4 mt-2" />
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -335,7 +341,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             >
               {EventType.map((category, index) => (
                 <React.Fragment key={index}>
-                  <DropdownMenuItem
+                  <DropdownMenuItem 
                     className="cursor-pointer my-1"
                     onClick={() => {
                       getQuoteNameAndIndex(category.name, category.index)

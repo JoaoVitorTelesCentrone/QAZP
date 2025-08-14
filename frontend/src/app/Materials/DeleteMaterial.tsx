@@ -21,7 +21,10 @@ const DeleteMaterial: React.FC<deleteMaterialProps> = ({ materialId }) => {
       console.log('Dados deletados com sucesso.')
       setDeleteModal(false)
       setMaterialChange(prev => prev + 1)
-      toast.success('Material excluído com sucesso')
+      toast.success(
+      <span data-testid="delete-material-toaster">
+        Material deletado com sucesso
+      </span>)
     } catch (error) {
       console.error('Erro ao deletar os dados:', error)
     }
@@ -36,9 +39,9 @@ const DeleteMaterial: React.FC<deleteMaterialProps> = ({ materialId }) => {
       {deleteModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white shadow-lg shadow-slate-600 rounded-lg p-8">
-            <h2 className="text-2xl font-bold mb-4">Deletar Cliente</h2>
+            <h2 className="text-2xl font-bold mb-4">Deletar Material</h2>
             <p className="text-gray-700">
-              Você tem certeza que deseja deletar este cliente ?
+              Você tem certeza que deseja deletar este material ?
             </p>
             <div className="justify-between">
               <Button

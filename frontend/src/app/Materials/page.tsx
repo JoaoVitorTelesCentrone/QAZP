@@ -52,7 +52,7 @@ const Materials = () => {
       setTimeout(() => {
         setLoading(false)
       }, 100);
-      
+
     }
   }, [])
 
@@ -87,6 +87,7 @@ const Materials = () => {
                   </h1>
                 </div>
                 <Button
+                  data-testid="material-modal-button"
                   icon={<TbBasketPlus className="w-5 h-5 " />}
                   type="primary"
                   className="mt-8"
@@ -98,10 +99,10 @@ const Materials = () => {
               </div>
             </div>
             <div className="bg-tertiary">
-            <div className="ml-56 mr-10">
-              <MaterialTable columns={columns} data={materials} />
+              <div className="ml-56 mr-10">
+                <MaterialTable columns={columns} data={materials} />
+              </div>
             </div>
-          </div>
           </div>
         </>
       )}

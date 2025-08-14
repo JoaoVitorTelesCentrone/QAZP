@@ -1,25 +1,36 @@
 describe('Login', () => {
 
-  const fazerLogin = () => {
-    cy.visit('http://localhost:3000/')
-    cy.get('.p-8 > .ant-btn').click()
-    cy.get('[id="username"]').type('admin')
-    cy.get('[id="password"]').type('123')
-    cy.get('[data-testid="login-button"]').click()
-  }
-beforeEach(() =>{
-  fazerLogin()
-})
+it('should login with alias', () => {
+  cy.visit('http://localhost:3000/')
+  cy.get('[data-testid="login-button-sidebar"]').click()
+  cy.intercept('POST', '/api/User/login', {
+    fixture: 'login-success.json'
+  }).as('postLogin');
+  cy.get('[data-testid="username-input-field"]').type('maria.souza');
+  cy.get('[data-testid="password-input-field"]').type('Maria');
+  cy.get('[data-testid="login-button"]').click()
 
-afterEach(() =>{
-  cy.get('.fixed > .text-white').click();
+  cy.wait('@postLogin');
+  cy.get('[data-testid="toast-login-success"]').eq(0).should('have.text', 'Bem-vindo, Maria Souza!');
+  })
 })
-  it('Should visit Orçamentos Page', () => {
-    cy.get(':nth-child(2) > .block').click();
-    cy.url().should('equal', 'http://localhost:3000/quote')
-  })
-  it('Should visit Clientes Page', () => {
-    cy.get(':nth-child(3) > .block').click();
-    cy.url().should('equal', 'http://localhost:3000/clients')
-  })
+it('should not login with wrong user', () => {
+  cy.visit('http://localhost:3000/')
+  cy.get('[data-testid="login-button-sidebar"]').click()
+  cy.get('[data-testid="username-input-field"]').type('admin');
+  cy.get('[data-testid="password-input-field"]').type('1234');
+  cy.get('[data-testid="login-button"]').click()
+
+  cy.wait(2000)
+  cy.get('[data-testid="toast-login-error"]').eq(0).should('have.text', 'Usuário ou senha incorretos. Verifique as informações e tente novamente');
+})
+it('should not login with correct user', () => {
+  cy.visit('http://localhost:3000/')
+  cy.get('[data-testid="login-button-sidebar"]').click()
+  cy.get('[data-testid="username-input-field"]').type('admin');
+  cy.get('[data-testid="password-input-field"]').type('123');
+  cy.get('[data-testid="login-button"]').click()
+
+  cy.wait(2000)
+  cy.get('[data-testid="toast-login-error"]').eq(0).should('have.text', 'Bem-vindo, Administrador!');
 })

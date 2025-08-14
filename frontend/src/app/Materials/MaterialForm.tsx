@@ -86,6 +86,7 @@ const MaterialForm: React.FC<MaterialFormProps> = ({
         <div className="flex flex-col">
           <h1 className="mx-4">Digite o nome do material</h1>
           <Input
+            data-testid="peteca-de-descricao"
             onChange={e => setName(e.target.value)}
             placeholder="Nome"
             className="border-2  bg-white placeholder:text-primary mx-4 my-1 w-[90%]"
@@ -94,7 +95,8 @@ const MaterialForm: React.FC<MaterialFormProps> = ({
         <div className="flex w-full my-2 mx-4">
           <div className="flex flex-col w-[50%]">
             <h1 className="my-1">Categoria</h1>
-            <DropdownMenu>
+            <DropdownMenu
+            data-testid="peteca-dropdown">
               <DropdownMenuTrigger className="flex border-2 bg-white  justify-between px-6 py-1 rounded-xl mr-8">
                 <h1 className="mt-1 mr-3">{type ? type : 'Categoria'}</h1>
                 <ChevronDown className="h-4 w-4 mt-2" />
@@ -118,6 +120,7 @@ const MaterialForm: React.FC<MaterialFormProps> = ({
           <div className="w[50%]">
             <h1 className="my-1">Digite o preço</h1>
             <Input
+              data-testid="peteca-de-numero"
               type="number"
               placeholder="Digite o preço"
               className="border-2  bg-white placeholder:text-primary"

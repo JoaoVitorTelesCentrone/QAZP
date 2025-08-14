@@ -72,6 +72,7 @@ export function MaterialTable<TData, TValue>({
                 return (
                   <TableHead
                     key={header.id}
+                    data-testid={`material-header-${header.column.id}`}
                     className="py-2 text-secondary-foreground text-center"
                   >
                     {header.isPlaceholder
@@ -94,7 +95,8 @@ export function MaterialTable<TData, TValue>({
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map(cell => (
-                  <TableCell className="text-center" key={cell.id}>
+                  <TableCell className="text-center" key={cell.id}
+                  data-testid={`material-cell-${cell.column.id}-${row.id}`}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -105,6 +107,7 @@ export function MaterialTable<TData, TValue>({
               <TableCell
                 colSpan={columns.length}
                 className="h-24 text-center text-2xl font-bold"
+                 data-testid="material-empty-state"
               >
                 {intl.formatMessage({ id: 'datagrid.empty.message' })}
               </TableCell>

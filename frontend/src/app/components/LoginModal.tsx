@@ -8,7 +8,7 @@ import { Input } from 'antd'
 import axios from 'axios'
 import { Toaster, toast } from 'sonner'
 import ClipLoader from 'react-spinners/ClipLoader'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Modal, Button } from 'antd'
 import { intl } from '@/i18n'
 import { Eye, EyeOff } from 'lucide-react'
@@ -63,6 +63,7 @@ const LoginModal = ({
       field.setError('')
     }
   }
+  const toastShown = useRef(false)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -104,18 +105,35 @@ const LoginModal = ({
           username: username,
           password: password,
         })
-        toast.success(intl.formatMessage({ id: 'login.success.message' }, { name }))
+        toast.dismiss('login-success')
+        toast.success(
+          <span data-testid="toast-login-success">
+            {intl.formatMessage({ id: 'login.success.message' }, { name })}
+          </span>,
+          { id: 'login-success' }
+        )
+        toast.dismiss('login-success')
         router.push('/dashboard')
         onClose()
       }
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
-      toast.error(`${intl.formatMessage({
-        id: 'login.error.message',
-      })}`)
+      toast.dismiss('login-error')
+      if (!toastShown.current) {
+        toastShown.current = true
+
+        toast.error(
+          <span data-testid="toast-login-error">
+            {intl.formatMessage({
+              id: 'login.error.message',
+            })}
+          </span>,
+          { id: 'login-error' })
+      }
     } finally {
       setTimeout(() => {
         setLoading(false)
+        toastShown.current = false // <-- libera para novos toasts depois
       }, 2000)
     }
   }
@@ -137,6 +155,7 @@ const LoginModal = ({
     <>
       <Toaster richColors />
       <Modal
+        data-testid="login-modal"
         open={isVisible}
         onCancel={onCancel}
         footer={null}
@@ -156,6 +175,7 @@ const LoginModal = ({
             </label>
             <div className="relative mb-4">
               <Input
+                data-testid="username-input-field"
                 placeholder={intl.formatMessage({
                   id: 'login.page.user.field.placeholder',
                 })}
@@ -187,6 +207,7 @@ const LoginModal = ({
                 })}
               </label>
               <Input
+                data-testid="password-input-field"
                 placeholder={intl.formatMessage({
                   id: 'login.page.password.field.placeholder',
                 })}

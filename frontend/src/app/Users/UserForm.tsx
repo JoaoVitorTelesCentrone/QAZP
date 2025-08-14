@@ -56,6 +56,7 @@ const UserForm: React.FC<UserFormProps> = ({ closeModal, userData }) => {
               required
               placeholder="Digite o nome completo"
               className="bg-white border-slate-500 mx-auto my-2"
+              data-testid="modal-button-user-name"
             />
           </div>
 
@@ -68,6 +69,7 @@ const UserForm: React.FC<UserFormProps> = ({ closeModal, userData }) => {
               required
               placeholder="Digite o nome do usuário"
               className="bg-white border-slate-500 mx-auto my-2"
+              data-testid="modal-button-user-username"
             />
           </div>
 
@@ -81,6 +83,7 @@ const UserForm: React.FC<UserFormProps> = ({ closeModal, userData }) => {
                 required
                 placeholder="Digite senha"
                 className="bg-white border-slate-500 mx-auto my-2"
+                data-testid="modal-button-user-password"
               />
               {showPassword1 ? (
                 <EyeOff
@@ -106,6 +109,7 @@ const UserForm: React.FC<UserFormProps> = ({ closeModal, userData }) => {
                 required
                 placeholder="Confirme a senha"
                 className="bg-white border-slate-500 mx-auto my-2"
+                data-testid="modal-button-user-confirm-password"
               />
               {showPassword2 ? (
                 <EyeOff
@@ -127,6 +131,7 @@ const UserForm: React.FC<UserFormProps> = ({ closeModal, userData }) => {
             <Button
               variant="outline"
               className="mx-4 bg-primary mt-2 text-white"
+              data-testid="modal-button-create-user"
             >
               Criar usuário
             </Button>

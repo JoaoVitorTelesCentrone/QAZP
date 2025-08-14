@@ -85,6 +85,7 @@ const Users = () => {
                   type="primary"
                   className="mt-8"
                   size="large"
+                  data-testid="modal-button-user-creation"
                   onClick={() => setOpenModal(true)}
                 >
                   Criar usuário

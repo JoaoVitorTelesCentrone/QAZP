@@ -86,188 +86,196 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
         data,
       )
       if (response.status === 201) {
-        toast.success('Material criado')
+        toast.success(
+          <span>Material criado</span>)
         setChange(prev => prev + 1)
         onClose()
       }
     } catch (error) {
-      console.error('Erro ao fazer a requisição:', error)
-      toast.error('Deu erro!')
-    }
+              console.error('Erro ao fazer a requisição:', error)
+              toast.error(
+                <span>Deu erro!</span>)
+          }
 
-    return true
+          return true
   }
 
   const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const fieldErrorMap = {
-      name: {
-        value: name,
-        setError: setNameError,
+            name: {
+            value: name,
+          setError: setNameError,
       },
-      price: {
-        value: price,
-        setError: setPriceError,
+          price: {
+            value: price,
+          setError: setPriceError,
       },
     }
 
-    const field = fieldErrorMap[fieldName]
+          const field = fieldErrorMap[fieldName]
 
-    if (!field.value) {
-      field.setError(`${intl.formatMessage({
-        id: 'required.field.error.message',
-      })}`)
-    } else {
-      field.setError('')
-    }
+          if (!field.value) {
+            field.setError(`${intl.formatMessage({
+              id: 'required.field.error.message',
+            })}`)
+          } else {
+            field.setError('')
+          }
   }
 
   const getCategoryNameAndIndex = (type: string, categoryIndex: number) => {
-    setType(type)
+            setType(type)
     setCategory(categoryIndex)
   }
 
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
 
-    if (!isNaN(Number(value)) || value === '') {
-      setPrice(value)
+            if (!isNaN(Number(value)) || value === '') {
+              setPrice(value)
       setPriceError('')
     } else {
-      setPriceError('Apenas números são permitidos')
-    }
+              setPriceError('Apenas números são permitidos')
+            }
   }
 
-  const isCategoryValid = category !== null
+            const isCategoryValid = category !== null
 
-  return (
-    <div>
-      <Modal
-        title="Criar material"
-        open={isVisible}
-        onCancel={onClose}
-        footer={[]}
-      >
-        <div className="flex flex-col my-8 rounded-xl justify-around">
-          <div className="flex flex-col relative">
-            <h1>Digite o nome do material</h1>
-            <Input
-              type="name"
-              onChange={e => setName(e.target.value)}
-              onBlur={() => handleBlur('name')}
-              placeholder="Nome"
-              className={`p-2 mb-4 border rounded w-full ${nameError ? 'border-red-500' : 'border-slate-300'}`}
-              value={name}
-              required
-            />
-            {nameError && (
-              <div
-                style={{
-                  color: 'red',
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                  marginTop: -15,
-                }}
+            return (
+            <div>
+              <Modal
+                data-testid="material-modal"
+                title="Criar material"
+                open={isVisible}
+                onCancel={onClose}
+                footer={[]}
               >
-                {nameError}
-              </div>
-            )}
-          </div>
-          <div className="flex w-full mt-4 mb-4">
-            <div className="flex flex-col w-[50%] relative">
-              <h1>Categoria</h1>
-              <DropdownMenu
-                onOpenChange={open => {
-                  if (!open) {
-                    if (!isCategoryValid) {
-                      setIsTouched(true)
-                    }
-                  }
-                }}
-              >
-                <DropdownMenuTrigger
-                  className={`flex border bg-white justify-between px-2 py-1 rounded mr-6 h-10 ${!isCategoryValid && isTouched
-                    ? 'border-red-500'
-                    : 'border-gray-300'
-                    }`}
-                  onBlur={() => setIsTouched(true)}
-                >
-                  <h1 className={`${!type ? 'text-gray-400' : 'text-black'} mt-1`}>
-                    {type ? type : 'Categoria'}
-                  </h1>
-                  <ChevronDown className="h-4 w-4 mt-2" />
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent
-                  style={{ zIndex: 1000 }}
-                  className="border-2 p-2 bg-white my-1 rounded-xl w-52"
-                >
-                  {MaterialCategory.map((category, index) => (
-                    <React.Fragment key={index}>
-                      <DropdownMenuItem
-                        className="cursor-pointer my-1"
-                        onClick={() => {
-                          getCategoryNameAndIndex(category.name, category.index)
-                          setIsTouched(false)
+                <div className="flex flex-col my-8 rounded-xl justify-around">
+                  <div className="flex flex-col relative">
+                    <h1>Digite o nome do material</h1>
+                    <Input
+                      data-testid="material-modal-name"
+                      type="name"
+                      onChange={e => setName(e.target.value)}
+                      onBlur={() => handleBlur('name')}
+                      placeholder="Nome"
+                      className={`p-2 mb-4 border rounded w-full ${nameError ? 'border-red-500' : 'border-slate-300'}`}
+                      value={name}
+                      required
+                    />
+                    {nameError && (
+                      <div
+                        style={{
+                          color: 'red',
+                          position: 'absolute',
+                          top: '100%',
+                          left: 0,
+                          marginTop: -15,
                         }}
                       >
-                        {category.name}
-                      </DropdownMenuItem>
-                      {index < MaterialCategory.length - 1 && (
-                        <hr className="bg-primary h-[0.4px]" />
+                        {nameError}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex w-full mt-4 mb-4">
+                    <div className="flex flex-col w-[50%] relative">
+                      <h1>Categoria</h1>
+                      <DropdownMenu
+                        onOpenChange={open => {
+                          if (!open) {
+                            if (!isCategoryValid) {
+                              setIsTouched(true)
+                            }
+                          }
+                        }}
+                      >
+                        <DropdownMenuTrigger
+                          data-testid="material-dropdown-full"
+                          className={`flex border bg-white justify-between px-2 py-1 rounded mr-6 h-10 ${!isCategoryValid && isTouched
+                            ? 'border-red-500'
+                            : 'border-gray-300'
+                            }`}
+                          onBlur={() => setIsTouched(true)}
+                        >
+                          <h1 className={`${!type ? 'text-gray-400' : 'text-black'} mt-1`}>
+                            {type ? type : 'Categoria'}
+                          </h1>
+                          <ChevronDown className="h-4 w-4 mt-2" />
+                        </DropdownMenuTrigger>
+
+                        <DropdownMenuContent
+                          style={{ zIndex: 1000 }}
+                          className="border-2 p-2 bg-white my-1 rounded-xl w-52"
+                        >
+                          {MaterialCategory.map((category, index) => (
+                            <React.Fragment key={index}>
+                              <DropdownMenuItem
+                                data-testid={`material-dropdown-${category.name}`}
+                                className="cursor-pointer my-1"
+                                onClick={() => {
+                                  getCategoryNameAndIndex(category.name, category.index)
+                                  setIsTouched(false)
+                                }}
+                              >
+                                {category.name}
+                              </DropdownMenuItem>
+                              {index < MaterialCategory.length - 1 && (
+                                <hr className="bg-primary h-[0.4px]" />
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                      {!isCategoryValid && isTouched && (
+                        <span
+                          className="text-red-500 text-sm absolute"
+                          style={{ top: '100%', marginTop: -15 }}
+                        >
+                          {intl.formatMessage({
+                            id: 'required.field.error.message',
+                          })}
+                        </span>
                       )}
-                    </React.Fragment>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              {!isCategoryValid && isTouched && (
-                <span
-                  className="text-red-500 text-sm absolute"
-                  style={{ top: '100%', marginTop: -15 }}
-                >
-                  {intl.formatMessage({
-                    id: 'required.field.error.message',
-                  })}
-                </span>
-              )}
-            </div>
-            <div className="w-[50%] relative">
-              <h1>Digite o preço</h1>
-              <Input
-                onChange={handlePriceChange}
-                onBlur={() => handleBlur('price')}
-                className={`p-2 mb-4 border rounded w-full ${priceError ? 'border-red-500' : 'border-slate-300'}`}
-                placeholder="Digite o preço"
-                value={price}
-                required
-              />
-              {priceError && (
-                <div
-                  style={{
-                    color: 'red',
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
-                    marginTop: -15,
-                  }}
-                >
-                  {priceError}
+                    </div>
+                    <div className="w-[50%] relative">
+                      <h1>Digite o preço</h1>
+                      <Input
+                        onChange={handlePriceChange}
+                        onBlur={() => handleBlur('price')}
+                        className={`p-2 mb-4 border rounded w-full ${priceError ? 'border-red-500' : 'border-slate-300'}`}
+                        placeholder="Digite o preço"
+                        data-testid="material-modal-price"
+                        value={price}
+                        required
+                      />
+                      {priceError && (
+                        <div
+                          style={{
+                            color: 'red',
+                            position: 'absolute',
+                            top: '100%',
+                            left: 0,
+                            marginTop: -15,
+                          }}
+                        >
+                          {priceError}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="w-full flex justify-end mt-3">
+                    <Button
+                      datatest-id="create-material-modal-button"
+                      className="bg-primary text-white w-[30%]"
+                      onClick={() => createMaterialRequest()}
+                    >
+                      Criar material
+                    </Button>
+                  </div>
                 </div>
-              )}
+              </Modal>
             </div>
-          </div>
-          <div className="w-full flex justify-end mt-3">
-            <Button
-              className="bg-primary text-white w-[30%]"
-              onClick={() => createMaterialRequest()}
-            >
-              Criar material
-            </Button>
-          </div>
-        </div>
-      </Modal>
-    </div>
-  )
+            )
 }
 
-export default CreateMaterialModal
+            export default CreateMaterialModal
