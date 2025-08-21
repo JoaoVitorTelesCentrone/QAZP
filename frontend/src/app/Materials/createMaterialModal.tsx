@@ -210,7 +210,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
                           {MaterialCategory.map((category, index) => (
                             <React.Fragment key={index}>
                               <DropdownMenuItem
-                                data-testid={`material-dropdown-${category.name}`}
+                                data-testid={`material-dropdown-${index}`}
                                 className="cursor-pointer my-1"
                                 onClick={() => {
                                   getCategoryNameAndIndex(category.name, category.index)

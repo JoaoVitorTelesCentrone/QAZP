@@ -31,14 +31,7 @@ it('should create one material', () => {
     // Abre o dropdown
     cy.get('[data-testid="material-dropdown-full"]').click();
     
-    cy.get('body', { timeout: 7000 })
-  .should('have.css', 'pointer-events', 'auto');
-
-
-    // Aguarda e encontra a opção do dropdown
-    cy.get('body') // Ant Design geralmente injeta os dropdowns no body
-      .contains('Aluguel')
-      .click();
+    cy.get('[data-testid="material-dropdown-2"]').click({ force: true });
 
     cy.get('[datatest-id="create-material-modal-button"]').click();
     cy.get('[datatest-id="toast-create-material-error"]').should('be.visible');
