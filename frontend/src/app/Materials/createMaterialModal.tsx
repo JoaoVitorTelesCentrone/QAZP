@@ -94,7 +94,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
     } catch (error) {
               console.error('Erro ao fazer a requisição:', error)
               toast.error(
-                <span>Deu erro!</span>)
+                <span datatest-id="toast-create-material-error">Deu erro!</span>)
           }
 
           return true

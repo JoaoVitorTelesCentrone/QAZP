@@ -35,5 +35,6 @@ it('should create one material', () => {
 
     cy.get('[datatest-id="create-material-modal-button"]').click();
     cy.get('[datatest-id="toast-create-material-error"]').should('be.visible');
+    cy.get('[datatest-id="toast-create-material-error"]').eq(0).should('have.text', 'Deu erro!');
 });
 // })
