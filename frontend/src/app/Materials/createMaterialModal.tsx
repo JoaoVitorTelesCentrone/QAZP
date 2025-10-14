@@ -87,7 +87,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
       )
       if (response.status === 201) {
         toast.success(
-          <span>Material criado</span>)
+          <span datatest-id="toast-create-material-success">Material criado</span>)
         setChange(prev => prev + 1)
         onClose()
       }

@@ -30,8 +30,8 @@ describe('Teste com mock de usuário', () => {
     cy.get('.justify-end > .ant-btn').click()
 
     cy.wait('@postUser').then((interception) => {
-      expect(interception.response.statusCode).to.eq(201)
-      expect(interception.response.body.name).to.eq('Maria Teste')
+      expect(interception.response?.statusCode).to.eq(201)
+      expect(interception.response?.body.name).to.eq('Maria Teste')
     })
 
     cy.contains('Usuário criado com sucesso').should('be.visible')
