@@ -1,4 +1,13 @@
 export class LoginPage {
+    
+    private get username() {
+        return cy.getByTestId('login-modal-username-field')
+    }
+
+    private get password() {
+        return cy.getByTestId('login-modal-password-field')
+    }
+
     visitForm(): void {
         cy.visit('http://localhost:3000/')
         cy.getByTestId('header-login-button').click()
@@ -6,9 +15,12 @@ export class LoginPage {
 
     submit(user: string, password: string): void {
 
-        if (user && password !== '') {
-            cy.getByTestId('login-modal-username-field').type(user)
-            cy.getByTestId('login-modal-password-field').type(password)
+        if (user) {
+            this.username.type(user)
+        }
+
+        if (password) {
+           this.password.type(password)
         }
 
         cy.getByTestId('login-button').click()

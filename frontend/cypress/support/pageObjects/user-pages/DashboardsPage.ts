@@ -1,4 +1,4 @@
-import { Toast } from '../../support/pageObjects/Components';
+import { Toast } from '../Components';
 
 
 export class DashboardPage {
@@ -11,7 +11,7 @@ export class DashboardPage {
     isLoggedIn(){
         const message: string = 'Bem-vindo, Administrador!'
 
-        cy.get('[class="ant-modal-title"]').should('not.exist')
+        cy.getByClass('ant-modal-title').should('not.exist')
         this.toast.haveText(message)
         cy.url().should('equal', 'http://localhost:3000/dashboard')
     }

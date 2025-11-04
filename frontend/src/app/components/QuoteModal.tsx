@@ -211,6 +211,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
       <Modal
         open={isVisible}
         onCancel={handleModalClose}
+        data-testid="quote-button"
         footer={null}
         title={intl.formatMessage({ id: 'create.quote.page.title' })}
         centered
@@ -225,6 +226,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             placeholder={intl.formatMessage({
               id: 'create.quote.page.name.placeholder',
             })}
+            data-testid='quote-modal-name'
             onChange={e => setFullName(e.target.value)}
             onBlur={() => handleBlur('fullName')}
             className={`p-2 mb-4 border rounded w-full ${fullNameError ? 'border-red-500' : 'border-slate-300'}`}
@@ -254,10 +256,12 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             placeholder={intl.formatMessage({
               id: 'create.quote.page.email.placeholder',
             })}
+            data-testid='quote-modal-email'
             onChange={e => setEmail(e.target.value)}
             onBlur={() => handleBlur('email')}
             className={`p-2 mb-4 border rounded w-full ${emailError ? 'border-red-500' : 'border-slate-300'}`}
             type="email"
+            
             required
           />
           {emailError && (
@@ -283,6 +287,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             placeholder={intl.formatMessage({
               id: 'create.quote.page.phone.placeholder',
             })}
+            data-testid='quote-modal-phone'
             onChange={e => setPhoneNumber(formatPhoneNumber(e.target.value))}
             onBlur={() => handleBlur('phoneNumber')}
             maxLength={15}
@@ -322,6 +327,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
                 ? 'border-red-500'
                 : 'border-gray-300'
                 }`}
+                data-testid='quote-modal-type'
               onBlur={() => setIsTouched(true)}
             >
               <h1 className={`${!type ? 'text-gray-400' : 'text-black'} mt-1`}>
@@ -372,6 +378,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
             placeholder={intl.formatMessage({
               id: 'create.quote.page.estimated.audience.placeholder',
             })}
+            data-testid='quote-modal-estimated-audiance'
             onChange={handleEstimatedAudience}
             onBlur={() => handleBlur('estimatedAudience')}
             className={`p-2 mb-4 border rounded w-full ${estimatedAudienceError ? 'border-red-500' : 'border-slate-300'}`}
@@ -393,6 +400,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
         </div>
         <Button
           className="bg-primary text-secondary w-full mt-4"
+          data-testid="quote-modal-button"
           type="primary"
           onClick={() => quoteModelRequest()}
         >
