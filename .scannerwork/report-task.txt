@@ -1,0 +1,6 @@
+projectKey=spring-myproject
+serverUrl=http://localhost:9000
+serverVersion=25.9.0.112764
+dashboardUrl=http://localhost:9000/dashboard?id=spring-myproject
+ceTaskId=63489d0f-0171-443e-a97f-e02126d68a33
+ceTaskUrl=http://localhost:9000/api/ce/task?id=63489d0f-0171-443e-a97f-e02126d68a33

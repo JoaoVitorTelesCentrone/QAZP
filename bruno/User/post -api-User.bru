@@ -1,0 +1,41 @@
+meta {
+  name: post /api/User
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/User
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "{{userId}}",
+    "name": "Usuário Teste",
+    "password": "1234",
+    "userName": "UserTeste",
+    "role": 0,
+    "createdDate": "{{currentTimeStamp}}",
+    "userStatus": 0,
+    "isDeleted": false
+  }
+}
+
+script:pre-request {
+  const { v4: uuidv4 } = require("uuid");
+  const newId = uuidv4();
+  bru.setEnvVar("userId", newId);
+  console.log("UUID gerado:", newId);
+  
+  const currentTimeStamp = new Date().toISOString();
+  bru.setEnvVar("currentTimeStamp", currentTimeStamp);
+  console.log("Timestamp atual:", currentTimeStamp);
+  
+}
+
+script:post-response {
+  bru.setEnvVar("name", name);
+  
+}

@@ -1,0 +1,15 @@
+meta {
+  name: delete /api/Quote/:id
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/api/Quote/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

@@ -1,0 +1,11 @@
+meta {
+  name: get /api/Event/active-events
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/Event/active-events
+  body: none
+  auth: inherit
+}

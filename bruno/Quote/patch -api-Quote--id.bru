@@ -1,0 +1,15 @@
+meta {
+  name: patch /api/Quote/:id
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/api/Quote/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

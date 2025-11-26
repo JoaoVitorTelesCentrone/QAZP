@@ -1,0 +1,59 @@
+meta {
+  name: put /api/Event/:id
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{baseUrl}}/api/Event/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+body:json {
+  {
+    "name": "",
+    "type": 0,
+    "status": 0,
+    "clientId": "",
+    "startDate": {
+      "year": 0,
+      "month": 0,
+      "day": 0,
+      "dayOfWeek": 0,
+      "dayOfYear": 0,
+      "dayNumber": 0
+    },
+    "startTime": {
+      "hour": 0,
+      "minute": 0,
+      "second": 0,
+      "millisecond": 0,
+      "microsecond": 0,
+      "nanosecond": 0,
+      "ticks": 0
+    },
+    "endDate": {},
+    "endTime": {},
+    "zipCode": "",
+    "addressName": "",
+    "addressNumber": "",
+    "addressComplement": "",
+    "district": "",
+    "state": "",
+    "city": "",
+    "estimatedAudience": 0,
+    "materials": [
+      {
+        "materialId": "",
+        "quantity": 0
+      }
+    ],
+    "totalAmount": "",
+    "isDeleted": false
+  }
+}

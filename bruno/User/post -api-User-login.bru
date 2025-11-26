@@ -1,0 +1,18 @@
+meta {
+  name: post /api/User/login
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/User/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "username": "",
+    "password": ""
+  }
+}

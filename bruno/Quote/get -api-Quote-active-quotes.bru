@@ -1,0 +1,11 @@
+meta {
+  name: get /api/Quote/active-quotes
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/Quote/active-quotes
+  body: none
+  auth: inherit
+}

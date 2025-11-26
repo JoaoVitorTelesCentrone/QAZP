@@ -1,0 +1,15 @@
+meta {
+  name: get /api/Event/clientId/:clientId
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/Event/clientId/:clientId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  clientId: 
+}

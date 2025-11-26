@@ -1,0 +1,15 @@
+meta {
+  name: delete /api/Material/:id
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}/api/Material/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
