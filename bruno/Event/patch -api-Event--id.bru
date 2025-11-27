@@ -1,0 +1,15 @@
+meta {
+  name: patch /api/Event/:id
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{baseUrl}}/api/Event/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

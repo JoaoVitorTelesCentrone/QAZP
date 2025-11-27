@@ -1,0 +1,24 @@
+meta {
+  name: post /api/Quote
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/Quote
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "",
+    "fullName": "",
+    "email": "",
+    "phoneNumber": "",
+    "eventType": "",
+    "estimatedAudience": 0,
+    "isDeleted": false,
+    "createdDate": ""
+  }
+}

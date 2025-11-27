@@ -1,0 +1,30 @@
+meta {
+  name: post /api/Client
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/Client
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "",
+    "fullName": "",
+    "documentId": "",
+    "phoneNumber": "",
+    "email": "",
+    "zipCode": "",
+    "addressName": "",
+    "addressNumber": "",
+    "addressComplement": "",
+    "district": "",
+    "state": "",
+    "city": "",
+    "createdDate": "",
+    "isDeleted": false
+  }
+}

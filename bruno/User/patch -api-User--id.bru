@@ -1,0 +1,15 @@
+meta {
+  name: patch /api/User/:id
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{baseUrl}}/api/User/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

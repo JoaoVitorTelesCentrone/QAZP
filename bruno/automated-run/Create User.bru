@@ -1,0 +1,47 @@
+meta {
+  name: Create User
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/User
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "{{userId}}",
+    "name": "{{userName}}",
+    "password": "1234",
+    "userName": "{{userName}}",
+    "role": 0,
+    "createdDate": "{{currentTimeStamp}}",
+    "userStatus": 0,
+    "isDeleted": false
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.body.name: eq {{userName}}
+  res.body.isDeleted: eq false
+  res.body.id: eq {{userId}}
+}
+
+script:pre-request {
+  const { v4: uuidv4 } = require('uuid');
+  const newId = uuidv4();
+  bru.setVar("userId", newId);
+
+  const currentTimeStamp = new Date().toISOString();
+  bru.setVar("currentTimeStamp", currentTimeStamp);
+
+  const userName = bru.interpolate('{{$randomFullName}}');
+  bru.setVar("userName", userName)
+}
+
+script:post-response {
+  console.log("User ", bru.getVar('userName'), " created. Their ID is: ", bru.getVar('userId'));
+}

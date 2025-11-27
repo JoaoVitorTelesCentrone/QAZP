@@ -1,0 +1,15 @@
+meta {
+  name: get /api/Material/id/:id
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/Material/id/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

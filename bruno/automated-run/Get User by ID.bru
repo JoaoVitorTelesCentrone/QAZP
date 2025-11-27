@@ -1,0 +1,17 @@
+meta {
+  name: Get user by ID
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/User/id/{{userId}}
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body.name: eq {{userName}}
+  res.body.id: eq {{userId}}
+}

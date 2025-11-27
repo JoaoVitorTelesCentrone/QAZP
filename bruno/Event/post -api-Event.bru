@@ -1,0 +1,54 @@
+meta {
+  name: post /api/Event
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/Event
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "",
+    "type": 0,
+    "status": 0,
+    "clientId": "",
+    "startDate": {
+      "year": 0,
+      "month": 0,
+      "day": 0,
+      "dayOfWeek": 0,
+      "dayOfYear": 0,
+      "dayNumber": 0
+    },
+    "startTime": {
+      "hour": 0,
+      "minute": 0,
+      "second": 0,
+      "millisecond": 0,
+      "microsecond": 0,
+      "nanosecond": 0,
+      "ticks": 0
+    },
+    "endDate": {},
+    "endTime": {},
+    "zipCode": "",
+    "addressName": "",
+    "addressNumber": "",
+    "addressComplement": "",
+    "district": "",
+    "state": "",
+    "city": "",
+    "estimatedAudience": 0,
+    "materials": [
+      {
+        "materialId": "",
+        "quantity": 0
+      }
+    ],
+    "totalAmount": ""
+  }
+}

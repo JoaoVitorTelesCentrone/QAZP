@@ -1,0 +1,32 @@
+meta {
+  name: Get List User
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/User
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  ~res.body.length: eq 2
+  ~res.body[1].id: eq {{userId}}
+  ~res.body[1].name: eq {{userName}}
+}
+
+tests {
+  test("Find user by ID", () => {
+    const jsonData = res.getBody();
+    const userId = bru.getVar('userId');
+    const userName = bru.getVar('userName')
+
+    const match = jsonData.find(b => b.id === userId);
+
+
+    expect(match).to.be.an("object");
+    expect(match.name).to.equal(userName)
+  })
+}

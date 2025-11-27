@@ -1,0 +1,11 @@
+meta {
+  name: get /api/User/activeUsers
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/User/activeUsers
+  body: none
+  auth: inherit
+}

@@ -1,0 +1,20 @@
+meta {
+  name: Delete user
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/api/User/{{userId}}
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 204
+  res.body: isEmpty
+}
+
+script:post-response {
+  console.log("User ", bru.getVar('userName'), " deleted. Their ID was: ", bru.getVar('userId'));
+}

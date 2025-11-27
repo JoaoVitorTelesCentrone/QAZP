@@ -1,0 +1,15 @@
+meta {
+  name: get /api/Client/documentId/:documentId
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/Client/documentId/:documentId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  documentId: 
+}

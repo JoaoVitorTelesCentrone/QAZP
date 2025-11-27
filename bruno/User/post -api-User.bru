@@ -1,0 +1,24 @@
+meta {
+  name: post /api/User
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/User
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "",
+    "name": "",
+    "password": "",
+    "userName": "",
+    "role": 0,
+    "createdDate": "",
+    "userStatus": 0,
+    "isDeleted": false
+  }
+}

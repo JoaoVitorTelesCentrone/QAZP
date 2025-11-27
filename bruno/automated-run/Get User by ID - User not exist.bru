@@ -1,0 +1,16 @@
+meta {
+  name: Get User by ID - User not exist
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/api/User/id/{{userId}}
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 404
+  res.body.title: eq Not Found
+}

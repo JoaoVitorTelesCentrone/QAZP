@@ -1,0 +1,23 @@
+meta {
+  name: post /api/Material
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/Material
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "",
+    "name": "",
+    "category": 0,
+    "price": "",
+    "eventMaterials": [],
+    "createdDate": "",
+    "isDeleted": false
+  }
+}

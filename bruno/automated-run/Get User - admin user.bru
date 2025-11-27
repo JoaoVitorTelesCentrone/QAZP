@@ -1,0 +1,18 @@
+meta {
+  name: Get User - admin user
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/User
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body.length: eq 1
+  res.body[0].name: eq Administrador
+  res.body[0].id: eq 86fadfb0-ca30-4a6f-914f-1dfb9415ec09
+}
