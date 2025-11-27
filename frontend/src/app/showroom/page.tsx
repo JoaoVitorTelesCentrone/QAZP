@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import axios from 'axios' // Se estiver usando Axios
+import axios from 'axios'
 import { useAtom } from 'jotai'
 import { getQuoteAtom } from '../atoms/getQuoteAtom'
-// import fetch from 'isomorphic-unfetch'; // Se estiver usando fetch
+
 
 function MeuComponente() {
   const [quote, setQuote] = useAtom(getQuoteAtom)

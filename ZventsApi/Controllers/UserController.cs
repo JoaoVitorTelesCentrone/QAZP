@@ -20,7 +20,7 @@ namespace ZventsApi.Controllers
         public UserController(ZventsDbContext context, IConfiguration configuration)
     {
         _context = context;
-        _configuration = configuration;  // Atribui a configuração ao campo privado
+        _configuration = configuration;
     }
 
         [HttpGet]
@@ -86,7 +86,6 @@ namespace ZventsApi.Controllers
                 return Unauthorized("Usuário não autorizado");
             }
 
-            // Gerar o token JWT
             var token = GenerateJwtToken(user);
 
             return Ok(new 
@@ -97,7 +96,6 @@ namespace ZventsApi.Controllers
             });
         }
 
-        // Método para gerar o token JWT
         private string GenerateJwtToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
@@ -122,7 +120,6 @@ namespace ZventsApi.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        // Classe para encapsular as credenciais do login
         public class LoginRequest
         {
             public required string Username { get; set; }

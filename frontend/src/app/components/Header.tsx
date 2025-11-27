@@ -20,12 +20,12 @@ const Header = () => {
 
   const handleOpenLoginModal = () => setOpenLoginModal(true)
   const handleCloseLoginModal = () => {
-    setLoading(true) // Set loading first for feedback
+    setLoading(true)
     setTimeout(() => {
-      setOpenLoginModal(false) // Close modal after 5 seconds
-      setLoading(false) // Stop loading once modal closes
+      setOpenLoginModal(false)
+      setLoading(false)
       console.log('Modal closed after 5 seconds')
-    }, 3000) // Delay of 5000 ms (5 seconds)
+    }, 3000)
   }
   const handleCancelLoginModal = () => {
     setOpenLoginModal(false)

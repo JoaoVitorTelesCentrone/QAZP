@@ -20,7 +20,6 @@ const Clients = () => {
   const [clientChange, setClientChange] = useAtom(clientChangeAtom)
   const [openModal, setOpenModal] = useState(false)
 
-  // Busca de dados dos clientes
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -97,4 +96,4 @@ const Clients = () => {
   )
 }
 
-export default withAuth(Clients) // Encapsulando a página com withAuth
+export default withAuth(Clients)

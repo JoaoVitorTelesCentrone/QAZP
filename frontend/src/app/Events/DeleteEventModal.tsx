@@ -37,7 +37,7 @@ const DeleteEventModal: React.FC<DeleteEventModalProps> = ({
     <Modal
       title="Confirm Delete"
       open={isVisible}
-      onCancel={onClose} // Close the modal when "X" is clicked
+      onCancel={onClose}
       footer={[
         <Button key="cancel" onClick={onClose}>
           Cancel

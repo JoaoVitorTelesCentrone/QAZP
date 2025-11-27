@@ -100,4 +100,4 @@ const Page = () => {
   )
 }
 
-export default withAuth(Page) // Encapsulando com withAuth
+export default withAuth(Page)
