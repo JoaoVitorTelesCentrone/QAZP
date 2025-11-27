@@ -30,8 +30,8 @@ namespace ZventsApi.Controllers
                     Id = dbclient.Id,
                     FullName = dbclient.FullName,
                     DocumentId = dbclient.DocumentId,
-                    Email = dbclient.Email,
-                    PhoneNumber = dbclient.PhoneNumber,
+                    Email = dbclient.Email!,
+                    PhoneNumber = dbclient.PhoneNumber!,
                     CreatedDate = dbclient.CreatedDate
                 })
                 .OrderByDescending(dbclient => dbclient.CreatedDate)

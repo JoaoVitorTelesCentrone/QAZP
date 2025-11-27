@@ -1,9 +1,8 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUp, ArrowDown, ArrowUpDown, Edit2Icon } from 'lucide-react'
+import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import DeleteEvent from './deleteEvent'
-import { useRouter } from 'next/router' // Import useRouter correctly
 import EditButton from './EditButton'
 
 export type Events = {
@@ -149,7 +148,7 @@ export const eventsColumns: ColumnDef<Events>[] = [
   {
     id: 'edit',
     cell: ({ row }) => (
-      <EditButton eventId={row.original.id} /> // Use the EditButton component here
+      <EditButton eventId={row.original.id} />
     ),
   },
   {

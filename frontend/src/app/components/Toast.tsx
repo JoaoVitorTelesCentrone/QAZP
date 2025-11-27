@@ -16,7 +16,7 @@ const Toast: React.FC<ToastProps> = ({ type, message }) => {
     }
   }, [type, message]);
 
-  return null; // Não é necessário renderizar nada aqui
+  return null;
 };
 
 export default Toast;

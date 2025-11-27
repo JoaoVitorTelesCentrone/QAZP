@@ -1,7 +1,6 @@
-// EditButton.tsx
-'use client' // Ensure this file is treated as a client-side component
+'use client' 
 
-import { useRouter } from 'next/navigation' // Use next/navigation for newer Next.js versions
+import { useRouter } from 'next/navigation'
 import { Edit2Icon } from 'lucide-react'
 import { eventIdAtom } from '../atoms/EventIdAtom'
 import { useAtom } from 'jotai'

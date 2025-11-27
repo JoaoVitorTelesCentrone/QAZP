@@ -3,7 +3,7 @@ import DeleteEventModal from './DeleteEventModal'
 import { TrashIcon } from 'lucide-react'
 
 interface DeleteEventProps {
-  eventId: string // Ensure refreshEvents is part of the props
+  eventId: string
 }
 
 const DeleteEvent: React.FC<DeleteEventProps> = ({ eventId }) => {
@@ -23,7 +23,7 @@ const DeleteEvent: React.FC<DeleteEventProps> = ({ eventId }) => {
       <DeleteEventModal
         isVisible={isModalVisible}
         onClose={closeModal}
-        eventId={eventId} // Pass the refresh function to the modal
+        eventId={eventId}
       />
     </>
   )

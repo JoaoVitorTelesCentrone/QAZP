@@ -29,7 +29,7 @@ namespace ZventsApi.Models
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [Required(ErrorMessage = "Category is required")]
         public MaterialCategory Category { get; set; }

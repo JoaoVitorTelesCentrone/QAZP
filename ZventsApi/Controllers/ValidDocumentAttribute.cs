@@ -4,16 +4,25 @@ namespace ZventsApi.Controllers
 {
     public class ValidDocumentAttribute : ValidationAttribute
     {
-        protected override ValidationResult IsValid(
-            object value,
+        protected override ValidationResult? IsValid(
+            object? value,
             ValidationContext validationContext
         )
         {
-            var document = (string)value;
+            if (value is null)
+                return ValidationResult.Success;
+
+            if (value is not string document)
+                return new ValidationResult("O valor informado não é um documento válido.");
+            
+            document = document.Trim();
+
+            if (string.IsNullOrWhiteSpace(document))
+                return ValidationResult.Success;
 
             if (!IsValidCPF(document) && !IsValidCNPJ(document))
             {
-                return new ValidationResult(ErrorMessage);
+                return new ValidationResult(ErrorMessage ?? "Documento inválido.");
             }
 
             return ValidationResult.Success;

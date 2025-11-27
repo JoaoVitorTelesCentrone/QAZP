@@ -35,7 +35,7 @@ interface userDataProps {
         const response = await axios.put(`http://localhost:5196/api/User/${userData?.id}`, updatedData);
         console.log('Update response:', response);
         setUserData(updatedData);
-        setEditModal(false); // Fechar o modal após a atualização
+        setEditModal(false);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error('Error message:', error.message);
