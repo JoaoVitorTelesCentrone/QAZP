@@ -1,15 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens; // Adicione esta linha
-using Microsoft.AspNetCore.Authentication.JwtBearer; // Adicione esta linha
-using System.Text; // Adicione esta linha
+using Microsoft.IdentityModel.Tokens; 
+using Microsoft.AspNetCore.Authentication.JwtBearer; 
+using System.Text; 
 using ZventsApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    // Preserve references to handle circular references
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 
@@ -22,7 +20,6 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Zvents", Version = "v1" });
 });
 
-// Configure CORS to allow any origin, header, and method
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
@@ -33,8 +30,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Configuração do JWT
-var key = Encoding.ASCII.GetBytes("sua_chave_secreta_aqui"); // Substitua pela sua chave secreta
+var key = Encoding.ASCII.GetBytes("sua_chave_secreta_aqui");
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -42,7 +38,7 @@ builder.Services.AddAuthentication(x =>
 })
 .AddJwtBearer(x =>
 {
-    x.RequireHttpsMetadata = false; // Mantenha como false em desenvolvimento
+    x.RequireHttpsMetadata = false;
     x.SaveToken = true;
     x.TokenValidationParameters = new TokenValidationParameters
     {
@@ -55,7 +51,6 @@ builder.Services.AddAuthentication(x =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -69,7 +64,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
-// Adicione autenticação e autorização
 app.UseAuthentication(); 
 app.UseAuthorization();
 
