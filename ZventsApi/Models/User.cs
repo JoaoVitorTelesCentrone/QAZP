@@ -22,14 +22,14 @@ namespace ZventsApi.Models
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
-        public string Password { get; set; }
+        public required string Password { get; set; }
 
         [Required(ErrorMessage = "User name is required")]
-        public string UserName { get; set; }
-        public UserRole? Role { get; set; }
+        public required string UserName { get; set; }
+        public UserRole Role { get; set; }
         public DateTime CreatedDate { get; set; }
         public UserStatus UserStatus { get; set; }
         public bool? IsDeleted { get; set; }

@@ -51,8 +51,8 @@ namespace ZventsApi.Models
     public class ActiveEventDto
     {
         public Guid Id { get; set; }
-        public string ClientFullName { get; set; }
-        public string Name { get; set; }
+        public required string ClientFullName { get; set; }
+        public required string Name { get; set; }
         public EventType Type { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
@@ -96,7 +96,7 @@ namespace ZventsApi.Models
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [Required(ErrorMessage = "Type is required")]
         public EventType Type { get; set; }
@@ -106,7 +106,7 @@ namespace ZventsApi.Models
 
         [Required(ErrorMessage = "ClientId is required")]
         public Guid ClientId { get; set; }
-        public Client? Client { get; set; }
+        public Client Client { get; set; } = default!;
 
         [Required(ErrorMessage = "StartDate is required")]
         public DateOnly StartDate { get; set; }
@@ -121,23 +121,23 @@ namespace ZventsApi.Models
         public TimeOnly EndTime { get; set; }
 
         [Required(ErrorMessage = "ZipCode is required")]
-        public string ZipCode { get; set; }
+        public required string ZipCode { get; set; }
 
         [Required(ErrorMessage = "AddressName is required")]
-        public string AddressName { get; set; }
+        public required string AddressName { get; set; }
 
         [Required(ErrorMessage = "AddressNumber is required")]
-        public string AddressNumber { get; set; }
+        public required string AddressNumber { get; set; }
         public string? AddressComplement { get; set; }
 
         [Required(ErrorMessage = "District is required")]
-        public string District { get; set; }
+        public required string District { get; set; }
 
         [Required(ErrorMessage = "State is required")]
-        public string State { get; set; }
+        public required string State { get; set; }
 
         [Required(ErrorMessage = "City is required")]
-        public string City { get; set; }
+        public required string City { get; set; }
         public int? EstimatedAudience { get; set; }
         public virtual ICollection<EventMaterial> EventMaterials { get; set; } = [];
         public decimal? TotalAmount { get; set; }

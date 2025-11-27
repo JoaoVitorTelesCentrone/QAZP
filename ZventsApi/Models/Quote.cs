@@ -10,14 +10,14 @@ namespace ZventsApi.Models
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Full name is required")]
-        public string FullName { get; set; }
+        public required string FullName { get; set; }
 
         [Required(ErrorMessage = "Last name is required")]
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Event type is required")]
-        public string EventType { get; set; }
+        public required string EventType { get; set; }
 
         [Required(ErrorMessage = "Estimated audience is required")]
         public int EstimatedAudience { get; set; }
