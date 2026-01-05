@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Reflection.Metadata;
 
 
 namespace ZventsApi.Controllers
@@ -20,13 +21,6 @@ namespace ZventsApi.Controllers
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
 
-
-        public UserController(ZventsDbContext context, IConfiguration configuration)
-        {
-            _context = context;
-            _configuration = configuration;
-        }
-
         public UserController(
             ZventsDbContext context,
             IConfiguration configuration,
@@ -38,27 +32,16 @@ namespace ZventsApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserListDto>>> GetUserAsync()
+        public async Task<ActionResult<IEnumerable<UserListDto>>> GetAllUsersAsync()
         {
-            var users = _userService.GetActiveUsersAsync();
+            var users = await _userService.GetAllUsersAsync();
             return Ok(users);
         }
 
         [HttpGet("activeUsers")]
-        public async Task<ActionResult<IEnumerable<object>>> GetActiveUsersAsync()
+        public async Task<ActionResult<IEnumerable<UserListDto>>> GetActiveUsersAsync()
         {
-            var activeUsers = await _context
-                .Users
-                .Where(dbUser => dbUser.IsDeleted == false && dbUser.UserStatus == UserStatus.Active)
-                .Select(dbUser => new
-                {
-                    dbUser.Name,
-                    dbUser.UserName,
-                    dbUser.CreatedDate
-                })
-                .OrderByDescending(dbUser => dbUser.CreatedDate)
-                .ToListAsync();
-
+            var activeUsers = await _userService.GetActiveUsersAsync();
             return Ok(activeUsers);
         }
 
@@ -137,30 +120,28 @@ namespace ZventsApi.Controllers
 
 
         [HttpGet("name/{name}")]
-        public ActionResult<User> GetUserByName(string name)
+        public async Task<ActionResult<UserListDto>> GetUserByNameAsync(string name)
         {
-            var user = _context.Users.FirstOrDefault(dbUser => dbUser.Name == name);
+            var user = await _userService.GetUserByNameAsync(name);
 
             if (user == null)
-            {
                 return NotFound();
-            }
 
-            return user;
+            return Ok(user);
         }
+
 
         [HttpGet("id/{id}")]
-        public ActionResult<User> GetUserById(Guid id)
+        public async Task<ActionResult<UserListDto>> GetUserByIdAsync(Guid id)
         {
-            var user = _context.Users.FirstOrDefault(dbUser => dbUser.Id == id);
+            var user = await _userService.GetUserByIdAsync(id);
 
             if (user == null)
-            {
                 return NotFound();
-            }
 
-            return user;
+            return Ok(user);
         }
+
 
         [HttpGet("userName/{userName}")]
         public ActionResult<User> GetUserByUserName(string userName)
