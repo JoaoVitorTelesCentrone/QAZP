@@ -47,75 +47,30 @@ namespace ZventsApi.Controllers
 
 
         [HttpPost]
-        public ActionResult<User> PostUser(User user)
+        public async Task<ActionResult<CreateUserResult>> PostUser(
+            [FromBody] CreateUserRequest request)
         {
-            bool userExists = _context.Users.Any(dbUser => dbUser.UserName == user.UserName);
+            var result = await _userService.CreateUserAsync(request);
 
-            if (!userExists)
-            {
-                _context.Users.Add(user);
-                _context.SaveChanges();
+            if (result == null)
+                return Conflict(new { message = "User already exists" });
 
-                return CreatedAtAction("GetUser", new { id = user.Id }, user);
-            }
-
-            return Conflict(new { message = "User already exists" });
+            return CreatedAtAction(
+                "GetUserById",
+                new { id = result.Id },
+                result
+            );
         }
 
         [HttpPost("login")]
-        public ActionResult Login([FromBody] LoginRequest request)
+        public async Task<ActionResult<UserLoginResult>> Login([FromBody] LoginRequest request)
         {
-            var user = _context.Users.FirstOrDefault(dbUser =>
-                dbUser.UserName == request.Username && dbUser.Password == request.Password
-            );
+            var result = await _userService.LoginAsync(request);
 
-            if (user == null)
-            {
-                return NotFound(new { message = "Usuário não encontrado" });
-            }
-            else if (user.UserStatus == UserStatus.Inactive || user.IsDeleted == true)
-            {
-                return Unauthorized("Usuário não autorizado");
-            }
+            if (result == null)
+                return Unauthorized(new { message = "Usuário não encontrado ou não autorizado" });
 
-            var token = GenerateJwtToken(user);
-
-            return Ok(new
-            {
-                token = token,
-                name = user.Name,
-                message = "Login bem-sucedido"
-            });
-        }
-
-        private string GenerateJwtToken(User user)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("name", user.Name),
-                new Claim("role", user.Role.ToString())
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        public class LoginRequest
-        {
-            public required string Username { get; set; }
-            public required string Password { get; set; }
+            return Ok(result);
         }
 
 
@@ -131,7 +86,7 @@ namespace ZventsApi.Controllers
         }
 
 
-        [HttpGet("id/{id}")]
+        [HttpGet("id/{id}", Name = "GetUserById")]
         public async Task<ActionResult<UserListDto>> GetUserByIdAsync(Guid id)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -154,25 +109,6 @@ namespace ZventsApi.Controllers
             }
 
             return user;
-        }
-
-        [HttpGet("{username}&{password}")]
-        public ActionResult<User> GetUserByCredentials(string username, string password)
-        {
-            var user = _context.Users.FirstOrDefault(dbUser =>
-                dbUser.UserName == username && dbUser.Password == password
-            );
-
-            if (user == null)
-            {
-                return NotFound(new { message = "User not found" });
-            }
-            else if (user.UserStatus == UserStatus.Inactive || user.IsDeleted == true)
-            {
-                return Unauthorized("User is not authorized");
-            }
-
-            return Ok(new { message = "Login successful" });
         }
 
         [HttpPut("{id}")]

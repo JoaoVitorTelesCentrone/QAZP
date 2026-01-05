@@ -1,4 +1,6 @@
 using ZventsApi.DTOs.User;
+using ZventsApi.Models;
+
 namespace ZventsApi.Application.Interfaces.Services
 {
 
@@ -8,5 +10,7 @@ namespace ZventsApi.Application.Interfaces.Services
         Task<IEnumerable<UserListDto>> GetActiveUsersAsync();
         Task<UserListDto?> GetUserByNameAsync(string name);
         Task<UserListDto?> GetUserByIdAsync(Guid id);
+        Task<CreateUserResult?> CreateUserAsync(CreateUserRequest request);
+        Task<UserLoginResult?> LoginAsync(LoginRequest request);
     }
 }
