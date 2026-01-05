@@ -11,29 +11,34 @@ namespace ZventsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
+
     public class UserController : ControllerBase
     {
         private readonly ZventsDbContext _context;
-        private readonly IConfiguration _configuration;  
+        private readonly IConfiguration _configuration;
 
         public UserController(ZventsDbContext context, IConfiguration configuration)
-    {
-        _context = context;
-        _configuration = configuration;
-    }
+        {
+            _context = context;
+            _configuration = configuration;
+        }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUserAsync()
+        public async Task<ActionResult<IEnumerable<UserListDto>>> GetUserAsync()
         {
-            var activeUsers = await _context
-                .Users.Where(dbUser =>
-                    dbUser.IsDeleted == false && dbUser.UserStatus == UserStatus.Active
-                )
-                .OrderBy(dbUser => dbUser.CreatedDate)
+            var users = await _context.Users
+                .Where(u => u.IsDeleted == false && u.UserStatus == UserStatus.Active)
+                .OrderBy(u => u.CreatedDate)
+                .Select(u => new UserListDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    UserName = u.UserName,
+                    CreatedDate = u.CreatedDate
+                })
                 .ToListAsync();
 
-            return Ok(activeUsers);
+            return Ok(users);
         }
 
         [HttpGet("activeUsers")]
@@ -42,9 +47,10 @@ namespace ZventsApi.Controllers
             var activeUsers = await _context
                 .Users
                 .Where(dbUser => dbUser.IsDeleted == false && dbUser.UserStatus == UserStatus.Active)
-                .Select(dbUser => new {
+                .Select(dbUser => new
+                {
                     dbUser.Name,
-                    dbUser.UserName, 
+                    dbUser.UserName,
                     dbUser.CreatedDate
                 })
                 .OrderByDescending(dbUser => dbUser.CreatedDate)
@@ -81,18 +87,18 @@ namespace ZventsApi.Controllers
             {
                 return NotFound(new { message = "Usuário não encontrado" });
             }
-            else if (user.UserStatus == UserStatus.Inactive || user.IsDeleted == true) 
+            else if (user.UserStatus == UserStatus.Inactive || user.IsDeleted == true)
             {
                 return Unauthorized("Usuário não autorizado");
             }
 
             var token = GenerateJwtToken(user);
 
-            return Ok(new 
-            { 
-                token = token, 
-                name = user.Name, 
-                message = "Login bem-sucedido" 
+            return Ok(new
+            {
+                token = token,
+                name = user.Name,
+                message = "Login bem-sucedido"
             });
         }
 
