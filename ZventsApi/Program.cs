@@ -3,6 +3,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer; 
 using System.Text; 
 using ZventsApi.Models;
+using ZventsApi.Application.Interfaces.Services;
+using ZventsApi.Application.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

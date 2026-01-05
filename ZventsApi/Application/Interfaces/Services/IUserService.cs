@@ -1,6 +1,9 @@
 using ZventsApi.DTOs.User;
-
-public interface IUserService
+namespace ZventsApi.Application.Interfaces.Services
 {
-    Task<IEnumerable<UserListDto>> GetActiveUsersAsync();
+
+    public interface IUserService
+    {
+        Task<IEnumerable<UserListDto>> GetActiveUsersAsync();
+    }
 }

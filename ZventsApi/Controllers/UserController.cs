@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ZventsApi.Models;
+using ZventsApi.Application.Interfaces.Services;
+using ZventsApi.DTOs.User;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,11 +18,23 @@ namespace ZventsApi.Controllers
     {
         private readonly ZventsDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
+
 
         public UserController(ZventsDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
+        }
+
+        public UserController(
+            ZventsDbContext context,
+            IConfiguration configuration,
+            IUserService userService)
+        {
+            _context = context;
+            _configuration = configuration;
+            _userService = userService;
         }
 
         [HttpGet]
