@@ -45,6 +45,38 @@ namespace ZventsApi.Controllers
             return Ok(activeUsers);
         }
 
+        [HttpGet("name/{name}")]
+        public async Task<ActionResult<UserListDto>> GetUserByNameAsync(string name)
+        {
+            var user = await _userService.GetUserByNameAsync(name);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
+
+        [HttpGet("id/{id}", Name = "GetUserById")]
+        public async Task<ActionResult<UserListDto>> GetUserByIdAsync(Guid id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
+
+        [HttpGet("username/{username}")]
+        public async Task<ActionResult<UserListDto>> GetUserByUsernameAsync(string username)
+        {
+            var user = await _userService.GetUserByUsernameAsync(username);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
 
         [HttpPost]
         public async Task<ActionResult<CreateUserResult>> PostUser(
@@ -73,44 +105,6 @@ namespace ZventsApi.Controllers
             return Ok(result);
         }
 
-
-        [HttpGet("name/{name}")]
-        public async Task<ActionResult<UserListDto>> GetUserByNameAsync(string name)
-        {
-            var user = await _userService.GetUserByNameAsync(name);
-
-            if (user == null)
-                return NotFound();
-
-            return Ok(user);
-        }
-
-
-        [HttpGet("id/{id}", Name = "GetUserById")]
-        public async Task<ActionResult<UserListDto>> GetUserByIdAsync(Guid id)
-        {
-            var user = await _userService.GetUserByIdAsync(id);
-
-            if (user == null)
-                return NotFound();
-
-            return Ok(user);
-        }
-
-
-        [HttpGet("userName/{userName}")]
-        public ActionResult<User> GetUserByUserName(string userName)
-        {
-            var user = _context.Users.FirstOrDefault(dbUser => dbUser.UserName == userName);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
-        }
-
         [HttpPut("{id}")]
         public IActionResult Edit(Guid id, User updatedUser)
         {
@@ -137,7 +131,7 @@ namespace ZventsApi.Controllers
 
             userToUpdate.Name = updatedUser.Name;
             userToUpdate.Password = updatedUser.Password;
-            userToUpdate.UserName = updatedUser.UserName;
+            userToUpdate.Username = updatedUser.Username;
             userToUpdate.Role = updatedUser.Role;
             userToUpdate.UserStatus = updatedUser.UserStatus;
 

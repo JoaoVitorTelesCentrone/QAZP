@@ -28,7 +28,7 @@ namespace ZventsApi.Models
         public required string Password { get; set; }
 
         [Required(ErrorMessage = "User name is required")]
-        public required string UserName { get; set; }
+        public required string Username { get; set; }
         public UserRole Role { get; set; }
         public DateTime CreatedDate { get; set; }
         public UserStatus UserStatus { get; set; }

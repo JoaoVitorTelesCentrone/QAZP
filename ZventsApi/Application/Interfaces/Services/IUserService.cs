@@ -10,6 +10,7 @@ namespace ZventsApi.Application.Interfaces.Services
         Task<IEnumerable<UserListDto>> GetActiveUsersAsync();
         Task<UserListDto?> GetUserByNameAsync(string name);
         Task<UserListDto?> GetUserByIdAsync(Guid id);
+        Task<UserListDto?> GetUserByUsernameAsync(string username);
         Task<CreateUserResult?> CreateUserAsync(CreateUserRequest request);
         Task<UserLoginResult?> LoginAsync(LoginRequest request);
     }

@@ -29,7 +29,7 @@ namespace ZventsApi.Application.Services
                 {
                     Id = u.Id,
                     Name = u.Name,
-                    UserName = u.UserName,
+                    Username = u.Username,
                     CreatedDate = u.CreatedDate
                 })
                 .ToListAsync();
@@ -44,7 +44,7 @@ namespace ZventsApi.Application.Services
                 {
                     Id = u.Id,
                     Name = u.Name,
-                    UserName = u.UserName,
+                    Username = u.Username,
                     CreatedDate = u.CreatedDate
                 })
                 .OrderByDescending(u => u.CreatedDate)
@@ -59,7 +59,7 @@ namespace ZventsApi.Application.Services
                 {
                     Id = u.Id,
                     Name = u.Name,
-                    UserName = u.UserName,
+                    Username = u.Username,
                     CreatedDate = u.CreatedDate
                 })
                 .FirstOrDefaultAsync();
@@ -72,15 +72,29 @@ namespace ZventsApi.Application.Services
                 {
                     Id = u.Id,
                     Name = u.Name,
-                    UserName = u.UserName,
+                    Username = u.Username,
                     CreatedDate = u.CreatedDate
                 })
                 .FirstOrDefaultAsync();
         }
+        public async Task<UserListDto?> GetUserByUsernameAsync(string username)
+        {
+            return await _context.Users
+                .Where(u => u.Username == username && !u.IsDeleted.GetValueOrDefault() == false && u.UserStatus == UserStatus.Active)
+                .Select(u => new UserListDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Username = u.Username,
+                    CreatedDate = u.CreatedDate
+                })
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<UserLoginResult?> LoginAsync(LoginRequest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u =>
-                u.UserName == request.Username && u.Password == request.Password);
+                u.Username == request.Username && u.Password == request.Password);
 
             if (user == null || user.UserStatus == UserStatus.Inactive || user.IsDeleted == true)
                 return null;
@@ -90,7 +104,7 @@ namespace ZventsApi.Application.Services
 
             var claims = new[]
             {
-        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+        new Claim(JwtRegisteredClaimNames.Sub, user.Username),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         new Claim("name", user.Name),
         new Claim("role", user.Role.ToString())
@@ -117,7 +131,7 @@ namespace ZventsApi.Application.Services
         public async Task<CreateUserResult?> CreateUserAsync(CreateUserRequest request)
         {
             var userExists = await _context.Users
-                .AnyAsync(u => u.UserName == request.UserName);
+                .AnyAsync(u => u.Username == request.Username);
 
             if (userExists)
                 return null;
@@ -126,7 +140,7 @@ namespace ZventsApi.Application.Services
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
-                UserName = request.UserName,
+                Username = request.Username,
                 Password = request.Password,
                 Role = request.Role,
                 CreatedDate = DateTime.UtcNow,
@@ -141,7 +155,7 @@ namespace ZventsApi.Application.Services
             {
                 Id = user.Id,
                 Name = user.Name,
-                UserName = user.UserName,
+                Username = user.Username,
                 Message = "Usuário criado com sucesso"
             };
         }
