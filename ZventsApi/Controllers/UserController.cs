@@ -26,18 +26,7 @@ namespace ZventsApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserListDto>>> GetUserAsync()
         {
-            var users = await _context.Users
-                .Where(u => u.IsDeleted == false && u.UserStatus == UserStatus.Active)
-                .OrderBy(u => u.CreatedDate)
-                .Select(u => new UserListDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    UserName = u.UserName,
-                    CreatedDate = u.CreatedDate
-                })
-                .ToListAsync();
-
+            var users = _userService.GetActiveUsersAsync();
             return Ok(users);
         }
 
