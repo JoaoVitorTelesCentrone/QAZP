@@ -9,18 +9,11 @@ using ZventsApi.Models;
 
 namespace ZventsApi.Application.Services
 {
-    public class UserService : IUserService
+    public class UserService(IUserRepository userRepository, IConfiguration configuration) : IUserService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IConfiguration _configuration;
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IConfiguration _configuration = configuration;
 
-        public UserService(IUserRepository userRepository, IConfiguration configuration)
-        {
-            _userRepository = userRepository;
-            _configuration = configuration;
-        }
-
-        // GET ALL
         public async Task<IEnumerable<UserListDto>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();

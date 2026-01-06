@@ -4,14 +4,9 @@ using ZventsApi.Models;
 
 namespace ZventsApi.Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(ZventsDbContext context) : IUserRepository
     {
-        private readonly ZventsDbContext _context;
-
-        public UserRepository(ZventsDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ZventsDbContext _context = context;
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {

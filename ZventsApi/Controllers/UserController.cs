@@ -7,14 +7,9 @@ namespace ZventsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController(IUserService userService) : ControllerBase
     {
-        private readonly IUserService _userService;
-
-        public UserController(IUserService userService)
-        {
-            _userService = userService;
-        }
+        private readonly IUserService _userService = userService;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserListDto>>> GetAllUsersAsync()
@@ -100,7 +95,6 @@ namespace ZventsApi.Controllers
             return Ok(user);
         }
 
-        // PATCH (Soft delete)
         [HttpPatch("{id}")]
         public async Task<IActionResult> SoftDeleteUser(Guid id)
         {
@@ -112,7 +106,6 @@ namespace ZventsApi.Controllers
             return NoContent();
         }
 
-        // DELETE (Hard delete)
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
