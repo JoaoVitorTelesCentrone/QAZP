@@ -5,10 +5,14 @@ using System.Text;
 using ZventsApi.Models;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.Application.Services;
+using ZventsApi.Application.Interfaces.Repositories; 
+using ZventsApi.Infrastructure.Repositories;        
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>

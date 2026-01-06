@@ -1,114 +1,108 @@
-using Microsoft.EntityFrameworkCore;
-using ZventsApi.DTOs.User;
-using ZventsApi.Models;
-using ZventsApi.Application.Interfaces.Services;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
-
+using ZventsApi.Application.Interfaces.Repositories;
+using ZventsApi.Application.Interfaces.Services;
+using ZventsApi.DTOs.User;
+using ZventsApi.Models;
 
 namespace ZventsApi.Application.Services
 {
     public class UserService : IUserService
     {
-        private readonly ZventsDbContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
 
-        public UserService(ZventsDbContext context, IConfiguration configuration)
+        public UserService(IUserRepository userRepository, IConfiguration configuration)
         {
-            _context = context;
+            _userRepository = userRepository;
             _configuration = configuration;
         }
 
+        // GET ALL
         public async Task<IEnumerable<UserListDto>> GetAllUsersAsync()
         {
-            return await _context.Users
-                .OrderBy(u => u.CreatedDate)
-                .Select(u => new UserListDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Username = u.Username,
-                    CreatedDate = u.CreatedDate
-                })
-                .ToListAsync();
+            var users = await _userRepository.GetAllAsync();
+            return users.Select(u => new UserListDto
+            {
+                Id = u.Id,
+                Name = u.Name,
+                Username = u.Username,
+                CreatedDate = u.CreatedDate
+            });
         }
 
         public async Task<IEnumerable<UserListDto>> GetActiveUsersAsync()
         {
-            return await _context.Users
-                .Where(u => u.IsDeleted == false && u.UserStatus == UserStatus.Active)
-                .OrderBy(u => u.CreatedDate)
-                .Select(u => new UserListDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Username = u.Username,
-                    CreatedDate = u.CreatedDate
-                })
-                .OrderByDescending(u => u.CreatedDate)
-                .ToListAsync();
+            var users = await _userRepository.GetActiveUsersAsync();
+            return users.Select(u => new UserListDto
+            {
+                Id = u.Id,
+                Name = u.Name,
+                Username = u.Username,
+                CreatedDate = u.CreatedDate
+            });
         }
 
         public async Task<UserListDto?> GetUserByNameAsync(string name)
         {
-            return await _context.Users
-                .Where(u => u.Name == name && u.IsDeleted == false && u.UserStatus == UserStatus.Active)
-                .Select(u => new UserListDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Username = u.Username,
-                    CreatedDate = u.CreatedDate
-                })
-                .FirstOrDefaultAsync();
+            var user = await _userRepository.GetByNameAsync(name);
+            if (user == null) return null;
+
+            return new UserListDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Username = user.Username,
+                CreatedDate = user.CreatedDate
+            };
         }
+
         public async Task<UserListDto?> GetUserByIdAsync(Guid id)
         {
-            return await _context.Users
-                .Where(u => u.Id == id && u.IsDeleted == false && u.UserStatus == UserStatus.Active)
-                .Select(u => new UserListDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Username = u.Username,
-                    CreatedDate = u.CreatedDate
-                })
-                .FirstOrDefaultAsync();
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return null;
+
+            return new UserListDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Username = user.Username,
+                CreatedDate = user.CreatedDate
+            };
         }
+
         public async Task<UserListDto?> GetUserByUsernameAsync(string username)
         {
-            return await _context.Users
-                .Where(u => u.Username == username && !u.IsDeleted.GetValueOrDefault() == false && u.UserStatus == UserStatus.Active)
-                .Select(u => new UserListDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Username = u.Username,
-                    CreatedDate = u.CreatedDate
-                })
-                .FirstOrDefaultAsync();
+            var user = await _userRepository.GetByUsernameAsync(username);
+            if (user == null) return null;
+
+            return new UserListDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Username = user.Username,
+                CreatedDate = user.CreatedDate
+            };
         }
 
         public async Task<UserLoginResult?> LoginAsync(LoginRequest request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u =>
-                u.Username == request.Username && u.Password == request.Password);
+            var user = await _userRepository.GetByUsernameAsync(request.Username);
 
-            if (user == null || user.UserStatus == UserStatus.Inactive || user.IsDeleted == true)
+            if (user == null || user.Password != request.Password || user.UserStatus != UserStatus.Active || user.IsDeleted.GetValueOrDefault())
                 return null;
 
-            var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
 
             var claims = new[]
             {
-        new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim("name", user.Name),
-        new Claim("role", user.Role.ToString())
-    };
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("name", user.Name),
+                new Claim("role", user.Role.ToString())
+            };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -119,6 +113,7 @@ namespace ZventsApi.Application.Services
                 Audience = _configuration["Jwt:Audience"]
             };
 
+            var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return new UserLoginResult
@@ -128,13 +123,11 @@ namespace ZventsApi.Application.Services
                 Message = "Login bem-sucedido"
             };
         }
+
         public async Task<CreateUserResult?> CreateUserAsync(CreateUserRequest request)
         {
-            var userExists = await _context.Users
-                .AnyAsync(u => u.Username == request.Username);
-
-            if (userExists)
-                return null;
+            var exists = await _userRepository.ExistsByUsernameAsync(request.Username);
+            if (exists) return null;
 
             var user = new User
             {
@@ -148,8 +141,7 @@ namespace ZventsApi.Application.Services
                 IsDeleted = false
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _userRepository.AddAsync(user);
 
             return new CreateUserResult
             {
@@ -159,7 +151,67 @@ namespace ZventsApi.Application.Services
                 Message = "Usuário criado com sucesso"
             };
         }
+
+        public async Task<UserListDto?> UpdateUserAsync(Guid id, UpdateUserRequestDto updatedUser)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return null;
+
+            if (user.Role == UserRole.Admin && updatedUser.Role != UserRole.Admin)
+            {
+                var admins = await _userRepository.GetUsersByRoleAsync(UserRole.Admin);
+                if (admins.Count() <= 1)
+                    throw new InvalidOperationException("Cannot change the role of the last admin user");
+            }
+
+            user.Name = updatedUser.Name;
+            user.Username = updatedUser.Username;
+            user.Password = updatedUser.Password;
+            user.Role = updatedUser.Role;
+            user.UserStatus = updatedUser.UserStatus;
+
+            await _userRepository.UpdateAsync(user);
+
+            return new UserListDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Username = user.Username,
+                CreatedDate = user.CreatedDate
+            };
+        }
+
+        public async Task<bool> SoftDeleteUserAsync(Guid id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return false;
+
+            if (user.Role == UserRole.Admin)
+            {
+                var admins = await _userRepository.GetUsersByRoleAsync(UserRole.Admin);
+                if (admins.Count() <= 1)
+                    throw new InvalidOperationException("Cannot delete the last admin user");
+            }
+
+            user.IsDeleted = true;
+            await _userRepository.UpdateAsync(user);
+            return true;
+        }
+
+        public async Task<bool> DeleteUserAsync(Guid id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return false;
+
+            if (user.Role == UserRole.Admin)
+            {
+                var admins = await _userRepository.GetUsersByRoleAsync(UserRole.Admin);
+                if (admins.Count() <= 1)
+                    throw new InvalidOperationException("Cannot delete the last admin user");
+            }
+
+            await _userRepository.DeleteAsync(user);
+            return true;
+        }
     }
 }
-
-
