@@ -6,14 +6,17 @@ using ZventsApi.Models;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.Application.Services;
 using ZventsApi.Application.Interfaces.Repositories; 
-using ZventsApi.Infrastructure.Repositories;        
-
+using ZventsApi.Infrastructure.Repositories;  
+using ZventsApi.Application.Interfaces.Repository;
+using ZventsApi.Infrastructure.Repository;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
