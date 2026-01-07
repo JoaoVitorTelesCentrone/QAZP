@@ -6,14 +6,9 @@ namespace ZventsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuoteController : ControllerBase
+    public class QuoteController(IQuoteService quoteService) : ControllerBase
     {
-        private readonly IQuoteService _quoteService;
-
-        public QuoteController(IQuoteService quoteService)
-        {
-            _quoteService = quoteService;
-        }
+        private readonly IQuoteService _quoteService = quoteService;
 
         [HttpGet("active-quotes")]
         public async Task<IActionResult> GetActiveQuotes()
