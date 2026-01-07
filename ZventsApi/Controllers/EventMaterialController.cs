@@ -1,21 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ZventsApi.Models;
+using ZventsApi.Application.Interfaces.Services;
+using ZventsApi.DTOs.EventMaterial;
 
 namespace ZventsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventMaterialController(ZventsDbContext context) : ControllerBase
+    public class EventMaterialController(IEventMaterialService service) : ControllerBase
     {
-        private readonly ZventsDbContext _context = context;
+        private readonly IEventMaterialService _service = service;
 
-        [HttpGet("eventId/{eventId}")]
-        public async Task<ActionResult<IEnumerable<EventMaterial>>> GetMaterialByEventId(
-            Guid eventId
-        )
+        [HttpGet("event/{eventId}")]
+        public async Task<ActionResult<IEnumerable<EventMaterialResponseDto>>> GetByEventId(Guid eventId)
         {
-            return await _context.EventMaterials.Where(x => x.EventId == eventId).ToArrayAsync();
+            var result = await _service.GetMaterialsByEventIdAsync(eventId);
+            return Ok(result);
         }
     }
 }
