@@ -21,6 +21,8 @@ builder.Services.AddScoped<IQuoteRepository, QuoteRepository>();
 builder.Services.AddScoped<IQuoteService, QuoteService>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
+builder.Services.AddScoped<IMaterialService, MaterialService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

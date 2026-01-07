@@ -1,144 +1,77 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using ZventsApi.Application.Interfaces.Services;
+using ZventsApi.DTOs.Material;
 using ZventsApi.Models;
 
 namespace ZventsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MaterialController(ZventsDbContext context) : ControllerBase
+    public class MaterialController(IMaterialService materialService) : ControllerBase
     {
-        private readonly ZventsDbContext _context = context;
+        private readonly IMaterialService _materialService = materialService;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Material>>> GetMaterialAsync()
+        public async Task<ActionResult<IEnumerable<MaterialResponseDto>>> GetAllMaterials()
         {
-            var activeMaterials = await _context
-                .Materials.Where(dbMaterial => dbMaterial.IsDeleted == false)
-                .ToListAsync();
-
-            return Ok(activeMaterials);
-        }
-
-        [HttpGet("id/{id}")]
-        public ActionResult<Material> GetMaterialById(Guid id)
-        {
-            var material = _context.Materials.FirstOrDefault(dbMaterial => dbMaterial.Id == id);
-
-            if (material == null)
-            {
-                return NotFound();
-            }
-
-            return material;
-        }
-
-        [HttpGet("category/{category}")]
-        public async Task<ActionResult<IEnumerable<Material>>> GetMaterialByCategory(
-            MaterialCategory category
-        )
-        {
-            return await _context
-                .Materials.Where(dbMaterial => dbMaterial.Category == category)
-                .ToArrayAsync();
-        }
-
-        [HttpGet("name/{name}")]
-        public async Task<ActionResult<IEnumerable<Material>>> GetMaterialByName(string name)
-        {
-            return await _context
-                .Materials.Where(dbMaterial => dbMaterial.Name == name)
-                .ToArrayAsync();
+            var materials = await _materialService.GetAllMaterialsAsync();
+            return Ok(materials);
         }
 
         [HttpGet("active-materials")]
-        public async Task<ActionResult<IEnumerable<object>>> GetActiveMaterialsAsync()
+        public async Task<ActionResult<IEnumerable<MaterialResponseDto>>> GetActiveMaterialsAsync()
         {
-            var activeMaterials = await _context.Materials
-                .Where(dbMaterial => dbMaterial.IsDeleted == false)
-                .Select(material => new 
-                {
-                    material.Id,
-                    material.Name,
-                    material.Category,
-                    material.Price,
-                    material.CreatedDate
-                })
-                .OrderByDescending(dbMaterial => dbMaterial.CreatedDate)
-                .ToListAsync();
-
+            var activeMaterials = await _materialService.GetActiveMaterialsAsync();
             return Ok(activeMaterials);
         }
 
-        [HttpPost]
-        public ActionResult<Material> PostMaterial(Material material)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MaterialResponseDto>> GetMaterialById(Guid id)
         {
-            bool materialExists = _context.Materials.Any(dbMaterial =>
-                dbMaterial.Name == material.Name && dbMaterial.Category == material.Category && dbMaterial.IsDeleted == false
-            );
-
-            if (!materialExists)
-            {
-                _context.Materials.Add(material);
-                _context.SaveChanges();
-
-                return CreatedAtAction(nameof(PostMaterial), new { id = material.Id }, material);
-            }
-
-            return Conflict(
-                new { message = "There is already a Material with the same Name and Category" }
-            );
+            var material = await _materialService.GetMaterialByIdAsync(id);
+            if (material == null) return NotFound();
+            return Ok(material);
         }
 
-        [HttpPatch]
+        [HttpGet("category/{category}")]
+        public async Task<ActionResult<IEnumerable<MaterialResponseDto>>> GetMaterialsByCategory(MaterialCategory category)
+        {
+            var materials = await _materialService.GetMaterialsByCategoryAsync(category);
+            return Ok(materials);
+        }
+
+        [HttpGet("name/{name}")]
+        public async Task<ActionResult<IEnumerable<MaterialResponseDto>>> GetMaterialsByName(string name)
+        {
+            var materials = await _materialService.GetMaterialsByNameAsync(name);
+            return Ok(materials);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<MaterialResponseDto>> CreateMaterial(MaterialRequestDto dto)
+        {
+            var material = await _materialService.CreateMaterialAsync(dto);
+            return CreatedAtAction(nameof(GetMaterialById), new { id = material.Id }, material);
+        }
+
+        [HttpPatch("{id}")]
         public async Task<IActionResult> SoftDeleteMaterial(Guid id)
         {
-            var materialToDelete = await _context.Materials.FindAsync(id);
+            var success = await _materialService.SoftDeleteMaterialAsync(id);
 
-            if (materialToDelete == null)
-            {
+            if (!success)
                 return NotFound();
-            }
-
-            materialToDelete.IsDeleted = true;
-            _context.Entry(materialToDelete).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MaterialExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return NoContent();
         }
-        private bool MaterialExists(Guid id)
-        {
-            return _context.Materials.Any(material => material.Id == id);
-        }
+
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteMaterial(Guid id)
+        public async Task<IActionResult> DeleteMaterial(Guid id)
         {
-            var materialToDelete = _context.Materials.Find(id);
-
-            if (materialToDelete == null)
-            {
-                return NotFound();
-            }
-
-            _context.Materials.Remove(materialToDelete);
-            _context.SaveChanges();
-
+            var success = await _materialService.DeleteMaterialAsync(id);
+            if (!success) return NotFound();
             return NoContent();
         }
     }
