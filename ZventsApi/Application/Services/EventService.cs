@@ -5,18 +5,12 @@ using ZventsApi.Models;
 
 namespace ZventsApi.Application.Services
 {
-    public class EventService : IEventService
+    public class EventService(
+        IEventRepository eventRepository,
+        IMaterialRepository materialRepository) : IEventService
     {
-        private readonly IEventRepository _eventRepository;
-        private readonly IMaterialRepository _materialRepository;
-
-        public EventService(
-            IEventRepository eventRepository,
-            IMaterialRepository materialRepository)
-        {
-            _eventRepository = eventRepository;
-            _materialRepository = materialRepository;
-        }
+        private readonly IEventRepository _eventRepository = eventRepository;
+        private readonly IMaterialRepository _materialRepository = materialRepository;
 
         public async Task<Event?> GetByIdAsync(Guid id)
         {

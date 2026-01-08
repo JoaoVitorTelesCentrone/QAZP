@@ -7,14 +7,9 @@ namespace ZventsApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EventController : ControllerBase
+    public class EventController(IEventService service) : ControllerBase
     {
-        private readonly IEventService _service;
-
-        public EventController(IEventService service)
-        {
-            _service = service;
-        }
+        private readonly IEventService _service = service;
 
         [HttpGet("active-events")]
         public async Task<ActionResult<IEnumerable<ActiveEventDto>>> GetActiveEvents()
