@@ -8,36 +8,16 @@ using ZventsApi.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure();
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddSwaggerConfiguration();
+builder.Services.AddCorsConfiguration();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler =
         System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
-
-builder.Services.AddDbContext<ZventsDbContext>(options =>
-    options.UseSqlite("Data Source=Zvents.db"));
-
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Title = "Zvents",
-        Version = "v1"
-    });
-});
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", builder =>
-    {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-});
-
-builder.Services.AddJwtAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
