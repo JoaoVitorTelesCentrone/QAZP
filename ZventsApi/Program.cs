@@ -25,6 +25,8 @@ builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<IMaterialService, MaterialService>();
 builder.Services.AddScoped<IEventMaterialRepository, EventMaterialRepository>();
 builder.Services.AddScoped<IEventMaterialService, EventMaterialService>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventService, EventService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

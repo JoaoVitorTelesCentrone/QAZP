@@ -1,3 +1,5 @@
+using ZventsApi.Models;
+
 namespace ZventsApi.DTOs.EventMaterial
 {
     public class EventMaterialResponseDto
