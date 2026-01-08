@@ -1,6 +1,6 @@
 using ZventsApi.Models;
 
-namespace ZventsApi.Application.Interfaces.Repository
+namespace ZventsApi.Application.Interfaces.Repositories
 {
     public interface IClientRepository
     {

@@ -1,18 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using ZventsApi.Application.Interfaces.Repository;
+using ZventsApi.Application.Interfaces.Repositories;
 using ZventsApi.DTOs.Quote;
 using ZventsApi.Models;
 
 namespace ZventsApi.Infrastructure.Repository
 {
-    public class QuoteRepository : IQuoteRepository
+    public class QuoteRepository(ZventsDbContext context) : IQuoteRepository
     {
-        private readonly ZventsDbContext _context;
-
-        public QuoteRepository(ZventsDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ZventsDbContext _context = context;
 
         public async Task<List<QuoteDto>> GetAllAsync()
         {

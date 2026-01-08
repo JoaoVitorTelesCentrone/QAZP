@@ -1,6 +1,6 @@
 using ZventsApi.DTOs.Dashboard;
 
-namespace ZventsApi.Application.Interfaces.Repository
+namespace ZventsApi.Application.Interfaces.Repositories
 {
     public interface IDashboardRepository
     {

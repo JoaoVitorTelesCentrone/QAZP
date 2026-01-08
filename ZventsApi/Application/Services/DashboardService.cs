@@ -1,4 +1,4 @@
-using ZventsApi.Application.Interfaces.Repository;
+using ZventsApi.Application.Interfaces.Repositories;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Dashboard;
 

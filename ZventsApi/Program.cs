@@ -1,45 +1,30 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens; 
-using Microsoft.AspNetCore.Authentication.JwtBearer; 
-using System.Text; 
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 using ZventsApi.Models;
-using ZventsApi.Application.Interfaces.Services;
-using ZventsApi.Application.Services;
-using ZventsApi.Application.Interfaces.Repositories; 
-using ZventsApi.Infrastructure.Repositories;  
-using ZventsApi.Application.Interfaces.Repository;
-using ZventsApi.Infrastructure.Repository;
-
+using ZventsApi.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IDashboardService, DashboardService>();
-builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
-builder.Services.AddScoped<IQuoteRepository, QuoteRepository>();
-builder.Services.AddScoped<IQuoteService, QuoteService>();
-builder.Services.AddScoped<IClientRepository, ClientRepository>();
-builder.Services.AddScoped<IClientService, ClientService>();
-builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
-builder.Services.AddScoped<IMaterialService, MaterialService>();
-builder.Services.AddScoped<IEventMaterialRepository, EventMaterialRepository>();
-builder.Services.AddScoped<IEventMaterialService, EventMaterialService>();
-builder.Services.AddScoped<IEventRepository, EventRepository>();
-builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddInfrastructure();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-
+    options.JsonSerializerOptions.ReferenceHandler =
+        System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
+
 builder.Services.AddDbContext<ZventsDbContext>(options =>
     options.UseSqlite("Data Source=Zvents.db"));
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Zvents", Version = "v1" });
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Zvents",
+        Version = "v1"
+    });
 });
 
 builder.Services.AddCors(options =>
@@ -86,7 +71,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

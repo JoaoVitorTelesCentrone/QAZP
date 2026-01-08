@@ -1,18 +1,13 @@
-using ZventsApi.Application.Interfaces.Repository;
+using ZventsApi.Application.Interfaces.Repositories;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Quote;
 using ZventsApi.Models;
 
 namespace ZventsApi.Application.Services
 {
-    public class QuoteService : IQuoteService
+    public class QuoteService(IQuoteRepository repository) : IQuoteService
     {
-        private readonly IQuoteRepository _repository;
-
-        public QuoteService(IQuoteRepository repository)
-        {
-            _repository = repository;
-        }
+        private readonly IQuoteRepository _repository = repository;
 
         public async Task<List<QuoteDto>> GetAllAsync()
         {
