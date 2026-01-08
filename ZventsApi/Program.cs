@@ -21,21 +21,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Zvents V1");
-    });
-}
-
-app.UseHttpsRedirection();
-app.UseCors("AllowAll");
-
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseDevelopmentSwagger();
+app.UseZventsPipeline();
 
 app.MapControllers();
 
