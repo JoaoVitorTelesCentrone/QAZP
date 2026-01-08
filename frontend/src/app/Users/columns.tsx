@@ -10,7 +10,7 @@ import {
 export type Users = {
   id: string
   name: string
-  userName: string
+  username: string
 }
 
 export const userColumns = (): ColumnDef<Users>[] => [
@@ -35,7 +35,7 @@ export const userColumns = (): ColumnDef<Users>[] => [
     },
   },
   {
-    accessorKey: 'userName',
+    accessorKey: 'username',
     header: ({ column }) => {
       return (
         <Button
