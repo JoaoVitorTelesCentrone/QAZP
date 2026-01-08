@@ -37,24 +37,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var key = Encoding.ASCII.GetBytes("sua_chave_secreta_aqui");
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
-});
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
