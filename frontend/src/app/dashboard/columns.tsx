@@ -1,7 +1,7 @@
 'use client'
-import { Button } from '@/components/ui/button'
+
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
+import { SortableHeader } from './components/SorttableHeader'
 
 export type Events = {
   id: string
@@ -19,109 +19,37 @@ export const eventsColumns: ColumnDef<Events>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Título
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowDown className="ml-2 h-4 w-4" />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowUp className="ml-2 h-4 w-4" />
-        ) : (
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        )}
-      </Button>
+      <SortableHeader column={column} label="Título" />
     ),
   },
   {
     accessorKey: 'type',
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Tipo
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowDown className="ml-2 h-4 w-4" />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowUp className="ml-2 h-4 w-4" />
-        ) : (
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        )}
-      </Button>
+      <SortableHeader column={column} label="Tipo" />      
     ),
   },
   {
     accessorKey: 'startDate',
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Início
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowDown className="ml-2 h-4 w-4" />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowUp className="ml-2 h-4 w-4" />
-        ) : (
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        )}
-      </Button>
+      <SortableHeader column={column} label="Início" />
     ),
   },
   {
     accessorKey: 'endDate',
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Fim
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowDown className="ml-2 h-4 w-4" />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowUp className="ml-2 h-4 w-4" />
-        ) : (
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        )}
-      </Button>
+      <SortableHeader column={column} label="Fim" />
     ),
   },
   {
     accessorKey: 'estimatedAudience',
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Público estimado
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowDown className="ml-2 h-4 w-4" />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowUp className="ml-2 h-4 w-4" />
-        ) : (
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        )}
-      </Button>
+      <SortableHeader column={column} label="Público Estimado" />
     ),
   },
   {
     accessorKey: 'totalAmount',
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Total (R$)
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowDown className="ml-2 h-4 w-4" />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowUp className="ml-2 h-4 w-4" />
-        ) : (
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        )}
-      </Button>
+      <SortableHeader column={column} label="Total (R$)" />
     ),
   },
 ]
