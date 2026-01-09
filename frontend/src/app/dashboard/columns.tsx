@@ -1,7 +1,7 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import { SortableHeader } from './components/SorttableHeader'
+import { SortableHeader } from '@/components/ui/SortableHeader'
 
 export type Events = {
   id: string
@@ -18,38 +18,26 @@ export type Events = {
 export const eventsColumns: ColumnDef<Events>[] = [
   {
     accessorKey: 'name',
-    header: ({ column }) => (
-      <SortableHeader column={column} label="Título" />
-    ),
+    header: ({ column }) => <SortableHeader column={column} title="Nome" />
   },
   {
     accessorKey: 'type',
-    header: ({ column }) => (
-      <SortableHeader column={column} label="Tipo" />      
-    ),
+    header: ({ column }) => <SortableHeader column={column} title="Tipo" />
   },
   {
     accessorKey: 'startDate',
-    header: ({ column }) => (
-      <SortableHeader column={column} label="Início" />
-    ),
+    header: ({ column }) => <SortableHeader column={column} title="Início" />
   },
   {
     accessorKey: 'endDate',
-    header: ({ column }) => (
-      <SortableHeader column={column} label="Fim" />
-    ),
+    header: ({ column }) => <SortableHeader column={column} title="Fim" />
   },
   {
     accessorKey: 'estimatedAudience',
-    header: ({ column }) => (
-      <SortableHeader column={column} label="Público Estimado" />
-    ),
+    header: ({ column }) => <SortableHeader column={column} title="Púlico Estimado" />
   },
   {
     accessorKey: 'totalAmount',
-    header: ({ column }) => (
-      <SortableHeader column={column} label="Total (R$)" />
-    ),
+    header: ({ column }) => <SortableHeader column={column} title="Total (R$)" />
   },
 ]

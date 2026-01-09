@@ -2,7 +2,7 @@
 
 import UserSideMenu from '../components/UserHeader'
 import { QuoteTable } from './QuoteTable'
-import { quoteColumns } from './column'
+import { quoteColumns } from './columns'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { GiTakeMyMoney } from 'react-icons/gi'
 
