@@ -8,11 +8,8 @@ import {
 
 } from 'lucide-react'
 
-import { materialProps } from './page'
+import { MaterialProps } from './page'
 import DeleteMaterial from './DeleteMaterial'
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 
 export type Materiais = {
   id: string
@@ -21,7 +18,7 @@ export type Materiais = {
   category: string
 }
 
-export const materialColumns = (): ColumnDef<materialProps>[] => [
+export const materialColumns = (): ColumnDef<MaterialProps>[] => [
   {
     accessorKey: 'name',
     header: ({ column }) => {
