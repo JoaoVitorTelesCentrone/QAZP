@@ -1,13 +1,9 @@
 'use client'
-import { Button } from '@/components/ui/button'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import { intl } from '../../i18n'
 import EditClient from './EditClient'
 import DeleteClient from './DeleteClient'
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+import { SortableHeader } from '@/components/ui/SortableHeader'
 
 export type Client = {
   id: string
@@ -19,87 +15,22 @@ export type Client = {
 
 export const clientColumns: ColumnDef<Client>[] = [
   {
-    accessorKey: 'fullName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          {intl.formatMessage({ id: 'client.page.datagrid.fullName.label' })}
-
-          {column.getIsSorted() === 'asc' ? (
-            <ArrowDown className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === 'desc' ? (
-            <ArrowUp className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-      )
-    },
+    accessorKey: 'name',
+    header: ({ column }) => <SortableHeader column={column} title={intl.formatMessage({ id: 'client.page.datagrid.fullName.label' })} />
   },
   {
     accessorKey: 'documentId',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          {intl.formatMessage({ id: 'client.page.datagrid.document.label' })}
-          {column.getIsSorted() === 'asc' ? (
-            <ArrowDown className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === 'desc' ? (
-            <ArrowUp className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-      )
-    },
+    header: ({ column }) => <SortableHeader column={column} title={intl.formatMessage({ id: 'client.page.datagrid.document.label' })} />
   },
 
   {
     accessorKey: 'email',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          {intl.formatMessage({ id: 'client.page.datagrid.email.label' })}
-          {column.getIsSorted() === 'asc' ? (
-            <ArrowDown className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === 'desc' ? (
-            <ArrowUp className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-      )
-    },
+    header: ({ column }) => <SortableHeader column={column} title={intl.formatMessage({ id: 'client.page.datagrid.email.label' })} />
   },
 
   {
     accessorKey: 'phoneNumber',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          {intl.formatMessage({ id: 'client.page.datagrid.phoneNumber.label' })}
-          {column.getIsSorted() === 'asc' ? (
-            <ArrowDown className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === 'desc' ? (
-            <ArrowUp className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-      )
-    },
+    header: ({ column }) => <SortableHeader column={column} title={intl.formatMessage({ id: 'client.page.datagrid.phoneNumber.label' })} />
   },
   {
     id: 'edit',
