@@ -1,9 +1,6 @@
 'use client'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { SortableHeader } from '@/components/ui/SortableHeader'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 
 export type Inserted = {
   name: string
