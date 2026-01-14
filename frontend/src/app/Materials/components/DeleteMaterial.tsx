@@ -4,7 +4,7 @@ import { toast, Toaster } from 'sonner'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { useAtom } from 'jotai'
-import { materialChangeAtom } from '../atoms/materialChange'
+import { materialChangeAtom } from '../../atoms/materialChange'
 
 type deleteMaterialProps = {
   materialId: string
@@ -34,9 +34,9 @@ const DeleteMaterial: React.FC<deleteMaterialProps> = ({ materialId }) => {
       {deleteModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white shadow-lg shadow-slate-600 rounded-lg p-8">
-            <h2 className="text-2xl font-bold mb-4">Deletar Cliente</h2>
+            <h2 className="text-2xl font-bold mb-4">Deletar Material</h2>
             <p className="text-gray-700">
-              Você tem certeza que deseja deletar este cliente ?
+              Você tem certeza que deseja deletar este material?
             </p>
             <div className="justify-between">
               <Button

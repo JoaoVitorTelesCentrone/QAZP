@@ -1,7 +1,7 @@
 'use client'
 import { ColumnDef } from '@tanstack/react-table'
-import { MaterialProps } from './page'
-import DeleteMaterial from './DeleteMaterial'
+import { MaterialProps } from './types/material'
+import DeleteMaterial from './components/DeleteMaterial'
 import { SortableHeader } from '@/components/ui/SortableHeader'
 
 export type Materiais = {

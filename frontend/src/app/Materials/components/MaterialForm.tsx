@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MaterialCategory } from '../CreateEvent/utils'
+import { MaterialCategory } from '../../Materials/constants/MaterialCategory'
 
 interface MaterialFormProps {
   materialData: MaterialDataProps | undefined

@@ -10,24 +10,10 @@ import axios from 'axios'
 import { ChevronDown } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAtom } from 'jotai'
-import { materialChangeAtom } from '../atoms/materialChange'
+import { materialChangeAtom } from '../../atoms/materialChange'
 import { intl } from '@/i18n'
+import { MaterialCategory } from '../../Materials/constants/MaterialCategory'
 
-const MaterialCategory: MaterialCategoryProps[] = [
-  { name: 'Comida', index: 0 },
-  { name: 'Decoração', index: 1 },
-  { name: 'Utensilios', index: 2 },
-  { name: 'Móveis', index: 3 },
-  { name: 'Recursos humanos', index: 4 },
-  { name: 'Aluguel', index: 5 },
-  { name: 'Entretenimento', index: 6 },
-  { name: 'Marketing', index: 7 },
-]
-
-type MaterialCategoryProps = {
-  name: string
-  index: number
-}
 export type createMaterialProps = {
   isVisible: boolean
   onClose: () => void
