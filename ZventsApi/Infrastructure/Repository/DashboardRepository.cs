@@ -12,7 +12,7 @@ namespace ZventsApi.Infrastructure.Repository
         public async Task<int> GetClientsCountAsync()
         {
             return await _context.Clients
-                .CountAsync(c => c.IsDeleted == false || c.IsDeleted == null);
+                .CountAsync(c => c.IsDeleted == false);
         }
 
         public async Task<int> GetActiveUsersCountAsync()
