@@ -6,9 +6,9 @@ import { toast } from 'sonner'
 import { AxiosError } from 'axios';
 import { useAtom } from 'jotai'
 import { redirect } from 'next/navigation'
-import { authAtom } from '../atoms/authAtom'
-import { userInfoAtom } from '../atoms/userInfoAtom'
-import { userChangeAtom } from '../atoms/changeUserAtom'
+import { authAtom } from '../../atoms/authAtom'
+import { userInfoAtom } from '../../atoms/userInfoAtom'
+import { userChangeAtom } from '../../atoms/changeUserAtom'
 import { intl } from '@/i18n'
 
 export type createUserProps = {
@@ -263,7 +263,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
             </div>
 
             {different && (
-              <h1 className="text-red-700 font-bold">
+              <h1 className="absolute text-red-700 font-bold">
                 {intl.formatMessage({ id: "create.user.passwords.mismatch" })}
               </h1>
             )}

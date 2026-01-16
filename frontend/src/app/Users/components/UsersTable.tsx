@@ -29,6 +29,7 @@ import { intl } from '@/i18n'
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  onRowClick?: (row: TData) => void
 }
 
 export function UsersTable<TData, TValue>({
