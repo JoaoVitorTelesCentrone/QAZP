@@ -12,13 +12,18 @@ namespace ZventsApi.Controllers
     {
         private readonly IClientService _clientService = clientService;
 
+        /// <summary>
+        /// Retrieves a list with all Clients
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client>>> GetAllClientsAsync()
         {
             var clients = await _clientService.GetAllClientsAsync();
             return Ok(clients);
         }
-
+        /// <summary>
+        /// Retrieves a list with all active clients
+        /// </summary>
         [HttpGet("active")]
         public async Task<ActionResult<IEnumerable<ClientDto>>> GetActiveClientsAsync()
         {
