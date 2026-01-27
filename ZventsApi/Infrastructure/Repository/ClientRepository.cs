@@ -4,9 +4,10 @@ using ZventsApi.Models;
 
 namespace ZventsApi.Infrastructure.Repository
 {
-    public class ClientRepository(ZventsDbContext context) : IClientRepository
+    public class ClientRepository(ZventsDbContext context, ILogger<ClientRepository> logger) : IClientRepository
     {
         private readonly ZventsDbContext _context = context;
+        private readonly ILogger<ClientRepository> _logger = logger;
 
         public async Task<IEnumerable<Client>> GetAllClientsAsync()
         {
@@ -24,6 +25,7 @@ namespace ZventsApi.Infrastructure.Repository
 
         public async Task<Client?> GetClientByIdAsync(Guid id)
         {
+            _logger.LogDebug("Lógica para o cliente ({id})", id);
             return await _context.Clients.FindAsync(id);
         }
 

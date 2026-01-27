@@ -8,17 +8,24 @@ namespace ZventsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController(IClientService clientService) : ControllerBase
+    public class ClientController(IClientService clientService, ILogger<ClientController> logger) : ControllerBase
     {
         private readonly IClientService _clientService = clientService;
+        private readonly ILogger<ClientController> _logger =logger;
 
         /// <summary>
         /// Retrieves a list with all Clients
         /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client>>> GetAllClientsAsync()
+        //usar IReadOnlyCollection no lugar de IEnumerable
         {
+            _logger.LogInformation("Iniciando busca de todos os clientes");
+
             var clients = await _clientService.GetAllClientsAsync();
+
+            _logger.LogInformation("Busca finalizada. Total de clientes: {Total}", clients);
+
             return Ok(clients);
         }
         /// <summary>
@@ -37,7 +44,10 @@ namespace ZventsApi.Controllers
             var client = await _clientService.GetClientByIdAsync(id);
 
             if (client == null)
+            {
+                _logger.LogWarning(" Cliente não encontrado para o ID: {id}", id);
                 return NotFound();
+            }
 
             return Ok(client);
         }
