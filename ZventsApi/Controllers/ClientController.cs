@@ -6,7 +6,7 @@ using ZventsApi.Application.DTOs;
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/client")]
     [ApiController]
     public class ClientController(IClientService clientService, ILogger<ClientController> logger) : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace ZventsApi.Controllers
         /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client>>> GetAllClientsAsync()
-        //usar IReadOnlyCollection no lugar de IEnumerable
+        //usar IReadOnlyCollection no lugar de IEnumerable - avaliar IList
         {
             _logger.LogInformation("Iniciando busca de todos os clientes");
 

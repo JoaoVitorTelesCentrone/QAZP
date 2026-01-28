@@ -15,6 +15,7 @@ namespace ZventsApi.Application.Services
         }
 
         public async Task<IEnumerable<ClientDto>> GetActiveClientsAsync()
+        //IList avaliar
         {
             var clients = await _repository.GetActiveClientsAsync();
 
@@ -29,6 +30,7 @@ namespace ZventsApi.Application.Services
                     PhoneNumber = c.PhoneNumber ?? string.Empty,
                     CreatedDate = c.CreatedDate
                 });
+                //mapper
         }
 
         public async Task<Client?> GetClientByIdAsync(Guid id)

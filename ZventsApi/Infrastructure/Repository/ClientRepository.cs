@@ -49,11 +49,16 @@ namespace ZventsApi.Infrastructure.Repository
 
         public async Task<bool> ClientWithDocumentExistsAsync(string documentId, Guid? excludeId = null)
         {
-            return await _context.Clients.AnyAsync(c =>
-                c.DocumentId == documentId &&
-                (!excludeId.HasValue || c.Id != excludeId == false) &&
-                (!c.IsDeleted == false || !c.IsDeleted == false)
-            );
+            var query = _context.Clients
+                .Where(c => c.DocumentId == documentId && !c.IsDeleted);
+
+            if (excludeId.HasValue)
+            {
+                query = query.Where(c => c.Id != excludeId.Value);
+            }
+
+
+            return await query.AnyAsync();
         }
     }
 }
