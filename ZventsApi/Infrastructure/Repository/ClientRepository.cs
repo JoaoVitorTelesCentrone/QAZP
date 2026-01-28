@@ -12,7 +12,6 @@ namespace ZventsApi.Infrastructure.Repository
         public async Task<IEnumerable<Client>> GetAllClientsAsync()
         {
             return await _context.Clients
-                .Where(c => !c.IsDeleted)
                 .ToListAsync();
         }
 

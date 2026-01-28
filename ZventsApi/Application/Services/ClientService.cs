@@ -30,7 +30,7 @@ namespace ZventsApi.Application.Services
                     PhoneNumber = c.PhoneNumber ?? string.Empty,
                     CreatedDate = c.CreatedDate
                 });
-                //mapper
+            //mapper
         }
 
         public async Task<Client?> GetClientByIdAsync(Guid id)
