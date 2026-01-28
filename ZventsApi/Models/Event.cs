@@ -83,7 +83,7 @@ namespace ZventsApi.Models
         public virtual ICollection<EventMaterial> EventMaterials { get; set; } = [];
         public decimal? TotalAmount { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public Event()
         {

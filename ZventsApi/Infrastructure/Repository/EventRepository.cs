@@ -26,7 +26,7 @@ namespace ZventsApi.Infrastructure.Repositories
         {
             return await _context.Events
                 .Include(e => e.Client)
-                .Where(e => e.IsDeleted == false)
+                .Where(e => !e.IsDeleted)
                 .OrderByDescending(e => e.CreatedDate)
                 .ToListAsync();
         }

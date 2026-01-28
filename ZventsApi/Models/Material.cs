@@ -40,7 +40,7 @@ namespace ZventsApi.Models
         public virtual ICollection<EventMaterial> EventMaterials { get; set; } =
             new List<EventMaterial>();
         public DateTime CreatedDate { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public Material()
         {

@@ -24,13 +24,13 @@ namespace ZventsApi.Infrastructure.Repository
         public async Task<int> GetEventsCountAsync()
         {
             return await _context.Events
-                .CountAsync(e => e.IsDeleted == false || e.IsDeleted == null);
+                .CountAsync(e => !e.IsDeleted);
         }
 
         public async Task<List<DashboardEventDto>> GetEventsAsync()
         {
             return await _context.Events
-                .Where(e => e.IsDeleted == false || e.IsDeleted == null)
+                .Where(e => !e.IsDeleted)
                 .OrderByDescending(e => e.CreatedDate)
                 .Select(e => new DashboardEventDto
                 {
