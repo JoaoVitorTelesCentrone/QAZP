@@ -4,7 +4,7 @@ using ZventsApi.DTOs.EventMaterial;
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/eventMaterial")]
     [ApiController]
     public class EventMaterialController(IEventMaterialService service) : ControllerBase
     {

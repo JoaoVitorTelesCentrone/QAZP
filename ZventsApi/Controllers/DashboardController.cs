@@ -3,7 +3,7 @@ using ZventsApi.Application.Interfaces.Services;
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/dashboard")]
     [ApiController]
     public class DashboardController(IDashboardService dashboardService) : ControllerBase
     {

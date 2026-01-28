@@ -6,7 +6,7 @@ using ZventsApi.Models;
 namespace ZventsApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/event")]
     public class EventController(IEventService service) : ControllerBase
     {
         private readonly IEventService _service = service;

@@ -4,7 +4,7 @@ using ZventsApi.DTOs.Quote;
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/quote")]
     [ApiController]
     public class QuoteController(IQuoteService quoteService) : ControllerBase
     {

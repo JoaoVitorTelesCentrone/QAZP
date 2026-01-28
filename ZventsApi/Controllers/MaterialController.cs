@@ -5,7 +5,7 @@ using ZventsApi.Models;
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/material")]
     [ApiController]
     public class MaterialController(IMaterialService materialService) : ControllerBase
     {
