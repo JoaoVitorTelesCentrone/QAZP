@@ -8,7 +8,7 @@ namespace ZventsApi.Infrastructure.Repository
     {
         private readonly ZventsDbContext _context = context;
 
-        public async Task<IEnumerable<Material>> GetAllAsync()
+        public async Task<IReadOnlyCollection<Material>> GetAllAsync()
         {
             return await _context.Materials.ToListAsync();
         }
@@ -18,12 +18,12 @@ namespace ZventsApi.Infrastructure.Repository
             return await _context.Materials.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<IEnumerable<Material>> GetByCategoryAsync(MaterialCategory category)
+        public async Task<IReadOnlyCollection<Material>> GetByCategoryAsync(MaterialCategory category)
         {
             return await _context.Materials.Where(m => m.Category == category && !m.IsDeleted).ToListAsync();
         }
 
-        public async Task<IEnumerable<Material>> GetByNameAsync(string name)
+        public async Task<IReadOnlyCollection<Material>> GetByNameAsync(string name)
         {
             return await _context.Materials.Where(m => m.Name == name && !m.IsDeleted).ToListAsync();
         }

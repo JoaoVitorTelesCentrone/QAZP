@@ -4,14 +4,9 @@ using ZventsApi.Models;
 
 namespace ZventsApi.Infrastructure.Repositories
 {
-    public class EventRepository : IEventRepository
+    public class EventRepository(ZventsDbContext context) : IEventRepository
     {
-        private readonly ZventsDbContext _context;
-
-        public EventRepository(ZventsDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ZventsDbContext _context = context;
 
         public async Task<Event?> GetByIdAsync(Guid id)
         {
@@ -22,7 +17,7 @@ namespace ZventsApi.Infrastructure.Repositories
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<IEnumerable<Event>> GetActiveEventsAsync()
+        public async Task<IReadOnlyCollection<Event>> GetActiveEventsAsync()
         {
             return await _context.Events
                 .Include(e => e.Client)

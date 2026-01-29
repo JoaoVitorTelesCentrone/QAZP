@@ -4,12 +4,12 @@ namespace ZventsApi.Application.Interfaces.Repositories
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetAllAsync();
-        Task<IEnumerable<User>> GetActiveUsersAsync();
+        Task<IReadOnlyCollection<User>> GetAllAsync();
+        Task<IReadOnlyCollection<User>> GetActiveUsersAsync();
         Task<User?> GetByIdAsync(Guid id);
         Task<User?> GetByNameAsync(string name);
         Task<User?> GetByUsernameAsync(string username);
-        Task<IEnumerable<User>> GetUsersByRoleAsync(UserRole role);
+        Task<IReadOnlyCollection<User>> GetUsersByRoleAsync(UserRole role);
 
         Task<bool> ExistsByUsernameAsync(string username);
 

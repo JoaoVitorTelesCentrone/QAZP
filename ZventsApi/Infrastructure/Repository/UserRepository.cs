@@ -8,13 +8,13 @@ namespace ZventsApi.Infrastructure.Repositories
     {
         private readonly ZventsDbContext _context = context;
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IReadOnlyCollection<User>> GetAllAsync()
         {
             return await _context.Users
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<User>> GetActiveUsersAsync()
+        public async Task<IReadOnlyCollection<User>> GetActiveUsersAsync()
         {
             return await _context.Users
                 .Where(u => !u.IsDeleted && u.UserStatus == UserStatus.Active)
@@ -43,7 +43,7 @@ namespace ZventsApi.Infrastructure.Repositories
             );
         }
 
-        public async Task<IEnumerable<User>> GetUsersByRoleAsync(UserRole role)
+        public async Task<IReadOnlyCollection<User>> GetUsersByRoleAsync(UserRole role)
         {
             return await _context.Users
                 .Where(u =>

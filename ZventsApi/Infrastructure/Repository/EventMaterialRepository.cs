@@ -9,7 +9,7 @@ namespace ZventsApi.Infrastructure.Repository
     {
         private readonly ZventsDbContext _context = context;
 
-        public async Task<IEnumerable<EventMaterial>> GetByEventIdAsync(Guid eventId)
+        public async Task<IReadOnlyCollection<EventMaterial>> GetByEventIdAsync(Guid eventId)
         {
             return await _context.EventMaterials
                 .Where(em => em.EventId == eventId)

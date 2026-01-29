@@ -4,6 +4,6 @@ namespace ZventsApi.Application.Interfaces.Repositories
 {
     public interface IEventMaterialRepository
     {
-        Task<IEnumerable<EventMaterial>> GetByEventIdAsync(Guid eventId);
+        Task<IReadOnlyCollection<EventMaterial>> GetByEventIdAsync(Guid eventId);
     }
 }
