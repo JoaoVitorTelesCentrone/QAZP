@@ -5,7 +5,7 @@ namespace ZventsApi.Application.Interfaces.Services
 {
     public interface IClientService
     {
-        Task<IEnumerable<Client>> GetAllClientsAsync();
+        Task<IEnumerable<ClientDto>> GetAllClientsAsync();
         Task<IEnumerable<ClientDto>> GetActiveClientsAsync();
         Task<Client?> GetClientByIdAsync(Guid id);
         Task<Client?> CreateClientAsync(Client client);

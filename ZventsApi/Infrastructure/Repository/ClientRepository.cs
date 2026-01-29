@@ -9,13 +9,13 @@ namespace ZventsApi.Infrastructure.Repository
         private readonly ZventsDbContext _context = context;
         private readonly ILogger<ClientRepository> _logger = logger;
 
-        public async Task<IEnumerable<Client>> GetAllClientsAsync()
+        public async Task<IReadOnlyCollection<Client>> GetAllClientsAsync()
         {
             return await _context.Clients
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Client>> GetActiveClientsAsync()
+        public async Task<IReadOnlyCollection<Client>> GetActiveClientsAsync()
         {
             return await _context.Clients
                 .Where(c => !c.IsDeleted)

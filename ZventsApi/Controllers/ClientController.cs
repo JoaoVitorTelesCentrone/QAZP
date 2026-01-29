@@ -17,8 +17,7 @@ namespace ZventsApi.Controllers
         /// Retrieves a list with all Clients
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetAllClientsAsync()
-        //usar IReadOnlyCollection no lugar de IEnumerable - avaliar IList
+        public async Task<ActionResult<IEnumerable<ClientDto>>> GetAllClientsAsync()
         {
             _logger.LogInformation("Iniciando busca de todos os clientes");
 

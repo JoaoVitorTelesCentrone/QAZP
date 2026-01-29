@@ -4,8 +4,8 @@ namespace ZventsApi.Application.Interfaces.Repositories
 {
     public interface IClientRepository
     {
-        Task<IEnumerable<Client>> GetAllClientsAsync();
-        Task<IEnumerable<Client>> GetActiveClientsAsync();
+        Task<IReadOnlyCollection<Client>> GetAllClientsAsync();
+        Task<IReadOnlyCollection<Client>> GetActiveClientsAsync();
         Task<Client?> GetClientByIdAsync(Guid id);
         Task CreateClientAsync(Client client);
         Task UpdateClientAsync(Client client);
