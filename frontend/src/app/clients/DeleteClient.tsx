@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import { toast } from 'sonner'
 import axios from 'axios'
 import { useAtom } from 'jotai'
@@ -11,18 +10,20 @@ type deleteClientProps = {
 }
 
 const DeleteClient: React.FC<deleteClientProps> = ({ userId }) => {
-  const [deleteModal, setDeleteModal] = useState(false)
-  const [clientChange, setClientChange] = useAtom(clientChangeAtom)
+  const [, setClientChange] = useAtom(clientChangeAtom)
+
   const deleteData = async (): Promise<void> => {
     try {
       await axios.patch(`http://localhost:5196/api/Client/${userId}`, {
         isDeleted: true,
       })
-      setDeleteModal(false)
       setClientChange(prev => prev + 1)
+
       toast.success(intl.formatMessage({ id: 'delete.client.success.message' }))
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Erro ao deletar os dados:', error)
+
       toast.error(intl.formatMessage({ id: 'delete.client.error.message' }))
     }
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+
 import axios from 'axios'
 import { useAtom } from 'jotai'
 import { quoteChangeAtom } from '../atoms/changeQuoteAtom'
@@ -9,8 +9,7 @@ type deleteQuoteProps = {
 }
 
 const DeleteQuote: React.FC<deleteQuoteProps> = ({ quoteId }) => {
-  const [deleteModal, setDeleteModal] = useState(false)
-  const [quoteChange, setQuoteChange] = useAtom(quoteChangeAtom)
+  const [, setQuoteChange] = useAtom(quoteChangeAtom)
 
   const deleteData = async (): Promise<void> => {
     try {
@@ -18,7 +17,6 @@ const DeleteQuote: React.FC<deleteQuoteProps> = ({ quoteId }) => {
         isDeleted: true,
       })
       console.log('Dados deletados com sucesso.')
-      setDeleteModal(false)
       setQuoteChange(prev => prev + 1)
     } catch (error) {
       console.error('Erro ao deletar os dados:', error)
