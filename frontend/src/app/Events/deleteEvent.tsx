@@ -1,31 +1,30 @@
-import React, { useState } from 'react'
-import DeleteEventModal from './DeleteEventModal'
-import { TrashIcon } from 'lucide-react'
+import axios from "axios"
+import { useAtom } from "jotai"
+import { eventChangeAtom } from "../atoms/eventChangeAtom"
+import { DeleteAction } from "../components/DeleteAction"
 
-interface DeleteEventProps {
+type DeleteEventProps = {
   eventId: string
 }
 
 const DeleteEvent: React.FC<DeleteEventProps> = ({ eventId }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [, setEventChange] = useAtom(eventChangeAtom)
 
-  const showModal = () => {
-    setIsModalVisible(true)
-  }
+  const handleDelete = async () => {
+    await axios.patch(`http://localhost:5196/api/Event/${eventId}`, {
+      isActive: false,
+    })
 
-  const closeModal = () => {
-    setIsModalVisible(false)
+    setEventChange(prev => prev + 1)
   }
 
   return (
-    <>
-      <TrashIcon className="cursor-pointer w-5 h-5" onClick={showModal} />
-      <DeleteEventModal
-        isVisible={isModalVisible}
-        onClose={closeModal}
-        eventId={eventId}
-      />
-    </>
+    <DeleteAction
+      title="Deletar Evento"
+      description="Você tem certeza que deseja deletar este evento?"
+      onDelete={handleDelete}
+      iconSize="md"
+    />
   )
 }
 
