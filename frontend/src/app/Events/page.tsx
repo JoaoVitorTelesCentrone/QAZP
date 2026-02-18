@@ -3,7 +3,6 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
 import ClipLoader from 'react-spinners/ClipLoader'
-import { EventTable } from './EventTable'
 import axios from 'axios'
 import { Events, eventsColumns } from './columns'
 import { eventChangeAtom } from '../atoms/eventChangeAtom'
@@ -17,6 +16,9 @@ import {
   formatDate,
 } from '@/functions/functions'
 import withAuth from '../hoc/withAuth'
+import GenericTable from '../components/GenericTable'
+import { Input } from '@/components/ui/input'
+
 const Page = () => {
   const [loading, setLoading] = useState(true)
   const [events, setEvents] = useState<Events[]>([])
@@ -92,8 +94,20 @@ const Page = () => {
         </div>
         <div className="bg-tertiary">
           <div className="ml-56 mr-10">
-            <EventTable columns={eventsColumns} data={events} />
-          </div>
+            <GenericTable columns={eventsColumns} data={events} >
+              {(table) => (
+                <>
+                  <Input
+                    placeholder="Filtrar por nome"
+                    value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+                    onChange={(e) =>
+                      table.getColumn('name')?.setFilterValue(e.target.value)
+                    }
+                    className="max-w-sm my-10 mx-auto border-primary text-center font-bold"
+                  />
+                </>
+              )}
+            </GenericTable></div>
         </div>
       </div>
     </div>

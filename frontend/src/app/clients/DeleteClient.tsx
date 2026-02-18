@@ -31,7 +31,7 @@ const DeleteClient: React.FC<deleteClientProps> = ({ userId }) => {
     <div>
       <Toaster richColors />
       <TrashIcon
-        className="cursor-pointer h-4 w-4"
+        className="cursor-pointer h-5 w-5"
         onClick={() => setDeleteModal(true)}
       />
       {deleteModal && (

@@ -30,7 +30,7 @@ const DeleteQuote: React.FC<deleteQuoteProps> = ({ quoteId }) => {
     <div>
       <Toaster richColors />
       <TrashIcon
-        className="cursor-pointer h-4 w-4"
+        className="cursor-pointer h-5 w-5"
         onClick={() => setDeleteModal(true)}
       />
       {deleteModal && (

@@ -1,7 +1,7 @@
 'use client' 
 
 import { useRouter } from 'next/navigation'
-import { Edit2Icon } from 'lucide-react'
+import { Edit3Icon } from 'lucide-react'
 import { eventIdAtom } from '../atoms/EventIdAtom'
 import { useAtom } from 'jotai'
 
@@ -17,7 +17,7 @@ const EditButton = ({ eventId }: { eventId: string }) => {
 
   return (
     <button onClick={handleClick}>
-      <Edit2Icon />
+      <Edit3Icon className="cursor-pointer w-5 h-5 mt-1.5"/>
     </button>
   )
 }
