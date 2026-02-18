@@ -1,10 +1,11 @@
 'use client'
 
 import UserSideMenu from '../components/UserHeader'
-import { QuoteTable } from './QuoteTable'
 import { quoteColumns } from './columns'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { GiTakeMyMoney } from 'react-icons/gi'
+import GenericTable from '../components/GenericTable'
+import { Input } from '@/components/ui/input'
 
 interface Props {
   loading: boolean
@@ -34,7 +35,20 @@ export default function QuoteView({ loading, quotes }: Props) {
         </div>
 
         <div className="ml-56 mr-10">
-          <QuoteTable columns={quoteColumns} data={quotes} />
+          <GenericTable columns={quoteColumns} data={quotes} >
+            {(table) => (
+              <>
+                <Input
+                  placeholder="Filtrar por nome"
+                  value={(table.getColumn('fullName')?.getFilterValue() as string) ?? ''}
+                  onChange={(e) =>
+                    table.getColumn('fullName')?.setFilterValue(e.target.value)
+                  }
+                  className="max-w-sm my-10 mx-auto border-primary text-center font-bold"
+                />
+              </>
+            )}
+          </GenericTable>
         </div>
       </div>
     </>

@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import { MaterialTable } from './components/MaterialTable'
 import { materialColumns } from './columns'
 import ClipLoader from 'react-spinners/ClipLoader'
 import UserSideMenu from '../components/UserHeader'
@@ -8,6 +7,8 @@ import { TbBasketPlus } from 'react-icons/tb'
 import CreateMaterialModal from './components/createMaterialModal'
 import { MaterialProps } from './types/material'
 import { Button } from 'antd'
+import GenericTable from '../components/GenericTable'
+import { Input } from '@/components/ui/input'
 
 interface MaterialsViewProps {
     materials: MaterialProps[]
@@ -58,7 +59,20 @@ const MaterialsView: React.FC<MaterialsViewProps> = ({
                     </div>
                 </div>
                 <div className="bg-tertiary ml-56 mr-10">
-                    <MaterialTable columns={columns} data={materials} />
+                    <GenericTable columns={columns} data={materials}>
+                        {(table) => (
+                            <>
+                                    <Input
+                                        placeholder="Filtrar por nome"
+                                        value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+                                        onChange={(e) =>
+                                            table.getColumn('name')?.setFilterValue(e.target.value)
+                                        }
+                                        className="max-w-sm my-10 mx-auto border-primary text-center font-bold"
+                                    />
+                            </>
+                        )}
+                    </GenericTable>
                 </div>
             </div>
         </div>

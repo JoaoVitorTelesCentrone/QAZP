@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import { clientColumns } from './columns'
-import { ClientTable } from './ClientTable'
 import axios from 'axios'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { clientChangeAtom } from '../atoms/clientChangeAtom'
@@ -14,6 +13,9 @@ import CreateClientModal from './CreateClientModal'
 import { documentIdConverter, formatPhoneNumber } from '@/functions/functions'
 import withAuth from '../hoc/withAuth';
 import { intl } from '@/i18n'
+import GenericTable from '../components/GenericTable'
+import { Input } from '@/components/ui/input'
+
 const Clients = () => {
   const [clients, setClients] = useState([])
   const [loading, setLoading] = useState(true)
@@ -86,7 +88,30 @@ const Clients = () => {
             </div>
             <div className='bg-tertiary'>
               <div className="ml-56 mr-10">
-                <ClientTable columns={clientColumns} data={clients} />
+                <GenericTable columns={clientColumns} data={clients}>
+                  {(table) => (
+                <>
+                <div className="flex gap-24 w-full">
+                  <Input
+                    placeholder="Filtrar por nome"
+                    value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+                    onChange={(e) =>
+                      table.getColumn('name')?.setFilterValue(e.target.value)
+                    }
+                    className="max-w-sm my-10 border-primary text-center font-bold mx-auto"
+                  />
+                  <Input
+                    placeholder="Filtrar por documento"
+                    value={(table.getColumn('documentId')?.getFilterValue() as string) ?? ''}
+                    onChange={(e) =>
+                      table.getColumn('documentId')?.setFilterValue(e.target.value)
+                    }
+                    className="max-w-sm my-10 border-primary text-center font-bold mx-auto"
+                  />
+                  </div>
+                </>
+              )}
+                  </GenericTable>
               </div>
             </div>
           </div>

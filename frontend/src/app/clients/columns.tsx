@@ -15,7 +15,7 @@ export type Client = {
 
 export const clientColumns: ColumnDef<Client>[] = [
   {
-    accessorKey: 'name',
+    accessorKey: 'fullName',
     header: ({ column }) => <SortableHeader column={column} title={intl.formatMessage({ id: 'client.page.datagrid.fullName.label' })} />
   },
   {

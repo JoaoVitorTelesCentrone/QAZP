@@ -5,8 +5,9 @@ import ClipLoader from 'react-spinners/ClipLoader'
 import UserSideMenu from '../components/UserHeader'
 import { FaUser, FaUserPlus } from 'react-icons/fa'
 import { Button } from 'antd'
-import { UsersTable } from './components/UsersTable'
+import { Input } from '@/components/ui/input'
 import CreateUserModal from './modals/createUserModal'
+import GenericTable from '../components/GenericTable'
 
 interface UserView {
   id: string
@@ -70,7 +71,31 @@ export const UsersView: React.FC<UsersViewProps> = ({
           </div>
 
           <div className="ml-56 mr-10 mb-10">
-            <UsersTable columns={columns} data={users} />
+            <GenericTable columns={columns} data={users}>
+              {(table) => (
+                <>
+                <div className="flex gap-24 w-full">
+                  <Input
+                    placeholder="Filtrar por nome"
+                    value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+                    onChange={(e) =>
+                      table.getColumn('name')?.setFilterValue(e.target.value)
+                    }
+                    className="max-w-sm my-10 border-primary text-center font-bold mx-auto"
+                  />
+
+                  <Input
+                    placeholder="Filtrar por usuário"
+                    value={(table.getColumn('username')?.getFilterValue() as string) ?? ''}
+                    onChange={(e) =>
+                      table.getColumn('username')?.setFilterValue(e.target.value)
+                    }
+                    className="max-w-sm my-10 border-primary text-center font-bold mx-auto"
+                  />
+                  </div>
+                </>
+              )}
+            </GenericTable>
           </div>
         </>
       )}

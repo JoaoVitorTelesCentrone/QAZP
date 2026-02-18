@@ -4,9 +4,9 @@ import { LucideLineChart } from 'lucide-react'
 import { MdEventAvailable } from 'react-icons/md'
 import ClipLoader from 'react-spinners/ClipLoader'
 import UserSideMenu from '../components/UserHeader'
-import { DashboardTable } from './DashboardTable'
 import { eventsColumns } from './columns'
 import { intl } from '@/i18n'
+import GenericTable from '../components/GenericTable'
 
 interface DashboardViewProps {
   loading: boolean
@@ -70,7 +70,7 @@ export default function DashboardView({
         </div>
 
         <div className="ml-56 mr-10">
-          <DashboardTable columns={eventsColumns} data={events} />
+          <GenericTable columns={eventsColumns} data={events} />
         </div>
       </div>
     </div>
