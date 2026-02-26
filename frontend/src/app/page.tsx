@@ -15,24 +15,28 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      router.push('/dashboard'); 
-    } else {
-      setLoading(false);
-    }
+    const checkAuth = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        router.replace('/dashboard'); 
+      } else {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
   }, [router]);
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={'#123abc'} loading={loading} />
+        <ClipLoader size={50} color="#123abc" />
       </div>
     );
   }
 
   return (
-    <div className="">
+    <div className="min-h-screen flex flex-col">
       <Toaster />
       <Header />
       <Call />

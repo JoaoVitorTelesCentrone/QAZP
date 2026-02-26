@@ -14,11 +14,11 @@ export default function RedirectIfLoggedIn() {
     if (token) {
       
       if (window.location.pathname === '/') {
-        router.push('/dashboard')
+        router.replace('/dashboard')
       }
     } else {
       const timeout = setTimeout(() => {
-        router.push('/');
+        router.replace('/');
         setLoading(false);
       }, 2000); 
 

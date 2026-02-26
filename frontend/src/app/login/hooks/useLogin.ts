@@ -20,7 +20,7 @@ export function useLogin() {
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
-      router.push('/dashboard')
+      router.replace('/dashboard')
     }
   }, [router])
 
@@ -34,7 +34,7 @@ export function useLogin() {
       setUserInfo({ name, username })
 
       toast.success(`Bem-vindo ${username}`)
-      router.push('/dashboard')
+      router.replace('/dashboard')
     } catch {
       toast.error('Usuário ou senha incorretos')
     } finally {
