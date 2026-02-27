@@ -21,6 +21,7 @@ const UserSideMenu = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    setLoading(true)
     const token = localStorage.getItem('token')
     if (!token) {
       setIsLogged(false)
@@ -45,10 +46,7 @@ const UserSideMenu = () => {
       } else {
         router.push(href)
       }
-
-      setTimeout(() => {
         setLoading(false)
-      }, 4500)
     }
   }
 
