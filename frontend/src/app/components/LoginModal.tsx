@@ -51,7 +51,6 @@ export default function LoginModal({ isVisible, onClose, onCancel }: LoginModalP
     if (!valid) return
 
     try {
-      setLoading(true)
       const response = await axios.post(API_URL, { username, password })
       if (response.status === 200) {
         const { token, name } = response.data
@@ -60,13 +59,12 @@ export default function LoginModal({ isVisible, onClose, onCancel }: LoginModalP
         setUserInfo({ name, username, password })
         toast.success(intl.formatMessage({ id: 'login.success.message' }, { name }))
 
-        // Mostra loader full screen antes de redirecionar
         onClose()
         setFullScreenLoading(true)
 
         setTimeout(() => {
           router.push('/dashboard')
-        }, 100) // garante que loader seja renderizado
+        })
       }
     } catch (error) {
       console.error(error)
@@ -87,7 +85,7 @@ export default function LoginModal({ isVisible, onClose, onCancel }: LoginModalP
     }
   }, [isVisible])
 
-  if (fullScreenLoading) return <Loader /> // loader full screen
+  if (fullScreenLoading) return <Loader />
 
 
   return (
