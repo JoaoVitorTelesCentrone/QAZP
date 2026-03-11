@@ -1,14 +1,20 @@
 'use client'
-import { Input } from 'antd'
+import { Input, Button } from 'antd'
 import { intl } from '@/i18n'
-import { useAtom } from 'jotai'
 import React, { useEffect, useState } from 'react'
-import { userInfoAtom } from '../atoms/userInfoAtom'
-import { authAtom } from '../atoms/authAtom'
 import { SearchIcon, X } from 'lucide-react'
-import { Button } from 'antd'
-import axios, { isAxiosError } from 'axios'
+import { isAxiosError } from 'axios'
 import { toast } from 'sonner'
+
+import { clientService } from './services/clientService'
+import { cepService } from './services/cepService'
+
+import {
+  removeMask,
+  formatPhoneNumber,
+  formatZipCode,
+  formatDocumentId,
+} from './utils/clientMasks'
 
 interface ClientFormProps {
   clientData: ClientDataProps | undefined
@@ -33,8 +39,6 @@ interface ClientDataProps {
 }
 
 const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
-  const [isLogged, setIsLogged] = useAtom(authAtom)
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom)
   const [fullName, setFullName] = useState(clientData?.fullName)
   const [documentId, setDocumentId] = useState(clientData?.documentId)
   const [phoneNumber, setPhoneNumber] = useState(clientData?.phoneNumber)
@@ -48,6 +52,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
   const [district, setDistrict] = useState(clientData?.district)
   const [state, setState] = useState(clientData?.state)
   const [city, setCity] = useState(clientData?.city)
+
   const [fullNameError, setFullNameError] = useState('')
   const [DocumentIdError, setDocumentIdError] = useState('')
   const [zipCodeError, setZipCodeError] = useState('')
@@ -57,77 +62,44 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
   const [cityError, setCityError] = useState('')
   const [stateError, setStateError] = useState('')
 
-  const removeMask = (value: string): string => {
-    return value.replace(/\D/g, '')
+  const clearFieldError = (fieldName: string) => {
+  switch (fieldName) {
+    case 'fullName':
+      setFullNameError('')
+      break
+    case 'documentId':
+      setDocumentIdError('')
+      break
+    case 'zipCode':
+      setZipCodeError('')
+      break
+    case 'addressNumber':
+      setAddressNumberError('')
+      break
+    case 'addressName':
+      setAddressNameError('')
+      break
+    case 'district':
+      setDistrictError('')
+      break
+    case 'city':
+      setCityError('')
+      break
+    case 'state':
+      setStateError('')
+      break
+    default:
+      break
   }
-
-  const formatPhoneNumber = (value: string) => {
-    const numericValue = value.replace(/\D/g, '')
-
-    if (numericValue.length === 0) return ''
-
-    if (numericValue.length <= 2) {
-      return `(${numericValue}`
-    } else if (numericValue.length <= 6) {
-      return numericValue.replace(/(\d{2})(\d{0,4})/, '($1) $2')
-    } else if (numericValue.length <= 10) {
-      // Padrão de telefone fixo (XX) XXXX-XXXX
-      return numericValue.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
-    } else {
-      // Padrão de celular (XX) XXXXX-XXXX
-      return numericValue.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
-    }
-  }
-
-  const formatZipCode = (value: string) => {
-    const numericValue = value.replace(/\D/g, '')
-
-    if (numericValue.length <= 5) {
-      // Adiciona apenas os primeiros dígitos, até 5, sem traço
-      return numericValue
-    } else {
-      // Adiciona o traço após os primeiros 5 dígitos
-      return numericValue.replace(/^(\d{5})(\d{0,3})$/, '$1-$2')
-    }
-  }
-
-  const formatDocumentId = (value: string) => {
-    const numericValue = value.replace(/\D/g, '')
-
-    if (numericValue.length <= 3) {
-      // Exibe os primeiros 3 dígitos
-      return numericValue
-    } else if (numericValue.length <= 6) {
-      // Adiciona o primeiro ponto
-      return numericValue.replace(/(\d{3})(\d{0,3})/, '$1.$2')
-    } else if (numericValue.length <= 9) {
-      // Adiciona o segundo ponto
-      return numericValue.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3')
-    } else if (numericValue.length <= 11) {
-      // Aplica máscara completa para CPF (XXX.XXX.XXX-XX)
-      return numericValue.replace(
-        /(\d{3})(\d{3})(\d{3})(\d{0,2})/,
-        '$1.$2.$3-$4',
-      )
-    } else {
-      // Aplica máscara completa para CNPJ (XX.XXX.XXX/XXXX-XX)
-      return numericValue.replace(
-        /(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/,
-        '$1.$2.$3/$4-$5',
-      )
-    }
-  }
-
+}
   const handleSearchClick: React.MouseEventHandler<
     SVGSVGElement
   > = async event => {
     try {
       event.preventDefault()
-      const response = await axios.get(
-        `https://viacep.com.br/ws/${zipCode}/json/`,
-      )
 
-      const cepData = response.data
+      const cepData = await cepService.getAddressByCep(removeMask(zipCode || ''))
+
       setAddressName(cepData.logradouro)
       setDistrict(cepData.bairro)
       setCity(cepData.localidade)
@@ -157,8 +129,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     setZipCode(formattedValue)
   }
 
-  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
-    const fieldErrorMap = {
+  const handleBlur = (fieldName: string) => {
+    const fieldErrorMap: any = {
       fullName: {
         value: fullName,
         setError: setFullNameError,
@@ -180,9 +152,11 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
-      field.setError(`${intl.formatMessage({
-        id: 'required.field.error.message',
-      })}`)
+      field.setError(
+        `${intl.formatMessage({
+          id: 'required.field.error.message',
+        })}`,
+      )
     } else {
       field.setError('')
     }
@@ -190,45 +164,41 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
 
   const updateClient = async (updatedData: ClientDataProps) => {
     try {
-      console.log('Updating client with data:', updatedData);
-      const response = await axios.put(
-        `http://localhost:5196/api/Client/${clientData?.id}`,
-        updatedData
-      );
-      console.log('Update response:', response);
-      toast.success(intl.formatMessage({ id: 'update.client.success.message' }));
-      closeModal();
+      await clientService.updateClient(clientData?.id, updatedData)
+
+      toast.success(
+        intl.formatMessage({ id: 'update.client.success.message' }),
+      )
+
+      closeModal()
     } catch (error) {
-      handleError(error);
+      handleError(error)
     }
-  };
+  }
 
   const handleError = (error: unknown) => {
     if (!isAxiosError(error)) {
-      console.error('Unexpected error:', error);
-      showGenericError();
-      return;
+      console.error('Unexpected error:', error)
+      showGenericError()
+      return
     }
-
-    console.error('Error message:', error.message);
 
     if (error.response) {
-      const { data, status, headers } = error.response;
-      console.error('Response data:', data);
-      console.error('Response status:', status);
-      console.error('Response headers:', headers);
+      const { data } = error.response
 
       if (data.errors?.DocumentId?.includes('Invalid DocumentId')) {
-        toast.error(intl.formatMessage({ id: 'update.client.invalid.document' }));
+        toast.error(
+          intl.formatMessage({ id: 'update.client.invalid.document' }),
+        )
       } else {
-        showGenericError();
+        showGenericError()
       }
     }
-  };
+  }
 
   const showGenericError = () => {
-    toast.error(intl.formatMessage({ id: 'update.client.error.message' }));
-  };
+    toast.error(intl.formatMessage({ id: 'update.client.error.message' }))
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -248,9 +218,11 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
 
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
-        errorSetter(`${intl.formatMessage({
-          id: 'required.field.error.message',
-        })}`)
+        errorSetter(
+          `${intl.formatMessage({
+            id: 'required.field.error.message',
+          })}`,
+        )
         isValid = false
       } else {
         errorSetter('')
@@ -293,7 +265,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     }
   }, [clientData])
 
-  return (
+    return (
     <div>
       <form
         onSubmit={handleSubmit}
@@ -312,8 +284,10 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
             </h1>
             <Input
               value={fullName}
-              onChange={handleFullNameChange}
-              onBlur={() => handleBlur('fullName')}
+              onChange={e => {
+          setFullName(e.target.value)
+          clearFieldError('fullName')
+        }}
               className={`p-2 mb-4 border rounded w-full ${fullNameError ? 'border-red-500' : 'border-slate-300'}`}
               placeholder={intl.formatMessage({
                 id: 'create.client.page.fullName.field.placeholder',

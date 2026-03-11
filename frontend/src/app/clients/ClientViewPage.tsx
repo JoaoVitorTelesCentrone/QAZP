@@ -6,7 +6,7 @@ import UserSideMenu from '../components/UserHeader'
 import { useClients } from './hooks/useClient'
 import ClientsHeader from './components/ClientsHeader'
 import ClientsTable from './components/ClientsTable'
-import CreateClientModal from './CreateClientModal'
+import CreateClientModal from './modals/CreateClientModal'
 
 export default function ClientsView() {
   const { clients, loading } = useClients()

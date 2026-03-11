@@ -1,13 +1,17 @@
 import { Button, Input, Modal } from 'antd'
-import axios, { isAxiosError } from 'axios'
+import { isAxiosError } from 'axios'
 import { SearchIcon } from 'lucide-react'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 import { useAtom } from 'jotai'
 import { intl } from '@/i18n'
 import { redirect } from 'next/navigation'
-import { authAtom } from '../atoms/authAtom'
-import { clientChangeAtom } from '../atoms/clientChangeAtom'
+import { authAtom } from '../../atoms/authAtom'
+import { clientChangeAtom } from '../../atoms/clientChangeAtom'
+import { ClientCategoryProps,CreateClientProps } from '../types/clientTypes'
+import { formatPhoneNumber, formatZipCode, formatDocumentId, removeMask } from '../utils/clientMasks'
+import { clientService } from '../services/clientService'
+import { cepService } from '../services/cepService'
 
 const ClientCategory: ClientCategoryProps[] = [
   { name: 'Comida', index: 1 },
@@ -20,16 +24,7 @@ const ClientCategory: ClientCategoryProps[] = [
   { name: 'Marketing', index: 8 },
 ]
 
-type ClientCategoryProps = {
-  name: string
-  index: number
-}
-export type createClientProps = {
-  isVisible: boolean
-  onClose: () => void
-}
-
-const CreateClientModal: React.FC<createClientProps> = ({
+const CreateClientModal: React.FC<CreateClientProps> = ({
   isVisible,
   onClose,
 }) => {
@@ -64,6 +59,20 @@ const CreateClientModal: React.FC<createClientProps> = ({
     setFullNameError('')
   }
 
+  const handleDocumentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDocumentId(formatDocumentId(e.target.value))
+    setDocumentIdError('')
+  }
+
+  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setZipCode(formatZipCode(e.target.value))
+    setZipCodeError('')
+  }
+
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhoneNumber(formatPhoneNumber(e.target.value))
+  }
+
   const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const fieldErrorMap = {
       fullName: {
@@ -95,91 +104,14 @@ const CreateClientModal: React.FC<createClientProps> = ({
     }
   }
 
-  const formatZipCode = (value: string) => {
-    const numericValue = value.replace(/\D/g, '')
-
-    if (numericValue.length <= 5) {
-      // Adiciona apenas os primeiros dígitos, até 5, sem traço
-      return numericValue
-    } else {
-      // Adiciona o traço após os primeiros 5 dígitos
-      return numericValue.replace(/^(\d{5})(\d{0,3})$/, '$1-$2')
-    }
-  }
-
-  const formatDocumentId = (value: string) => {
-    const numericValue = value.replace(/\D/g, '')
-
-    if (numericValue.length <= 3) {
-      // Exibe os primeiros 3 dígitos
-      return numericValue
-    } else if (numericValue.length <= 6) {
-      // Adiciona o primeiro ponto
-      return numericValue.replace(/(\d{3})(\d{0,3})/, '$1.$2')
-    } else if (numericValue.length <= 9) {
-      // Adiciona o segundo ponto
-      return numericValue.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3')
-    } else if (numericValue.length <= 11) {
-      // Aplica máscara completa para CPF (XXX.XXX.XXX-XX)
-      return numericValue.replace(
-        /(\d{3})(\d{3})(\d{3})(\d{0,2})/,
-        '$1.$2.$3-$4',
-      )
-    } else {
-      // Aplica máscara completa para CNPJ (XX.XXX.XXX/XXXX-XX)
-      return numericValue.replace(
-        /(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/,
-        '$1.$2.$3/$4-$5',
-      )
-    }
-  }
-
-  const formatPhoneNumber = (value: string) => {
-    const numericValue = value.replace(/\D/g, '')
-
-    if (numericValue.length === 0) return ''
-
-    if (numericValue.length <= 2) {
-      return `(${numericValue}`
-    } else if (numericValue.length <= 6) {
-      return numericValue.replace(/(\d{2})(\d{0,4})/, '($1) $2')
-    } else if (numericValue.length <= 10) {
-      // Padrão de telefone fixo (XX) XXXX-XXXX
-      return numericValue.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
-    } else {
-      // Padrão de celular (XX) XXXXX-XXXX
-      return numericValue.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
-    }
-  }
-
-  const handleDocumentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedValue = formatDocumentId(e.target.value)
-    setDocumentId(formattedValue)
-
-    if (formattedValue) {
-      setDocumentIdError('')
-    }
-  }
-
-  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedValue = formatZipCode(e.target.value)
-    setZipCode(formattedValue)
-
-    if (formattedValue) {
-      setZipCodeError('')
-    }
-  }
-
   const handleSearchClick: React.MouseEventHandler<
     SVGSVGElement
   > = async event => {
+    event.preventDefault()
     try {
-      event.preventDefault()
-      const response = await axios.get(
-        `https://viacep.com.br/ws/${zipCode}/json/`,
-      )
+      
+      const cepData = await cepService.getAddressByCep(zipCode)
 
-      const cepData = response.data
       setAddressName(cepData.logradouro)
       setDistrict(cepData.bairro)
       setCity(cepData.localidade)
@@ -192,10 +124,6 @@ const CreateClientModal: React.FC<createClientProps> = ({
     } catch (error) {
       console.error('Erro ao buscar o CEP:', error)
     }
-  }
-
-  function removeMask(value: string): string {
-    return value.replace(/\D/g, '')
   }
 
   async function createClient() {
@@ -212,7 +140,6 @@ const CreateClientModal: React.FC<createClientProps> = ({
 
     let isValid = true;
 
-    // Validação dos campos obrigatórios
     fieldsToValidate.forEach(({ value, errorSetter }) => {
       if (!value) {
         errorSetter(intl.formatMessage({ id: 'required.field.error.message' }));
@@ -238,10 +165,8 @@ const CreateClientModal: React.FC<createClientProps> = ({
       city,
     };
 
-    console.log('Dados do cliente:', data);
-
     try {
-      const response = await axios.post('http://localhost:5196/api/Client', data);
+      const response = await clientService.createClient(data)
 
       if (response.status === 201) {
         toast.success(intl.formatMessage({ id: 'create.client.success.message' }));
