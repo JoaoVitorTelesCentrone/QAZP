@@ -4,14 +4,7 @@ import { intl } from '../../i18n'
 import EditClient from './components/EditClient'
 import DeleteClient from './components/DeleteClient'
 import { SortableHeader } from '@/components/ui/SortableHeader'
-
-export type Client = {
-  id: string
-  fullName: string
-  documentId: string
-  email: string
-  phoneNumber: string
-}
+import { Client } from './types/clientTypes'
 
 export const clientColumns: ColumnDef<Client>[] = [
   {

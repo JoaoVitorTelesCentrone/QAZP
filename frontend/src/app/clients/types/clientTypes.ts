@@ -32,3 +32,23 @@ export type CreateClientProps = {
   isVisible: boolean
   onClose: () => void
 }
+
+export type Client = {
+  id: string
+  fullName: string
+  documentId: string
+  email: string
+  phoneNumber: string
+}
+
+export type ClientsFiltersProps = {
+  table: any
+}
+
+export type ClientsHeaderProps = {
+  onCreate: () => void
+}
+
+export type ClientsTableProps = {
+  data: any[]
+}

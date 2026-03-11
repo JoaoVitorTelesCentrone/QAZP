@@ -1,10 +1,7 @@
 'use client'
 
 import { Input } from '@/components/ui/input'
-
-type ClientsFiltersProps = {
-  table: any
-}
+import { ClientsFiltersProps } from '../types/clientTypes'
 
 export default function ClientsFilters({ table }: ClientsFiltersProps) {
   return (

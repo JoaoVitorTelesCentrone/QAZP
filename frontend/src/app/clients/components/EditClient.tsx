@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Edit3Icon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import ClientForm from '../ClientForm';
+import ClientForm from './ClientForm';
 import { clientChangeAtom } from '../../atoms/clientChangeAtom';
 import { useAtom } from 'jotai';
 import { formatDocumentId, formatPhoneNumber, formatZipCode } from '../utils/clientMasks'

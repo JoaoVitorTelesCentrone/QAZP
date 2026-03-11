@@ -6,37 +6,23 @@ import { SearchIcon, X } from 'lucide-react'
 import { isAxiosError } from 'axios'
 import { toast } from 'sonner'
 
-import { clientService } from './services/clientService'
-import { cepService } from './services/cepService'
+import { clientService } from '../services/clientService'
+import { cepService } from '../services/cepService'
+import { ClientDataProps } from '../types/clientTypes'
 
 import {
   removeMask,
   formatPhoneNumber,
   formatZipCode,
   formatDocumentId,
-} from './utils/clientMasks'
+} from '../utils/clientMasks'
 
 interface ClientFormProps {
   clientData: ClientDataProps | undefined
   closeModal: () => void
 }
 
-interface ClientDataProps {
-  id: string | undefined
-  fullName: string | undefined
-  documentId: string | undefined
-  email: string | undefined
-  zipCode: string | undefined
-  addressName: string | undefined
-  addressComplement: string | undefined
-  addressNumber: string | undefined
-  district: string | undefined
-  state: string | undefined
-  city: string | undefined
-  createdDate: string | undefined
-  isActive: boolean | undefined
-  phoneNumber: string | undefined
-}
+
 
 const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
   const [fullName, setFullName] = useState(clientData?.fullName)

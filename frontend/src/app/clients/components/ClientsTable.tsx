@@ -3,10 +3,7 @@
 import GenericTable from '../../components/GenericTable'
 import { clientColumns } from '../columns'
 import ClientsFilters from './ClientsFilters'
-
-type ClientsTableProps = {
-  data: any[]
-}
+import { ClientsTableProps } from '../types/clientTypes'
 
 export default function ClientsTable({ data }: ClientsTableProps) {
   return (

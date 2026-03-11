@@ -3,10 +3,7 @@
 import { Button } from 'antd'
 import { FaUserPlus, FaUsers } from 'react-icons/fa'
 import { intl } from '@/i18n'
-
-type ClientsHeaderProps = {
-  onCreate: () => void
-}
+import { ClientsHeaderProps } from '../types/clientTypes'
 
 export default function ClientsHeader({ onCreate }: ClientsHeaderProps) {
   return (
