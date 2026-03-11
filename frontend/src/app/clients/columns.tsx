@@ -1,7 +1,7 @@
 'use client'
 import { ColumnDef } from '@tanstack/react-table'
 import { intl } from '../../i18n'
-import EditClient from './EditClient'
+import EditClient from './components/EditClient'
 import DeleteClient from './components/DeleteClient'
 import { SortableHeader } from '@/components/ui/SortableHeader'
 
