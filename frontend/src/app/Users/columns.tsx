@@ -1,15 +1,9 @@
 'use client'
 import { SortableHeader } from '@/components/ui/SortableHeader'
 import { ColumnDef } from '@tanstack/react-table'
+import { UsersTable } from './types/usersTypes'
 
-
-export type Users = {
-  id: string
-  name: string
-  username: string
-}
-
-export const userColumns = (): ColumnDef<Users>[] => [
+export const userColumns = (): ColumnDef<UsersTable>[] => [
   {
     accessorKey: 'name',
     header: ({ column }) => <SortableHeader column={column} title="Nome" />

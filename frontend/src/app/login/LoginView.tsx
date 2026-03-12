@@ -5,15 +5,7 @@ import Footer from '../components/Footer'
 import { Input } from '@/components/ui/input'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { intl } from '@/i18n'
-
-interface Props {
-  loading: boolean
-  username: string
-  password: string
-  onUsernameChange: (v: string) => void
-  onPasswordChange: (v: string) => void
-  onSubmit: () => void
-}
+import { LoginProps } from './types/loginTypes'
 
 export default function LoginView({
   loading,
@@ -22,7 +14,7 @@ export default function LoginView({
   onUsernameChange,
   onPasswordChange,
   onSubmit,
-}: Props) {
+}: LoginProps) {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
