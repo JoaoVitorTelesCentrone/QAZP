@@ -3,65 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZventsApi.Models
 {
-    public class CreateEventDto
-    {
-        public required string Name { get; set; }
-        public required EventType Type { get; set; }
-        public EventStatus Status { get; set; }
-        public Guid ClientId { get; set; }
-        public required DateOnly StartDate { get; set; }
-        public required TimeOnly StartTime { get; set; }
-        public required DateOnly EndDate { get; set; }
-        public required TimeOnly EndTime { get; set; }
-        public required string ZipCode { get; set; }
-        public required string AddressName { get; set; }
-        public required string AddressNumber { get; set; }
-        public string? AddressComplement { get; set; }
-        public required string District { get; set; }
-        public required string State { get; set; }
-        public required string City { get; set; }
-        public int? EstimatedAudience { get; set; }
-        public List<MaterialDto> Materials { get; set; } = new List<MaterialDto>();
-        public decimal? TotalAmount { get; set; }
-    }
-
-    public class UpdateEventDto
-    {
-        public required string Name { get; set; }
-        public EventType Type { get; set; }
-        public EventStatus Status { get; set; }
-        public Guid ClientId { get; set; }
-        public DateOnly StartDate { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public DateOnly EndDate { get; set; }
-        public TimeOnly EndTime { get; set; }
-        public required string ZipCode { get; set; }
-        public required string AddressName { get; set; }
-        public required string AddressNumber { get; set; }
-        public string? AddressComplement { get; set; }
-        public required string District { get; set; }
-        public required string State { get; set; }
-        public required string City { get; set; }
-        public int? EstimatedAudience { get; set; }
-        public List<MaterialDto> Materials { get; set; } = [];
-        public decimal? TotalAmount { get; set; }
-        public bool? IsDeleted { get; set; }
-    }
-
-    public class ActiveEventDto
-    {
-        public Guid Id { get; set; }
-        public required string ClientFullName { get; set; }
-        public required string Name { get; set; }
-        public EventType Type { get; set; }
-        public DateOnly StartDate { get; set; }
-        public DateOnly EndDate { get; set; }
-        public int? EstimatedAudience { get; set; }
-        public decimal? TotalAmount { get; set; }
-        public DateTime CreatedDate { get; set; }
-    }
-
-
     public enum EventType
     {
         Wedding,
@@ -142,7 +83,7 @@ namespace ZventsApi.Models
         public virtual ICollection<EventMaterial> EventMaterials { get; set; } = [];
         public decimal? TotalAmount { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public Event()
         {

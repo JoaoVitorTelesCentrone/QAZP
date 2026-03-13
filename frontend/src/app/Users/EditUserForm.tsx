@@ -14,7 +14,7 @@ interface EditUserFormProps {
 interface userDataProps {
     id: string | undefined;
     name: string | undefined;
-    userName: string | undefined;
+    username: string | undefined;
     password: string | undefined;
     createdDate: string | undefined;
     role: number | undefined;
@@ -55,7 +55,7 @@ interface userDataProps {
       updateUser({
       id: userData?.id,
       name: name,          
-      userName: username,  
+      username: username,  
       password: password,  
       createdDate: userData?.createdDate,
       role: userData?.role
@@ -65,7 +65,7 @@ interface userDataProps {
     useEffect(() => {
         if (userData) {
           setName(userData.name || '');
-          setUsername(userData.userName || '');
+          setUsername(userData.username || '');
           setPassword(userData.password || '');
         }
       }, [userData]);

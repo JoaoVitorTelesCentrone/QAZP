@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ZventsApi.Controllers;
+using ZventsApi.Application.Validators;
 
 namespace ZventsApi.Models
 {
@@ -10,51 +10,37 @@ namespace ZventsApi.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "FullName is required")]
-        public required string FullName { get; set; }
+        [Required]
+        public string FullName { get; set; } = default!;
 
-        [Required(ErrorMessage = "DocumentId is required")]
-        [RegularExpression(@"^\d{11}$|^\d{14}$", ErrorMessage = "Invalid DocumentId")]
+        [Required]
         [ValidDocument(ErrorMessage = "Invalid DocumentId")]
-        public required string DocumentId { get; set; }
+        public string DocumentId { get; set; } = default!;
+
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
 
-        [Required(ErrorMessage = "ZipCode is required")]
-        public required string ZipCode { get; set; }
+        [Required]
+        public string ZipCode { get; set; } = default!;
 
-        [Required(ErrorMessage = "AddressName is required")]
-        public required string AddressName { get; set; }
+        [Required]
+        public string AddressName { get; set; } = default!;
 
-        [Required(ErrorMessage = "AddressNumber is required")]
-        public required string AddressNumber { get; set; }
+        [Required]
+        public string AddressNumber { get; set; } = default!;
+
         public string? AddressComplement { get; set; }
 
-        [Required(ErrorMessage = "District is required")]
-        public required string District { get; set; }
+        [Required]
+        public string District { get; set; } = default!;
 
-        [Required(ErrorMessage = "State is required")]
-        public required string State { get; set; }
+        [Required]
+        public string State { get; set; } = default!;
 
-        [Required(ErrorMessage = "City is required")]
-        public required string City { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public bool? IsDeleted { get; set; }
+        [Required]
+        public string City { get; set; } = default!;
 
-        public Client()
-        {
-            IsDeleted = false;
-            CreatedDate = DateTime.Now;
-        }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public bool IsDeleted { get; set; } = false;
     }
-    public class ClientDto
-    {
-        public Guid Id { get; set; }
-        public required string FullName { get; set; }
-        public required string DocumentId { get; set; }
-        public required string Email { get; set; }
-        public required string PhoneNumber { get; set; }
-        public DateTime CreatedDate { get; set; }
-    }
-
 }

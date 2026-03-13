@@ -1,177 +1,100 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.Models;
+using ZventsApi.Application.DTOs;
+
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/client")]
     [ApiController]
-    public class ClientController(ZventsDbContext context) : ControllerBase
+    public class ClientController(IClientService clientService, ILogger<ClientController> logger) : ControllerBase
     {
-        private readonly ZventsDbContext _context = context;
+        private readonly IClientService _clientService = clientService;
+        private readonly ILogger<ClientController> _logger =logger;
 
+        /// <summary>
+        /// Retrieves a list with all Clients
+        /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetClientAsync()
+        public async Task<ActionResult<IEnumerable<ClientDto>>> GetAllClientsAsync()
         {
-            var activeClients = await _context
-                .Clients.Where(dbclient => dbclient.IsDeleted == false)
-                .ToListAsync();
+            _logger.LogInformation("Iniciando busca de todos os clientes");
 
-            return Ok(activeClients);
+            var clients = await _clientService.GetAllClientsAsync();
+
+            _logger.LogInformation("Busca finalizada. Total de clientes: {Total}", clients);
+
+            return Ok(clients);
         }
-
+        /// <summary>
+        /// Retrieves a list with all active clients
+        /// </summary>
         [HttpGet("active")]
         public async Task<ActionResult<IEnumerable<ClientDto>>> GetActiveClientsAsync()
         {
-            var activeClients = await _context.Clients
-                .Where(dbclient => dbclient.IsDeleted == false)
-                .Select(dbclient => new ClientDto
-                {
-                    Id = dbclient.Id,
-                    FullName = dbclient.FullName,
-                    DocumentId = dbclient.DocumentId,
-                    Email = dbclient.Email!,
-                    PhoneNumber = dbclient.PhoneNumber!,
-                    CreatedDate = dbclient.CreatedDate
-                })
-                .OrderByDescending(dbclient => dbclient.CreatedDate)
-                .ToListAsync();
-
+            var activeClients = await _clientService.GetActiveClientsAsync();
             return Ok(activeClients);
         }
 
+        [HttpGet("id/{id}", Name = "GetClientById")]
+        public async Task<ActionResult<Client>> GetClientByIdAsync(Guid id)
+        {
+            var client = await _clientService.GetClientByIdAsync(id);
+
+            if (client == null)
+            {
+                _logger.LogWarning(" Cliente não encontrado para o ID: {id}", id);
+                return NotFound();
+            }
+
+            return Ok(client);
+        }
 
         [HttpPost]
-        public async Task<ActionResult<Client>> PostClientAsync(Client client)
+        public async Task<ActionResult<Client>> CreateClientAsync([FromBody] Client client)
         {
-            bool clientExists = await _context.Clients.AnyAsync(dbclient =>
-                dbclient.DocumentId == client.DocumentId
+            var createdClient = await _clientService.CreateClientAsync(client);
+
+            if (createdClient == null)
+                return Conflict(new { message = "Client already exists" });
+
+            return CreatedAtAction(
+                "GetClientById",
+                new { id = createdClient.Id },
+                createdClient
             );
-
-            if (!clientExists)
-            {
-                _context.Clients.Add(client);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(GetClientById), new { id = client.Id }, client);
-            }
-
-            return Conflict(new { message = "There is already a Client with the same DocumentId" });
-        }
-
-        [HttpGet("id/{id}")]
-        public async Task<ActionResult<Client>> GetClientById(Guid id)
-        {
-            var client = await _context.Clients.FindAsync(id);
-
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-            return client;
-        }
-
-        [HttpGet("documentId/{documentId}")]
-        public async Task<ActionResult<Client>> GetClientByDocumentId(string documentId)
-        {
-            var client = await _context.Clients.FirstOrDefaultAsync(dbclient =>
-                dbclient.DocumentId == documentId
-            );
-
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-            return client;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditAsync(Guid id, Client updatedClient)
+        public async Task<ActionResult<Client>> EditClientAsync(Guid id, Client updatedClient)
         {
-            var clientToUpdate = await _context.Clients.FindAsync(id);
+            var client = await _clientService.EditClientAsync(id, updatedClient);
 
-            if (clientToUpdate == null)
-            {
+            if (client == null)
                 return NotFound();
-            }
 
-            var existingClient = await _context.Clients.FirstOrDefaultAsync(dbClient =>
-                dbClient.Id != id && dbClient.DocumentId == updatedClient.DocumentId
-            );
-
-            if (existingClient != null)
-            {
-                return Conflict("There is already a Client with same DocumentId");
-            }
-
-            clientToUpdate.FullName = updatedClient.FullName;
-            clientToUpdate.DocumentId = updatedClient.DocumentId;
-            clientToUpdate.PhoneNumber = updatedClient.PhoneNumber;
-            clientToUpdate.Email = updatedClient.Email;
-            clientToUpdate.ZipCode = updatedClient.ZipCode;
-            clientToUpdate.AddressName = updatedClient.AddressName;
-            clientToUpdate.AddressNumber = updatedClient.AddressNumber;
-            clientToUpdate.AddressComplement = updatedClient.AddressComplement;
-            clientToUpdate.District = updatedClient.District;
-            clientToUpdate.State = updatedClient.State;
-            clientToUpdate.City = updatedClient.City;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(clientToUpdate);
+            return Ok(client);
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> SoftDeleteClient(Guid id)
+        public async Task<IActionResult> SoftDeleteClientAsync(Guid id)
         {
-            var clientToDelete = await _context.Clients.FindAsync(id);
+            var success = await _clientService.SoftDeleteClientAsync(id);
 
-            if (clientToDelete == null)
-            {
+            if (!success)
                 return NotFound();
-            }
-
-            clientToDelete.IsDeleted = true;
-            _context.Entry(clientToDelete).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ClientExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return NoContent();
-        }
-
-        private bool ClientExists(Guid id)
-        {
-            return _context.Clients.Any(client => client.Id == id);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClientAsync(Guid id)
         {
-            var clientToDelete = await _context.Clients.FindAsync(id);
+            var success = await _clientService.DeleteClientAsync(id);
 
-            if (clientToDelete == null)
-            {
+            if (!success)
                 return NotFound();
-            }
-
-            _context.Clients.Remove(clientToDelete);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }

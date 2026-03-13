@@ -1,117 +1,52 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ZventsApi.Models;
+using ZventsApi.Application.Interfaces.Services;
+using ZventsApi.DTOs.Quote;
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/quote")]
     [ApiController]
-    public class QuoteController(ZventsDbContext context) : ControllerBase
+    public class QuoteController(IQuoteService quoteService) : ControllerBase
     {
-        private readonly ZventsDbContext _context = context;
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Quote>>> GetActiveQuoteAsync()
-        {
-            var activeQuotes = await _context
-                .Quotes.Where(dbQuote => dbQuote.IsDeleted == false)
-                .OrderBy(dbQuote => dbQuote.CreatedDate)
-                .ToListAsync();
-
-            return Ok(activeQuotes);
-            ;
-        }
+        private readonly IQuoteService _quoteService = quoteService;
 
         [HttpGet("active-quotes")]
-        public async Task<ActionResult<IEnumerable<Quote>>> GetQuoteAsync()
+        public async Task<IActionResult> GetActiveQuotes()
         {
-            var activeQuotes = await _context
-                .Quotes.Where(dbQuote => dbQuote.IsDeleted == false)
-                .Select(quote => new
-                {
-                    quote.Id,
-                    quote.FullName,
-                    quote.Email,
-                    quote.PhoneNumber,
-                    quote.EventType,
-                    quote.EstimatedAudience,
-                })
-                .ToListAsync();
-            
-            return Ok(activeQuotes);
+            var quotes = await _quoteService.GetActiveAsync();
+            return Ok(quotes);
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllQuotes()
+        {
+            var quotes = await _quoteService.GetAllAsync();
+            return Ok(quotes);
         }
 
         [HttpPost]
-        public ActionResult<Quote> PostQuote(Quote quote)
+        public async Task<IActionResult> CreateQuote(CreateQuoteDto dto)
         {
-            bool quoteExists = _context.Quotes.Any(dbQuote =>
-                dbQuote.FullName == quote.FullName
-                && (dbQuote.Email == quote.Email || dbQuote.PhoneNumber == quote.PhoneNumber)
-                && dbQuote.EventType == quote.EventType
-                && dbQuote.IsDeleted == false
-            );
+            var created = await _quoteService.CreateQuoteAsync(dto);
+            if (created == null)
+                return Conflict(new { message = "There is already a quote in progress" });
 
-            if (!quoteExists)
-            {
-                _context.Quotes.Add(quote);
-                _context.SaveChanges();
-
-                return CreatedAtAction(nameof(PostQuote), new { id = quote.Id }, quote);
-            }
-
-            return Conflict(new { message = "There is already a quote in progress" });
+            return CreatedAtAction(nameof(CreateQuote), new { id = created.Id }, created);
         }
 
         [HttpPatch("{id}")]
         public async Task<IActionResult> SoftDeleteQuote(Guid id)
         {
-            var quoteToDelete = await _context.Quotes.FindAsync(id);
-
-            if (quoteToDelete == null)
-            {
-                return NotFound();
-            }
-
-            quoteToDelete.IsDeleted = true;
-            _context.Entry(quoteToDelete).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!QuoteExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            var success = await _quoteService.SoftDeleteAsync(id);
+            if (!success) return NotFound();
             return NoContent();
         }
 
-        private bool QuoteExists(Guid id)
-        {
-            return _context.Quotes.Any(quote => quote.Id == id);
-        }
-
         [HttpDelete("{id}")]
-        public IActionResult DeleteQuote(Guid id)
+        public async Task<IActionResult> DeleteQuote(Guid id)
         {
-            var quoteToDelete = _context.Quotes.Find(id);
-
-            if (quoteToDelete == null)
-            {
-                return NotFound();
-            }
-
-            _context.Quotes.Remove(quoteToDelete);
-            _context.SaveChanges();
-
+            var success = await _quoteService.DeleteAsync(id);
+            if (!success) return NotFound();
             return NoContent();
         }
     }

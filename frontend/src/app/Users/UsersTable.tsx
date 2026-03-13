@@ -67,10 +67,10 @@ export function UsersTable<TData, TValue>({
         <Input
           placeholder="Filtrar por usuário"
           value={
-            (table.getColumn('userName')?.getFilterValue() as string) ?? ''
+            (table.getColumn('username')?.getFilterValue() as string) ?? ''
           }
           onChange={event =>
-            table.getColumn('userName')?.setFilterValue(event.target.value)
+            table.getColumn('username')?.setFilterValue(event.target.value)
           }
           className="max-w-sm my-10 border-primary text-center font-bold"
         />

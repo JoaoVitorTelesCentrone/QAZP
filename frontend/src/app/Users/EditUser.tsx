@@ -11,7 +11,7 @@ type editUserProps = {
 interface userDataProps {
   id: string
   name: string
-  userName: string
+  username: string
   password: string
 }
 
@@ -30,7 +30,7 @@ const EditUser: React.FC<editUserProps> = ({ userId }) => {
   const fetchUserData = async () => {
     try {
       const userResponse = await axios.get(
-        `http://localhost:5196/api/User/userName/${userId}`,
+        `http://localhost:5196/api/User/username/${userId}`,
       )
       const user = userResponse.data
 

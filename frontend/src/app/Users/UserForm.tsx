@@ -7,7 +7,7 @@ import { Toaster, toast } from 'sonner'
 
 interface UserFormProps {
   closeModal: () => void
-  userData?: { name: string; userName: string; password: string }
+  userData?: { name: string; username: string; password: string }
 }
 
 const UserForm: React.FC<UserFormProps> = ({ closeModal, userData }) => {
@@ -30,7 +30,7 @@ const UserForm: React.FC<UserFormProps> = ({ closeModal, userData }) => {
   useEffect(() => {
     if (userData) {
       setName(userData.name || '')
-      setUsername(userData.userName || '')
+      setUsername(userData.username || '')
     }
   }, [userData])
 
@@ -64,7 +64,7 @@ const UserForm: React.FC<UserFormProps> = ({ closeModal, userData }) => {
 
             <Input
               onChange={e => setUsername(e.target.value)}
-              value={userData?.userName}
+              value={userData?.username}
               required
               placeholder="Digite o nome do usuário"
               className="bg-white border-slate-500 mx-auto my-2"

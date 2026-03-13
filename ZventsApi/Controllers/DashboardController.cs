@@ -1,55 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ZventsApi.Models;
+using ZventsApi.Application.Interfaces.Services;
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/dashboard")]
     [ApiController]
-    public class DashboardController : ControllerBase
+    public class DashboardController(IDashboardService dashboardService) : ControllerBase
     {
-        private readonly ZventsDbContext _context;
-
-        public DashboardController(ZventsDbContext context)
-        {
-            _context = context;
-        }
+        private readonly IDashboardService _dashboardService = dashboardService;
 
         [HttpGet]
-        public async Task<ActionResult<object>> GetDashboardData()
+        public async Task<IActionResult> Get()
         {
-
-            var clientCount = await _context.Clients
-                .CountAsync(client => client.IsDeleted == false);
-                
-            var userCount = await _context.Users
-                .CountAsync(user => user.IsDeleted == false && user.UserStatus == UserStatus.Active);
-
-            var eventCount = await _context.Events
-                .CountAsync(eventItem => eventItem.IsDeleted == false);
-
-            var events = await _context.Events
-                .Where(eventItem => eventItem.IsDeleted == false)
-                .Select(eventItem => new {
-                    eventItem.Name,
-                    eventItem.Type,                    
-                    eventItem.StartDate,
-                    eventItem.EndDate,
-                    eventItem.EstimatedAudience,
-                    eventItem.TotalAmount,
-                    eventItem.CreatedDate
-                })
-                .OrderByDescending(dbEvent => dbEvent.CreatedDate)
-                .ToListAsync();
-
-            var result = new {
-                Clients = clientCount,
-                Users = userCount,
-                Events = eventCount,
-                EventDetails = events
-            };
-
-            return Ok(result);
+            var dashboard = await _dashboardService.GetDashboardAsync();
+            return Ok(dashboard);
         }
     }
 }

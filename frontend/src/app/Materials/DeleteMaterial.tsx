@@ -15,9 +15,7 @@ const DeleteMaterial: React.FC<deleteMaterialProps> = ({ materialId }) => {
   const [materialChange, setMaterialChange] = useAtom(materialChangeAtom)
   const deleteData = async (): Promise<void> => {
     try {
-      await axios.patch(`http://localhost:5196/api/Material?id=${materialId}`, {
-        isDelete: true,
-      })
+      await axios.patch(`http://localhost:5196/api/Material/${materialId}`)
       console.log('Dados deletados com sucesso.')
       setDeleteModal(false)
       setMaterialChange(prev => prev + 1)

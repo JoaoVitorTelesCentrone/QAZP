@@ -35,7 +35,7 @@ const Users = () => {
         .filter((user: any) => !user.isDeleted)
         .map((user: any) => ({
           name: user.name,
-          userName: user.userName,
+          username: user.username,
         }))
 
       setUserData(filteredData)
