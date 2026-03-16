@@ -12,25 +12,25 @@ namespace ZventsApi.Infrastructure.Repository
         public async Task<int> GetClientsCountAsync()
         {
             return await _context.Clients
-                .CountAsync(c => c.IsDeleted == false);
+                .CountAsync(c => !c.IsDeleted);
         }
 
         public async Task<int> GetActiveUsersCountAsync()
         {
             return await _context.Users
-                .CountAsync(u => u.IsDeleted == false || u.IsDeleted == null && u.UserStatus == UserStatus.Active);
+                .CountAsync(u => !u.IsDeleted && u.UserStatus == UserStatus.Active);
         }
 
         public async Task<int> GetEventsCountAsync()
         {
             return await _context.Events
-                .CountAsync(e => e.IsDeleted == false || e.IsDeleted == null);
+                .CountAsync(e => !e.IsDeleted);
         }
 
         public async Task<List<DashboardEventDto>> GetEventsAsync()
         {
             return await _context.Events
-                .Where(e => e.IsDeleted == false || e.IsDeleted == null)
+                .Where(e => !e.IsDeleted)
                 .OrderByDescending(e => e.CreatedDate)
                 .Select(e => new DashboardEventDto
                 {

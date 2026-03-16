@@ -5,7 +5,7 @@ using ZventsApi.Models;
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UserController(IUserService userService) : ControllerBase
     {

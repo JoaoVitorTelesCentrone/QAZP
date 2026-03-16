@@ -26,7 +26,7 @@ namespace ZventsApi.Application.Services
         {
             var materials = await _materialRepository.GetAllAsync();
             var activeMaterials = materials
-                .Where(m => m.IsDeleted == false)
+                .Where(m => !m.IsDeleted)
                 .Select(m => new MaterialResponseDto
                 {
                     Id = m.Id,

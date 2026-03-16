@@ -84,9 +84,13 @@ namespace ZventsApi.Application.Services
         {
             var user = await _userRepository.GetByUsernameAsync(request.Username);
 
-            if (user == null || user.Password != request.Password || user.UserStatus != UserStatus.Active || user.IsDeleted.GetValueOrDefault())
+            if (user == null 
+            || user.Password != request.Password 
+            || user.UserStatus != UserStatus.Active)
+            {
                 return null;
-
+            }
+                
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
 
             var claims = new[]

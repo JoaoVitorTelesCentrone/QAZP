@@ -32,7 +32,7 @@ namespace ZventsApi.Models
         public UserRole Role { get; set; }
         public DateTime CreatedDate { get; set; }
         public UserStatus UserStatus { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public User()
         {

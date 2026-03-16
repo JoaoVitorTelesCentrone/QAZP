@@ -9,9 +9,19 @@ namespace ZventsApi.Application.Services
     {
         private readonly IClientRepository _repository = repository;
 
-        public async Task<IEnumerable<Client>> GetAllClientsAsync()
+        public async Task<IEnumerable<ClientDto>> GetAllClientsAsync()
         {
-            return await _repository.GetAllClientsAsync();
+            var clients = await _repository.GetAllClientsAsync();
+
+            return clients.Select(c => new ClientDto
+            {
+                Id = c.Id,
+                FullName = c.FullName,
+                DocumentId = c.DocumentId,
+                Email = c.Email,
+                PhoneNumber = c.PhoneNumber,
+                CreatedDate = c.CreatedDate
+            });
         }
 
         public async Task<IEnumerable<ClientDto>> GetActiveClientsAsync()
@@ -29,6 +39,7 @@ namespace ZventsApi.Application.Services
                     PhoneNumber = c.PhoneNumber ?? string.Empty,
                     CreatedDate = c.CreatedDate
                 });
+            //mapper
         }
 
         public async Task<Client?> GetClientByIdAsync(Guid id)

@@ -4,18 +4,18 @@ using ZventsApi.Models;
 
 namespace ZventsApi.Infrastructure.Repository
 {
-    public class ClientRepository(ZventsDbContext context) : IClientRepository
+    public class ClientRepository(ZventsDbContext context, ILogger<ClientRepository> logger) : IClientRepository
     {
         private readonly ZventsDbContext _context = context;
+        private readonly ILogger<ClientRepository> _logger = logger;
 
-        public async Task<IEnumerable<Client>> GetAllClientsAsync()
+        public async Task<IReadOnlyCollection<Client>> GetAllClientsAsync()
         {
             return await _context.Clients
-                .Where(c => !c.IsDeleted)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Client>> GetActiveClientsAsync()
+        public async Task<IReadOnlyCollection<Client>> GetActiveClientsAsync()
         {
             return await _context.Clients
                 .Where(c => !c.IsDeleted)
@@ -24,6 +24,7 @@ namespace ZventsApi.Infrastructure.Repository
 
         public async Task<Client?> GetClientByIdAsync(Guid id)
         {
+            _logger.LogDebug("Lógica para o cliente ({id})", id);
             return await _context.Clients.FindAsync(id);
         }
 
@@ -47,11 +48,16 @@ namespace ZventsApi.Infrastructure.Repository
 
         public async Task<bool> ClientWithDocumentExistsAsync(string documentId, Guid? excludeId = null)
         {
-            return await _context.Clients.AnyAsync(c =>
-                c.DocumentId == documentId &&
-                (!excludeId.HasValue || c.Id != excludeId == false) &&
-                (!c.IsDeleted == false || !c.IsDeleted == false)
-            );
+            var query = _context.Clients
+                .Where(c => c.DocumentId == documentId && !c.IsDeleted);
+
+            if (excludeId.HasValue)
+            {
+                query = query.Where(c => c.Id != excludeId.Value);
+            }
+
+
+            return await query.AnyAsync();
         }
     }
 }

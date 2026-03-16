@@ -6,19 +6,30 @@ using ZventsApi.Application.DTOs;
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/client")]
     [ApiController]
-    public class ClientController(IClientService clientService) : ControllerBase
+    public class ClientController(IClientService clientService, ILogger<ClientController> logger) : ControllerBase
     {
         private readonly IClientService _clientService = clientService;
+        private readonly ILogger<ClientController> _logger =logger;
 
+        /// <summary>
+        /// Retrieves a list with all Clients
+        /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetAllClientsAsync()
+        public async Task<ActionResult<IEnumerable<ClientDto>>> GetAllClientsAsync()
         {
+            _logger.LogInformation("Iniciando busca de todos os clientes");
+
             var clients = await _clientService.GetAllClientsAsync();
+
+            _logger.LogInformation("Busca finalizada. Total de clientes: {Total}", clients);
+
             return Ok(clients);
         }
-
+        /// <summary>
+        /// Retrieves a list with all active clients
+        /// </summary>
         [HttpGet("active")]
         public async Task<ActionResult<IEnumerable<ClientDto>>> GetActiveClientsAsync()
         {
@@ -32,7 +43,10 @@ namespace ZventsApi.Controllers
             var client = await _clientService.GetClientByIdAsync(id);
 
             if (client == null)
+            {
+                _logger.LogWarning(" Cliente não encontrado para o ID: {id}", id);
                 return NotFound();
+            }
 
             return Ok(client);
         }

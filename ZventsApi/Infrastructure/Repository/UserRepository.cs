@@ -8,37 +8,29 @@ namespace ZventsApi.Infrastructure.Repositories
     {
         private readonly ZventsDbContext _context = context;
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IReadOnlyCollection<User>> GetAllAsync()
         {
             return await _context.Users
-                .Where(u => u.IsDeleted == false || u.IsDeleted == null)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<User>> GetActiveUsersAsync()
+        public async Task<IReadOnlyCollection<User>> GetActiveUsersAsync()
         {
             return await _context.Users
-                .Where(u =>
-                    (u.IsDeleted == false || u.IsDeleted == null) &&
-                    u.UserStatus == UserStatus.Active
-                )
+                .Where(u => !u.IsDeleted && u.UserStatus == UserStatus.Active)
                 .ToListAsync();
         }
 
         public async Task<User?> GetByIdAsync(Guid id)
         {
-            return await _context.Users.FirstOrDefaultAsync(u =>
-                u.Id == id &&
-                (u.IsDeleted == false || u.IsDeleted == null)
-            );
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
         }
 
         public async Task<User?> GetByNameAsync(string name)
         {
-            return await _context.Users.FirstOrDefaultAsync(u =>
-                u.Name == name &&
-                (u.IsDeleted == false || u.IsDeleted == null) &&
-                u.UserStatus == UserStatus.Active
+            return await _context.Users.FirstOrDefaultAsync(u => u.Name == name 
+            && !u.IsDeleted 
+            && u.UserStatus == UserStatus.Active
             );
         }
 
@@ -46,17 +38,17 @@ namespace ZventsApi.Infrastructure.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(u =>
                 u.Username == username &&
-                (u.IsDeleted == false || u.IsDeleted == null) &&
+                !u.IsDeleted &&
                 u.UserStatus == UserStatus.Active
             );
         }
 
-        public async Task<IEnumerable<User>> GetUsersByRoleAsync(UserRole role)
+        public async Task<IReadOnlyCollection<User>> GetUsersByRoleAsync(UserRole role)
         {
             return await _context.Users
                 .Where(u =>
                     u.Role == role &&
-                    (u.IsDeleted == false || u.IsDeleted == null) &&
+                    !u.IsDeleted &&
                     u.UserStatus == UserStatus.Active
                 )
                 .ToListAsync();
@@ -66,7 +58,7 @@ namespace ZventsApi.Infrastructure.Repositories
         {
             return await _context.Users.AnyAsync(u =>
                 u.Username == username &&
-                (u.IsDeleted == false || u.IsDeleted == null)
+                !u.IsDeleted
             );
         }
 

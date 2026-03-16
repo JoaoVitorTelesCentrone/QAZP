@@ -4,7 +4,7 @@ using ZventsApi.DTOs.Quote;
 
 namespace ZventsApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/quote")]
     [ApiController]
     public class QuoteController(IQuoteService quoteService) : ControllerBase
     {
@@ -25,13 +25,13 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostQuote(CreateQuoteDto dto)
+        public async Task<IActionResult> CreateQuote(CreateQuoteDto dto)
         {
             var created = await _quoteService.CreateQuoteAsync(dto);
             if (created == null)
                 return Conflict(new { message = "There is already a quote in progress" });
 
-            return CreatedAtAction(nameof(PostQuote), new { id = created.Id }, created);
+            return CreatedAtAction(nameof(CreateQuote), new { id = created.Id }, created);
         }
 
         [HttpPatch("{id}")]
