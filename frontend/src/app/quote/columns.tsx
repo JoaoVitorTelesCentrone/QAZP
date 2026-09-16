@@ -1,20 +1,11 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import DeleteQuote from './DeleteQuote'
+import DeleteQuote from './components/DeleteQuote'
 import { SortableHeader } from '@/components/ui/SortableHeader'
+import { Quote } from './types/quoteTypes'
 
-export type Quotes = {
-  id: string
-  fullName: string
-  lastName: string
-  email: string
-  phoneNumber: string
-  eventType: string
-  estimatedAudience: string
-}
-
-export const quoteColumns: ColumnDef<Quotes>[] = [
+export const quoteColumns: ColumnDef<Quote>[] = [
   {
     accessorKey: 'fullName',
     header: ({ column }) => <SortableHeader column={column} title="Nome" />

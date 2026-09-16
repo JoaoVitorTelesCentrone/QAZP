@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import { quoteChangeAtom } from '../../atoms/changeQuoteAtom'
-import { getActiveQuotes } from '../services/quote.service'
-import { mapQuoteToTable } from '../mappers/quote.mapper'
-import { Quote } from '../types'
+import { getActiveQuotes } from '../services/quoteService'
+import { mapQuoteToTable } from '../mappers/quoteMapper'
+import { Quote } from '../types/quoteTypes'
 
 export function useQuotes() {
   const [quotes, setQuotes] = useState<Quote[]>([])
