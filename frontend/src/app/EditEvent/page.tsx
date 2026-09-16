@@ -1,5 +1,5 @@
 'use client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import {
   ChevronDown,
@@ -21,7 +21,6 @@ import UserSideMenu from '@/app/components/UserHeader'
 import { useAtom } from 'jotai'
 import { clientsAtom } from '@/app/CreateEvent/page'
 import { formatCurrency } from '@/functions/functions'
-import { eventIdAtom } from '../atoms/EventIdAtom'
 import { insertMaterialProps, MaterialType } from '../CreateEvent/utils'
 import { toast } from 'sonner'
 import { intl } from '@/i18n'
@@ -58,7 +57,6 @@ const EditEvent: React.FC<EditEventProps> = () => {
   const [clientId, setClientId] = useState('')
   const [clientName, setClientName] = useState('')
   const [totalAmount, setTotalAmount] = useState<Number>()
-  const [eventId, setEventId] = useState('')
   const [clients, setClients] = useAtom(clientsAtom)
   const [sMaterials, setSMaterials] = useState<MaterialType[]>([])
   const [sendMaterial, setSendMaterial] = useState<Mats[]>([])
@@ -82,6 +80,8 @@ const EditEvent: React.FC<EditEventProps> = () => {
   const [isTouched, setIsTouched] = useState(false)
 
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const eventId = searchParams.get('id') ?? ''
 
   const [materials, setMaterials] = useState<
     {
@@ -92,7 +92,6 @@ const EditEvent: React.FC<EditEventProps> = () => {
     }[]
   >([])
 
-  const [eventAtom, setEventAtom] = useAtom(eventIdAtom)
   const [insertedMaterial, setInsertedMaterial] = useState<
     insertMaterialProps[]
   >([])
@@ -347,9 +346,9 @@ const EditEvent: React.FC<EditEventProps> = () => {
   useEffect(() => {
     const fetchEventAndClient = async () => {
       try {
-        if (eventAtom) {
+        if (eventId) {
           const eventResponse = await axios.get(
-            `http://localhost:5196/api/Event/id/${eventAtom}`,
+            `http://localhost:5196/api/Event/${eventId}`,
           )
           const event = eventResponse.data
 
@@ -383,7 +382,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
 
           if (event.id) {
             const materialsResponse = await axios.get(
-              `http://localhost:5196/api/EventMaterial/eventId/${event.id}`,
+              `http://localhost:5196/api/EventMaterial/event/${event.id}`,
             )
             const materials = materialsResponse.data
             setMaterials(materials)
@@ -395,7 +394,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
     }
 
     fetchEventAndClient()
-  }, [eventAtom])
+  }, [eventId])
 
   const getMaterialValues = (
     id: string,
@@ -478,7 +477,7 @@ const EditEvent: React.FC<EditEventProps> = () => {
       }
       console.log(body)
 
-      await axios.put(`http://localhost:5196/api/Event/${eventAtom}`, body)
+      await axios.put(`http://localhost:5196/api/Event/${eventId}`, body)
       message.success('Atualização feita com sucesso')
     } catch (error) {
       console.error('Error updating event:', error)

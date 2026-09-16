@@ -1,7 +1,7 @@
-import axios from "axios"
 import { useAtom } from "jotai"
-import { eventChangeAtom } from "../atoms/eventChangeAtom"
-import { DeleteAction } from "../components/DeleteAction"
+import { eventChangeAtom } from "../../atoms/eventChangeAtom"
+import { DeleteAction } from "../../components/DeleteAction"
+import { deleteEvent } from "../services/eventService"
 
 type DeleteEventProps = {
   eventId: string
@@ -11,9 +11,7 @@ const DeleteEvent: React.FC<DeleteEventProps> = ({ eventId }) => {
   const [, setEventChange] = useAtom(eventChangeAtom)
 
   const handleDelete = async () => {
-    await axios.patch(`http://localhost:5196/api/Event/${eventId}`, {
-      isActive: false,
-    })
+    await deleteEvent(eventId)
 
     setEventChange(prev => prev + 1)
   }

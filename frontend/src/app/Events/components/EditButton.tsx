@@ -1,18 +1,13 @@
-'use client' 
+'use client'
 
 import { useRouter } from 'next/navigation'
 import { Edit3Icon } from 'lucide-react'
-import { eventIdAtom } from '../atoms/EventIdAtom'
-import { useAtom } from 'jotai'
 
 const EditButton = ({ eventId }: { eventId: string }) => {
   const router = useRouter()
 
-  const [eventAtom, setEventId] = useAtom(eventIdAtom)
-
   const handleClick = () => {
-    setEventId(eventId)
-    router.push(`/EditEvent`)
+    router.push(`/EditEvent?id=${eventId}`)
   }
 
   return (
