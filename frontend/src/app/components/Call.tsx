@@ -12,7 +12,9 @@ const Call = () => {
   const handleCloseQuoteModal = () => setOpenQuoteModal(false)
   return (
     <div className="bg-primary flex justify-between w-full">
-      <QuoteModal isVisible={openQuoteModal} onClose={handleCloseQuoteModal} />
+      {openQuoteModal && (
+        <QuoteModal isVisible={openQuoteModal} onClose={handleCloseQuoteModal} />
+      )}
       <div className="flex flex-col xl:py-12 py-24 xl:w-[65%] w-[50%] px-12 bg-primary">
         <h1 className="font-montserrat xl:text-8xl text-7xl max-w-[1200px] text-center text-secondary mx-auto font-bold">
           {intl.formatMessage({

@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { authAtom } from '../atoms/authAtom'
 import { useRouter, usePathname } from 'next/navigation'
-import ClipLoader from 'react-spinners/ClipLoader'
 import { LogOut } from 'lucide-react'
 import AvatarUser from './Avatar'
+import Loader from './Loader'
 import withAuth from '../hoc/withAuth'
 import { TbCircleLetterZ } from 'react-icons/tb'
 import { intl } from '@/i18n'
@@ -20,7 +20,15 @@ const UserSideMenu = () => {
   const pathname = usePathname()
   const [loading, setLoading] = useState(true)
 
+  const getLinkClassName = (href: string) =>
+    `block py-2 px-3 rounded hover:bg-gray-700 border-l-4 ${
+      pathname === href
+        ? 'bg-gray-700 font-semibold border-primary'
+        : 'border-transparent'
+    }`
+
   useEffect(() => {
+    setLoading(true)
     const token = localStorage.getItem('token')
     if (!token) {
       setIsLogged(false)
@@ -45,10 +53,7 @@ const UserSideMenu = () => {
       } else {
         router.push(href)
       }
-
-      setTimeout(() => {
         setLoading(false)
-      }, 4500)
     }
   }
 
@@ -58,15 +63,13 @@ const UserSideMenu = () => {
     localStorage.removeItem('token')
     setIsLogged(false)
 
-    router.push('/')
+    setTimeout(() => {
+      router.push('/')
+    })
   }
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <ClipLoader size={50} color={'#123abc'} loading={loading} />
-      </div>
-    )
+    return <Loader />
   }
 
   if (!loggedIn) return null
@@ -88,7 +91,7 @@ const UserSideMenu = () => {
             <li>
               <Link
                 href="/dashboard"
-                className="block py-2 px-3 rounded hover:bg-gray-700"
+                className={getLinkClassName('/dashboard')}
               >
                 {intl.formatMessage({
                   id: 'side.nav.dashboard.option.label',
@@ -98,7 +101,7 @@ const UserSideMenu = () => {
             <li>
               <Link
                 href="/quote"
-                className="block py-2 px-3 rounded hover:bg-gray-700"
+                className={getLinkClassName('/quote')}
               >
                 {intl.formatMessage({
                   id: 'side.nav.quotes.option.label',
@@ -108,7 +111,7 @@ const UserSideMenu = () => {
             <li>
               <Link
                 href="/clients"
-                className="block py-2 px-3 rounded hover:bg-gray-700"
+                className={getLinkClassName('/clients')}
               >
                 {intl.formatMessage({
                   id: 'side.nav.clients.option.label',
@@ -117,8 +120,8 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
-                href="/Materials"
-                className="block py-2 px-3 rounded hover:bg-gray-700"
+                href="/materials"
+                className={getLinkClassName('/materials')}
               >
                 {intl.formatMessage({
                   id: 'side.nav.materials.option.label',
@@ -127,8 +130,8 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
-                href="/Events"
-                className="block py-2 px-3 rounded hover:bg-gray-700"
+                href="/events"
+                className={getLinkClassName('/events')}
               >
                 {intl.formatMessage({
                   id: 'side.nav.events.option.label',
@@ -137,8 +140,8 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
-                href="/Users"
-                className="block py-2 px-3 rounded hover:bg-gray-700"
+                href="/users"
+                className={getLinkClassName('/users')}
               >
                 {intl.formatMessage({
                   id: 'side.nav.users.option.label',
