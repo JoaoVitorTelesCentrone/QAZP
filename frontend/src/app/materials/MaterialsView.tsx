@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import dynamic from 'next/dynamic'
 import { materialColumns } from './columns'
 import ClipLoader from 'react-spinners/ClipLoader'
 import UserSideMenu from '../components/UserHeader'
@@ -9,8 +8,7 @@ import { MaterialProps } from './types/materialTypes'
 import { Button } from 'antd'
 import GenericTable from '../components/GenericTable'
 import { Input } from '@/components/ui/input'
-
-const CreateMaterialModal = dynamic(() => import('./components/createMaterialModal'))
+import CreateMaterialModal from './components/createMaterialModal'
 
 interface MaterialsViewProps {
     materials: MaterialProps[]

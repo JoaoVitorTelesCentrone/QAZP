@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react'
 import { userInfoAtom } from '../atoms/userInfoAtom'
 import { authAtom } from '../atoms/authAtom'
 import { useRouter, usePathname } from 'next/navigation'
-import ClipLoader from 'react-spinners/ClipLoader'
 import { LogOut } from 'lucide-react'
 import AvatarUser from './Avatar'
+import Loader from './Loader'
 import withAuth from '../hoc/withAuth'
 import { TbCircleLetterZ } from 'react-icons/tb'
 import { intl } from '@/i18n'
@@ -56,15 +56,13 @@ const UserSideMenu = () => {
     localStorage.removeItem('token')
     setIsLogged(false)
 
-    router.push('/')
+    setTimeout(() => {
+      router.push('/')
+    })
   }
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <ClipLoader size={50} color={'#123abc'} loading={loading} />
-      </div>
-    )
+    return <Loader />
   }
 
   if (!loggedIn) return null

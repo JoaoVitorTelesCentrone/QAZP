@@ -25,6 +25,7 @@ interface ClientFormProps {
 
 
 const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [fullName, setFullName] = useState(clientData?.fullName)
   const [documentId, setDocumentId] = useState(clientData?.documentId)
   const [phoneNumber, setPhoneNumber] = useState(clientData?.phoneNumber)
@@ -149,6 +150,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
   }
 
   const updateClient = async (updatedData: ClientDataProps) => {
+    setIsSubmitting(true)
     try {
       await clientService.updateClient(clientData?.id, updatedData)
 
@@ -159,6 +161,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
       closeModal()
     } catch (error) {
       handleError(error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -554,12 +558,12 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
           </div>
         </div>
         <div className="flex justify-between">
-          <Button className="" onClick={closeModal} type="default">
+          <Button className="" onClick={closeModal} type="default" disabled={isSubmitting}>
             {intl.formatMessage({
               id: 'close.modal.button.label',
             })}
           </Button>
-          <Button htmlType="submit" type="default">
+          <Button htmlType="submit" type="default" loading={isSubmitting} disabled={isSubmitting}>
             {intl.formatMessage({
               id: 'save.client.button.label',
             })}

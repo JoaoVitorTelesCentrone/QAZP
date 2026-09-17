@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, Input, Modal } from 'antd'
 import { AxiosError } from 'axios'
 import { apiClient } from '@/lib/apiClient'
@@ -19,6 +21,7 @@ export type createUserProps = {
 const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
   const [userInfo, setUserInfo] = useAtom(userInfoAtom)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -93,6 +96,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
     if (!validateFields(fieldsToValidate)) return;
     const data = { name, username, password, role: 0 };
 
+    setIsSubmitting(true);
     try {
       const response = await apiClient.post('/User', data);
 
@@ -114,6 +118,8 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
 
       setError(true);
       console.error('Erro ao fazer a requisição:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -271,6 +277,8 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
               <Button
                 className="bg-primary text-white w-[30%]"
                 onClick={() => verifyCreation()}
+                loading={isSubmitting}
+                disabled={isSubmitting}
               >
                 {intl.formatMessage({ id: "create.user.create.button" })}
               </Button>

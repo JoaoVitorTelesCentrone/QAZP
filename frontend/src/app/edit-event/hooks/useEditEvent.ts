@@ -29,6 +29,8 @@ const requiredFieldError = () =>
 export const useEditEvent = (eventId: string) => {
   const router = useRouter()
 
+  const [loading, setLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState('')
   const [startDate, setStartDate] = useState<Dayjs | null>(null)
   const [endDate, setEndDate] = useState<Dayjs | null>(null)
@@ -266,6 +268,12 @@ export const useEditEvent = (eventId: string) => {
 
   useEffect(() => {
     const fetchEventAndClient = async () => {
+      if (!eventId) {
+        setLoading(false)
+        return
+      }
+
+      setLoading(true)
       try {
         if (eventId) {
           const event = await fetchEventById(eventId)
@@ -301,6 +309,8 @@ export const useEditEvent = (eventId: string) => {
         }
       } catch (error) {
         console.error('Error fetching event or client details:', error)
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -352,6 +362,7 @@ export const useEditEvent = (eventId: string) => {
 
     if (!isValid) return
 
+    setIsSubmitting(true)
     try {
       const body = mapFormStateToUpdatePayload({
         name,
@@ -379,6 +390,7 @@ export const useEditEvent = (eventId: string) => {
       console.error('Error updating event:', error)
       message.error('Erro ao atualizar evento')
     } finally {
+      setIsSubmitting(false)
       router.push('/events')
     }
   }
@@ -422,6 +434,9 @@ export const useEditEvent = (eventId: string) => {
   }
 
   return {
+    loading,
+    isSubmitting,
+
     name,
     setName,
     nameError,

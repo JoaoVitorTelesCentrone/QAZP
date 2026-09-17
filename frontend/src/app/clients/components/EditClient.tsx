@@ -1,6 +1,7 @@
 import { apiClient } from '@/lib/apiClient';
 import { Edit3Icon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import ClipLoader from 'react-spinners/ClipLoader';
 import ClientForm from './ClientForm';
 import { clientChangeAtom } from '../../atoms/clientChangeAtom';
 import { useAtom } from 'jotai';
@@ -9,16 +10,19 @@ import { EditClientProps, ClientDataProps } from '../types/clientTypes';
 
 const EditClient: React.FC<EditClientProps> = ({ userId }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [clientData, setClientData] = useState<ClientDataProps | undefined>(
     undefined,
   );
   const [clientChange, setClientChange] = useAtom(clientChangeAtom);
 
   useEffect(() => {
-      fetchUserData();
+    if (!openModal) return;
+    fetchUserData();
   }, [openModal]);
 
   const fetchUserData = async () => {
+    setLoading(true);
     try {
       const response = await apiClient.get(
         `/Client/id/${userId}`,
@@ -40,6 +44,8 @@ const EditClient: React.FC<EditClientProps> = ({ userId }) => {
       setClientChange(prev => prev + 1);
     } catch (error) {
       console.error('Error fetching user data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,10 +57,14 @@ const EditClient: React.FC<EditClientProps> = ({ userId }) => {
       />
       {openModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <ClientForm
-            clientData={clientData}
-            closeModal={() => setOpenModal(false)}
-          />
+          {loading ? (
+            <ClipLoader size={50} color="#123abc" loading={loading} />
+          ) : (
+            <ClientForm
+              clientData={clientData}
+              closeModal={() => setOpenModal(false)}
+            />
+          )}
         </div>
       )}
     </div>

@@ -30,6 +30,7 @@ type MaterialsSectionProps = {
   totalAmountConverted: string
 
   onSubmit: (event: React.FormEvent) => void
+  isSubmitting: boolean
 }
 
 export default function MaterialsSection({
@@ -45,6 +46,7 @@ export default function MaterialsSection({
   onRemoveMaterial,
   totalAmountConverted,
   onSubmit,
+  isSubmitting,
 }: MaterialsSectionProps) {
   const columns = [
     {
@@ -161,6 +163,8 @@ export default function MaterialsSection({
       <div className="flex justify-end mt-3 mr-6">
         <Button
           onClick={onSubmit}
+          loading={isSubmitting}
+          disabled={isSubmitting}
           className="bg-primary mt-4 font-bold text-tertiary w-[20%]"
         >
           Criar evento

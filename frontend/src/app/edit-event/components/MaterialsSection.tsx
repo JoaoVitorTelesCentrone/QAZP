@@ -31,6 +31,7 @@ type MaterialsSectionProps = {
   totalAmountConverted: string
 
   onUpdate: () => void
+  isSubmitting: boolean
 }
 
 export default function MaterialsSection({
@@ -46,6 +47,7 @@ export default function MaterialsSection({
   onRemoveMaterial,
   totalAmountConverted,
   onUpdate,
+  isSubmitting,
 }: MaterialsSectionProps) {
   const materialColumns = [
     {
@@ -162,7 +164,9 @@ export default function MaterialsSection({
       </div>
 
       <div className="flex mt-4">
-        <Button onClick={onUpdate}>Atualizar</Button>
+        <Button onClick={onUpdate} loading={isSubmitting} disabled={isSubmitting}>
+          Atualizar
+        </Button>
       </div>
     </div>
   )

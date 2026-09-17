@@ -2,6 +2,7 @@
 
 import { LucideLineChart } from 'lucide-react'
 import { MdEventAvailable } from 'react-icons/md'
+import ClipLoader from 'react-spinners/ClipLoader'
 import UserSideMenu from '../components/UserHeader'
 import { eventsColumns } from './columns'
 import { intl } from '@/i18n'
@@ -14,6 +15,14 @@ interface DashboardViewProps {
 }
 
 export default function DashboardView({ loading, counts, events }: DashboardViewProps) {
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color="#123abc" loading={loading} />
+      </div>
+    )
+  }
+
   return (
     <div>
       <UserSideMenu />

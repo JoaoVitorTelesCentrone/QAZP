@@ -1,3 +1,5 @@
+'use client'
+
 import { Input, Button, Modal } from 'antd'
 import { AxiosError } from 'axios'
 import { apiClient } from '@/lib/apiClient'
@@ -37,6 +39,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
   const [typeError, setTypeError] = useState('')
   const [estimatedAudienceError, setEstimatedAudienceError] = useState('')
   const [isTouched, setIsTouched] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const resetForm = () => {
     setFullName('')
@@ -96,6 +99,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
       estimatedAudience: estimatedAudience,
     }
 
+    setIsSubmitting(true);
     try {
       const response = await apiClient.post('/Quote', quote);
 
@@ -106,6 +110,8 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
       }
     } catch (error: unknown) {
       handleSaveQuoteError(error);
+    } finally {
+      setIsSubmitting(false);
     }
     return true;
   }
@@ -395,6 +401,8 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           className="bg-primary text-secondary w-full mt-4"
           type="primary"
           onClick={() => quoteModelRequest()}
+          loading={isSubmitting}
+          disabled={isSubmitting}
         >
           {intl.formatMessage({ id: 'request.quote.button' })}
         </Button>

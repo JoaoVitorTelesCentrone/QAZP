@@ -13,6 +13,7 @@ import { ClientProps } from '@/app/atoms/clientsAtom'
 
 type ClientFieldsProps = {
   clients: ClientProps[]
+  clientsLoading: boolean
   clientName: string
   clientDocument: string
   clientEmail: string
@@ -27,6 +28,7 @@ type ClientFieldsProps = {
 
 export default function ClientFields({
   clients,
+  clientsLoading,
   clientName,
   clientDocument,
   clientEmail,
@@ -65,7 +67,7 @@ export default function ClientFields({
                 }
               }}
             >
-              <span>{clientName || 'Cliente'}</span>
+              <span>{clientsLoading ? 'Carregando clientes...' : clientName || 'Cliente'}</span>
               <ChevronDown className="h-6 w-6" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-96 max-h-72 overflow-y-auto">

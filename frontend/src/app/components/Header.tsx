@@ -1,7 +1,6 @@
 'use client'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import React, { useState, useEffect } from 'react'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
@@ -9,9 +8,8 @@ import UserHeader from './UserHeader'
 import { intl } from '@/i18n'
 import { Button } from 'antd'
 import ClipLoader from 'react-spinners/ClipLoader'
-
-const QuoteModal = dynamic(() => import('./QuoteModal'))
-const LoginModal = dynamic(() => import('./LoginModal'))
+import QuoteModal from './QuoteModal'
+import LoginModal from './LoginModal'
 
 const Header = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)

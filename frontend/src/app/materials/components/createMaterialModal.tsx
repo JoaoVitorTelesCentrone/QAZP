@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react'
 import {
   DropdownMenu,
@@ -23,6 +25,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
   isVisible,
   onClose,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
   const [type, setType] = useState('')
@@ -66,6 +69,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
       isActive: true,
     }
 
+    setIsSubmitting(true)
     try {
       const response = await apiClient.post('/Material', data)
       if (response.status === 201) {
@@ -76,6 +80,8 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error)
       toast.error('Deu erro!')
+    } finally {
+      setIsSubmitting(false)
     }
 
     return true
@@ -243,6 +249,8 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
             <Button
               className="bg-primary text-white w-[30%]"
               onClick={() => createMaterialRequest()}
+              loading={isSubmitting}
+              disabled={isSubmitting}
             >
               Criar material
             </Button>

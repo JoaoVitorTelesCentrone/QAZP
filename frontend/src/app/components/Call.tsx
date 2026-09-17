@@ -1,12 +1,10 @@
 'use client'
 import { Button } from 'antd'
 import Image from 'next/image'
-import dynamic from 'next/dynamic'
 import foto from '../../assets/event.png'
 import React, { useState } from 'react'
 import { intl } from '@/i18n'
-
-const QuoteModal = dynamic(() => import('./QuoteModal'))
+import QuoteModal from './QuoteModal'
 
 const Call = () => {
   const [openQuoteModal, setOpenQuoteModal] = useState(false)

@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, Input, Modal } from 'antd'
 import { isAxiosError } from 'axios'
 import { SearchIcon } from 'lucide-react'
@@ -29,6 +31,7 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
   onClose,
 }) => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [fullName, setFullName] = useState('')
   const [documentId, setDocumentId] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -165,6 +168,7 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
       city,
     };
 
+    setIsSubmitting(true);
     try {
       const response = await clientService.createClient(data)
 
@@ -175,6 +179,8 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
       }
     } catch (error: unknown) {
       handleCreateClientError(error);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -524,6 +530,8 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
             <Button
               className="bg-primary text-white w-[30%]"
               onClick={() => createClient()}
+              loading={isSubmitting}
+              disabled={isSubmitting}
             >
               {intl.formatMessage({
                 id: 'create.client.page.create.client.button',

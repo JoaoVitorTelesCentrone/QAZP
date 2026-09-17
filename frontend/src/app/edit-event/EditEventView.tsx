@@ -1,6 +1,7 @@
 'use client'
 
 import { Input } from 'antd'
+import ClipLoader from 'react-spinners/ClipLoader'
 import UserSideMenu from '@/app/components/UserHeader'
 import EventDetailsFields from './components/EventDetailsFields'
 import AddressFields from './components/AddressFields'
@@ -11,7 +12,15 @@ import { useEditEvent } from './hooks/useEditEvent'
 type EditEventViewProps = ReturnType<typeof useEditEvent>
 
 export default function EditEventView(props: EditEventViewProps) {
-  const { name } = props
+  const { name, loading } = props
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color="#123abc" loading={loading} />
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -114,6 +123,7 @@ export default function EditEventView(props: EditEventViewProps) {
             onRemoveMaterial={props.removeMaterial}
             totalAmountConverted={props.totalAmountConverted}
             onUpdate={props.handleUpdate}
+            isSubmitting={props.isSubmitting}
           />
         </div>
       </div>

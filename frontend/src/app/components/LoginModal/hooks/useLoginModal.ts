@@ -38,6 +38,7 @@ export function useLoginModal(isVisible: boolean, onClose: () => void) {
 
     if (!valid) return
 
+    setLoading(true)
     try {
       const { token, name } = await login(username, password)
       localStorage.setItem('token', token)
@@ -45,12 +46,8 @@ export function useLoginModal(isVisible: boolean, onClose: () => void) {
       setUserInfo({ name, username, password })
       toast.success(intl.formatMessage({ id: 'login.success.message' }, { name }))
 
-      onClose()
       setFullScreenLoading(true)
-
-      setTimeout(() => {
-        router.push('/dashboard')
-      })
+      router.push('/dashboard')
     } catch (error) {
       console.error(error)
       toast.error(intl.formatMessage({ id: 'login.error.message' }))

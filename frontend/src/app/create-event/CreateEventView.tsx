@@ -42,6 +42,7 @@ export default function CreateEventView(props: CreateEventViewProps) {
           </h1>
           <ClientFields
             clients={props.clients}
+            clientsLoading={props.clientsLoading}
             clientName={props.clientName}
             clientDocument={props.clientDocument}
             clientEmail={props.clientEmail}
@@ -120,6 +121,7 @@ export default function CreateEventView(props: CreateEventViewProps) {
             onRemoveMaterial={props.removeMaterial}
             totalAmountConverted={props.totalAmountConverted}
             onSubmit={props.postEvent}
+            isSubmitting={props.isSubmitting}
           />
         </form>
       </div>

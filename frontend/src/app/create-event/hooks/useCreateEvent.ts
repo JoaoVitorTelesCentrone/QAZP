@@ -26,6 +26,8 @@ const requiredFieldError = () =>
 export const useCreateEvent = () => {
   const router = useRouter()
 
+  const [clientsLoading, setClientsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [eventName, setEventName] = useState('')
   const [eventType, setEventType] = useState<number | null>(null)
   const [selectedType, setSelectedType] = useState('')
@@ -120,11 +122,14 @@ export const useCreateEvent = () => {
 
   useEffect(() => {
     const loadClients = async () => {
+      setClientsLoading(true)
       try {
         const data = await fetchClients()
         setClients(data.map(mapClientApiToOption))
       } catch (error) {
         console.error('Error fetching clients:', error)
+      } finally {
+        setClientsLoading(false)
       }
     }
     loadClients()
@@ -395,6 +400,7 @@ export const useCreateEvent = () => {
       totalAmount,
     })
 
+    setIsSubmitting(true)
     try {
       await createEvent(body)
       toast.success('Evento criado com sucesso')
@@ -402,6 +408,8 @@ export const useCreateEvent = () => {
     } catch (error) {
       toast.error('Erro ao criar evento')
       console.error('Error creating event:', error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -428,6 +436,8 @@ export const useCreateEvent = () => {
   const isTypeValid = eventType !== null
 
   return {
+    isSubmitting,
+
     eventName,
     setEventName,
     eventNameError,
@@ -440,6 +450,7 @@ export const useCreateEvent = () => {
     getEventTypeNameAndIndex,
 
     clients,
+    clientsLoading,
     clientName,
     clientDocument,
     setClientDocument,
