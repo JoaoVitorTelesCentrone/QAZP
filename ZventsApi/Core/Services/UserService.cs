@@ -17,80 +17,71 @@ namespace ZventsApi.Application.Services
         public async Task<IEnumerable<UserListDto>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
-            return users.Select(u => new UserListDto
-            {
-                Id = u.Id,
-                Name = u.Name,
-                Username = u.Username,
-                CreatedDate = u.CreatedDate
-            });
+            return users.Select(ToListDto);
         }
 
         public async Task<IEnumerable<UserListDto>> GetActiveUsersAsync()
         {
             var users = await _userRepository.GetActiveUsersAsync();
-            return users.Select(u => new UserListDto
-            {
-                Id = u.Id,
-                Name = u.Name,
-                Username = u.Username,
-                CreatedDate = u.CreatedDate
-            });
+            return users.Select(ToListDto);
         }
 
         public async Task<UserListDto?> GetUserByNameAsync(string name)
         {
             var user = await _userRepository.GetByNameAsync(name);
-            if (user == null) return null;
-
-            return new UserListDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Username = user.Username,
-                CreatedDate = user.CreatedDate
-            };
+            return user == null ? null : ToListDto(user);
         }
 
         public async Task<UserListDto?> GetUserByIdAsync(Guid id)
         {
             var user = await _userRepository.GetByIdAsync(id);
-            if (user == null) return null;
-
-            return new UserListDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Username = user.Username,
-                CreatedDate = user.CreatedDate
-            };
+            return user == null ? null : ToListDto(user);
         }
 
         public async Task<UserListDto?> GetUserByUsernameAsync(string username)
         {
             var user = await _userRepository.GetByUsernameAsync(username);
-            if (user == null) return null;
-
-            return new UserListDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Username = user.Username,
-                CreatedDate = user.CreatedDate
-            };
+            return user == null ? null : ToListDto(user);
         }
+
+        private static UserListDto ToListDto(User u) => new()
+        {
+            Id = u.Id,
+            Name = u.Name,
+            Username = u.Username,
+            CreatedDate = u.CreatedDate
+        };
 
         public async Task<UserLoginResult?> LoginAsync(LoginRequest request)
         {
             var user = await _userRepository.GetByUsernameAsync(request.Username);
 
-            if (user == null 
-            || user.Password != request.Password 
-            || user.UserStatus != UserStatus.Active)
+            if (user == null || user.UserStatus != UserStatus.Active)
             {
                 return null;
             }
-                
+
+            var isBCryptHash = user.Password.StartsWith("$2a$")
+                || user.Password.StartsWith("$2b$")
+                || user.Password.StartsWith("$2y$");
+
+            var passwordValid = isBCryptHash
+                ? BCrypt.Net.BCrypt.Verify(request.Password, user.Password)
+                : user.Password == request.Password;
+
+            if (!passwordValid)
+            {
+                return null;
+            }
+
+            if (!isBCryptHash)
+            {
+                // Legacy plaintext password from before hashing was introduced.
+                // Migrate it to a proper hash now that we know it's correct.
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+                await _userRepository.UpdateAsync(user);
+            }
+
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
 
             var claims = new[]
@@ -131,7 +122,7 @@ namespace ZventsApi.Application.Services
                 Id = Guid.NewGuid(),
                 Name = request.Name,
                 Username = request.Username,
-                Password = request.Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 Role = request.Role,
                 CreatedDate = DateTime.UtcNow,
                 UserStatus = UserStatus.Active,
@@ -163,19 +154,13 @@ namespace ZventsApi.Application.Services
 
             user.Name = updatedUser.Name;
             user.Username = updatedUser.Username;
-            user.Password = updatedUser.Password;
+            user.Password = BCrypt.Net.BCrypt.HashPassword(updatedUser.Password);
             user.Role = updatedUser.Role;
             user.UserStatus = updatedUser.UserStatus;
 
             await _userRepository.UpdateAsync(user);
 
-            return new UserListDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Username = user.Username,
-                CreatedDate = user.CreatedDate
-            };
+            return ToListDto(user);
         }
 
         public async Task<bool> SoftDeleteUserAsync(Guid id)

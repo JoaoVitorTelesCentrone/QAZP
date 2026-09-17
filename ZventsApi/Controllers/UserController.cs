@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.User;
 using ZventsApi.Models;
@@ -7,9 +8,11 @@ namespace ZventsApi.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController(IUserService userService) : ControllerBase
+    [Authorize]
+    public class UserController(IUserService userService, ILogger<UserController> logger) : ControllerBase
     {
         private readonly IUserService _userService = userService;
+        private readonly ILogger<UserController> _logger = logger;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserListDto>>> GetAllUsersAsync()
@@ -64,8 +67,12 @@ namespace ZventsApi.Controllers
             var result = await _userService.CreateUserAsync(request);
 
             if (result == null)
+            {
+                _logger.LogWarning("Tentativa de criar usuário já existente: {Username}", request.Username);
                 return Conflict(new { message = "User already exists" });
+            }
 
+            _logger.LogInformation("Usuário criado: {UserId}", result.Id);
             return CreatedAtAction(
                 "GetUserById",
                 new { id = result.Id },
@@ -74,13 +81,18 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserLoginResult>> Login([FromBody] LoginRequest request)
         {
             var result = await _userService.LoginAsync(request);
 
             if (result == null)
+            {
+                _logger.LogWarning("Tentativa de login falhou para o usuário: {Username}", request.Username);
                 return Unauthorized(new { message = "Usuário não encontrado ou não autorizado" });
+            }
 
+            _logger.LogInformation("Login bem-sucedido para o usuário: {Username}", request.Username);
             return Ok(result);
         }
 
@@ -114,6 +126,7 @@ namespace ZventsApi.Controllers
             if (!success)
                 return NotFound();
 
+            _logger.LogInformation("Usuário excluído: {UserId}", id);
             return NoContent();
         }
     }
