@@ -11,7 +11,7 @@ builder.Services.AddInfrastructure();
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddSwaggerConfiguration();
-builder.Services.AddCorsConfiguration();
+builder.Services.AddCorsConfiguration(builder.Configuration);
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

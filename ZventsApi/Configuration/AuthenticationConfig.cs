@@ -9,7 +9,15 @@ public static class AuthenticationConfig
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
+        var jwtKey = configuration["Jwt:Key"];
+        if (string.IsNullOrWhiteSpace(jwtKey))
+        {
+            throw new InvalidOperationException(
+                "Jwt:Key is not configured. Set it via user-secrets (dotnet user-secrets set \"Jwt:Key\" \"...\") " +
+                "in Development, or via the Jwt__Key environment variable in other environments.");
+        }
+
+        var key = Encoding.UTF8.GetBytes(jwtKey);
 
         services.AddAuthentication(options =>
         {

@@ -9,9 +9,10 @@ namespace ZventsApi.Controllers
     [ApiController]
     [Route("api/event")]
     [Authorize]
-    public class EventController(IEventService service) : ControllerBase
+    public class EventController(IEventService service, ILogger<EventController> logger) : ControllerBase
     {
         private readonly IEventService _service = service;
+        private readonly ILogger<EventController> _logger = logger;
 
         [HttpGet("active-events")]
         public async Task<ActionResult<IEnumerable<ActiveEventDto>>> GetActiveEvents()
@@ -31,6 +32,7 @@ namespace ZventsApi.Controllers
         public async Task<ActionResult<Event>> Create(CreateEventDto dto)
         {
             var evt = await _service.CreateEventAsync(dto);
+            _logger.LogInformation("Evento criado: {EventId}", evt.Id);
             return CreatedAtAction(nameof(GetById), new { id = evt.Id }, evt);
         }
 
@@ -55,6 +57,8 @@ namespace ZventsApi.Controllers
         {
             var success = await _service.DeleteEventAsync(id);
             if (!success) return NotFound();
+
+            _logger.LogInformation("Evento excluído: {EventId}", id);
             return NoContent();
         }
     }

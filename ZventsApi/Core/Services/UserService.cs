@@ -17,68 +17,40 @@ namespace ZventsApi.Application.Services
         public async Task<IEnumerable<UserListDto>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
-            return users.Select(u => new UserListDto
-            {
-                Id = u.Id,
-                Name = u.Name,
-                Username = u.Username,
-                CreatedDate = u.CreatedDate
-            });
+            return users.Select(ToListDto);
         }
 
         public async Task<IEnumerable<UserListDto>> GetActiveUsersAsync()
         {
             var users = await _userRepository.GetActiveUsersAsync();
-            return users.Select(u => new UserListDto
-            {
-                Id = u.Id,
-                Name = u.Name,
-                Username = u.Username,
-                CreatedDate = u.CreatedDate
-            });
+            return users.Select(ToListDto);
         }
 
         public async Task<UserListDto?> GetUserByNameAsync(string name)
         {
             var user = await _userRepository.GetByNameAsync(name);
-            if (user == null) return null;
-
-            return new UserListDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Username = user.Username,
-                CreatedDate = user.CreatedDate
-            };
+            return user == null ? null : ToListDto(user);
         }
 
         public async Task<UserListDto?> GetUserByIdAsync(Guid id)
         {
             var user = await _userRepository.GetByIdAsync(id);
-            if (user == null) return null;
-
-            return new UserListDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Username = user.Username,
-                CreatedDate = user.CreatedDate
-            };
+            return user == null ? null : ToListDto(user);
         }
 
         public async Task<UserListDto?> GetUserByUsernameAsync(string username)
         {
             var user = await _userRepository.GetByUsernameAsync(username);
-            if (user == null) return null;
-
-            return new UserListDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Username = user.Username,
-                CreatedDate = user.CreatedDate
-            };
+            return user == null ? null : ToListDto(user);
         }
+
+        private static UserListDto ToListDto(User u) => new()
+        {
+            Id = u.Id,
+            Name = u.Name,
+            Username = u.Username,
+            CreatedDate = u.CreatedDate
+        };
 
         public async Task<UserLoginResult?> LoginAsync(LoginRequest request)
         {
@@ -188,13 +160,7 @@ namespace ZventsApi.Application.Services
 
             await _userRepository.UpdateAsync(user);
 
-            return new UserListDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Username = user.Username,
-                CreatedDate = user.CreatedDate
-            };
+            return ToListDto(user);
         }
 
         public async Task<bool> SoftDeleteUserAsync(Guid id)
