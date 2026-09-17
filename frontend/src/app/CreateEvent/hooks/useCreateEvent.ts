@@ -1,38 +1,37 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import dayjs, { Dayjs } from 'dayjs'
-import { message } from 'antd'
-import { toast } from 'sonner'
 import { useAtom } from 'jotai'
+import dayjs, { Dayjs } from 'dayjs'
+import { toast } from 'sonner'
 import { intl } from '@/i18n'
 import { formatCurrency } from '@/functions/functions'
 import { clientsAtom } from '@/app/atoms/clientsAtom'
-import { MaterialType } from '../../CreateEvent/types/createEventTypes'
 import {
-  fetchClientById,
-  fetchEventById,
-  fetchEventMaterials,
-  fetchMaterialsByCategory,
+  createEvent,
   fetchAddressByZipCode,
-  updateEvent,
-} from '../services/editEventService'
+  fetchClients,
+  fetchMaterialsByCategory,
+} from '../services/createEventService'
 import {
   formatZipCodeInput,
-  mapEventResponseToFormState,
-  mapFormStateToUpdatePayload,
-} from '../mappers/editEventMapper'
-import { EditEventMaterial, EditEventMaterialToSend } from '../types/editEventTypes'
+  mapClientApiToOption,
+  mapFormStateToCreatePayload,
+  mapMaterialApiToOption,
+} from '../mappers/createEventMapper'
+import { MaterialType, Mats, insertMaterialProps } from '../types/createEventTypes'
 
 const requiredFieldError = () =>
   `${intl.formatMessage({ id: 'required.field.error.message' })}`
 
-export const useEditEvent = (eventId: string) => {
+export const useCreateEvent = () => {
   const router = useRouter()
 
-  const [name, setName] = useState('')
+  const [eventName, setEventName] = useState('')
+  const [eventType, setEventType] = useState<number | null>(null)
+  const [selectedType, setSelectedType] = useState('')
   const [startDate, setStartDate] = useState<Dayjs | null>(null)
-  const [endDate, setEndDate] = useState<Dayjs | null>(null)
   const [startTime, setStartTime] = useState<Dayjs | null>(null)
+  const [endDate, setEndDate] = useState<Dayjs | null>(null)
   const [endTime, setEndTime] = useState<Dayjs | null>(null)
   const [zipCode, setZipCode] = useState('')
   const [addressName, setAddressName] = useState('')
@@ -42,30 +41,33 @@ export const useEditEvent = (eventId: string) => {
   const [state, setState] = useState('')
   const [city, setCity] = useState('')
   const [estimatedAudience, setEstimatedAudience] = useState('')
+  const [clients, setClients] = useAtom(clientsAtom)
   const [clientId, setClientId] = useState('')
   const [clientName, setClientName] = useState('')
-  const [totalAmount, setTotalAmount] = useState<number>()
-  const [type, setType] = useState('')
-  const [clients] = useAtom(clientsAtom)
-
+  const [clientDocument, setClientDocument] = useState('')
+  const [clientEmail, setClientEmail] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
-  const [sMaterials, setSMaterials] = useState<MaterialType[]>([])
   const [selectedMaterial, setSelectedMaterial] = useState('')
   const [selectedMaterialId, setSelectedMaterialId] = useState('')
   const [selectedMaterialIndex, setSelectedMaterialIndex] = useState(0)
   const [selectedMaterialPrice, setSelectedMaterialPrice] = useState(0)
   const [materialQnt, setMaterialQnt] = useState('')
-  const [materials, setMaterials] = useState<EditEventMaterial[]>([])
-  const [sendMaterial, setSendMaterial] = useState<EditEventMaterialToSend[]>([])
+  const [materials, setMaterials] = useState<MaterialType[]>([])
+  const [insertedMaterial, setInsertedMaterial] = useState<insertMaterialProps[]>([])
+  const [materialIdAndQuantity, setMaterialIdAndQuantity] = useState<Mats[]>([])
+  const [totalAmount, setTotalAmount] = useState(0)
 
-  const [NameError, setNameError] = useState('')
+  const [EventNameError, setEventNameError] = useState('')
+  const [clientDocumentError, setclientDocumentError] = useState('')
   const [zipCodeError, setZipCodeError] = useState('')
-  const [addressNameError, setAddressNameError] = useState('')
   const [addressNumberError, setAddressNumberError] = useState('')
+  const [addressNameError, setAddressNameError] = useState('')
   const [districtError, setDistrictError] = useState('')
   const [cityError, setCityError] = useState('')
   const [stateError, setStateError] = useState('')
   const [estimatedAudienceError, setEstimatedAudienceError] = useState('')
+  const [isClientTouched, setIsClientTouched] = useState(false)
+  const [clientNameError, setClientNameError] = useState('')
   const [startDateError, setStartDateError] = useState('')
   const [endDateError, setEndDateError] = useState('')
   const [startTimeError, setStartTimeError] = useState('')
@@ -74,10 +76,10 @@ export const useEditEvent = (eventId: string) => {
   const [isEndDateTouched, setIsEndDateTouched] = useState(false)
   const [isStartTimeTouched, setIsStartTimeTouched] = useState(false)
   const [isEndTimeTouched, setIsEndTimeTouched] = useState(false)
+  const [isTouched, setIsTouched] = useState(false)
 
-  const getClientValues = (name: string, id: string) => {
-    setClientId(id)
-    setClientName(name)
+  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setZipCode(formatZipCodeInput(e.target.value))
   }
 
   const handleSearchClick: React.MouseEventHandler<SVGSVGElement> = async event => {
@@ -91,10 +93,6 @@ export const useEditEvent = (eventId: string) => {
     } catch (error) {
       console.error('Erro ao buscar o CEP:', error)
     }
-  }
-
-  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setZipCode(formatZipCodeInput(e.target.value))
   }
 
   const handleEstimatedAudienceChange = (
@@ -119,6 +117,26 @@ export const useEditEvent = (eventId: string) => {
       setMaterialQnt(value)
     }
   }
+
+  useEffect(() => {
+    const loadClients = async () => {
+      try {
+        const data = await fetchClients()
+        setClients(data.map(mapClientApiToOption))
+      } catch (error) {
+        console.error('Error fetching clients:', error)
+      }
+    }
+    loadClients()
+  }, [])
+
+  useEffect(() => {
+    const newTotalAmount = insertedMaterial.reduce(
+      (sum, material) => sum + material.price * material.quantity,
+      0,
+    )
+    setTotalAmount(newTotalAmount)
+  }, [insertedMaterial])
 
   const handleStartTimeChange = (
     time: Dayjs | null,
@@ -220,10 +238,50 @@ export const useEditEvent = (eventId: string) => {
     setEndTimeError(formattedTime && formattedTime.isValid() ? '' : requiredFieldError())
   }
 
-  const removeMaterial = (index: number) => {
-    const newInsertedMaterial = [...materials]
-    newInsertedMaterial.splice(index, 1)
-    setMaterials(newInsertedMaterial)
+  const getMaterialsByCategory = async (
+    categoryName: string,
+    category: number,
+  ) => {
+    try {
+      const data = await fetchMaterialsByCategory(category)
+      setMaterials(data.map(mapMaterialApiToOption))
+      setSelectedCategory(categoryName)
+    } catch (error) {
+      console.error('Error fetching materials:', error)
+    }
+  }
+
+  const getClientValues = (
+    name: string,
+    id: string,
+    documentId: string,
+    email: string,
+  ) => {
+    setClientId(id)
+    setClientName(name)
+    setClientDocument(documentId)
+    setClientEmail(email)
+  }
+
+  const getEventTypeNameAndIndex = (
+    newEventType: number,
+    stringEventType: string,
+  ) => {
+    setEventType(newEventType)
+    setSelectedType(stringEventType)
+    setIsTouched(false)
+  }
+
+  const getMaterialValues = (
+    id: string,
+    name: string,
+    index: number,
+    price: number,
+  ) => {
+    setSelectedMaterialId(id)
+    setSelectedMaterial(name)
+    setSelectedMaterialIndex(index)
+    setSelectedMaterialPrice(price)
   }
 
   const insertMaterial = (
@@ -240,18 +298,25 @@ export const useEditEvent = (eventId: string) => {
       toast.error('Preencha todos os campos corretamente antes de adicionar o material.')
       return
     }
-    const newMaterialInsert = {
-      materialName: materialName,
-      quantity: quantity,
-      materialId: materialId,
-      materialPrice: price,
+    const newMaterialInsert: insertMaterialProps = {
+      name: materialName,
+      quantity,
+      key: index.toString(),
+      price,
     }
-    const newMaterialSend = {
+
+    const newMaterialInsertPost: Mats = {
       materialId: materialId,
       quantity: quantity,
     }
-    setMaterials(prevMaterials => [...prevMaterials, newMaterialInsert])
-    setSendMaterial([...materials, newMaterialSend])
+    setInsertedMaterial(prevMaterials => [...prevMaterials, newMaterialInsert])
+    setMaterialIdAndQuantity(prevMaterials => [
+      ...prevMaterials,
+      newMaterialInsertPost,
+    ])
+    setMaterialQnt('')
+    setSelectedCategory('')
+    setSelectedMaterial('')
   }
 
   const handleAddMaterial = (event: React.FormEvent) =>
@@ -264,79 +329,32 @@ export const useEditEvent = (eventId: string) => {
       selectedMaterialPrice,
     )
 
-  useEffect(() => {
-    const fetchEventAndClient = async () => {
-      try {
-        if (eventId) {
-          const event = await fetchEventById(eventId)
-          const formState = mapEventResponseToFormState(event)
-
-          setName(formState.name)
-          setClientId(formState.clientId)
-          setStartDate(formState.startDate)
-          setEndDate(formState.endDate)
-          setStartTime(formState.startTime)
-          setEndTime(formState.endTime)
-          setZipCode(formState.zipCode)
-          setAddressName(formState.addressName)
-          setAddressNumber(formState.addressNumber)
-          setAddressComplement(formState.addressComplement)
-          setDistrict(formState.district)
-          setState(formState.state)
-          setCity(formState.city)
-          setType(formState.type)
-          setEstimatedAudience(formState.estimatedAudience)
-          setTotalAmount(formState.totalAmount)
-
-          if (event.clientId) {
-            const client = await fetchClientById(event.clientId)
-            setClientId(client.id)
-            setClientName(client.fullName)
-          }
-
-          if (event.id) {
-            const eventMaterials = await fetchEventMaterials(event.id)
-            setMaterials(eventMaterials)
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching event or client details:', error)
-      }
-    }
-
-    fetchEventAndClient()
-  }, [eventId])
-
-  const getMaterialValues = (
-    id: string,
-    name: string,
-    index: number,
-    price: number,
-  ) => {
-    setSelectedMaterialId(id)
-    setSelectedMaterial(name)
-    setSelectedMaterialIndex(index)
-    setSelectedMaterialPrice(price)
+  const removeMaterial = (index: number) => {
+    const newInsertedMaterial = [...insertedMaterial]
+    newInsertedMaterial.splice(index, 1)
+    setInsertedMaterial(newInsertedMaterial)
   }
 
-  useEffect(() => {
-    const newTotalAmount = materials.reduce(
-      (sum, material) => sum + material.materialPrice * material.quantity,
-      0,
-    )
-    setTotalAmount(newTotalAmount)
-  }, [materials])
+  const totalAmountConverted = formatCurrency(Number(totalAmount.toFixed(2)))
 
-  const handleUpdate = async () => {
+  const postEvent = async (event: React.FormEvent) => {
+    event.preventDefault()
+
     const fieldsToValidate = [
-      { value: name, errorSetter: setNameError },
+      { value: eventName, errorSetter: setEventNameError },
       { value: estimatedAudience, errorSetter: setEstimatedAudienceError },
+      { value: clientDocument, errorSetter: setclientDocumentError },
+      { value: clientName, errorSetter: setClientNameError },
       { value: zipCode, errorSetter: setZipCodeError },
       { value: addressName, errorSetter: setAddressNameError },
       { value: addressNumber, errorSetter: setAddressNumberError },
       { value: district, errorSetter: setDistrictError },
       { value: city, errorSetter: setCityError },
       { value: state, errorSetter: setStateError },
+      { value: startDate, errorSetter: setStartDateError },
+      { value: startTime, errorSetter: setStartTimeError },
+      { value: endDate, errorSetter: setEndDateError },
+      { value: endTime, errorSetter: setEndTimeError },
     ]
 
     let isValid = true
@@ -350,66 +368,52 @@ export const useEditEvent = (eventId: string) => {
       }
     })
 
+    if (eventType === null) {
+      setIsTouched(true)
+      isValid = false
+    }
+
     if (!isValid) return
 
-    try {
-      const body = mapFormStateToUpdatePayload({
-        name,
-        clientId,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-        zipCode,
-        addressName,
-        addressNumber,
-        addressComplement,
-        district,
-        state,
-        city,
-        estimatedAudience,
-        materials: sendMaterial,
-        totalAmount,
-        type,
-      })
+    const body = mapFormStateToCreatePayload({
+      eventName,
+      eventType: eventType as number,
+      clientId,
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      zipCode,
+      addressName,
+      addressNumber,
+      addressComplement,
+      district,
+      state,
+      city,
+      estimatedAudience,
+      materials: materialIdAndQuantity,
+      totalAmount,
+    })
 
-      await updateEvent(eventId, body)
-      message.success('Atualização feita com sucesso')
-    } catch (error) {
-      console.error('Error updating event:', error)
-      message.error('Erro ao atualizar evento')
-    } finally {
+    try {
+      await createEvent(body)
+      toast.success('Evento criado com sucesso')
       router.push('/Events')
-    }
-  }
-
-  const getMaterialsByCategory = async (
-    categoryName: string,
-    category: number,
-  ) => {
-    try {
-      const data = await fetchMaterialsByCategory(category)
-      const categoryMaterials = data.map((material: any) => ({
-        name: material.name,
-        id: material.id,
-        price: material.price,
-      }))
-      setSMaterials(categoryMaterials)
-      setSelectedCategory(categoryName)
     } catch (error) {
-      console.error('Error fetching materials:', error)
+      toast.error('Erro ao criar evento')
+      console.error('Error creating event:', error)
     }
   }
-
-  const totalAmountConverted = formatCurrency(Number(totalAmount))
 
   const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const fieldErrorMap = {
-      name: { value: name, setError: setNameError },
+      eventName: { value: eventName, setError: setEventNameError },
       estimatedAudience: { value: estimatedAudience, setError: setEstimatedAudienceError },
+      clientDocument: { value: clientDocument, setError: setclientDocumentError },
       zipCode: { value: zipCode, setError: setZipCodeError },
       addressName: { value: addressName, setError: setAddressNameError },
       addressNumber: { value: addressNumber, setError: setAddressNumberError },
+      startDate: { value: startDate, setError: setStartDateError },
     }
 
     const field = fieldErrorMap[fieldName]
@@ -421,20 +425,36 @@ export const useEditEvent = (eventId: string) => {
     }
   }
 
+  const isTypeValid = eventType !== null
+
   return {
-    name,
-    setName,
-    NameError,
-    clientId,
-    clientName,
+    eventName,
+    setEventName,
+    EventNameError,
+    handleBlur,
+
+    selectedType,
+    isTypeValid,
+    isTouched,
+    setIsTouched,
+    getEventTypeNameAndIndex,
+
     clients,
+    clientName,
+    clientDocument,
+    setClientDocument,
+    clientEmail,
+    clientNameError,
+    isClientTouched,
+    setIsClientTouched,
+    setClientNameError,
+    clientDocumentError,
     getClientValues,
 
     zipCode,
     handleZipCodeChange,
     zipCodeError,
     handleSearchClick,
-
     addressName,
     setAddressName,
     addressNameError,
@@ -452,7 +472,6 @@ export const useEditEvent = (eventId: string) => {
     state,
     setState,
     stateError,
-
     estimatedAudience,
     handleEstimatedAudienceChange,
     estimatedAudienceError,
@@ -462,19 +481,16 @@ export const useEditEvent = (eventId: string) => {
     startDateError,
     isStartDateTouched,
     setIsStartDateTouched,
-
     endDate,
     handleEndDateChange: handleEndDateInputChange,
     endDateError,
     isEndDateTouched,
     setIsEndDateTouched,
-
     startTime,
     handleStartTimeChange: handleStartTimeInputChange,
     startTimeError,
     isStartTimeTouched,
     setIsStartTimeTouched,
-
     endTime,
     handleEndTimeChange: handleEndTimeInputChange,
     endTimeError,
@@ -484,17 +500,15 @@ export const useEditEvent = (eventId: string) => {
     selectedCategory,
     getMaterialsByCategory,
     selectedMaterial,
-    sMaterials,
+    materials,
     getMaterialValues,
     materialQnt,
     handleMaterialQuantityChange,
     handleAddMaterial,
-
-    materials,
+    insertedMaterial,
     removeMaterial,
     totalAmountConverted,
 
-    handleBlur,
-    handleUpdate,
+    postEvent,
   }
 }

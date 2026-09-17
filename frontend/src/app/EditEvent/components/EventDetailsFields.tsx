@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { ClientProps } from '@/app/CreateEvent/utils'
+import { ClientProps } from '@/app/atoms/clientsAtom'
 
 type EventDetailsFieldsProps = {
   name: string

@@ -8,16 +8,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MaterialCategory } from '@/app/CreateEvent/constants/materialCategory'
-import { MaterialType } from '@/app/CreateEvent/types/createEventTypes'
-import { EditEventMaterial } from '../types/editEventTypes'
+import { MaterialCategory } from '../constants/materialCategory'
+import { MaterialType, insertMaterialProps } from '../types/createEventTypes'
 
 type MaterialsSectionProps = {
   selectedCategory: string
   onSelectCategory: (categoryName: string, category: number) => void
 
   selectedMaterial: string
-  sMaterials: MaterialType[]
+  materials: MaterialType[]
   onSelectMaterial: (id: string, name: string, index: number, price: number) => void
 
   materialQnt: string
@@ -25,33 +24,33 @@ type MaterialsSectionProps = {
 
   onAddMaterial: (event: React.FormEvent) => void
 
-  materials: EditEventMaterial[]
+  insertedMaterial: insertMaterialProps[]
   onRemoveMaterial: (index: number) => void
 
   totalAmountConverted: string
 
-  onUpdate: () => void
+  onSubmit: (event: React.FormEvent) => void
 }
 
 export default function MaterialsSection({
   selectedCategory,
   onSelectCategory,
   selectedMaterial,
-  sMaterials,
+  materials,
   onSelectMaterial,
   materialQnt,
   onMaterialQntChange,
   onAddMaterial,
-  materials,
+  insertedMaterial,
   onRemoveMaterial,
   totalAmountConverted,
-  onUpdate,
+  onSubmit,
 }: MaterialsSectionProps) {
-  const materialColumns = [
+  const columns = [
     {
       title: 'Nome',
-      dataIndex: 'materialName',
-      key: 'materialName',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Quantidade',
@@ -60,8 +59,8 @@ export default function MaterialsSection({
     },
     {
       title: 'Preço',
-      dataIndex: 'materialPrice',
-      key: 'materialPrice',
+      dataIndex: 'price',
+      key: 'price',
     },
     {
       title: '',
@@ -76,21 +75,20 @@ export default function MaterialsSection({
   ]
 
   return (
-    <div>
+    <>
       <h1 className="w-full p-4 mt-6 rounded-xl bg-cyan-900 text-white text-2xl font-bold text-center">
         Materiais
       </h1>
-
-      <div className="flex flex-col justify-around mx-auto my-10">
-        <div className="flex flex-col xl:flex-row">
-          <div className="flex flex-col ">
-            <h1 className="font-bold block mb-2">Categoria</h1>
+      <div className="flex flex-col gap-4">
+        <div className="flex space-y-4 xl:w-full">
+          <div className="flex flex-col sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[400px] mt-4 sm:mr-2 md:mr-4 lg:mr-6 xl:mr-12 2xl:w-[500px] 2xl:mr-16">
+            <h1 className="font-bold">Categoria</h1>
             <DropdownMenu>
-              <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
-                <span>{selectedCategory || 'Selecione uma Categoria'}</span>
+              <DropdownMenuTrigger className="border border-gray-300 h-[40px]  bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                <span>{selectedCategory || 'Categoria'}</span>
                 <ChevronDown className="h-6 w-6" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-full max-h-48 overflow-y-auto">
+              <DropdownMenuContent className="bg-white border border-gray-300 rounded w-72 xl:w-96 max-h-48 overflow-y-auto">
                 {MaterialCategory.map((category, index) => (
                   <div key={index}>
                     <DropdownMenuItem
@@ -104,15 +102,15 @@ export default function MaterialsSection({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="flex flex-col flex-grow">
-            <h1 className="font-bold block mb-2 xl:ml-10">Material</h1>
+          <div className="flex flex-col sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-[400px] sm:mr-2 md:mr-4 lg:mr-6 xl:mr-12 2xl:w-[500px] 2xl:mr-16">
+            <h1 className="font-bold">Material</h1>
             <DropdownMenu>
-              <DropdownMenuTrigger className="border border-gray-300 h-[50px] w-full sm:w-[300px] xl:mx-10 bg-white rounded-xl flex items-center justify-between px-4 font-bold">
-                <span>{selectedMaterial || 'Selecione um Material'}</span>
+              <DropdownMenuTrigger className="border border-gray-300 h-[40px] bg-white rounded-xl flex items-center justify-between px-4 font-bold">
+                <span>{selectedMaterial || 'Material'}</span>
                 <ChevronDown className="h-6 w-6" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-white border border-gray-300 rounded-xl w-full max-h-48 overflow-y-auto">
-                {sMaterials.map((material, index) => (
+              <DropdownMenuContent className="bg-white border border-gray-300 rounded w-96 max-h-48 overflow-y-auto">
+                {materials.map((material, index) => (
                   <div key={index}>
                     <DropdownMenuItem
                       onClick={() =>
@@ -127,43 +125,47 @@ export default function MaterialsSection({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="flex flex-col flex-grow">
-            <h1 className="font-bold block mb-2">Quantidade</h1>
+          <div className="flex flex-col xl:w-56 xl:mx-10 w-36 sm:mr-2 md:mr-4 lg:mr-6 xl:mr-12 2xl:w-[200px] 2xl:mr-16">
+            <h1 className="font-bold ">Quantidade</h1>
             <Input
               value={materialQnt}
               onChange={onMaterialQntChange}
               placeholder="Quantidade"
-              className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px]  w-32"
+              className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] w-36 xl:w-56 "
             />
           </div>
-          <div className="flex flex-col flex-grow">
+          <div className="flex flex-col">
             <Button
               onClick={onAddMaterial}
-              className="bg-white text-gray-600 border border-gray-300 rounded-xl h-[50px] w-full sm:w-[300px] md:w-[120px] mt-8"
+              className="bg-white text-gray-600 border border-gray-300 rounded h-[40px] mt-6 xl:w-24"
             >
               <PlusCircleIcon className="h-8 w-8" />
             </Button>
           </div>
         </div>
       </div>
-
-      <div className="mt-16">
+      <div className="space-y-4 mr-6">
+        <h1 className="text-3xl font-bold text-primary">Relação de Materiais</h1>
         <Table
           scroll={{ y: 200 }}
-          dataSource={materials}
-          columns={materialColumns}
+          dataSource={insertedMaterial}
+          columns={columns}
           pagination={false}
           rowKey="key"
         />
-        <div className="bg-tertiary p-4  mt-4 rounded-xl flex justify-between">
+        <div className="bg-tertiary p-4 rounded flex justify-between">
           <span className="font-bold">Valor final</span>
           <span className="font-bold">{totalAmountConverted}</span>
         </div>
       </div>
-
-      <div className="flex mt-4">
-        <Button onClick={onUpdate}>Atualizar</Button>
+      <div className="flex justify-end mt-3 mr-6">
+        <Button
+          onClick={onSubmit}
+          className="bg-primary mt-4 font-bold text-tertiary w-[20%]"
+        >
+          Criar evento
+        </Button>
       </div>
-    </div>
+    </>
   )
 }

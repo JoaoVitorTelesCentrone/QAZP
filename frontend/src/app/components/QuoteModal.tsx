@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu'
 import React from 'react'
-import { EventType } from '../CreateEvent/utils'
+import { EventType } from '../CreateEvent/constants/eventType'
 
 const API_URL = 'http://localhost:5196/api/Quote'
 interface ErrorResponse {
