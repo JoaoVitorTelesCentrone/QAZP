@@ -1,6 +1,7 @@
 'use client'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import React, { useState, useEffect } from 'react'
 import { authAtom } from '../atoms/authAtom'
 import { userInfoAtom } from '../atoms/userInfoAtom'
@@ -8,8 +9,9 @@ import UserHeader from './UserHeader'
 import { intl } from '@/i18n'
 import { Button } from 'antd'
 import ClipLoader from 'react-spinners/ClipLoader'
-import QuoteModal from './QuoteModal'
-import LoginModal from './LoginModal'
+
+const QuoteModal = dynamic(() => import('./QuoteModal'))
+const LoginModal = dynamic(() => import('./LoginModal'))
 
 const Header = () => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
@@ -43,12 +45,16 @@ const Header = () => {
 
   return (
     <div className="flex p-8 bg-quartenary text-secondary justify-around">
-      <LoginModal
-        isVisible={openLoginModal}
-        onClose={handleCloseLoginModal}
-        onCancel={handleCancelLoginModal}
-      />
-      <QuoteModal isVisible={openQuoteModal} onClose={handleCloseQuoteModal} />
+      {openLoginModal && (
+        <LoginModal
+          isVisible={openLoginModal}
+          onClose={handleCloseLoginModal}
+          onCancel={handleCancelLoginModal}
+        />
+      )}
+      {openQuoteModal && (
+        <QuoteModal isVisible={openQuoteModal} onClose={handleCloseQuoteModal} />
+      )}
       <Link
         href="/"
         className="text-2xl text-secondary font-extrabold font-montserrat"
