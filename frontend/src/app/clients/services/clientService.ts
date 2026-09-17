@@ -1,27 +1,25 @@
-import axios from "axios"
-
-const API_URL = "http://localhost:5196/api/Client"
+import { apiClient } from '@/lib/apiClient'
 
 export const clientService = {
   async getActiveClients() {
-    const { data } = await axios.get(`${API_URL}/active`)
+    const { data } = await apiClient.get('/Client/active')
     return data
   },
 
   async getClientById(id: string) {
-    const { data } = await axios.get(`${API_URL}/id/${id}`)
+    const { data } = await apiClient.get(`/Client/id/${id}`)
     return data
   },
 
   async updateClient(id: string | undefined, data: any) {
-    return axios.put(`${API_URL}/${id}`, data)
+    return apiClient.put(`/Client/${id}`, data)
   },
   async createClient(clientData: any) {
-    return axios.post(`${API_URL}`, clientData)
+    return apiClient.post('/Client', clientData)
   },
-  
+
   async deleteClient(id: string) {
-    await axios.patch(`${API_URL}/${id}`, {
+    await apiClient.patch(`/Client/${id}`, {
       isDeleted: true
     })
   }

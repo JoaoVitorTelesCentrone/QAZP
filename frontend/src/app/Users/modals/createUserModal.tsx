@@ -1,9 +1,9 @@
 import { Button, Input, Modal } from 'antd'
-import axios from 'axios'
+import { AxiosError } from 'axios'
+import { apiClient } from '@/lib/apiClient'
 import { Eye, EyeOff } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { AxiosError } from 'axios';
 import { useAtom } from 'jotai'
 import { redirect } from 'next/navigation'
 import { authAtom } from '../../atoms/authAtom'
@@ -94,7 +94,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
     const data = { name, username, password, role: 0 };
 
     try {
-      const response = await axios.post('http://localhost:5196/api/User', data);
+      const response = await apiClient.post('/User', data);
 
       if (response.status === 201) {
         toast.success(intl.formatMessage({ id: 'create.user.success.message' }));

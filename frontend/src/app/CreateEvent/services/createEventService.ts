@@ -1,14 +1,13 @@
 import axios from 'axios'
-
-const API_BASE = 'http://localhost:5196/api'
+import { apiClient } from '@/lib/apiClient'
 
 export const fetchClients = async () => {
-  const res = await axios.get(`${API_BASE}/Client`)
+  const res = await apiClient.get('/Client')
   return res.data
 }
 
 export const fetchMaterialsByCategory = async (category: number) => {
-  const res = await axios.get(`${API_BASE}/Material/category/${category}`)
+  const res = await apiClient.get(`/Material/category/${category}`)
   return res.data
 }
 
@@ -18,5 +17,5 @@ export const fetchAddressByZipCode = async (zipCode: string) => {
 }
 
 export const createEvent = async (payload: unknown) => {
-  return axios.post(`${API_BASE}/Event`, payload)
+  return apiClient.post('/Event', payload)
 }

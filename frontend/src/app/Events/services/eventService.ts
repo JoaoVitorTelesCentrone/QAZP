@@ -1,14 +1,12 @@
-import axios from 'axios'
-
-const API_BASE = 'http://localhost:5196/api/Event'
+import { apiClient } from '@/lib/apiClient'
 
 export const fetchActiveEvents = async (): Promise<any[]> => {
-  const res = await axios.get(`${API_BASE}/active-events`)
+  const res = await apiClient.get('/Event/active-events')
   return res.data
 }
 
 export const deleteEvent = async (id: string) => {
-  return await axios.patch(`${API_BASE}/${id}`, {
+  return await apiClient.patch(`/Event/${id}`, {
     isActive: false,
   })
 }

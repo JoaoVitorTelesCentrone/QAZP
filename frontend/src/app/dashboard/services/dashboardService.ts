@@ -1,7 +1,7 @@
-import axios from 'axios'
+import { apiClient } from '@/lib/apiClient'
 
 export async function getDashboardData(token: string) {
-  return axios.get('http://localhost:5196/api/Dashboard', {
+  return apiClient.get('/Dashboard', {
     headers: {
       Authorization: `Bearer ${token}`,
     },

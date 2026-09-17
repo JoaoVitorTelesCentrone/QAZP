@@ -3,7 +3,8 @@ import { Input } from '@/components/ui/input'
 import React, { useEffect, useState } from 'react'
 import { ChevronDown, SearchIcon, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import axios, { isAxiosError } from 'axios'
+import { isAxiosError } from 'axios'
+import { apiClient } from '@/lib/apiClient'
 import { toast } from 'sonner'
 import {
   DropdownMenu,
@@ -38,8 +39,8 @@ const MaterialForm: React.FC<MaterialFormProps> = ({
   const updateMaterial = async (updatedData: MaterialDataProps) => {
     try {
       console.log('Updating client with data:', updatedData)
-      const response = await axios.put(
-        `http://localhost:5196/api/Material/${materialData?.id}`,
+      const response = await apiClient.put(
+        `/Material/${materialData?.id}`,
         updatedData,
       )
       console.log('Update response:', response)

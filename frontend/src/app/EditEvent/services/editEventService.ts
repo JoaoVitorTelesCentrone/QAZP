@@ -1,25 +1,24 @@
 import axios from 'axios'
+import { apiClient } from '@/lib/apiClient'
 import { EditEventUpdatePayload } from '../types/editEventTypes'
 
-const API_BASE = 'http://localhost:5196/api'
-
 export const fetchEventById = async (eventId: string) => {
-  const res = await axios.get(`${API_BASE}/Event/${eventId}`)
+  const res = await apiClient.get(`/Event/${eventId}`)
   return res.data
 }
 
 export const fetchClientById = async (clientId: string) => {
-  const res = await axios.get(`${API_BASE}/Client/id/${clientId}`)
+  const res = await apiClient.get(`/Client/id/${clientId}`)
   return res.data
 }
 
 export const fetchEventMaterials = async (eventId: string) => {
-  const res = await axios.get(`${API_BASE}/EventMaterial/event/${eventId}`)
+  const res = await apiClient.get(`/EventMaterial/event/${eventId}`)
   return res.data
 }
 
 export const fetchMaterialsByCategory = async (category: number) => {
-  const res = await axios.get(`${API_BASE}/Material/category/${category}`)
+  const res = await apiClient.get(`/Material/category/${category}`)
   return res.data
 }
 
@@ -32,5 +31,5 @@ export const updateEvent = async (
   eventId: string,
   payload: EditEventUpdatePayload,
 ) => {
-  return await axios.put(`${API_BASE}/Event/${eventId}`, payload)
+  return await apiClient.put(`/Event/${eventId}`, payload)
 }

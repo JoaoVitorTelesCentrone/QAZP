@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { apiClient } from '@/lib/apiClient';
 import { Edit3Icon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import ClientForm from './ClientForm';
@@ -20,8 +20,8 @@ const EditClient: React.FC<EditClientProps> = ({ userId }) => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5196/api/Client/id/${userId}`,
+      const response = await apiClient.get(
+        `/Client/id/${userId}`,
       );
       const data = response.data;
       const formattedData = {

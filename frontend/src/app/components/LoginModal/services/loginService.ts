@@ -1,6 +1,4 @@
-import axios from 'axios'
-
-const API_URL = 'http://localhost:5196/api/User/login'
+import { apiClient } from '@/lib/apiClient'
 
 export type LoginResult = {
   token: string
@@ -8,6 +6,6 @@ export type LoginResult = {
 }
 
 export async function login(username: string, password: string): Promise<LoginResult> {
-  const response = await axios.post(API_URL, { username, password })
+  const response = await apiClient.post('/User/login', { username, password })
   return response.data
 }

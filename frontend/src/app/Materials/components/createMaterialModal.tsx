@@ -6,7 +6,7 @@ import {
   DropdownMenuContent,
 } from '@/components/ui/dropdown-menu'
 import { Button, Input, Modal } from 'antd'
-import axios from 'axios'
+import { apiClient } from '@/lib/apiClient'
 import { ChevronDown } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAtom } from 'jotai'
@@ -67,10 +67,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
     }
 
     try {
-      const response = await axios.post(
-        'http://localhost:5196/api/Material',
-        data,
-      )
+      const response = await apiClient.post('/Material', data)
       if (response.status === 201) {
         toast.success('Material criado')
         setChange(prev => prev + 1)

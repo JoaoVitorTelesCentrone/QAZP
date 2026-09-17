@@ -1,21 +1,19 @@
-import axios from 'axios'
+import { apiClient } from '@/lib/apiClient'
 import { MaterialProps } from '../types/materialTypes'
 
-const API_BASE = 'http://localhost:5196/api/Material'
-
 export const fetchActiveMaterials = async (): Promise<MaterialProps[]> => {
-  const res = await axios.get(`${API_BASE}/active-materials`)
+  const res = await apiClient.get('/Material/active-materials')
   return res.data
 }
 
 export const createMaterial = async (data: Partial<MaterialProps>) => {
-  return await axios.post(API_BASE, data)
+  return await apiClient.post('/Material', data)
 }
 
 export const updateMaterial = async (id: string, data: Partial<MaterialProps>) => {
-  return await axios.put(`${API_BASE}/${id}`, data)
+  return await apiClient.put(`/Material/${id}`, data)
 }
 
 export const deleteMaterial = async (id: string) => {
-  return await axios.patch(`${API_BASE}/${id}`)
+  return await apiClient.patch(`/Material/${id}`)
 }

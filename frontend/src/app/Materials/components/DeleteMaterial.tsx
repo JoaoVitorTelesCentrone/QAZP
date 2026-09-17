@@ -1,5 +1,5 @@
 import { toast } from 'sonner'
-import axios from 'axios'
+import { apiClient } from '@/lib/apiClient'
 import { useAtom } from 'jotai'
 import { materialChangeAtom } from '../../atoms/materialChange'
 import { DeleteAction } from '@/app/components/DeleteAction'
@@ -13,7 +13,7 @@ const DeleteMaterial: React.FC<deleteMaterialProps> = ({ materialId }) => {
 
   const deleteData = async (): Promise<void> => {
     try {
-      await axios.patch(`http://localhost:5196/api/Material/${materialId}`)
+      await apiClient.patch(`/Material/${materialId}`)
       console.log('Dados deletados com sucesso.')
       setMaterialChange(prev => prev + 1)
       toast.success('Material excluído com sucesso')

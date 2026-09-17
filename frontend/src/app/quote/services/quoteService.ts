@@ -1,15 +1,12 @@
-import axios from 'axios'
+import { apiClient } from '@/lib/apiClient'
 
 export async function getActiveQuotes() {
-  const response = await axios.get(
-    'http://localhost:5196/api/Quote/active-quotes',
-  )
-
+  const response = await apiClient.get('/Quote/active-quotes')
   return response.data
 }
 
 export async function deleteQuote(id: string) {
-  return axios.patch(`http://localhost:5196/api/Quote/${id}`, {
+  return apiClient.patch(`/Quote/${id}`, {
     isDeleted: true,
   })
 }
