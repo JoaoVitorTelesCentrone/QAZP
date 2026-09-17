@@ -115,7 +115,7 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
-                href="/Materials"
+                href="/materials"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
                 {intl.formatMessage({
@@ -125,7 +125,7 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
-                href="/Events"
+                href="/events"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
                 {intl.formatMessage({
@@ -135,7 +135,7 @@ const UserSideMenu = () => {
             </li>
             <li>
               <Link
-                href="/Users"
+                href="/users"
                 className="block py-2 px-3 rounded hover:bg-gray-700"
               >
                 {intl.formatMessage({

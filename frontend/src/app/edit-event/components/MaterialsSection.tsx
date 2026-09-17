@@ -8,8 +8,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MaterialCategory } from '@/app/CreateEvent/constants/materialCategory'
-import { MaterialType } from '@/app/CreateEvent/types/createEventTypes'
+import { MaterialCategory } from '@/app/create-event/constants/materialCategory'
+import { MaterialType } from '@/app/create-event/types/createEventTypes'
 import { EditEventMaterial } from '../types/editEventTypes'
 
 type MaterialsSectionProps = {

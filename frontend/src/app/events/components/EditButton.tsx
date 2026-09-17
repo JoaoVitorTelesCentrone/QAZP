@@ -7,7 +7,7 @@ const EditButton = ({ eventId }: { eventId: string }) => {
   const router = useRouter()
 
   const handleClick = () => {
-    router.push(`/EditEvent?id=${eventId}`)
+    router.push(`/edit-event?id=${eventId}`)
   }
 
   return (

@@ -43,7 +43,7 @@ export default function EventsView({ loading, events }: EventsViewProps) {
               className="mt-8"
               size="large"
             >
-              <Link href="/CreateEvent" className="text-lg">
+              <Link href="/create-event" className="text-lg">
                 Criar evento
               </Link>
             </Button>

@@ -12,7 +12,7 @@ import { toast } from 'sonner'
 import { useAtom } from 'jotai'
 import { materialChangeAtom } from '../../atoms/materialChange'
 import { intl } from '@/i18n'
-import { MaterialCategory } from '../../Materials/constants/MaterialCategory'
+import { MaterialCategory } from '../../materials/constants/MaterialCategory'
 
 export type createMaterialProps = {
   isVisible: boolean

@@ -398,7 +398,7 @@ export const useCreateEvent = () => {
     try {
       await createEvent(body)
       toast.success('Evento criado com sucesso')
-      router.push('/Events')
+      router.push('/events')
     } catch (error) {
       toast.error('Erro ao criar evento')
       console.error('Error creating event:', error)

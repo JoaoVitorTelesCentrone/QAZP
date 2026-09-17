@@ -7,7 +7,7 @@ import { useAtom } from 'jotai'
 import { intl } from '@/i18n'
 import { formatCurrency } from '@/functions/functions'
 import { clientsAtom } from '@/app/atoms/clientsAtom'
-import { MaterialType } from '../../CreateEvent/types/createEventTypes'
+import { MaterialType } from '../../create-event/types/createEventTypes'
 import {
   fetchClientById,
   fetchEventById,
@@ -379,7 +379,7 @@ export const useEditEvent = (eventId: string) => {
       console.error('Error updating event:', error)
       message.error('Erro ao atualizar evento')
     } finally {
-      router.push('/Events')
+      router.push('/events')
     }
   }
 

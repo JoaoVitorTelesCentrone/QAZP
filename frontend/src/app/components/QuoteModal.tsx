@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu'
 import React from 'react'
-import { EventType } from '../CreateEvent/constants/eventType'
+import { EventType } from '../create-event/constants/eventType'
 
 interface ErrorResponse {
   message: string;
