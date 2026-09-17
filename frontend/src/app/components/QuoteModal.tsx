@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu'
 import React from 'react'
-import { EventType } from '../create-event/constants/eventType'
+import { EventType } from '../(protected)/create-event/constants/eventType'
 
 interface ErrorResponse {
   message: string;
