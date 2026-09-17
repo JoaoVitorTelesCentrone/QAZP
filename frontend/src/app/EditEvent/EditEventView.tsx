@@ -23,7 +23,7 @@ export default function EditEventView(props: EditEventViewProps) {
             name={props.name}
             onNameChange={props.setName}
             onNameBlur={() => props.handleBlur('name')}
-            nameError={props.NameError}
+            nameError={props.nameError}
             clientName={props.clientName}
             clients={props.clients}
             onSelectClient={props.getClientValues}

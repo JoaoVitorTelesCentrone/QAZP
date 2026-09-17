@@ -58,7 +58,7 @@ export const useEditEvent = (eventId: string) => {
   const [materials, setMaterials] = useState<EditEventMaterial[]>([])
   const [sendMaterial, setSendMaterial] = useState<EditEventMaterialToSend[]>([])
 
-  const [NameError, setNameError] = useState('')
+  const [nameError, setNameError] = useState('')
   const [zipCodeError, setZipCodeError] = useState('')
   const [addressNameError, setAddressNameError] = useState('')
   const [addressNumberError, setAddressNumberError] = useState('')
@@ -424,7 +424,7 @@ export const useEditEvent = (eventId: string) => {
   return {
     name,
     setName,
-    NameError,
+    nameError,
     clientId,
     clientName,
     clients,

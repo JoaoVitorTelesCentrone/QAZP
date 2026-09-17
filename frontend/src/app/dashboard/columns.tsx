@@ -2,18 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { SortableHeader } from '@/components/ui/SortableHeader'
-
-export type Events = {
-  id: string
-  name: string
-  city: string
-  state: string
-  estimatedAudience: string
-  type: string
-  startDate: string
-  endDate: string
-  totalAmount: string
-}
+import { Events } from './types/dashboardTypes'
 
 export const eventsColumns: ColumnDef<Events>[] = [
   {

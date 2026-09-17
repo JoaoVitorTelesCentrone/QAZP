@@ -34,7 +34,7 @@ export default function CreateEventView(props: CreateEventViewProps) {
             eventName={props.eventName}
             onEventNameChange={props.setEventName}
             onEventNameBlur={() => props.handleBlur('eventName')}
-            eventNameError={props.EventNameError}
+            eventNameError={props.eventNameError}
           />
 
           <h1 className="text-2xl font-bold text-left text-primary">

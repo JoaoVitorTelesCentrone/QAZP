@@ -1,19 +1,12 @@
 'use client'
 
-import { useAtom } from 'jotai'
-import { authAtom } from '../atoms/authAtom'
-import { userInfoAtom } from '../atoms/userInfoAtom'
-import { useRouter } from 'next/navigation'
 import { Input, Button, Modal } from 'antd'
 import ClipLoader from 'react-spinners/ClipLoader'
-import { useState, useEffect } from 'react'
-import { Toaster, toast } from 'sonner'
-import axios from 'axios'
+import { Toaster } from 'sonner'
 import { intl } from '@/i18n'
 import { Eye, EyeOff } from 'lucide-react'
-import Loader from './Loader'
-
-const API_URL = 'http://localhost:5196/api/User/login'
+import Loader from '../Loader'
+import { useLoginModal } from './hooks/useLoginModal'
 
 interface LoginModalProps {
   isVisible: boolean
@@ -22,71 +15,22 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ isVisible, onClose, onCancel }: LoginModalProps) {
-  const router = useRouter()
-  const [userAuth, setUserAuth] = useAtom(authAtom)
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [usernameError, setUsernameError] = useState('')
-  const [passwordError, setPasswordError] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [fullScreenLoading, setFullScreenLoading] = useState(false)
-
-  const handleBlur = (fieldName: 'username' | 'password') => {
-    if (fieldName === 'username') {
-      setUsernameError(username ? '' : intl.formatMessage({ id: 'required.field.error.message' }))
-    } else {
-      setPasswordError(password ? '' : intl.formatMessage({ id: 'required.field.error.message' }))
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    let valid = true
-    if (!username) { setUsernameError(intl.formatMessage({ id: 'required.field.error.message' })); valid = false }
-    if (!password) { setPasswordError(intl.formatMessage({ id: 'required.field.error.message' })); valid = false }
-
-    if (!valid) return
-
-    try {
-      const response = await axios.post(API_URL, { username, password })
-      if (response.status === 200) {
-        const { token, name } = response.data
-        localStorage.setItem('token', token)
-        setUserAuth(true)
-        setUserInfo({ name, username, password })
-        toast.success(intl.formatMessage({ id: 'login.success.message' }, { name }))
-
-        onClose()
-        setFullScreenLoading(true)
-
-        setTimeout(() => {
-          router.push('/dashboard')
-        })
-      }
-    } catch (error) {
-      console.error(error)
-      toast.error(intl.formatMessage({ id: 'login.error.message' }))
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const toggleShowPassword = () => setShowPassword(prev => !prev)
-
-  useEffect(() => {
-    if (!isVisible) {
-      setUsername('')
-      setPassword('')
-      setUsernameError('')
-      setPasswordError('')
-    }
-  }, [isVisible])
+  const {
+    username,
+    setUsername,
+    password,
+    setPassword,
+    loading,
+    usernameError,
+    passwordError,
+    showPassword,
+    setShowPassword,
+    fullScreenLoading,
+    handleBlur,
+    handleSubmit,
+  } = useLoginModal(isVisible, onClose)
 
   if (fullScreenLoading) return <Loader />
-
 
   return (
     <>

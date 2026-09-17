@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MaterialProps } from '../types/material'
+import { MaterialProps } from '../types/materialTypes'
 
 const API_BASE = 'http://localhost:5196/api/Material'
 

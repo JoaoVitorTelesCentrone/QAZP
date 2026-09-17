@@ -57,7 +57,7 @@ export const useCreateEvent = () => {
   const [materialIdAndQuantity, setMaterialIdAndQuantity] = useState<Mats[]>([])
   const [totalAmount, setTotalAmount] = useState(0)
 
-  const [EventNameError, setEventNameError] = useState('')
+  const [eventNameError, setEventNameError] = useState('')
   const [clientDocumentError, setclientDocumentError] = useState('')
   const [zipCodeError, setZipCodeError] = useState('')
   const [addressNumberError, setAddressNumberError] = useState('')
@@ -430,7 +430,7 @@ export const useCreateEvent = () => {
   return {
     eventName,
     setEventName,
-    EventNameError,
+    eventNameError,
     handleBlur,
 
     selectedType,

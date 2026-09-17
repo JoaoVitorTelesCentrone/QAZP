@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { fetchActiveMaterials } from '../services/materialService'
-import { MaterialProps } from '../types/material'
+import { MaterialProps } from '../types/materialTypes'
 import { useAtom } from 'jotai'
 import { materialChangeAtom } from '../../atoms/materialChange'
 import { formatCurrency, materialCategoryNameConverter } from '../mappers/materialMapper'

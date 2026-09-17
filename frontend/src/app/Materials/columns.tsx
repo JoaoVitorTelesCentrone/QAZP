@@ -1,6 +1,6 @@
 'use client'
 import { ColumnDef } from '@tanstack/react-table'
-import { MaterialProps } from './types/material'
+import { MaterialProps } from './types/materialTypes'
 import DeleteMaterial from './components/DeleteMaterial'
 import { SortableHeader } from '@/components/ui/SortableHeader'
 
