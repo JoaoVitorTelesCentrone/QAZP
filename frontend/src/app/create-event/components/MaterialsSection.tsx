@@ -65,7 +65,7 @@ export default function MaterialsSection({
     {
       title: '',
       key: 'action',
-      render: (record: any, index: number) => (
+      render: (_value: unknown, _record: insertMaterialProps, index: number) => (
         <LucideTrash2
           onClick={() => onRemoveMaterial(index)}
           className="h-5 w-5 inline-block text-primary ml-2 cursor-pointer"
