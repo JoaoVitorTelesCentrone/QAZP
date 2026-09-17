@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Quote;
 
@@ -6,6 +7,7 @@ namespace ZventsApi.Controllers
 {
     [Route("api/quote")]
     [ApiController]
+    [Authorize]
     public class QuoteController(IQuoteService quoteService) : ControllerBase
     {
         private readonly IQuoteService _quoteService = quoteService;
@@ -25,6 +27,7 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateQuote(CreateQuoteDto dto)
         {
             var created = await _quoteService.CreateQuoteAsync(dto);

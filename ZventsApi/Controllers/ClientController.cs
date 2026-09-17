@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.Models;
 using ZventsApi.Application.DTOs;
@@ -8,6 +9,7 @@ namespace ZventsApi.Controllers
 {
     [Route("api/client")]
     [ApiController]
+    [Authorize]
     public class ClientController(IClientService clientService, ILogger<ClientController> logger) : ControllerBase
     {
         private readonly IClientService _clientService = clientService;

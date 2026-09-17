@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Event;
 using ZventsApi.Models;
@@ -7,6 +8,7 @@ namespace ZventsApi.Controllers
 {
     [ApiController]
     [Route("api/event")]
+    [Authorize]
     public class EventController(IEventService service) : ControllerBase
     {
         private readonly IEventService _service = service;

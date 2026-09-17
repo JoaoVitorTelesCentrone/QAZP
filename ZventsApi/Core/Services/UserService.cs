@@ -84,13 +84,32 @@ namespace ZventsApi.Application.Services
         {
             var user = await _userRepository.GetByUsernameAsync(request.Username);
 
-            if (user == null 
-            || user.Password != request.Password 
-            || user.UserStatus != UserStatus.Active)
+            if (user == null || user.UserStatus != UserStatus.Active)
             {
                 return null;
             }
-                
+
+            var isBCryptHash = user.Password.StartsWith("$2a$")
+                || user.Password.StartsWith("$2b$")
+                || user.Password.StartsWith("$2y$");
+
+            var passwordValid = isBCryptHash
+                ? BCrypt.Net.BCrypt.Verify(request.Password, user.Password)
+                : user.Password == request.Password;
+
+            if (!passwordValid)
+            {
+                return null;
+            }
+
+            if (!isBCryptHash)
+            {
+                // Legacy plaintext password from before hashing was introduced.
+                // Migrate it to a proper hash now that we know it's correct.
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+                await _userRepository.UpdateAsync(user);
+            }
+
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
 
             var claims = new[]
@@ -131,7 +150,7 @@ namespace ZventsApi.Application.Services
                 Id = Guid.NewGuid(),
                 Name = request.Name,
                 Username = request.Username,
-                Password = request.Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 Role = request.Role,
                 CreatedDate = DateTime.UtcNow,
                 UserStatus = UserStatus.Active,
@@ -163,7 +182,7 @@ namespace ZventsApi.Application.Services
 
             user.Name = updatedUser.Name;
             user.Username = updatedUser.Username;
-            user.Password = updatedUser.Password;
+            user.Password = BCrypt.Net.BCrypt.HashPassword(updatedUser.Password);
             user.Role = updatedUser.Role;
             user.UserStatus = updatedUser.UserStatus;
 

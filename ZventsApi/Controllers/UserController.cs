@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.User;
 using ZventsApi.Models;
@@ -7,6 +8,7 @@ namespace ZventsApi.Controllers
 {
     [Route("api/user")]
     [ApiController]
+    [Authorize]
     public class UserController(IUserService userService) : ControllerBase
     {
         private readonly IUserService _userService = userService;
@@ -74,6 +76,7 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserLoginResult>> Login([FromBody] LoginRequest request)
         {
             var result = await _userService.LoginAsync(request);

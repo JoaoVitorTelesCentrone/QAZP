@@ -9,7 +9,7 @@ public static class AuthenticationConfig
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var key = Encoding.ASCII.GetBytes("sua_chave_secreta_aqui");
+        var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
 
         services.AddAuthentication(options =>
         {
@@ -24,8 +24,10 @@ public static class AuthenticationConfig
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false
+                ValidateIssuer = true,
+                ValidIssuer = configuration["Jwt:Issuer"],
+                ValidateAudience = true,
+                ValidAudience = configuration["Jwt:Audience"]
             };
         });
 

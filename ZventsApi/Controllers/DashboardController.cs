@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
 
@@ -5,6 +6,7 @@ namespace ZventsApi.Controllers
 {
     [Route("api/dashboard")]
     [ApiController]
+    [Authorize]
     public class DashboardController(IDashboardService dashboardService) : ControllerBase
     {
         private readonly IDashboardService _dashboardService = dashboardService;

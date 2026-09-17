@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Material;
 using ZventsApi.Models;
@@ -7,6 +8,7 @@ namespace ZventsApi.Controllers
 {
     [Route("api/material")]
     [ApiController]
+    [Authorize]
     public class MaterialController(IMaterialService materialService) : ControllerBase
     {
         private readonly IMaterialService _materialService = materialService;
