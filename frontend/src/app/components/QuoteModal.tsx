@@ -1,5 +1,6 @@
 import { Input, Button, Modal } from 'antd'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
+import { apiClient } from '@/lib/apiClient'
 import { Toaster, toast } from 'sonner'
 import { useState } from 'react'
 import { intl } from '@/i18n'
@@ -11,9 +12,8 @@ import {
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu'
 import React from 'react'
-import { EventType } from '../CreateEvent/utils'
+import { EventType } from '../create-event/constants/eventType'
 
-const API_URL = 'http://localhost:5196/api/Quote'
 interface ErrorResponse {
   message: string;
 }
@@ -97,7 +97,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
     }
 
     try {
-      const response = await axios.post(API_URL, quote);
+      const response = await apiClient.post('/Quote', quote);
 
       if (response.status === 201) {
         toast.success(intl.formatMessage({ id: 'create.quote.success.message' }));
