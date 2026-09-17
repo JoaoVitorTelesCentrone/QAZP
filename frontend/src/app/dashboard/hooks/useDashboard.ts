@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { getDashboardData } from '../services/dashboard.service'
-import { mapEventToTable } from '../mappers/event.mapper'
+import { getDashboardData } from '../services/dashboardService'
+import { mapEventToTable } from '../mappers/dashboardMapper'
 import { toast } from 'sonner'
 
 export function useDashboard() {
