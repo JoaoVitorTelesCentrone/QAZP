@@ -1,13 +1,15 @@
 'use client'
 
 import React from 'react'
+import dynamic from 'next/dynamic'
 import ClipLoader from 'react-spinners/ClipLoader'
 import UserSideMenu from '../components/UserHeader'
 import { FaUser, FaUserPlus } from 'react-icons/fa'
 import { Button } from 'antd'
 import { Input } from '@/components/ui/input'
-import CreateUserModal from './modals/createUserModal'
 import GenericTable from '../components/GenericTable'
+
+const CreateUserModal = dynamic(() => import('./modals/createUserModal'))
 
 interface UserView {
   id: string

@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import ClipLoader from 'react-spinners/ClipLoader'
 import UserSideMenu from '../components/UserHeader'
 import { useClients } from './hooks/useClient'
 import ClientsHeader from './components/ClientsHeader'
 import ClientsTable from './components/ClientsTable'
-import CreateClientModal from './modals/CreateClientModal'
+
+const CreateClientModal = dynamic(() => import('./modals/CreateClientModal'))
 
 export default function ClientsView() {
   const { clients, loading } = useClients()
