@@ -35,7 +35,16 @@ export default function LoginModal({ isVisible, onClose, onCancel }: LoginModalP
   return (
     <>
       <Toaster richColors />
-      <Modal open={isVisible} onCancel={onCancel} footer={null} title={intl.formatMessage({ id: 'login.page.title' })} centered>
+      <Modal
+        open={isVisible}
+        onCancel={onCancel}
+        footer={null}
+        title={intl.formatMessage({ id: 'login.page.title' })}
+        centered
+        closable={!loading}
+        maskClosable={!loading}
+        keyboard={!loading}
+      >
         {loading ? (
           <div className="flex justify-center items-center h-40">
             <ClipLoader size={50} color="#123abc" loading={loading} />
