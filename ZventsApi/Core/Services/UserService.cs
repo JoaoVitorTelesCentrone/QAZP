@@ -16,6 +16,12 @@ namespace ZventsApi.Application.Services
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IConfiguration _configuration = configuration;
 
+        // The seeded account everyone falls back to. It can never be deleted, deactivated,
+        // renamed or have its password changed, so the platform always has a known way in.
+        private const string ProtectedUsername = "admin";
+
+        private static bool IsProtected(User user) => user.Username == ProtectedUsername;
+
         public async Task<IEnumerable<UserListDto>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
@@ -190,17 +196,20 @@ namespace ZventsApi.Application.Services
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null) return null;
 
-            if (user.Role == UserRole.Admin && updatedUser.Role != UserRole.Admin)
+            if (IsProtected(user))
             {
-                var admins = await _userRepository.GetUsersByRoleAsync(UserRole.Admin);
-                if (admins.Count() <= 1)
-                    throw new BusinessRuleException("Cannot change the role of the last admin user");
+                if (user.Username != updatedUser.Username)
+                    throw new BusinessRuleException("O usuário admin não pode ser renomeado");
+                if (updatedUser.UserStatus != UserStatus.Active)
+                    throw new BusinessRuleException("O usuário admin não pode ser desativado");
+                if (!PasswordMatches(user, updatedUser.Password))
+                    throw new BusinessRuleException("A senha do usuário admin não pode ser alterada");
             }
 
             if (user.Username != updatedUser.Username
                 && await _userRepository.ExistsByUsernameAsync(updatedUser.Username))
             {
-                throw new BusinessRuleException("Username already exists");
+                throw new BusinessRuleException("Nome de usuário já existe");
             }
 
             user.Name = updatedUser.Name;
@@ -226,12 +235,8 @@ namespace ZventsApi.Application.Services
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null) return false;
 
-            if (user.Role == UserRole.Admin)
-            {
-                var admins = await _userRepository.GetUsersByRoleAsync(UserRole.Admin);
-                if (admins.Count() <= 1)
-                    throw new BusinessRuleException("Cannot delete the last admin user");
-            }
+            if (IsProtected(user))
+                throw new BusinessRuleException("O usuário admin não pode ser excluído");
 
             user.IsDeleted = true;
             await _userRepository.UpdateAsync(user);
@@ -243,12 +248,8 @@ namespace ZventsApi.Application.Services
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null) return false;
 
-            if (user.Role == UserRole.Admin)
-            {
-                var admins = await _userRepository.GetUsersByRoleAsync(UserRole.Admin);
-                if (admins.Count() <= 1)
-                    throw new BusinessRuleException("Cannot delete the last admin user");
-            }
+            if (IsProtected(user))
+                throw new BusinessRuleException("O usuário admin não pode ser excluído");
 
             await _userRepository.DeleteAsync(user);
             return true;

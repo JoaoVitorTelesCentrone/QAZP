@@ -4,6 +4,8 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { updateUser } from '../services/userService'
 import { UserApi, mapFormToApi } from '../mappers/userMapper'
+import { toast } from 'sonner'
+import axios from 'axios'
 
 interface EditUserFormProps {
   userData: UserApi
@@ -30,6 +32,8 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userData, closeModal, onUpd
       closeModal()
     } catch (err) {
       console.error(err)
+      const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined
+      toast.error(message ?? 'Erro ao atualizar usuário')
     }
   }
 

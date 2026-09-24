@@ -52,17 +52,6 @@ namespace ZventsApi.Infrastructure.Repositories
             );
         }
 
-        public async Task<IReadOnlyCollection<User>> GetUsersByRoleAsync(UserRole role)
-        {
-            return await _context.Users
-                .Where(u =>
-                    u.Role == role &&
-                    !u.IsDeleted &&
-                    u.UserStatus == UserStatus.Active
-                )
-                .ToListAsync();
-        }
-
         public async Task<bool> ExistsByUsernameAsync(string username)
         {
             return await _context.Users.AnyAsync(u =>

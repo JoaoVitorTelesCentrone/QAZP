@@ -10,7 +10,6 @@ namespace ZventsApi.Application.Interfaces.Repositories
         Task<User?> GetByNameAsync(string name);
         Task<User?> GetByUsernameAsync(string username);
         Task<User?> GetByRefreshTokenHashAsync(string refreshTokenHash);
-        Task<IReadOnlyCollection<User>> GetUsersByRoleAsync(UserRole role);
 
         Task<bool> ExistsByUsernameAsync(string username);
 
