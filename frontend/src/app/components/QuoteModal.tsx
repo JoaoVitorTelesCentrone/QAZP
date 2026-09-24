@@ -1,5 +1,8 @@
+'use client'
+
 import { Input, Button, Modal } from 'antd'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
+import { apiClient } from '@/lib/apiClient'
 import { Toaster, toast } from 'sonner'
 import { useState } from 'react'
 import { intl } from '@/i18n'
@@ -11,9 +14,8 @@ import {
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu'
 import React from 'react'
-import { EventType } from '../CreateEvent/utils'
+import { EventType } from '../(protected)/create-event/constants/eventType'
 
-const API_URL = 'http://localhost:5196/api/Quote'
 interface ErrorResponse {
   message: string;
 }
@@ -37,6 +39,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
   const [typeError, setTypeError] = useState('')
   const [estimatedAudienceError, setEstimatedAudienceError] = useState('')
   const [isTouched, setIsTouched] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const resetForm = () => {
     setFullName('')
@@ -96,8 +99,9 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
       estimatedAudience: estimatedAudience,
     }
 
+    setIsSubmitting(true);
     try {
-      const response = await axios.post(API_URL, quote);
+      const response = await apiClient.post('/Quote', quote);
 
       if (response.status === 201) {
         toast.success(intl.formatMessage({ id: 'create.quote.success.message' }));
@@ -106,6 +110,8 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
       }
     } catch (error: unknown) {
       handleSaveQuoteError(error);
+    } finally {
+      setIsSubmitting(false);
     }
     return true;
   }
@@ -395,6 +401,8 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
           className="bg-primary text-secondary w-full mt-4"
           type="primary"
           onClick={() => quoteModelRequest()}
+          loading={isSubmitting}
+          disabled={isSubmitting}
         >
           {intl.formatMessage({ id: 'request.quote.button' })}
         </Button>

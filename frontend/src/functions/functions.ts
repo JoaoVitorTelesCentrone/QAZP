@@ -1,4 +1,4 @@
-import { EventType, MaterialCategory } from '@/enuns/enuns'
+import { EventType, MaterialCategory } from '@/enums/enums'
 import { intl } from '@/i18n'
 
 export function formatCurrency(value: number): string {
