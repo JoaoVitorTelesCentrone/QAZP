@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Material;
 using ZventsApi.Models;
@@ -7,9 +8,11 @@ namespace ZventsApi.Controllers
 {
     [Route("api/material")]
     [ApiController]
-    public class MaterialController(IMaterialService materialService) : ControllerBase
+    [Authorize]
+    public class MaterialController(IMaterialService materialService, ILogger<MaterialController> logger) : ControllerBase
     {
         private readonly IMaterialService _materialService = materialService;
+        private readonly ILogger<MaterialController> _logger = logger;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MaterialResponseDto>>> GetAllMaterials()
@@ -52,7 +55,22 @@ namespace ZventsApi.Controllers
         public async Task<ActionResult<MaterialResponseDto>> CreateMaterial(MaterialRequestDto dto)
         {
             var material = await _materialService.CreateMaterialAsync(dto);
+            _logger.LogInformation("Material criado: {MaterialId}", material.Id);
             return CreatedAtAction(nameof(GetMaterialById), new { id = material.Id }, material);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<MaterialResponseDto>> UpdateMaterial(Guid id, MaterialRequestDto dto)
+        {
+            var material = await _materialService.UpdateMaterialAsync(id, dto);
+
+            if (material == null)
+            {
+                _logger.LogWarning("Tentativa de atualizar material inexistente: {MaterialId}", id);
+                return NotFound();
+            }
+
+            return Ok(material);
         }
 
         [HttpPatch("{id}")]
@@ -72,6 +90,8 @@ namespace ZventsApi.Controllers
         {
             var success = await _materialService.DeleteMaterialAsync(id);
             if (!success) return NotFound();
+
+            _logger.LogInformation("Material excluído: {MaterialId}", id);
             return NoContent();
         }
     }

@@ -9,7 +9,21 @@ public static class AuthenticationConfig
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var key = Encoding.ASCII.GetBytes("sua_chave_secreta_aqui");
+        var jwtKey = configuration["Jwt:Key"];
+        if (string.IsNullOrWhiteSpace(jwtKey))
+        {
+            throw new InvalidOperationException(
+                "Jwt:Key is not configured. Set it via user-secrets (dotnet user-secrets set \"Jwt:Key\" \"...\") " +
+                "in Development, or via the Jwt__Key environment variable in other environments.");
+        }
+
+        var key = Encoding.UTF8.GetBytes(jwtKey);
+        if (key.Length < 32)
+        {
+            // HS256 rejects keys shorter than 256 bits at token creation time; fail at startup instead.
+            throw new InvalidOperationException(
+                $"Jwt:Key must be at least 32 bytes long (current: {key.Length}).");
+        }
 
         services.AddAuthentication(options =>
         {
@@ -24,8 +38,11 @@ public static class AuthenticationConfig
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false
+                ValidateIssuer = true,
+                ValidIssuer = configuration["Jwt:Issuer"],
+                ValidateAudience = true,
+                ValidAudience = configuration["Jwt:Audience"],
+                ClockSkew = TimeSpan.FromSeconds(30)
             };
         });
 

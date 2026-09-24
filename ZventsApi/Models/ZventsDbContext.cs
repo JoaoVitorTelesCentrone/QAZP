@@ -12,6 +12,7 @@ namespace ZventsApi.Models
         public DbSet<Material> Materials { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventMaterial> EventMaterials { get; set; }
+        public DbSet<UserSession> UserSessions { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=Zvents.db");
@@ -19,6 +20,16 @@ namespace ZventsApi.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<UserSession>()
+                .HasIndex(s => s.RefreshTokenHash)
+                .IsUnique();
+
+            modelBuilder.Entity<UserSession>()
+                .HasOne(s => s.User)
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<EventMaterial>()
                 .HasKey(em => new { em.EventId, em.MaterialId });
 

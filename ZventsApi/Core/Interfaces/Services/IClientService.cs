@@ -1,5 +1,6 @@
 using ZventsApi.Models;
 using ZventsApi.Application.DTOs;
+using ZventsApi.DTOs.Client;
 
 namespace ZventsApi.Application.Interfaces.Services
 {
@@ -8,8 +9,8 @@ namespace ZventsApi.Application.Interfaces.Services
         Task<IEnumerable<ClientDto>> GetAllClientsAsync();
         Task<IEnumerable<ClientDto>> GetActiveClientsAsync();
         Task<Client?> GetClientByIdAsync(Guid id);
-        Task<Client?> CreateClientAsync(Client client);
-        Task<Client?> EditClientAsync(Guid id, Client client);
+        Task<Client?> CreateClientAsync(ClientRequestDto request);
+        Task<Client?> EditClientAsync(Guid id, ClientRequestDto request);
         Task<bool> SoftDeleteClientAsync(Guid id);
         Task<bool> DeleteClientAsync(Guid id);
     }

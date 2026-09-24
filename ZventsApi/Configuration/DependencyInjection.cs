@@ -13,6 +13,7 @@ namespace ZventsApi.Configuration
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserSessionRepository, UserSessionRepository>();
             services.AddScoped<IDashboardRepository, DashboardRepository>();
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IQuoteRepository, QuoteRepository>();

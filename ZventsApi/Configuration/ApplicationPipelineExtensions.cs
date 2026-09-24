@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using ZventsApi.Middleware;
 
 namespace ZventsApi.Configuration
 {
@@ -6,8 +7,12 @@ namespace ZventsApi.Configuration
     {
         public static void UseZventsPipeline(this WebApplication app)
         {
-            app.UseHttpsRedirection();
-            app.UseCors("AllowAll");
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
+            app.UseCors(CorsConfig.PolicyName);
             app.UseAuthentication();
             app.UseAuthorization();
         }
