@@ -43,15 +43,6 @@ namespace ZventsApi.Infrastructure.Repositories
             );
         }
 
-        public async Task<User?> GetByRefreshTokenHashAsync(string refreshTokenHash)
-        {
-            return await _context.Users.FirstOrDefaultAsync(u =>
-                u.RefreshTokenHash == refreshTokenHash &&
-                !u.IsDeleted &&
-                u.UserStatus == UserStatus.Active
-            );
-        }
-
         public async Task<bool> ExistsByUsernameAsync(string username)
         {
             return await _context.Users.AnyAsync(u =>

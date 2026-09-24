@@ -11,9 +11,13 @@ using ZventsApi.Models;
 
 namespace ZventsApi.Application.Services
 {
-    public class UserService(IUserRepository userRepository, IConfiguration configuration) : IUserService
+    public class UserService(
+        IUserRepository userRepository,
+        IUserSessionRepository sessionRepository,
+        IConfiguration configuration) : IUserService
     {
         private readonly IUserRepository _userRepository = userRepository;
+        private readonly IUserSessionRepository _sessionRepository = sessionRepository;
         private readonly IConfiguration _configuration = configuration;
 
         // The seeded account everyone falls back to. It can never be deleted, deactivated,
@@ -87,34 +91,60 @@ namespace ZventsApi.Application.Services
 
         public async Task<UserLoginResult?> RefreshAsync(string refreshToken)
         {
-            var user = await _userRepository.GetByRefreshTokenHashAsync(HashRefreshToken(refreshToken));
+            var currentHash = HashRefreshToken(refreshToken);
+            var session = await _sessionRepository.GetByRefreshTokenHashAsync(currentHash);
+            if (session == null) return null;
 
-            if (user == null || user.RefreshTokenExpiresAt == null || user.RefreshTokenExpiresAt <= DateTime.UtcNow)
+            var user = session.User;
+            if (session.ExpiresAt <= DateTime.UtcNow || user.IsDeleted || user.UserStatus != UserStatus.Active)
             {
+                await _sessionRepository.DeleteAsync(session);
                 return null;
             }
 
-            return await IssueSessionAsync(user);
+            var newRefreshToken = GenerateRefreshToken();
+            var rotated = await _sessionRepository.TryRotateAsync(
+                session.Id, currentHash, HashRefreshToken(newRefreshToken), DateTime.UtcNow.AddDays(RefreshTokenDays));
+            if (!rotated) return null;
+
+            return BuildLoginResult(user, newRefreshToken);
         }
 
         public async Task LogoutAsync(string refreshToken)
         {
-            var user = await _userRepository.GetByRefreshTokenHashAsync(HashRefreshToken(refreshToken));
-            if (user == null) return;
-
-            user.RefreshTokenHash = null;
-            user.RefreshTokenExpiresAt = null;
-            await _userRepository.UpdateAsync(user);
+            var session = await _sessionRepository.GetByRefreshTokenHashAsync(HashRefreshToken(refreshToken));
+            if (session != null)
+            {
+                await _sessionRepository.DeleteAsync(session);
+            }
         }
 
-        // Emits a short-lived access token plus a rotated refresh token. Each refresh
-        // pushes the refresh expiration forward, so the session only ends after
+        // Opens a new session (one per browser/device). Each refresh rotates that session's
+        // token and pushes its expiration forward, so a session only ends after
         // Jwt:RefreshTokenDays without any activity.
         private async Task<UserLoginResult> IssueSessionAsync(User user)
         {
+            await _sessionRepository.DeleteExpiredForUserAsync(user.Id);
+
+            var refreshToken = GenerateRefreshToken();
+            await _sessionRepository.AddAsync(new UserSession
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id,
+                RefreshTokenHash = HashRefreshToken(refreshToken),
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(RefreshTokenDays)
+            });
+
+            return BuildLoginResult(user, refreshToken);
+        }
+
+        private int RefreshTokenDays => _configuration.GetValue("Jwt:RefreshTokenDays", 7);
+
+        private UserLoginResult BuildLoginResult(User user, string refreshToken)
+        {
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
             var accessTokenMinutes = _configuration.GetValue("Jwt:AccessTokenMinutes", 60);
-            var refreshTokenDays = _configuration.GetValue("Jwt:RefreshTokenDays", 7);
 
             var claims = new[]
             {
@@ -136,11 +166,6 @@ namespace ZventsApi.Application.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
-            user.RefreshTokenHash = HashRefreshToken(refreshToken);
-            user.RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(refreshTokenDays);
-            await _userRepository.UpdateAsync(user);
-
             return new UserLoginResult
             {
                 Token = tokenHandler.WriteToken(token),
@@ -149,6 +174,9 @@ namespace ZventsApi.Application.Services
                 Message = "Login bem-sucedido"
             };
         }
+
+        private static string GenerateRefreshToken() =>
+            Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
 
         private static bool IsBCryptHash(string storedPassword) =>
             storedPassword.StartsWith("$2a$")
@@ -215,17 +243,21 @@ namespace ZventsApi.Application.Services
             user.Name = updatedUser.Name;
             user.Username = updatedUser.Username;
 
-            if (!PasswordMatches(user, updatedUser.Password))
+            var passwordChanged = !PasswordMatches(user, updatedUser.Password);
+            if (passwordChanged)
             {
                 user.Password = BCrypt.Net.BCrypt.HashPassword(updatedUser.Password);
-                // A new password must end every session opened with the old one.
-                user.RefreshTokenHash = null;
-                user.RefreshTokenExpiresAt = null;
             }
             user.Role = updatedUser.Role;
             user.UserStatus = updatedUser.UserStatus;
 
             await _userRepository.UpdateAsync(user);
+
+            if (passwordChanged)
+            {
+                // A new password must end every session opened with the old one.
+                await _sessionRepository.DeleteAllForUserAsync(user.Id);
+            }
 
             return ToListDto(user);
         }

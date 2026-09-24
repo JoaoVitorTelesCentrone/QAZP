@@ -9,7 +9,6 @@ namespace ZventsApi.Application.Interfaces.Repositories
         Task<User?> GetByIdAsync(Guid id);
         Task<User?> GetByNameAsync(string name);
         Task<User?> GetByUsernameAsync(string username);
-        Task<User?> GetByRefreshTokenHashAsync(string refreshTokenHash);
 
         Task<bool> ExistsByUsernameAsync(string username);
 

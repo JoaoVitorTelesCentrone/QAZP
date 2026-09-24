@@ -39,15 +39,30 @@ apiClient.interceptors.request.use((config) => {
 })
 
 const REFRESH_TIMEOUT_MS = 10000
+const REFRESH_LOCK = 'zvents-token-refresh'
+export const SESSION_EXPIRED_PARAM = 'sessionExpired'
 
 // 'expired' = the server rejected the refresh token, so the session is really over.
 // 'failed' = network error, timeout or server error: keep the session and just fail the request.
 type RefreshResult = { status: 'ok'; token: string } | { status: 'expired' } | { status: 'failed' }
 
-// Shared across concurrent 401s so the refresh token is only rotated once.
+// Shared across concurrent 401s in this tab so they all wait on a single refresh.
 let refreshPromise: Promise<RefreshResult> | null = null
 
-async function refreshAccessToken(): Promise<RefreshResult> {
+// Refresh tokens rotate on every use, so two tabs refreshing with the same one would log
+// one of them out. The Web Locks API serializes refreshes across tabs; whoever gets the
+// lock second sees the token the first one saved and reuses it instead of refreshing again.
+function refreshAccessToken(staleToken: string | undefined): Promise<RefreshResult> {
+  const run = () => doRefresh(staleToken)
+  return navigator.locks ? navigator.locks.request(REFRESH_LOCK, run) : run()
+}
+
+async function doRefresh(staleToken: string | undefined): Promise<RefreshResult> {
+  const currentToken = localStorage.getItem(TOKEN_KEY)
+  if (currentToken && currentToken !== staleToken) {
+    return { status: 'ok', token: currentToken }
+  }
+
   const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY)
   if (!refreshToken) return { status: 'expired' }
 
@@ -77,7 +92,8 @@ apiClient.interceptors.response.use(
 
     if (!original._retry) {
       original._retry = true
-      refreshPromise ??= refreshAccessToken().finally(() => {
+      const staleToken = String(original.headers.Authorization ?? '').replace(/^Bearer /, '') || undefined
+      refreshPromise ??= refreshAccessToken(staleToken).finally(() => {
         refreshPromise = null
       })
       const result = await refreshPromise
@@ -91,7 +107,7 @@ apiClient.interceptors.response.use(
     }
 
     clearSession()
-    window.location.href = '/'
+    window.location.href = `/?${SESSION_EXPIRED_PARAM}=1`
     return Promise.reject(error)
   },
 )

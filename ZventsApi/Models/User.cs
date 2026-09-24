@@ -33,8 +33,6 @@ namespace ZventsApi.Models
         public DateTime CreatedDate { get; set; }
         public UserStatus UserStatus { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public string? RefreshTokenHash { get; set; }
-        public DateTime? RefreshTokenExpiresAt { get; set; }
 
         public User()
         {
