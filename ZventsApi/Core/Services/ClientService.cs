@@ -85,8 +85,8 @@ namespace ZventsApi.Application.Services
             Id = c.Id,
             FullName = c.FullName,
             DocumentId = c.DocumentId,
-            Email = c.Email,
-            PhoneNumber = c.PhoneNumber,
+            Email = c.Email ?? string.Empty,
+            PhoneNumber = c.PhoneNumber ?? string.Empty,
             CreatedDate = c.CreatedDate
         };
 

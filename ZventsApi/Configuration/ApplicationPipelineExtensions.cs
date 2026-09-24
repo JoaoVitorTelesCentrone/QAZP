@@ -8,7 +8,10 @@ namespace ZventsApi.Configuration
         public static void UseZventsPipeline(this WebApplication app)
         {
             app.UseMiddleware<ExceptionHandlingMiddleware>();
-            app.UseHttpsRedirection();
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
             app.UseCors(CorsConfig.PolicyName);
             app.UseAuthentication();
             app.UseAuthorization();
