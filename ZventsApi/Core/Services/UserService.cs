@@ -1,6 +1,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using ZventsApi.Application.Interfaces.Repositories;
 using ZventsApi.Application.Interfaces.Services;
@@ -82,7 +83,39 @@ namespace ZventsApi.Application.Services
                 await _userRepository.UpdateAsync(user);
             }
 
+            return await IssueSessionAsync(user);
+        }
+
+        public async Task<UserLoginResult?> RefreshAsync(string refreshToken)
+        {
+            var user = await _userRepository.GetByRefreshTokenHashAsync(HashRefreshToken(refreshToken));
+
+            if (user == null || user.RefreshTokenExpiresAt == null || user.RefreshTokenExpiresAt <= DateTime.UtcNow)
+            {
+                return null;
+            }
+
+            return await IssueSessionAsync(user);
+        }
+
+        public async Task LogoutAsync(string refreshToken)
+        {
+            var user = await _userRepository.GetByRefreshTokenHashAsync(HashRefreshToken(refreshToken));
+            if (user == null) return;
+
+            user.RefreshTokenHash = null;
+            user.RefreshTokenExpiresAt = null;
+            await _userRepository.UpdateAsync(user);
+        }
+
+        // Emits a short-lived access token plus a rotated refresh token. Each refresh
+        // pushes the refresh expiration forward, so the session only ends after
+        // Jwt:RefreshTokenDays without any activity.
+        private async Task<UserLoginResult> IssueSessionAsync(User user)
+        {
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
+            var accessTokenMinutes = _configuration.GetValue("Jwt:AccessTokenMinutes", 60);
+            var refreshTokenDays = _configuration.GetValue("Jwt:RefreshTokenDays", 7);
 
             var claims = new[]
             {
@@ -95,7 +128,7 @@ namespace ZventsApi.Application.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddMinutes(accessTokenMinutes),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"]
@@ -104,13 +137,22 @@ namespace ZventsApi.Application.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
+            var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+            user.RefreshTokenHash = HashRefreshToken(refreshToken);
+            user.RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(refreshTokenDays);
+            await _userRepository.UpdateAsync(user);
+
             return new UserLoginResult
             {
                 Token = tokenHandler.WriteToken(token),
+                RefreshToken = refreshToken,
                 Name = user.Name,
                 Message = "Login bem-sucedido"
             };
         }
+
+        private static string HashRefreshToken(string refreshToken) =>
+            Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken)));
 
         public async Task<CreateUserResult?> CreateUserAsync(CreateUserRequest request)
         {

@@ -35,7 +35,8 @@ public static class AuthenticationConfig
                 ValidateIssuer = true,
                 ValidIssuer = configuration["Jwt:Issuer"],
                 ValidateAudience = true,
-                ValidAudience = configuration["Jwt:Audience"]
+                ValidAudience = configuration["Jwt:Audience"],
+                ClockSkew = TimeSpan.FromSeconds(30)
             };
         });
 

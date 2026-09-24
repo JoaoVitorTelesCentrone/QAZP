@@ -11,6 +11,8 @@ namespace ZventsApi.Application.Interfaces.Services
         Task<UserListDto?> GetUserByNameAsync(string name);
         Task<UserListDto?> GetUserByUsernameAsync(string username);
         Task<UserLoginResult?> LoginAsync(LoginRequest request);
+        Task<UserLoginResult?> RefreshAsync(string refreshToken);
+        Task LogoutAsync(string refreshToken);
         Task<CreateUserResult?> CreateUserAsync(CreateUserRequest request);
 
         Task<UserListDto?> UpdateUserAsync(Guid id, UpdateUserRequestDto request);

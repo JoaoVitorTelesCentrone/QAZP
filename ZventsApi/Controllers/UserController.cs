@@ -96,6 +96,26 @@ namespace ZventsApi.Controllers
             return Ok(result);
         }
 
+        [HttpPost("refresh")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserLoginResult>> Refresh([FromBody] RefreshTokenRequest request)
+        {
+            var result = await _userService.RefreshAsync(request.RefreshToken);
+
+            if (result == null)
+                return Unauthorized(new { message = "Sessão expirada, faça o login novamente" });
+
+            return Ok(result);
+        }
+
+        [HttpPost("logout")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request)
+        {
+            await _userService.LogoutAsync(request.RefreshToken);
+            return NoContent();
+        }
+
         [HttpPut("{id}")]
         public async Task<ActionResult<UserListDto>> Edit(Guid id, UpdateUserRequestDto updatedUser)
         {

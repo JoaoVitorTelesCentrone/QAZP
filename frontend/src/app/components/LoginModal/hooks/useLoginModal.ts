@@ -8,6 +8,7 @@ import { intl } from '@/i18n'
 import { authAtom } from '@/app/atoms/authAtom'
 import { userInfoAtom } from '@/app/atoms/userInfoAtom'
 import { login } from '../services/loginService'
+import { saveSession } from '@/lib/apiClient'
 
 export function useLoginModal(isVisible: boolean, onClose: () => void) {
   const router = useRouter()
@@ -40,8 +41,8 @@ export function useLoginModal(isVisible: boolean, onClose: () => void) {
 
     setLoading(true)
     try {
-      const { token, name } = await login(username, password)
-      localStorage.setItem('token', token)
+      const { token, refreshToken, name } = await login(username, password)
+      saveSession(token, refreshToken)
       setUserAuth(true)
       setUserInfo({ name, username, password })
       toast.success(intl.formatMessage({ id: 'login.success.message' }, { name }))

@@ -11,6 +11,7 @@ import Loader from './Loader'
 import withAuth from '../hoc/withAuth'
 import { TbCircleLetterZ } from 'react-icons/tb'
 import { intl } from '@/i18n'
+import { logout } from '@/lib/apiClient'
 
 const UserSideMenu = () => {
   const router = useRouter()
@@ -60,7 +61,7 @@ const UserSideMenu = () => {
   const handleLogout = () => {
     setLoading(true)
 
-    localStorage.removeItem('token')
+    logout()
     setIsLogged(false)
 
     setTimeout(() => {
