@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using ZventsApi.Application.Exceptions;
 using ZventsApi.Application.Interfaces.Repositories;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.User;
@@ -62,20 +63,12 @@ namespace ZventsApi.Application.Services
                 return null;
             }
 
-            var isBCryptHash = user.Password.StartsWith("$2a$")
-                || user.Password.StartsWith("$2b$")
-                || user.Password.StartsWith("$2y$");
-
-            var passwordValid = isBCryptHash
-                ? BCrypt.Net.BCrypt.Verify(request.Password, user.Password)
-                : user.Password == request.Password;
-
-            if (!passwordValid)
+            if (!PasswordMatches(user, request.Password))
             {
                 return null;
             }
 
-            if (!isBCryptHash)
+            if (!IsBCryptHash(user.Password))
             {
                 // Legacy plaintext password from before hashing was introduced.
                 // Migrate it to a proper hash now that we know it's correct.
@@ -151,6 +144,16 @@ namespace ZventsApi.Application.Services
             };
         }
 
+        private static bool IsBCryptHash(string storedPassword) =>
+            storedPassword.StartsWith("$2a$")
+            || storedPassword.StartsWith("$2b$")
+            || storedPassword.StartsWith("$2y$");
+
+        private static bool PasswordMatches(User user, string plainPassword) =>
+            IsBCryptHash(user.Password)
+                ? BCrypt.Net.BCrypt.Verify(plainPassword, user.Password)
+                : user.Password == plainPassword;
+
         private static string HashRefreshToken(string refreshToken) =>
             Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken)));
 
@@ -191,12 +194,25 @@ namespace ZventsApi.Application.Services
             {
                 var admins = await _userRepository.GetUsersByRoleAsync(UserRole.Admin);
                 if (admins.Count() <= 1)
-                    throw new InvalidOperationException("Cannot change the role of the last admin user");
+                    throw new BusinessRuleException("Cannot change the role of the last admin user");
+            }
+
+            if (user.Username != updatedUser.Username
+                && await _userRepository.ExistsByUsernameAsync(updatedUser.Username))
+            {
+                throw new BusinessRuleException("Username already exists");
             }
 
             user.Name = updatedUser.Name;
             user.Username = updatedUser.Username;
-            user.Password = BCrypt.Net.BCrypt.HashPassword(updatedUser.Password);
+
+            if (!PasswordMatches(user, updatedUser.Password))
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(updatedUser.Password);
+                // A new password must end every session opened with the old one.
+                user.RefreshTokenHash = null;
+                user.RefreshTokenExpiresAt = null;
+            }
             user.Role = updatedUser.Role;
             user.UserStatus = updatedUser.UserStatus;
 
@@ -214,7 +230,7 @@ namespace ZventsApi.Application.Services
             {
                 var admins = await _userRepository.GetUsersByRoleAsync(UserRole.Admin);
                 if (admins.Count() <= 1)
-                    throw new InvalidOperationException("Cannot delete the last admin user");
+                    throw new BusinessRuleException("Cannot delete the last admin user");
             }
 
             user.IsDeleted = true;
@@ -231,7 +247,7 @@ namespace ZventsApi.Application.Services
             {
                 var admins = await _userRepository.GetUsersByRoleAsync(UserRole.Admin);
                 if (admins.Count() <= 1)
-                    throw new InvalidOperationException("Cannot delete the last admin user");
+                    throw new BusinessRuleException("Cannot delete the last admin user");
             }
 
             await _userRepository.DeleteAsync(user);

@@ -38,19 +38,30 @@ apiClient.interceptors.request.use((config) => {
   return config
 })
 
-// Shared across concurrent 401s so the refresh token is only rotated once.
-let refreshPromise: Promise<string | null> | null = null
+const REFRESH_TIMEOUT_MS = 10000
 
-async function refreshAccessToken(): Promise<string | null> {
+// 'expired' = the server rejected the refresh token, so the session is really over.
+// 'failed' = network error, timeout or server error: keep the session and just fail the request.
+type RefreshResult = { status: 'ok'; token: string } | { status: 'expired' } | { status: 'failed' }
+
+// Shared across concurrent 401s so the refresh token is only rotated once.
+let refreshPromise: Promise<RefreshResult> | null = null
+
+async function refreshAccessToken(): Promise<RefreshResult> {
   const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY)
-  if (!refreshToken) return null
+  if (!refreshToken) return { status: 'expired' }
 
   try {
-    const { data } = await axios.post(`${baseURL}/User/refresh`, { refreshToken })
+    const { data } = await axios.post(
+      `${baseURL}/User/refresh`,
+      { refreshToken },
+      { timeout: REFRESH_TIMEOUT_MS },
+    )
     saveSession(data.token, data.refreshToken)
-    return data.token
-  } catch {
-    return null
+    return { status: 'ok', token: data.token }
+  } catch (error) {
+    const status = axios.isAxiosError(error) ? error.response?.status : undefined
+    return status === 400 || status === 401 ? { status: 'expired' } : { status: 'failed' }
   }
 }
 
@@ -69,10 +80,13 @@ apiClient.interceptors.response.use(
       refreshPromise ??= refreshAccessToken().finally(() => {
         refreshPromise = null
       })
-      const newToken = await refreshPromise
-      if (newToken) {
-        original.headers.Authorization = `Bearer ${newToken}`
+      const result = await refreshPromise
+      if (result.status === 'ok') {
+        original.headers.Authorization = `Bearer ${result.token}`
         return apiClient(original)
+      }
+      if (result.status === 'failed') {
+        return Promise.reject(error)
       }
     }
 

@@ -18,6 +18,12 @@ public static class AuthenticationConfig
         }
 
         var key = Encoding.UTF8.GetBytes(jwtKey);
+        if (key.Length < 32)
+        {
+            // HS256 rejects keys shorter than 256 bits at token creation time; fail at startup instead.
+            throw new InvalidOperationException(
+                $"Jwt:Key must be at least 32 bytes long (current: {key.Length}).");
+        }
 
         services.AddAuthentication(options =>
         {

@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using ZventsApi.Application.Exceptions;
 
 namespace ZventsApi.Middleware;
 
@@ -14,7 +15,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         {
             await _next(context);
         }
-        catch (InvalidOperationException ex)
+        catch (BusinessRuleException ex)
         {
             _logger.LogWarning(ex, "Business rule violation on {Path}", context.Request.Path);
             await WriteProblemAsync(context, HttpStatusCode.BadRequest, ex.Message);
@@ -28,6 +29,12 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
 
     private static Task WriteProblemAsync(HttpContext context, HttpStatusCode statusCode, string message)
     {
+        // Once the response has started streaming we can no longer change status or headers.
+        if (context.Response.HasStarted)
+        {
+            return Task.CompletedTask;
+        }
+
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;
         var payload = JsonSerializer.Serialize(new { message });
