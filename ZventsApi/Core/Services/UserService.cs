@@ -256,6 +256,11 @@ namespace ZventsApi.Application.Services
             var passwordChanged = !PasswordMatches(user, updatedUser.Password);
             if (passwordChanged)
             {
+                // Checked only when the password changes, so users with a legacy short
+                // password can still be edited without being forced to pick a new one.
+                if (updatedUser.Password.Length < CreateUserRequest.MinPasswordLength)
+                    throw new BusinessRuleException($"A senha deve ter no mínimo {CreateUserRequest.MinPasswordLength} caracteres");
+
                 user.Password = BCrypt.Net.BCrypt.HashPassword(updatedUser.Password);
             }
             user.Role = updatedUser.Role;
