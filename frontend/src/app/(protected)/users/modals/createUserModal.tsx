@@ -10,7 +10,6 @@ import { useAtom } from 'jotai'
 import { redirect } from 'next/navigation'
 import { authAtom } from '../../../atoms/authAtom'
 import { userInfoAtom } from '../../../atoms/userInfoAtom'
-import { userChangeAtom } from '../../../atoms/changeUserAtom'
 import { intl } from '@/i18n'
 
 const MIN_PASSWORD_LENGTH = 6
@@ -18,9 +17,10 @@ const MIN_PASSWORD_LENGTH = 6
 export type createUserProps = {
   isVisible: boolean
   onClose: () => void
+  onCreated?: () => void
 }
 
-const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
+const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose, onCreated }) => {
   const [isLogged, setIsLogged] = useAtom(authAtom)
   const [userInfo, setUserInfo] = useAtom(userInfoAtom)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -33,7 +33,6 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
   const [showPassword1, setShowPassword1] = useState(false)
   const [showPassword2, setShowPassword2] = useState(false)
   const [different, setDifferent] = useState(false)
-  const [change, setChange] = useAtom(userChangeAtom)
   const [nameError, setNameError] = useState('')
   const [usernameError, setUsernameError] = useState('')
   const [passwordError, setPasswordError] = useState('')
@@ -114,7 +113,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
       if (response.status === 201) {
         toast.success(intl.formatMessage({ id: 'create.user.success.message' }));
         onClose();
-        setChange(prev => prev + 1);
+        onCreated?.();
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
