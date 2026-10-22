@@ -91,9 +91,16 @@ namespace ZventsApi.Application.Services
 
         public async Task<UserLoginResult?> RefreshAsync(string refreshToken)
         {
-            var currentHash = HashRefreshToken(refreshToken);
-            var session = await _sessionRepository.GetByRefreshTokenHashAsync(currentHash);
+            var presentedHash = HashRefreshToken(refreshToken);
+            var session = await _sessionRepository.GetByRefreshTokenHashAsync(presentedHash);
             if (session == null) return null;
+
+            if (session.RefreshTokenHash != presentedHash)
+            {
+                // The previous token: only accepted shortly after it was rotated out.
+                var graceEndsAt = session.RotatedAt?.AddSeconds(RefreshTokenGraceSeconds);
+                if (graceEndsAt == null || graceEndsAt <= DateTime.UtcNow) return null;
+            }
 
             var user = session.User;
             if (session.ExpiresAt <= DateTime.UtcNow || user.IsDeleted || user.UserStatus != UserStatus.Active)
@@ -104,10 +111,10 @@ namespace ZventsApi.Application.Services
 
             var newRefreshToken = GenerateRefreshToken();
             var rotated = await _sessionRepository.TryRotateAsync(
-                session.Id, currentHash, HashRefreshToken(newRefreshToken), DateTime.UtcNow.AddDays(RefreshTokenDays));
+                session.Id, session.RefreshTokenHash, HashRefreshToken(newRefreshToken), DateTime.UtcNow.AddDays(RefreshTokenDays));
             if (!rotated) return null;
 
-            return BuildLoginResult(user, newRefreshToken);
+            return BuildLoginResult(user, session.Id, newRefreshToken);
         }
 
         public async Task LogoutAsync(string refreshToken)
@@ -124,24 +131,26 @@ namespace ZventsApi.Application.Services
         // Jwt:RefreshTokenDays without any activity.
         private async Task<UserLoginResult> IssueSessionAsync(User user)
         {
-            await _sessionRepository.DeleteExpiredForUserAsync(user.Id);
-
             var refreshToken = GenerateRefreshToken();
-            await _sessionRepository.AddAsync(new UserSession
+            var session = new UserSession
             {
                 Id = Guid.NewGuid(),
                 UserId = user.Id,
                 RefreshTokenHash = HashRefreshToken(refreshToken),
                 CreatedAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddDays(RefreshTokenDays)
-            });
+            };
+            await _sessionRepository.AddAsync(session);
 
-            return BuildLoginResult(user, refreshToken);
+            return BuildLoginResult(user, session.Id, refreshToken);
         }
 
         private int RefreshTokenDays => _configuration.GetValue("Jwt:RefreshTokenDays", 7);
+        private int RefreshTokenGraceSeconds => _configuration.GetValue("Jwt:RefreshTokenGraceSeconds", 60);
 
-        private UserLoginResult BuildLoginResult(User user, string refreshToken)
+        // The access token carries its session id, so revoking the session (logout, password
+        // change, deactivation, deletion) also invalidates access tokens already handed out.
+        private UserLoginResult BuildLoginResult(User user, Guid sessionId, string refreshToken)
         {
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
             var accessTokenMinutes = _configuration.GetValue("Jwt:AccessTokenMinutes", 60);
@@ -150,6 +159,7 @@ namespace ZventsApi.Application.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Sid, sessionId.ToString()),
                 new Claim("name", user.Name),
                 new Claim("role", user.Role.ToString())
             };
@@ -253,9 +263,10 @@ namespace ZventsApi.Application.Services
 
             await _userRepository.UpdateAsync(user);
 
-            if (passwordChanged)
+            // A new password must end every session opened with the old one, and an
+            // inactive user must lose access right away, not when their token expires.
+            if (passwordChanged || user.UserStatus != UserStatus.Active)
             {
-                // A new password must end every session opened with the old one.
                 await _sessionRepository.DeleteAllForUserAsync(user.Id);
             }
 
@@ -272,6 +283,7 @@ namespace ZventsApi.Application.Services
 
             user.IsDeleted = true;
             await _userRepository.UpdateAsync(user);
+            await _sessionRepository.DeleteAllForUserAsync(user.Id);
             return true;
         }
 

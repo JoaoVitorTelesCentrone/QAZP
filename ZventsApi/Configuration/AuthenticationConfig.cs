@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
+using ZventsApi.Application.Interfaces.Repositories;
+using ZventsApi.Models;
 
 namespace ZventsApi.Configuration;
 public static class AuthenticationConfig
@@ -43,6 +47,32 @@ public static class AuthenticationConfig
                 ValidateAudience = true,
                 ValidAudience = configuration["Jwt:Audience"],
                 ClockSkew = TimeSpan.FromSeconds(30)
+            };
+
+            // A valid signature isn't enough: the session behind the token must still exist
+            // and its user must still be active. Revoking sessions then takes effect at once.
+            options.Events = new JwtBearerEvents
+            {
+                OnTokenValidated = async context =>
+                {
+                    var sid = context.Principal?.FindFirst(JwtRegisteredClaimNames.Sid)?.Value
+                        ?? context.Principal?.FindFirst(ClaimTypes.Sid)?.Value;
+                    if (!Guid.TryParse(sid, out var sessionId))
+                    {
+                        context.Fail("Token sem sessão");
+                        return;
+                    }
+
+                    var sessions = context.HttpContext.RequestServices.GetRequiredService<IUserSessionRepository>();
+                    var session = await sessions.GetByIdAsync(sessionId);
+                    if (session == null
+                        || session.ExpiresAt <= DateTime.UtcNow
+                        || session.User.IsDeleted
+                        || session.User.UserStatus != UserStatus.Active)
+                    {
+                        context.Fail("Sessão revogada");
+                    }
+                }
             };
         });
 

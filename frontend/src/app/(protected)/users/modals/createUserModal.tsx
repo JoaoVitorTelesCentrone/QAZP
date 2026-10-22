@@ -13,6 +13,8 @@ import { userInfoAtom } from '../../../atoms/userInfoAtom'
 import { userChangeAtom } from '../../../atoms/changeUserAtom'
 import { intl } from '@/i18n'
 
+const MIN_PASSWORD_LENGTH = 6
+
 export type createUserProps = {
   isVisible: boolean
   onClose: () => void
@@ -94,6 +96,15 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
     ];
 
     if (!validateFields(fieldsToValidate)) return;
+    // Mirrors the backend's [MinLength] on CreateUserRequest.Password.
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setPasswordError(intl.formatMessage({ id: 'create.user.password.min.length' }));
+      return;
+    }
+    if (password !== confirmedPassword) {
+      setDifferent(true);
+      return;
+    }
     const data = { name, username, password, role: 0 };
 
     setIsSubmitting(true);
@@ -108,8 +119,11 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if (error.response) {
+          const validationErrors = (error.response.data as { errors?: Record<string, string[]> })?.errors;
           if (error.response.status === 409) {
             toast.error(intl.formatMessage({ id: 'create.user.already.exists.error' }));
+          } else if (error.response.status === 400 && validationErrors) {
+            Object.values(validationErrors).flat().forEach(message => toast.error(message));
           } else {
             toast.error(intl.formatMessage({ id: 'create.user.error.message' }));
           }
@@ -137,7 +151,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose }) => {
     } else {
       setDifferent(false)
     }
-  }, [confirmedPassword])
+  }, [password, confirmedPassword])
 
   return (
     <div>

@@ -25,6 +25,9 @@ namespace ZventsApi.Models
                 .IsUnique();
 
             modelBuilder.Entity<UserSession>()
+                .HasIndex(s => s.PreviousRefreshTokenHash);
+
+            modelBuilder.Entity<UserSession>()
                 .HasOne(s => s.User)
                 .WithMany()
                 .HasForeignKey(s => s.UserId)

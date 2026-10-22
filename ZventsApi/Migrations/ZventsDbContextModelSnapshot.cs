@@ -286,14 +286,22 @@ namespace ZventsApi.Migrations
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PreviousRefreshTokenHash")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("RefreshTokenHash")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("RotatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PreviousRefreshTokenHash");
 
                     b.HasIndex("RefreshTokenHash")
                         .IsUnique();

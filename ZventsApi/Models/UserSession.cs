@@ -17,6 +17,12 @@ namespace ZventsApi.Models
         [Required]
         public string RefreshTokenHash { get; set; } = null!;
 
+        // The token that was current before the last rotation. It stays valid for a short
+        // grace period so a client that never received the rotated token (lost response,
+        // timeout) can still refresh instead of being logged out.
+        public string? PreviousRefreshTokenHash { get; set; }
+        public DateTime? RotatedAt { get; set; }
+
         public DateTime ExpiresAt { get; set; }
         public DateTime CreatedAt { get; set; }
     }

@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.Application.Services;
 using ZventsApi.Application.Interfaces.Repositories;
+using ZventsApi.Infrastructure.BackgroundJobs;
 using ZventsApi.Infrastructure.Repositories;
 using ZventsApi.Infrastructure.Repository;
 
@@ -26,6 +27,8 @@ namespace ZventsApi.Configuration
             services.AddScoped<IEventMaterialService, EventMaterialService>();
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IEventService, EventService>();
+
+            services.AddHostedService<SessionCleanupService>();
 
             return services;
         }
