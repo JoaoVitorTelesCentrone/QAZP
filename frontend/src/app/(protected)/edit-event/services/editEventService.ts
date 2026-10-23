@@ -7,16 +7,6 @@ export const fetchEventById = async (eventId: string) => {
   return res.data
 }
 
-export const fetchClientById = async (clientId: string) => {
-  const res = await apiClient.get(`/Client/id/${clientId}`)
-  return res.data
-}
-
-export const fetchEventMaterials = async (eventId: string) => {
-  const res = await apiClient.get(`/EventMaterial/event/${eventId}`)
-  return res.data
-}
-
 export const fetchMaterialsByCategory = async (category: number) => {
   const res = await apiClient.get(`/Material/category/${category}`)
   return res.data

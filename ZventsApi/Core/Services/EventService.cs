@@ -2,6 +2,7 @@ using ZventsApi.Application.Exceptions;
 using ZventsApi.Application.Interfaces.Repositories;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Event;
+using ZventsApi.DTOs.EventMaterial;
 using ZventsApi.Models;
 
 namespace ZventsApi.Application.Services
@@ -15,9 +16,10 @@ namespace ZventsApi.Application.Services
         private readonly IMaterialRepository _materialRepository = materialRepository;
         private readonly IClientRepository _clientRepository = clientRepository;
 
-        public async Task<Event?> GetByIdAsync(Guid id)
+        public async Task<EventDetailDto?> GetByIdAsync(Guid id)
         {
-            return await _eventRepository.GetByIdAsync(id);
+            var eventEntity = await _eventRepository.GetByIdAsync(id);
+            return eventEntity == null ? null : ToDetailDto(eventEntity);
         }
 
         public async Task<IEnumerable<ActiveEventDto>> GetActiveEventsAsync()
@@ -38,7 +40,7 @@ namespace ZventsApi.Application.Services
             });
         }
 
-        public async Task<Event> CreateEventAsync(CreateEventDto dto)
+        public async Task<EventDetailDto> CreateEventAsync(CreateEventDto dto)
         {
             ValidateSchedule(dto);
             await EnsureClientExistsAsync(dto.ClientId);
@@ -67,7 +69,10 @@ namespace ZventsApi.Application.Services
             SetMaterials(eventEntity, dto, materials);
 
             await _eventRepository.AddAsync(eventEntity);
-            return eventEntity;
+
+            // Reload with the client attached, which the new entity doesn't carry.
+            var created = await _eventRepository.GetByIdAsync(eventEntity.Id);
+            return ToDetailDto(created!);
         }
 
         public async Task<bool> UpdateEventAsync(Guid id, UpdateEventDto dto)
@@ -124,6 +129,40 @@ namespace ZventsApi.Application.Services
             await _eventRepository.DeleteAsync(eventEntity);
             return true;
         }
+
+        private static EventDetailDto ToDetailDto(Event e) => new()
+        {
+            Id = e.Id,
+            Name = e.Name,
+            Type = e.Type,
+            Status = e.Status,
+            ClientId = e.ClientId,
+            ClientFullName = e.Client.FullName,
+            StartDate = e.StartDate,
+            StartTime = e.StartTime,
+            EndDate = e.EndDate,
+            EndTime = e.EndTime,
+            ZipCode = e.ZipCode,
+            AddressName = e.AddressName,
+            AddressNumber = e.AddressNumber,
+            AddressComplement = e.AddressComplement,
+            District = e.District,
+            State = e.State,
+            City = e.City,
+            EstimatedAudience = e.EstimatedAudience,
+            TotalAmount = e.TotalAmount,
+            CreatedDate = e.CreatedDate,
+            // Current name/price, matching what saving the event would apply.
+            Materials = e.EventMaterials
+                .Select(em => new EventMaterialResponseDto
+                {
+                    MaterialId = em.MaterialId,
+                    MaterialName = em.Material.Name,
+                    MaterialPrice = em.Material.Price,
+                    Quantity = em.Quantity
+                })
+                .ToList()
+        };
 
         private static void ValidateSchedule(CreateEventDto dto)
         {

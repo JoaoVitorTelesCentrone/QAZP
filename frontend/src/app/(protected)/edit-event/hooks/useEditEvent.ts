@@ -10,9 +10,7 @@ import { formatCurrency } from '@/functions/functions'
 import { clientsAtom } from '@/app/atoms/clientsAtom'
 import { MaterialType } from '../../create-event/types/createEventTypes'
 import {
-  fetchClientById,
   fetchEventById,
-  fetchEventMaterials,
   fetchMaterialsByCategory,
   fetchAddressByZipCode,
   updateEvent,
@@ -297,16 +295,10 @@ export const useEditEvent = (eventId: string) => {
           setEstimatedAudience(formState.estimatedAudience)
           setTotalAmount(formState.totalAmount)
 
-          if (event.clientId) {
-            const client = await fetchClientById(event.clientId)
-            setClientId(client.id)
-            setClientName(client.fullName)
-          }
-
-          if (event.id) {
-            const eventMaterials = await fetchEventMaterials(event.id)
-            setMaterials(eventMaterials)
-          }
+          // Client name and materials come with the event itself, so the screen still
+          // loads when the client has been deleted since.
+          setClientName(event.clientFullName)
+          setMaterials(event.materials ?? [])
         }
       } catch (error) {
         console.error('Error fetching event or client details:', error)

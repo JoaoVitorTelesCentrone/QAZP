@@ -21,7 +21,7 @@ namespace ZventsApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Event>> GetById(Guid id)
+        public async Task<ActionResult<EventDetailDto>> GetById(Guid id)
         {
             var evt = await _service.GetByIdAsync(id);
             if (evt == null) return NotFound();
@@ -29,7 +29,7 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Event>> Create(CreateEventDto dto)
+        public async Task<ActionResult<EventDetailDto>> Create(CreateEventDto dto)
         {
             var evt = await _service.CreateEventAsync(dto);
             _logger.LogInformation("Evento criado: {EventId}", evt.Id);
