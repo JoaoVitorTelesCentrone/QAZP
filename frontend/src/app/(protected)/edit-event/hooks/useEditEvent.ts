@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import dayjs, { Dayjs } from 'dayjs'
 import { message } from 'antd'
+import { apiErrorMessage } from '@/lib/apiClient'
 import { toast } from 'sonner'
 import { useAtom } from 'jotai'
 import { intl } from '@/i18n'
@@ -388,7 +389,7 @@ export const useEditEvent = (eventId: string) => {
       message.success('Atualização feita com sucesso')
     } catch (error) {
       console.error('Error updating event:', error)
-      message.error('Erro ao atualizar evento')
+      message.error(apiErrorMessage(error) ?? 'Erro ao atualizar evento')
     } finally {
       setIsSubmitting(false)
       router.push('/events')

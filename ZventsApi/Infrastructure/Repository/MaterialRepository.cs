@@ -13,9 +13,9 @@ namespace ZventsApi.Infrastructure.Repository
             return await _context.Materials.ToListAsync();
         }
 
-        public async Task<Material?> GetByIdAsync(Guid id)
+        public async Task<Material?> GetByIdAsync(Guid id, bool includeDeleted = false)
         {
-            return await _context.Materials.FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.Materials.FirstOrDefaultAsync(m => m.Id == id && (includeDeleted || !m.IsDeleted));
         }
 
         public async Task<IReadOnlyCollection<Material>> GetByCategoryAsync(MaterialCategory category)

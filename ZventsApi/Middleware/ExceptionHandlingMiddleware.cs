@@ -15,6 +15,11 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         {
             await _next(context);
         }
+        catch (ConflictException ex)
+        {
+            _logger.LogWarning(ex, "Conflict on {Path}", context.Request.Path);
+            await WriteProblemAsync(context, HttpStatusCode.Conflict, ex.Message);
+        }
         catch (BusinessRuleException ex)
         {
             _logger.LogWarning(ex, "Business rule violation on {Path}", context.Request.Path);

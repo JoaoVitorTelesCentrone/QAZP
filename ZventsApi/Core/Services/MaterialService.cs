@@ -82,7 +82,7 @@ namespace ZventsApi.Application.Services
 
         public async Task<bool> DeleteMaterialAsync(Guid id)
         {
-            var material = await _materialRepository.GetByIdAsync(id);
+            var material = await _materialRepository.GetByIdAsync(id, includeDeleted: true);
             if (material == null) return false;
 
             await _materialRepository.DeleteAsync(material);

@@ -8,13 +8,13 @@ namespace ZventsApi.Infrastructure.Repositories
     {
         private readonly ZventsDbContext _context = context;
 
-        public async Task<Event?> GetByIdAsync(Guid id)
+        public async Task<Event?> GetByIdAsync(Guid id, bool includeDeleted = false)
         {
             return await _context.Events
                 .Include(e => e.Client)
                 .Include(e => e.EventMaterials)
                 .ThenInclude(em => em.Material)
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .FirstOrDefaultAsync(e => e.Id == id && (includeDeleted || !e.IsDeleted));
         }
 
         public async Task<IReadOnlyCollection<Event>> GetActiveEventsAsync()

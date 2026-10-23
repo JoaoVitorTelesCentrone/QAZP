@@ -174,11 +174,15 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     }
 
     if (error.response) {
-      const { data } = error.response
+      const { data, status } = error.response
 
       if (data.errors?.DocumentId?.includes('Invalid DocumentId')) {
         toast.error(
           intl.formatMessage({ id: 'update.client.invalid.document' }),
+        )
+      } else if (status === 409) {
+        toast.error(
+          intl.formatMessage({ id: 'update.client.document.exists' }),
         )
       } else {
         showGenericError()

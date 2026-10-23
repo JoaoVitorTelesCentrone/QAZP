@@ -6,7 +6,7 @@ namespace ZventsApi.Application.Interfaces.Repositories
     {
         Task<IReadOnlyCollection<Client>> GetAllClientsAsync();
         Task<IReadOnlyCollection<Client>> GetActiveClientsAsync();
-        Task<Client?> GetClientByIdAsync(Guid id);
+        Task<Client?> GetClientByIdAsync(Guid id, bool includeDeleted = false);
         Task CreateClientAsync(Client client);
         Task UpdateClientAsync(Client client);
         Task DeleteClientAsync(Client client);

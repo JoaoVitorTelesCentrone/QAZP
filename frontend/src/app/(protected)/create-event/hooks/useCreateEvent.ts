@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useAtom } from 'jotai'
 import dayjs, { Dayjs } from 'dayjs'
 import { toast } from 'sonner'
+import { apiErrorMessage } from '@/lib/apiClient'
 import { intl } from '@/i18n'
 import { formatCurrency } from '@/functions/functions'
 import { clientsAtom } from '@/app/atoms/clientsAtom'
@@ -406,7 +407,7 @@ export const useCreateEvent = () => {
       toast.success('Evento criado com sucesso')
       router.push('/events')
     } catch (error) {
-      toast.error('Erro ao criar evento')
+      toast.error(apiErrorMessage(error) ?? 'Erro ao criar evento')
       console.error('Error creating event:', error)
     } finally {
       setIsSubmitting(false)

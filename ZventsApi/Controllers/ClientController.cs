@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
+using ZventsApi.Application.Services;
 using ZventsApi.Models;
 using ZventsApi.Application.DTOs;
 using ZventsApi.DTOs.Client;
@@ -60,7 +61,7 @@ namespace ZventsApi.Controllers
             var createdClient = await _clientService.CreateClientAsync(request);
 
             if (createdClient == null)
-                return Conflict(new { message = "Client already exists" });
+                return Conflict(new { message = ClientService.DuplicateDocumentMessage });
 
             return CreatedAtAction(
                 "GetClientById",

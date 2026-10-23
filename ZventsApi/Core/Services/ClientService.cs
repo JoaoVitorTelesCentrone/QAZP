@@ -1,3 +1,4 @@
+using ZventsApi.Application.Exceptions;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.Application.Interfaces.Repositories;
 using ZventsApi.Models;
@@ -9,6 +10,9 @@ namespace ZventsApi.Application.Services
     public class ClientService(IClientRepository repository) : IClientService
     {
         private readonly IClientRepository _repository = repository;
+
+        // The frontend matches on this text to show its "document already registered" message.
+        public const string DuplicateDocumentMessage = "There is already a Client with the same DocumentId";
 
         public async Task<IEnumerable<ClientDto>> GetAllClientsAsync()
         {
@@ -62,7 +66,7 @@ namespace ZventsApi.Application.Services
             if (client == null) return null;
 
             if (await _repository.ClientWithDocumentExistsAsync(request.DocumentId, id))
-                return null;
+                throw new ConflictException(DuplicateDocumentMessage);
 
             client.FullName = request.FullName;
             client.DocumentId = request.DocumentId;
@@ -102,7 +106,7 @@ namespace ZventsApi.Application.Services
 
         public async Task<bool> DeleteClientAsync(Guid id)
         {
-            var client = await _repository.GetClientByIdAsync(id);
+            var client = await _repository.GetClientByIdAsync(id, includeDeleted: true);
             if (client == null) return false;
 
             await _repository.DeleteClientAsync(client);
