@@ -45,7 +45,6 @@ namespace ZventsApi.DTOs.Event
 
         public List<EventMaterialDto> Materials { get; set; } = [];
 
-        [Range(0, double.MaxValue, ErrorMessage = "TotalAmount must be zero or greater")]
-        public decimal? TotalAmount { get; set; }
+        // No TotalAmount here: the server always derives it from the materials.
     }
 }
