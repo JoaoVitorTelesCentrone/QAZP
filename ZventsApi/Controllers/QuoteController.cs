@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using ZventsApi.Configuration;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Quote;
 
@@ -29,6 +31,7 @@ namespace ZventsApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [EnableRateLimiting(RateLimitingConfig.QuotePolicy)]
         public async Task<IActionResult> CreateQuote(CreateQuoteDto dto)
         {
             var created = await _quoteService.CreateQuoteAsync(dto);

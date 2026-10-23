@@ -12,6 +12,7 @@ builder.Services.AddDatabase(builder.Configuration, builder.Environment);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddSwaggerConfiguration();
 builder.Services.AddCorsConfiguration(builder.Configuration);
+builder.Services.AddRateLimitingConfiguration(builder.Configuration);
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

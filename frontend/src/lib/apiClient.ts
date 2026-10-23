@@ -20,12 +20,12 @@ export function clearSession() {
   localStorage.removeItem(REFRESH_TOKEN_KEY)
 }
 
-// The business-rule message the API sends with a 400/409 ({ message }), if any.
+// The message the API sends with a 400/409 (business rule) or 429 (rate limit), if any.
 export function apiErrorMessage(error: unknown): string | undefined {
   if (!axios.isAxiosError(error)) return undefined
   const status = error.response?.status
   const message = (error.response?.data as { message?: unknown } | undefined)?.message
-  return (status === 400 || status === 409) && typeof message === 'string' ? message : undefined
+  return (status === 400 || status === 409 || status === 429) && typeof message === 'string' ? message : undefined
 }
 
 export async function logout() {

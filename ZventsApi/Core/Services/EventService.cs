@@ -61,11 +61,10 @@ namespace ZventsApi.Application.Services
                 District = dto.District,
                 State = dto.State,
                 City = dto.City,
-                EstimatedAudience = dto.EstimatedAudience,
-                TotalAmount = dto.TotalAmount
+                EstimatedAudience = dto.EstimatedAudience
             };
 
-            AddMaterials(eventEntity, dto, materials);
+            SetMaterials(eventEntity, dto, materials);
 
             await _eventRepository.AddAsync(eventEntity);
             return eventEntity;
@@ -100,10 +99,9 @@ namespace ZventsApi.Application.Services
             eventEntity.State = dto.State;
             eventEntity.City = dto.City;
             eventEntity.EstimatedAudience = dto.EstimatedAudience;
-            eventEntity.TotalAmount = dto.TotalAmount;
 
             eventEntity.EventMaterials.Clear();
-            AddMaterials(eventEntity, dto, materials);
+            SetMaterials(eventEntity, dto, materials);
 
             await _eventRepository.UpdateAsync(eventEntity);
             return true;
@@ -159,7 +157,9 @@ namespace ZventsApi.Application.Services
             return materials;
         }
 
-        private static void AddMaterials(Event eventEntity, CreateEventDto dto, Dictionary<Guid, Material> materials)
+        // Every save re-prices the event with the materials' current name and price, so the
+        // total follows price changes. It is always derived here, never taken from the request.
+        private static void SetMaterials(Event eventEntity, CreateEventDto dto, Dictionary<Guid, Material> materials)
         {
             foreach (var materialDto in dto.Materials)
             {
@@ -175,6 +175,8 @@ namespace ZventsApi.Application.Services
                     MaterialPrice = material.Price
                 });
             }
+
+            eventEntity.TotalAmount = eventEntity.EventMaterials.Sum(em => em.MaterialPrice * em.Quantity);
         }
     }
 }

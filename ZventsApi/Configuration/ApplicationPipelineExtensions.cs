@@ -13,6 +13,8 @@ namespace ZventsApi.Configuration
                 app.UseHttpsRedirection();
             }
             app.UseCors(CorsConfig.PolicyName);
+            // After CORS so a 429 still carries the CORS headers and the browser can read it.
+            app.UseRateLimiter();
             app.UseAuthentication();
             app.UseAuthorization();
         }

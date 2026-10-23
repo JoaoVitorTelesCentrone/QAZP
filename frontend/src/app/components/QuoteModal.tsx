@@ -2,7 +2,7 @@
 
 import { Input, Button, Modal } from 'antd'
 import { AxiosError } from 'axios'
-import { apiClient } from '@/lib/apiClient'
+import { apiClient, apiErrorMessage } from '@/lib/apiClient'
 import { Toaster, toast } from 'sonner'
 import { useState } from 'react'
 import { intl } from '@/i18n'
@@ -207,7 +207,7 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
       if (status === 409 && (data as ErrorResponse)?.message === 'There is already a quote in progress') {
         toast.error(intl.formatMessage({ id: 'create.quote.in.progress.message' }));
       } else {
-        toast.error(intl.formatMessage({ id: 'create.quote.error.message' }));
+        toast.error(apiErrorMessage(error) ?? intl.formatMessage({ id: 'create.quote.error.message' }));
       }
     }
   }
