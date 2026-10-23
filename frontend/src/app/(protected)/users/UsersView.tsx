@@ -21,6 +21,7 @@ interface UsersViewProps {
   isCreateModalOpen: boolean
   onOpenCreateModal: () => void
   onCloseCreateModal: () => void
+  onUserCreated: () => void
 }
 
 export const UsersView: React.FC<UsersViewProps> = ({
@@ -30,6 +31,7 @@ export const UsersView: React.FC<UsersViewProps> = ({
   isCreateModalOpen,
   onOpenCreateModal,
   onCloseCreateModal,
+  onUserCreated,
 }) => {
   return (
     <div className="bg-tertiary min-h-screen">
@@ -37,6 +39,7 @@ export const UsersView: React.FC<UsersViewProps> = ({
         <CreateUserModal
           isVisible={isCreateModalOpen}
           onClose={onCloseCreateModal}
+          onCreated={onUserCreated}
         />
       )}
 

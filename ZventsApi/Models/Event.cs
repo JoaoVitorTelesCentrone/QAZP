@@ -88,7 +88,7 @@ namespace ZventsApi.Models
         public Event()
         {
             IsDeleted = false;
-            CreatedDate = DateTime.Now;
+            CreatedDate = DateTime.UtcNow;
             Status = 0;
         }
     }

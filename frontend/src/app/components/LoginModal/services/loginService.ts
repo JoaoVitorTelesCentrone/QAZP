@@ -2,6 +2,7 @@ import { apiClient } from '@/lib/apiClient'
 
 export type LoginResult = {
   token: string
+  refreshToken: string
   name: string
 }
 

@@ -7,7 +7,7 @@ namespace ZventsApi.Application.Interfaces.Repositories
     {
         Task<List<QuoteDto>> GetAllAsync();
         Task<List<QuoteDto>> GetActiveAsync();
-        Task<Quote?> GetByIdAsync(Guid id);
+        Task<Quote?> GetByIdAsync(Guid id, bool includeDeleted = false);
         Task AddAsync(Quote quote);
         Task UpdateAsync(Quote quote);
         Task DeleteAsync(Quote quote);

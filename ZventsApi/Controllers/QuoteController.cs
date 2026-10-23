@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using ZventsApi.Configuration;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Quote;
 
@@ -6,9 +9,11 @@ namespace ZventsApi.Controllers
 {
     [Route("api/quote")]
     [ApiController]
-    public class QuoteController(IQuoteService quoteService) : ControllerBase
+    [Authorize]
+    public class QuoteController(IQuoteService quoteService, ILogger<QuoteController> logger) : ControllerBase
     {
         private readonly IQuoteService _quoteService = quoteService;
+        private readonly ILogger<QuoteController> _logger = logger;
 
         [HttpGet("active-quotes")]
         public async Task<IActionResult> GetActiveQuotes()
@@ -25,12 +30,18 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+        [EnableRateLimiting(RateLimitingConfig.QuotePolicy)]
         public async Task<IActionResult> CreateQuote(CreateQuoteDto dto)
         {
             var created = await _quoteService.CreateQuoteAsync(dto);
             if (created == null)
+            {
+                _logger.LogWarning("Tentativa de criar orçamento já em andamento para: {Email}", dto.Email);
                 return Conflict(new { message = "There is already a quote in progress" });
+            }
 
+            _logger.LogInformation("Orçamento criado: {QuoteId}", created.Id);
             return CreatedAtAction(nameof(CreateQuote), new { id = created.Id }, created);
         }
 

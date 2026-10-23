@@ -13,11 +13,13 @@ namespace ZventsApi.Application.Services
         {
             var materials = await _repository.GetByEventIdAsync(eventId);
 
+            // Current name/price, not the values stored on the event: the edit screen totals
+            // these, and saving re-prices the event with exactly the same values.
             return materials.Select(em => new EventMaterialResponseDto
             {
                 MaterialId = em.MaterialId,
-                MaterialName = em.MaterialName,
-                MaterialPrice = em.MaterialPrice,
+                MaterialName = em.Material.Name,
+                MaterialPrice = em.Material.Price,
                 Quantity = em.Quantity
             });
         }

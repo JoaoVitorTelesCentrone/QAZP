@@ -2,7 +2,8 @@ import axios from 'axios'
 import { apiClient } from '@/lib/apiClient'
 
 export const fetchClients = async () => {
-  const res = await apiClient.get('/Client')
+  // Only active clients can be picked for an event.
+  const res = await apiClient.get('/Client/active')
   return res.data
 }
 

@@ -7,10 +7,11 @@ export const useUsers = () => {
   const [loading, setLoading] = useState(true)
   const isFetching = useRef(false)
 
+  // `loading` only covers the first load; refetches update the table in place so it
+  // doesn't unmount (and lose its filters) behind the full-page spinner.
   const fetchUsers = useCallback(async () => {
     if (isFetching.current) return
     isFetching.current = true
-    setLoading(true)
     try {
       const data = await getActiveUsers()
       setUsers(data.filter((u: any) => !u.isDeleted))

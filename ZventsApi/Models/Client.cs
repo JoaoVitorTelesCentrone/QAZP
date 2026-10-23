@@ -40,7 +40,7 @@ namespace ZventsApi.Models
         [Required]
         public string City { get; set; } = default!;
 
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public bool IsDeleted { get; set; } = false;
     }
 }
