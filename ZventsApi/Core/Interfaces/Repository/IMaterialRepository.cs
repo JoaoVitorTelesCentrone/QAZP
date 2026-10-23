@@ -11,5 +11,6 @@ namespace ZventsApi.Application.Interfaces.Repositories
         Task AddAsync(Material material);
         Task UpdateAsync(Material material);
         Task DeleteAsync(Material material);
+        Task<bool> IsUsedInEventsAsync(Guid materialId);
     }
 }

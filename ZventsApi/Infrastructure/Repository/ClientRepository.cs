@@ -47,6 +47,12 @@ namespace ZventsApi.Infrastructure.Repository
             await _context.SaveChangesAsync();
         }
 
+        // Counts soft-deleted events too: they still reference the client in the database.
+        public async Task<bool> HasEventsAsync(Guid clientId)
+        {
+            return await _context.Events.AnyAsync(e => e.ClientId == clientId);
+        }
+
         public async Task<bool> ClientWithDocumentExistsAsync(string documentId, Guid? excludeId = null)
         {
             var query = _context.Clients

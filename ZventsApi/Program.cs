@@ -8,7 +8,7 @@ using ZventsApi.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure();
-builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddDatabase(builder.Configuration, builder.Environment);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddSwaggerConfiguration();
 builder.Services.AddCorsConfiguration(builder.Configuration);
@@ -20,6 +20,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 var app = builder.Build();
+
+app.ApplyMigrations();
 
 app.UseDevelopmentSwagger();
 app.UseZventsPipeline();

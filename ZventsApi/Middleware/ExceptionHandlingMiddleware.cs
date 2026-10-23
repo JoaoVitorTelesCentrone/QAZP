@@ -1,5 +1,7 @@
 using System.Net;
 using System.Text.Json;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using ZventsApi.Application.Exceptions;
 
 namespace ZventsApi.Middleware;
@@ -8,6 +10,9 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
 {
     private readonly RequestDelegate _next = next;
     private readonly ILogger<ExceptionHandlingMiddleware> _logger = logger;
+
+    private const int SqliteConstraintError = 19;     // SQLITE_CONSTRAINT
+    private const int SqliteForeignKeyError = 787;    // SQLITE_CONSTRAINT_FOREIGNKEY
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -19,6 +24,16 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         {
             _logger.LogWarning(ex, "Conflict on {Path}", context.Request.Path);
             await WriteProblemAsync(context, HttpStatusCode.Conflict, ex.Message);
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqliteException { SqliteErrorCode: SqliteConstraintError } sqlite)
+        {
+            // Safety net for races the services' own checks can't catch (two requests
+            // creating the same username at once, deleting something still referenced).
+            _logger.LogWarning(ex, "Constraint violation on {Path}", context.Request.Path);
+            var message = sqlite.SqliteExtendedErrorCode == SqliteForeignKeyError
+                ? "O registro está vinculado a outros dados e não pode ser alterado ou excluído"
+                : "Já existe um registro com esses dados";
+            await WriteProblemAsync(context, HttpStatusCode.Conflict, message);
         }
         catch (BusinessRuleException ex)
         {

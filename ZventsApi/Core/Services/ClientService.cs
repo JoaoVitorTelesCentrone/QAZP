@@ -109,6 +109,9 @@ namespace ZventsApi.Application.Services
             var client = await _repository.GetClientByIdAsync(id, includeDeleted: true);
             if (client == null) return false;
 
+            if (await _repository.HasEventsAsync(id))
+                throw new ConflictException("O cliente possui eventos vinculados e não pode ser excluído definitivamente");
+
             await _repository.DeleteClientAsync(client);
             return true;
         }

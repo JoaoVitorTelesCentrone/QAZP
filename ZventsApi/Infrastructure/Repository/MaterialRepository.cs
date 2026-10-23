@@ -40,6 +40,11 @@ namespace ZventsApi.Infrastructure.Repository
             await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> IsUsedInEventsAsync(Guid materialId)
+        {
+            return await _context.EventMaterials.AnyAsync(em => em.MaterialId == materialId);
+        }
+
         public async Task DeleteAsync(Material material)
         {
             _context.Materials.Remove(material);

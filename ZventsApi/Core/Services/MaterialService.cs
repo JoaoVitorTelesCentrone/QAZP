@@ -1,3 +1,4 @@
+using ZventsApi.Application.Exceptions;
 using ZventsApi.Application.Interfaces.Repositories;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Material;
@@ -84,6 +85,9 @@ namespace ZventsApi.Application.Services
         {
             var material = await _materialRepository.GetByIdAsync(id, includeDeleted: true);
             if (material == null) return false;
+
+            if (await _materialRepository.IsUsedInEventsAsync(id))
+                throw new ConflictException("O material está vinculado a eventos e não pode ser excluído definitivamente");
 
             await _materialRepository.DeleteAsync(material);
             return true;

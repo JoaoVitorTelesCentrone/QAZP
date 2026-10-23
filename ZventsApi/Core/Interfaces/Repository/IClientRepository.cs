@@ -11,5 +11,6 @@ namespace ZventsApi.Application.Interfaces.Repositories
         Task UpdateClientAsync(Client client);
         Task DeleteClientAsync(Client client);
         Task<bool> ClientWithDocumentExistsAsync(string documentId, Guid? excludeId = null);
+        Task<bool> HasEventsAsync(Guid clientId);
     }
 }

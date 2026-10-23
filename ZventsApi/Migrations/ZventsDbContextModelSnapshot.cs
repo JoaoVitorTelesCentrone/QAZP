@@ -15,7 +15,7 @@ namespace ZventsApi.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.13");
 
             modelBuilder.Entity("ZventsApi.Models.Client", b =>
                 {
@@ -71,6 +71,10 @@ namespace ZventsApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DocumentId")
+                        .IsUnique()
+                        .HasFilter("\"IsDeleted\" = 0");
 
                     b.ToTable("Clients");
                 });
@@ -271,6 +275,10 @@ namespace ZventsApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasFilter("\"IsDeleted\" = 0");
+
                     b.ToTable("Users");
                 });
 
@@ -316,7 +324,7 @@ namespace ZventsApi.Migrations
                     b.HasOne("ZventsApi.Models.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Client");
@@ -333,7 +341,7 @@ namespace ZventsApi.Migrations
                     b.HasOne("ZventsApi.Models.Material", "Material")
                         .WithMany("EventMaterials")
                         .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");
