@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Hosting;
 
 namespace ZventsApi.Models
@@ -13,6 +14,20 @@ namespace ZventsApi.Models
         public DbSet<Event> Events { get; set; }
         public DbSet<EventMaterial> EventMaterials { get; set; }
         public DbSet<UserSession> UserSessions { get; set; }
+
+        // Every timestamp is stored in UTC. SQLite keeps no time zone, so values read back
+        // would be DateTimeKind.Unspecified and serialize without the trailing "Z", making the
+        // browser treat them as local time. Marking them as UTC lets the frontend convert to
+        // the user's own time zone correctly.
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Properties<DateTime>().HaveConversion<UtcDateTimeConverter>();
+            configurationBuilder.Properties<DateTime?>().HaveConversion<UtcDateTimeConverter>();
+        }
+
+        private class UtcDateTimeConverter() : ValueConverter<DateTime, DateTime>(
+            v => v.Kind == DateTimeKind.Local ? v.ToUniversalTime() : DateTime.SpecifyKind(v, DateTimeKind.Utc),
+            v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

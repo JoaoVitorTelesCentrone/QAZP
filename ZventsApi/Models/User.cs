@@ -36,7 +36,7 @@ namespace ZventsApi.Models
 
         public User()
         {
-            CreatedDate = DateTime.Now;
+            CreatedDate = DateTime.UtcNow;
             IsDeleted = false;
             UserStatus = UserStatus.Active;
         }
