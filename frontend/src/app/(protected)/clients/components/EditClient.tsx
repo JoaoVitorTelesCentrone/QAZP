@@ -41,7 +41,6 @@ const EditClient: React.FC<EditClientProps> = ({ userId }) => {
         : '',
     }
       setClientData(formattedData);
-      setClientChange(prev => prev + 1);
     } catch (error) {
       console.error('Error fetching user data:', error);
     } finally {
@@ -63,6 +62,7 @@ const EditClient: React.FC<EditClientProps> = ({ userId }) => {
             <ClientForm
               clientData={clientData}
               closeModal={() => setOpenModal(false)}
+              onUpdated={() => setClientChange(prev => prev + 1)}
             />
           )}
         </div>

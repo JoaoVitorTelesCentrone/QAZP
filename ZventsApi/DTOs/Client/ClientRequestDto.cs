@@ -11,11 +11,17 @@ namespace ZventsApi.DTOs.Client
         [Required, ValidDocument(ErrorMessage = "Invalid DocumentId")]
         public string DocumentId { get; set; } = null!;
 
-        [Phone]
+        [Required(ErrorMessage = "O telefone é obrigatório"), Phone(ErrorMessage = "Telefone inválido")]
         public string? PhoneNumber { get; set; }
 
-        [EmailAddress]
-        public string? Email { get; set; }
+        // Optional: a blank value is treated as "no e-mail" instead of failing validation.
+        [EmailAddress(ErrorMessage = "E-mail inválido")]
+        public string? Email
+        {
+            get => _email;
+            set => _email = string.IsNullOrWhiteSpace(value) ? null : value;
+        }
+        private string? _email;
 
         [Required]
         public string ZipCode { get; set; } = null!;

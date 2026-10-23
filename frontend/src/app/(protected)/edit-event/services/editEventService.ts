@@ -7,6 +7,13 @@ export const fetchEventById = async (eventId: string) => {
   return res.data
 }
 
+// Only active clients can be picked; the event's current client (even if deleted since)
+// is shown from the event itself.
+export const fetchActiveClients = async () => {
+  const res = await apiClient.get('/Client/active')
+  return res.data
+}
+
 export const fetchMaterialsByCategory = async (category: number) => {
   const res = await apiClient.get(`/Material/category/${category}`)
   return res.data

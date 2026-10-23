@@ -4,12 +4,13 @@ import dayjs, { Dayjs } from 'dayjs'
 import { message } from 'antd'
 import { apiErrorMessage } from '@/lib/apiClient'
 import { toast } from 'sonner'
-import { useAtom } from 'jotai'
 import { intl } from '@/i18n'
 import { formatCurrency } from '@/functions/functions'
-import { clientsAtom } from '@/app/atoms/clientsAtom'
+import { ClientProps } from '@/app/atoms/clientsAtom'
+import { mapClientApiToOption } from '../../create-event/mappers/createEventMapper'
 import { MaterialType } from '../../create-event/types/createEventTypes'
 import {
+  fetchActiveClients,
   fetchEventById,
   fetchMaterialsByCategory,
   fetchAddressByZipCode,
@@ -47,7 +48,7 @@ export const useEditEvent = (eventId: string) => {
   const [clientName, setClientName] = useState('')
   const [totalAmount, setTotalAmount] = useState<number>()
   const [type, setType] = useState('')
-  const [clients] = useAtom(clientsAtom)
+  const [clients, setClients] = useState<ClientProps[]>([])
 
   const [selectedCategory, setSelectedCategory] = useState('')
   const [sMaterials, setSMaterials] = useState<MaterialType[]>([])
@@ -264,6 +265,14 @@ export const useEditEvent = (eventId: string) => {
       selectedMaterialIndex,
       selectedMaterialPrice,
     )
+
+  // Loaded here rather than reused from the create screen's cached list, which may be
+  // empty (create was never opened) or stale.
+  useEffect(() => {
+    fetchActiveClients()
+      .then(data => setClients(data.map(mapClientApiToOption)))
+      .catch(error => console.error('Error fetching clients:', error))
+  }, [])
 
   useEffect(() => {
     const fetchEventAndClient = async () => {

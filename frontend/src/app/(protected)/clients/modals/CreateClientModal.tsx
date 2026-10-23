@@ -46,6 +46,7 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
   const [change, setChange] = useAtom(clientChangeAtom)
   const [fullNameError, setFullNameError] = useState('')
   const [DocumentIdError, setDocumentIdError] = useState('')
+  const [phoneNumberError, setPhoneNumberError] = useState('')
   const [zipCodeError, setZipCodeError] = useState('')
   const [addressNumberError, setAddressNumberError] = useState('')
   const [addressNameError, setAddressNameError] = useState('')
@@ -133,6 +134,7 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
     const fieldsToValidate = [
       { value: addressName, errorSetter: setAddressNameError },
       { value: documentId, errorSetter: setDocumentIdError },
+      { value: phoneNumber, errorSetter: setPhoneNumberError },
       { value: zipCode, errorSetter: setZipCodeError },
       { value: fullName, errorSetter: setFullNameError },
       { value: addressNumber, errorSetter: setAddressNumberError },
@@ -158,7 +160,8 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
       fullName,
       documentId: removeMask(documentId),
       phoneNumber: removeMask(phoneNumber),
-      email,
+      // Optional: send null rather than "", which the API's e-mail validation rejects.
+      email: email || null,
       zipCode: removeMask(zipCode),
       addressName,
       addressNumber,
@@ -203,6 +206,8 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
         toast.error(intl.formatMessage({ id: 'update.client.invalid.document' }));
       } else if (status === 409 && data?.message && data.message.includes('There is already a Client with the same DocumentId')) {
         toast.error(intl.formatMessage({ id: 'update.client.document.exists' }));
+      } else if (status === 400 && data?.errors) {
+        Object.values(data.errors as Record<string, string[]>).flat().forEach(message => toast.error(message));
       } else {
         showGenericError();
       }
@@ -289,17 +294,18 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
                   </div>
                 )}
               </div>
-              <div className="mt-3 w-56">
+              <div className="mt-3 w-56 relative">
                 <h1>
                   {intl.formatMessage({
                     id: 'create.client.page.phoneNumber.field.label',
                   })}
                 </h1>
                 <Input
-                  onChange={e =>
+                  onChange={e => {
                     setPhoneNumber(formatPhoneNumber(e.target.value))
-                  }
-                  className="p-2 mb-4 border rounded w-full"
+                    setPhoneNumberError('')
+                  }}
+                  className={`p-2 mb-4 border rounded w-full ${phoneNumberError ? 'border-red-500' : 'border-slate-300'}`}
                   placeholder={intl.formatMessage({
                     id: 'create.client.page.phoneNumber.field.placeholder',
                   })}
@@ -307,6 +313,19 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
                   maxLength={15}
                   type="text"
                 />
+                {phoneNumberError && (
+                  <div
+                    style={{
+                      color: 'red',
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: -15,
+                    }}
+                  >
+                    {phoneNumberError}
+                  </div>
+                )}
               </div>
             </div>
             <h1 className="mt-3">

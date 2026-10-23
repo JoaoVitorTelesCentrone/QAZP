@@ -10,7 +10,10 @@ namespace ZventsApi.Infrastructure.Repository
 
         public async Task<IReadOnlyCollection<Material>> GetAllAsync()
         {
-            return await _context.Materials.ToListAsync();
+            // Newest first, so a material that was just created shows at the top of the list.
+            return await _context.Materials
+                .OrderByDescending(m => m.CreatedDate)
+                .ToListAsync();
         }
 
         public async Task<Material?> GetByIdAsync(Guid id, bool includeDeleted = false)
