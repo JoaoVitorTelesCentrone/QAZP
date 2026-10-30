@@ -60,9 +60,9 @@ let refreshPromise: Promise<RefreshResult> | null = null
 // Refresh tokens rotate on every use, so two tabs refreshing with the same one would log
 // one of them out. The Web Locks API serializes refreshes across tabs; whoever gets the
 // lock second sees the token the first one saved and reuses it instead of refreshing again.
-function refreshAccessToken(staleToken: string | undefined): Promise<RefreshResult> {
+async function refreshAccessToken(staleToken: string | undefined): Promise<RefreshResult> {
   const run = () => doRefresh(staleToken)
-  return navigator.locks ? navigator.locks.request(REFRESH_LOCK, run) : run()
+  return navigator.locks ? await navigator.locks.request(REFRESH_LOCK, run) : run()
 }
 
 async function doRefresh(staleToken: string | undefined): Promise<RefreshResult> {
