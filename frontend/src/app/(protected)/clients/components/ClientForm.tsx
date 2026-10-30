@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import { clientService } from '../services/clientService'
 import { cepService } from '../services/cepService'
 import { ClientDataProps } from '../types/clientTypes'
+import { logUnexpectedError } from '@/lib/apiClient'
 
 import {
   removeMask,
@@ -99,7 +100,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal, onUpdat
       if (cepData.localidade) setCityError('')
       if (cepData.uf) setStateError('')
     } catch (error) {
-      console.error('Erro ao buscar o CEP:', error)
+      logUnexpectedError('Erro ao buscar o CEP:', error)
     }
   }
 

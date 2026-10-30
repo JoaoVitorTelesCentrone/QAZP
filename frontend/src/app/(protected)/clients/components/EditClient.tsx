@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/apiClient';
+import { apiClient, logUnexpectedError } from '@/lib/apiClient';
 import { Edit3Icon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -42,7 +42,7 @@ const EditClient: React.FC<EditClientProps> = ({ userId }) => {
     }
       setClientData(formattedData);
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      logUnexpectedError('Error fetching user data:', error);
     } finally {
       setLoading(false);
     }

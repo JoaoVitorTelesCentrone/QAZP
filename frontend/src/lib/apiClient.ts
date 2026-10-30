@@ -28,6 +28,15 @@ export function apiErrorMessage(error: unknown): string | undefined {
   return (status === 400 || status === 409 || status === 429) && typeof message === 'string' ? message : undefined
 }
 
+// 4xx responses are expected (wrong password, validation, duplicates) and the screens already
+// show them to the user, so only network errors, 5xx and code errors go to the console.
+export function logUnexpectedError(...args: unknown[]) {
+  const isClientError = args.some(
+    arg => axios.isAxiosError(arg) && arg.response !== undefined && arg.response.status < 500,
+  )
+  if (!isClientError) console.error(...args)
+}
+
 export async function logout() {
   const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY)
   clearSession()

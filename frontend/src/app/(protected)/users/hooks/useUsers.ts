@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { getActiveUsers } from '../services/userService'
 import { UserApi } from '../mappers/userMapper'
+import { logUnexpectedError } from '@/lib/apiClient'
 
 export const useUsers = () => {
   const [users, setUsers] = useState<UserApi[]>([])
@@ -16,7 +17,7 @@ export const useUsers = () => {
       const data = await getActiveUsers()
       setUsers(data.filter((u: any) => !u.isDeleted))
     } catch (err) {
-      console.error(err)
+      logUnexpectedError(err)
     } finally {
       setLoading(false)
       isFetching.current = false

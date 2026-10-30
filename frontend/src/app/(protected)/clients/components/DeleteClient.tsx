@@ -7,6 +7,7 @@ import { clientChangeAtom } from "../../../atoms/clientChangeAtom"
 import { DeleteAction } from "../../../components/DeleteAction"
 import { clientService } from "../services/clientService"
 import { DeleteClientProps } from '../types/clientTypes'
+import { logUnexpectedError } from '@/lib/apiClient'
 
 export default function DeleteClient({ userId }: DeleteClientProps) {
   const [, setClientChange] = useAtom(clientChangeAtom)
@@ -23,7 +24,7 @@ export default function DeleteClient({ userId }: DeleteClientProps) {
         })
       )
     } catch (error) {
-      console.error("Erro ao deletar cliente", error)
+      logUnexpectedError("Erro ao deletar cliente", error)
 
       toast.error(
         intl.formatMessage({

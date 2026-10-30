@@ -1,5 +1,5 @@
 import { toast } from 'sonner'
-import { apiClient } from '@/lib/apiClient'
+import { apiClient, logUnexpectedError } from '@/lib/apiClient'
 import { useAtom } from 'jotai'
 import { materialChangeAtom } from '../../../atoms/materialChange'
 import { DeleteAction } from '@/app/components/DeleteAction'
@@ -18,7 +18,7 @@ const DeleteMaterial: React.FC<deleteMaterialProps> = ({ materialId }) => {
       setMaterialChange(prev => prev + 1)
       toast.success('Material excluído com sucesso')
     } catch (error) {
-      console.error('Erro ao deletar os dados:', error)
+      logUnexpectedError('Erro ao deletar os dados:', error)
       toast.error('Erro ao deletar o material')
     }
   }

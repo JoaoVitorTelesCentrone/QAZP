@@ -3,8 +3,7 @@ import { Input } from '@/components/ui/input'
 import React, { useEffect, useState } from 'react'
 import { ChevronDown, SearchIcon, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { isAxiosError } from 'axios'
-import { apiClient } from '@/lib/apiClient'
+import { apiClient, logUnexpectedError } from '@/lib/apiClient'
 import { toast } from 'sonner'
 import {
   DropdownMenu,
@@ -47,16 +46,7 @@ const MaterialForm: React.FC<MaterialFormProps> = ({
       toast.success('Cliente alterado com sucesso')
       closeModal()
     } catch (error) {
-      if (isAxiosError(error)) {
-        console.error('Error message:', error.message)
-        if (error.response) {
-          console.error('Response data:', error.response.data)
-          console.error('Response status:', error.response.status)
-          console.error('Response headers:', error.response.headers)
-        }
-      } else {
-        console.error('Unexpected error:', error)
-      }
+      logUnexpectedError('Error updating material:', error)
       toast.error('Falha ao atualizar cliente')
     }
   }

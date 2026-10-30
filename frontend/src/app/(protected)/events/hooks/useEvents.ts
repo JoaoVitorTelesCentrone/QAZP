@@ -4,6 +4,7 @@ import { fetchActiveEvents } from '../services/eventService'
 import { mapEventApiToRow } from '../mappers/eventMapper'
 import { EventProps } from '../types/eventTypes'
 import { eventChangeAtom } from '../../../atoms/eventChangeAtom'
+import { logUnexpectedError } from '@/lib/apiClient'
 
 export const useEvents = () => {
   const [events, setEvents] = useState<EventProps[]>([])
@@ -16,7 +17,7 @@ export const useEvents = () => {
       const data = await fetchActiveEvents()
       setEvents(data.map(mapEventApiToRow))
     } catch (error) {
-      console.error('Error fetching data:', error)
+      logUnexpectedError('Error fetching data:', error)
     } finally {
       setLoading(false)
     }

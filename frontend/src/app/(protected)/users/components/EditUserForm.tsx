@@ -7,6 +7,7 @@ import { UserApi, mapFormToApi } from '../mappers/userMapper'
 import { toast } from 'sonner'
 import axios from 'axios'
 import { intl } from '@/i18n'
+import { logUnexpectedError } from '@/lib/apiClient'
 
 // Mirrors the backend rule applied when the password changes.
 const MIN_PASSWORD_LENGTH = 6
@@ -38,7 +39,7 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ userData, closeModal, onUpd
       onUpdated?.()
       closeModal()
     } catch (err) {
-      console.error(err)
+      logUnexpectedError(err)
       const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined
       toast.error(message ?? 'Erro ao atualizar usuário')
     }

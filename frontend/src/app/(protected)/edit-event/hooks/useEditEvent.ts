@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import dayjs, { Dayjs } from 'dayjs'
 import { message } from 'antd'
-import { apiErrorMessage } from '@/lib/apiClient'
+import { apiErrorMessage, logUnexpectedError } from '@/lib/apiClient'
 import { toast } from 'sonner'
 import { intl } from '@/i18n'
 import { formatCurrency } from '@/functions/functions'
@@ -91,7 +91,7 @@ export const useEditEvent = (eventId: string) => {
       setCity(cepData.localidade)
       setState(cepData.uf)
     } catch (error) {
-      console.error('Erro ao buscar o CEP:', error)
+      logUnexpectedError('Erro ao buscar o CEP:', error)
     }
   }
 
@@ -271,7 +271,7 @@ export const useEditEvent = (eventId: string) => {
   useEffect(() => {
     fetchActiveClients()
       .then(data => setClients(data.map(mapClientApiToOption)))
-      .catch(error => console.error('Error fetching clients:', error))
+      .catch(error => logUnexpectedError('Error fetching clients:', error))
   }, [])
 
   useEffect(() => {
@@ -310,7 +310,7 @@ export const useEditEvent = (eventId: string) => {
           setMaterials(event.materials ?? [])
         }
       } catch (error) {
-        console.error('Error fetching event or client details:', error)
+        logUnexpectedError('Error fetching event or client details:', error)
       } finally {
         setLoading(false)
       }
@@ -389,7 +389,7 @@ export const useEditEvent = (eventId: string) => {
       await updateEvent(eventId, body)
       message.success('Atualização feita com sucesso')
     } catch (error) {
-      console.error('Error updating event:', error)
+      logUnexpectedError('Error updating event:', error)
       message.error(apiErrorMessage(error) ?? 'Erro ao atualizar evento')
     } finally {
       setIsSubmitting(false)
@@ -411,7 +411,7 @@ export const useEditEvent = (eventId: string) => {
       setSMaterials(categoryMaterials)
       setSelectedCategory(categoryName)
     } catch (error) {
-      console.error('Error fetching materials:', error)
+      logUnexpectedError('Error fetching materials:', error)
     }
   }
 

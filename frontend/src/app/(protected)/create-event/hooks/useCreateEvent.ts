@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useAtom } from 'jotai'
 import dayjs, { Dayjs } from 'dayjs'
 import { toast } from 'sonner'
-import { apiErrorMessage } from '@/lib/apiClient'
+import { apiErrorMessage, logUnexpectedError } from '@/lib/apiClient'
 import { intl } from '@/i18n'
 import { formatCurrency } from '@/functions/functions'
 import { clientsAtom } from '@/app/atoms/clientsAtom'
@@ -94,7 +94,7 @@ export const useCreateEvent = () => {
       setCity(cepData.localidade)
       setState(cepData.uf)
     } catch (error) {
-      console.error('Erro ao buscar o CEP:', error)
+      logUnexpectedError('Erro ao buscar o CEP:', error)
     }
   }
 
@@ -128,7 +128,7 @@ export const useCreateEvent = () => {
         const data = await fetchClients()
         setClients(data.map(mapClientApiToOption))
       } catch (error) {
-        console.error('Error fetching clients:', error)
+        logUnexpectedError('Error fetching clients:', error)
       } finally {
         setClientsLoading(false)
       }
@@ -253,7 +253,7 @@ export const useCreateEvent = () => {
       setMaterials(data.map(mapMaterialApiToOption))
       setSelectedCategory(categoryName)
     } catch (error) {
-      console.error('Error fetching materials:', error)
+      logUnexpectedError('Error fetching materials:', error)
     }
   }
 
@@ -408,7 +408,7 @@ export const useCreateEvent = () => {
       router.push('/events')
     } catch (error) {
       toast.error(apiErrorMessage(error) ?? 'Erro ao criar evento')
-      console.error('Error creating event:', error)
+      logUnexpectedError('Error creating event:', error)
     } finally {
       setIsSubmitting(false)
     }

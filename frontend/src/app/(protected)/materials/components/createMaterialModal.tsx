@@ -8,7 +8,7 @@ import {
   DropdownMenuContent,
 } from '@/components/ui/dropdown-menu'
 import { Button, Input, Modal } from 'antd'
-import { apiClient } from '@/lib/apiClient'
+import { apiClient, logUnexpectedError } from '@/lib/apiClient'
 import { ChevronDown } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAtom } from 'jotai'
@@ -78,7 +78,7 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
         onClose()
       }
     } catch (error) {
-      console.error('Erro ao fazer a requisição:', error)
+      logUnexpectedError('Erro ao fazer a requisição:', error)
       toast.error('Deu erro!')
     } finally {
       setIsSubmitting(false)

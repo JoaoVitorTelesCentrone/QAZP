@@ -4,6 +4,7 @@ import { MaterialProps } from '../types/materialTypes'
 import { useAtom } from 'jotai'
 import { materialChangeAtom } from '../../../atoms/materialChange'
 import { formatCurrency, materialCategoryNameConverter } from '../mappers/materialMapper'
+import { logUnexpectedError } from '@/lib/apiClient'
 
 export const useMaterials = () => {
   const [materials, setMaterials] = useState<MaterialProps[]>([])
@@ -21,7 +22,7 @@ export const useMaterials = () => {
       }))
       setMaterials(materialNames)
     } catch (error) {
-      console.error(error)
+      logUnexpectedError(error)
     } finally {
       setLoading(false)
     }

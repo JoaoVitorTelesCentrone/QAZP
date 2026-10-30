@@ -3,6 +3,7 @@ import { useAtom } from "jotai"
 import { clientChangeAtom } from "../../../atoms/clientChangeAtom"
 import { clientService } from "../services/clientService"
 import { clientMapper } from "../mappers/clientMapper"
+import { logUnexpectedError } from "@/lib/apiClient"
 
 export const useClients = () => {
   const [clients, setClients] = useState([])
@@ -18,7 +19,7 @@ export const useClients = () => {
       const data = await clientService.getActiveClients()
       setClients(data.map(clientMapper))
     } catch (err) {
-      console.error(err)
+      logUnexpectedError(err)
     } finally {
       setLoading(false)
     }

@@ -6,6 +6,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
 import { createUser } from '../services/userService'
 import { mapFormToApi, UserFormData } from '../mappers/userMapper'
+import { logUnexpectedError } from '@/lib/apiClient'
 
 interface UserFormProps {
   closeModal: () => void
@@ -51,7 +52,7 @@ const UserForm: React.FC<UserFormProps> = ({ closeModal, onCreated, userData }) 
       onCreated?.()
       closeModal()
     } catch (err) {
-      console.error(err)
+      logUnexpectedError(err)
       toast.error('Erro ao criar usuário')
     }
   }

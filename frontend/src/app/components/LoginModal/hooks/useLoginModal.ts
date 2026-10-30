@@ -8,7 +8,7 @@ import { intl } from '@/i18n'
 import { authAtom } from '@/app/atoms/authAtom'
 import { userInfoAtom } from '@/app/atoms/userInfoAtom'
 import { login } from '../services/loginService'
-import { apiErrorMessage, saveSession } from '@/lib/apiClient'
+import { apiErrorMessage, saveSession, logUnexpectedError } from '@/lib/apiClient'
 
 export function useLoginModal(isVisible: boolean, onClose: () => void) {
   const router = useRouter()
@@ -50,7 +50,7 @@ export function useLoginModal(isVisible: boolean, onClose: () => void) {
       setFullScreenLoading(true)
       router.push('/dashboard')
     } catch (error) {
-      console.error(error)
+      logUnexpectedError(error)
       toast.error(apiErrorMessage(error) ?? intl.formatMessage({ id: 'login.error.message' }))
     } finally {
       setLoading(false)

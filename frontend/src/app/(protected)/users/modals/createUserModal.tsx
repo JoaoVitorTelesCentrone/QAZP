@@ -2,7 +2,7 @@
 
 import { Button, Input, Modal } from 'antd'
 import { AxiosError } from 'axios'
-import { apiClient } from '@/lib/apiClient'
+import { apiClient, logUnexpectedError } from '@/lib/apiClient'
 import { Eye, EyeOff } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -130,7 +130,7 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose, onCrea
       }
 
       setError(true);
-      console.error('Erro ao fazer a requisição:', error);
+      logUnexpectedError('Erro ao fazer a requisição:', error);
     } finally {
       setIsSubmitting(false);
     }

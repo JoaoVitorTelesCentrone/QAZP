@@ -14,6 +14,7 @@ import { ClientCategoryProps,CreateClientProps } from '../types/clientTypes'
 import { formatPhoneNumber, formatZipCode, formatDocumentId, removeMask } from '../utils/clientMasks'
 import { clientService } from '../services/clientService'
 import { cepService } from '../services/cepService'
+import { logUnexpectedError } from '@/lib/apiClient'
 
 const ClientCategory: ClientCategoryProps[] = [
   { name: 'Comida', index: 1 },
@@ -126,7 +127,7 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
       if (cepData.localidade) setCityError('')
       if (cepData.uf) setStateError('')
     } catch (error) {
-      console.error('Erro ao buscar o CEP:', error)
+      logUnexpectedError('Erro ao buscar o CEP:', error)
     }
   }
 
@@ -198,7 +199,7 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
       return;
     }
 
-    console.error('Erro ao fazer a requisição:', error.message);
+    logUnexpectedError('Erro ao fazer a requisição:', error);
 
     if (error.response) {
       const { data, status } = error.response;

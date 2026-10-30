@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { clientService } from "../services/clientService"
 import { clientDetailsMapper } from "../mappers/clientDetailsMapper"
+import { logUnexpectedError } from "@/lib/apiClient"
 
 export function useClientById() {
   const [clientData, setClientData] = useState<any>()
@@ -10,7 +11,7 @@ export function useClientById() {
       const data = await clientService.getClientById(id)
       setClientData(clientDetailsMapper(data))
     } catch (error) {
-      console.error("Error fetching client", error)
+      logUnexpectedError("Error fetching client", error)
     }
   }
 
