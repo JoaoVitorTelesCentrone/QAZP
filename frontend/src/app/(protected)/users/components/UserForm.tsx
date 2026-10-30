@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Eye, EyeOff } from 'lucide-react'
-import { toast, Toaster } from 'sonner'
+import { toast } from 'sonner'
 import { createUser } from '../services/userService'
 import { mapFormToApi, UserFormData } from '../mappers/userMapper'
 
@@ -58,7 +58,6 @@ const UserForm: React.FC<UserFormProps> = ({ closeModal, onCreated, userData }) 
 
   return (
     <div className="flex flex-col gap-4">
-      <Toaster richColors />
       <h1 className="text-xl font-bold uppercase">Criar usuário</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>

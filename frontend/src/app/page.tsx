@@ -6,7 +6,7 @@ import Header from './components/Header';
 import Call from './components/Call';
 import Plan from './components/Plan';
 import WhatWeDo from './components/WhatWeDo';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 import { SESSION_EXPIRED_PARAM } from '@/lib/apiClient';
 import Footer from './components/Footer';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -28,7 +28,7 @@ export default function Home() {
     checkAuth();
   }, [router]);
 
-  // Runs once the Toaster below is mounted, otherwise the toast would be lost.
+  // Runs after the first render, when the Toaster in the root layout is already mounted.
   useEffect(() => {
     if (loading) return;
     const params = new URLSearchParams(window.location.search);
@@ -48,7 +48,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Toaster />
       <Header />
       <Call />
       <Plan />

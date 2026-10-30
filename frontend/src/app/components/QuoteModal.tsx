@@ -3,7 +3,7 @@
 import { Input, Button, Modal } from 'antd'
 import { AxiosError } from 'axios'
 import { apiClient, apiErrorMessage } from '@/lib/apiClient'
-import { Toaster, toast } from 'sonner'
+import { toast } from 'sonner'
 import { useState } from 'react'
 import { intl } from '@/i18n'
 import { ChevronDown } from 'lucide-react'
@@ -213,7 +213,6 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
   }
   return (
     <>
-      <Toaster richColors />
       <Modal
         open={isVisible}
         onCancel={handleModalClose}

@@ -2,7 +2,6 @@
 
 import { Input, Button, Modal } from 'antd'
 import ClipLoader from 'react-spinners/ClipLoader'
-import { Toaster } from 'sonner'
 import { intl } from '@/i18n'
 import { Eye, EyeOff } from 'lucide-react'
 import Loader from '../Loader'
@@ -34,7 +33,6 @@ export default function LoginModal({ isVisible, onClose, onCancel }: LoginModalP
 
   return (
     <>
-      <Toaster richColors />
       <Modal
         open={isVisible}
         onCancel={onCancel}
