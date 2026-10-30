@@ -1,6 +1,5 @@
 'use client'
 
-import { Toaster } from 'sonner'
 import EventTypeAndTitleFields from './components/EventTypeAndTitleFields'
 import ClientFields from './components/ClientFields'
 import AddressFields from './components/AddressFields'
@@ -13,7 +12,6 @@ type CreateEventViewProps = ReturnType<typeof useCreateEvent>
 export default function CreateEventView(props: CreateEventViewProps) {
   return (
     <div className="h-full bg-tertiary">
-      <Toaster richColors />
       <div className="h-full bg-tertiary">
         <form className="flex flex-col rounded-xl  border-gray-200 border-2 bg-gray-300 p-6 mr-10 mt-10 mx-auto ml-64 space-y-4">
           <h1 className="text-3xl font-bold text-left text-primary">

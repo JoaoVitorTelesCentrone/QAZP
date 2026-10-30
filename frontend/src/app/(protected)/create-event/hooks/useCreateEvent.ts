@@ -414,17 +414,17 @@ export const useCreateEvent = () => {
     }
   }
 
-  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
-    const fieldErrorMap = {
-      eventName: { value: eventName, setError: setEventNameError },
-      estimatedAudience: { value: estimatedAudience, setError: setEstimatedAudienceError },
-      clientDocument: { value: clientDocument, setError: setclientDocumentError },
-      zipCode: { value: zipCode, setError: setZipCodeError },
-      addressName: { value: addressName, setError: setAddressNameError },
-      addressNumber: { value: addressNumber, setError: setAddressNumberError },
-      startDate: { value: startDate, setError: setStartDateError },
-    }
+  const fieldErrorMap = {
+    eventName: { value: eventName, setError: setEventNameError },
+    estimatedAudience: { value: estimatedAudience, setError: setEstimatedAudienceError },
+    clientDocument: { value: clientDocument, setError: setclientDocumentError },
+    zipCode: { value: zipCode, setError: setZipCodeError },
+    addressName: { value: addressName, setError: setAddressNameError },
+    addressNumber: { value: addressNumber, setError: setAddressNumberError },
+    startDate: { value: startDate, setError: setStartDateError },
+  }
 
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {

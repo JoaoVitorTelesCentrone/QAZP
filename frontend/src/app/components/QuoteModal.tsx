@@ -3,7 +3,7 @@
 import { Input, Button, Modal } from 'antd'
 import { AxiosError } from 'axios'
 import { apiClient, apiErrorMessage } from '@/lib/apiClient'
-import { Toaster, toast } from 'sonner'
+import { toast } from 'sonner'
 import { useState } from 'react'
 import { intl } from '@/i18n'
 import { ChevronDown } from 'lucide-react'
@@ -116,26 +116,26 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
     return true;
   }
 
-  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
-    const fieldErrorMap = {
-      fullName: {
-        value: fullName,
-        setError: setFullNameError,
-      },
-      email: {
-        value: email,
-        setError: setEmailError,
-      },
-      estimatedAudience: {
-        value: estimatedAudience,
-        setError: setEstimatedAudienceError,
-      },
-      phoneNumber: {
-        value: phoneNumber,
-        setError: setPhoneNumberError,
-      },
-    }
+  const fieldErrorMap = {
+    fullName: {
+      value: fullName,
+      setError: setFullNameError,
+    },
+    email: {
+      value: email,
+      setError: setEmailError,
+    },
+    estimatedAudience: {
+      value: estimatedAudience,
+      setError: setEstimatedAudienceError,
+    },
+    phoneNumber: {
+      value: phoneNumber,
+      setError: setPhoneNumberError,
+    },
+  }
 
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
@@ -213,7 +213,6 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
   }
   return (
     <>
-      <Toaster richColors />
       <Modal
         open={isVisible}
         onCancel={handleModalClose}

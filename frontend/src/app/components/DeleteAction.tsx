@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { TrashIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Toaster } from "sonner"
 
 type DeleteActionProps = {
   title: string
@@ -23,8 +22,6 @@ export function DeleteAction({
 
   return (
     <div>
-      <Toaster richColors />
-
       <TrashIcon
         className={`cursor-pointer ${iconSizeClass}`}
         onClick={() => setOpen(true)}
