@@ -1,3 +1,4 @@
+using ZventsApi.Application.Exceptions;
 using ZventsApi.Application.Interfaces.Repositories;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Material;
@@ -12,71 +13,31 @@ namespace ZventsApi.Application.Services
         public async Task<IEnumerable<MaterialResponseDto>> GetAllMaterialsAsync()
         {
             var materials = await _materialRepository.GetAllAsync();
-            return materials.Select(m => new MaterialResponseDto
-            {
-                Id = m.Id,
-                Name = m.Name,
-                Category = m.Category,
-                Price = m.Price,
-                CreatedDate = m.CreatedDate
-            });
+            return materials.Select(ToDto);
         }
 
         public async Task<IEnumerable<MaterialResponseDto>> GetActiveMaterialsAsync()
         {
             var materials = await _materialRepository.GetAllAsync();
-            var activeMaterials = materials
-                .Where(m => !m.IsDeleted)
-                .Select(m => new MaterialResponseDto
-                {
-                    Id = m.Id,
-                    Name = m.Name,
-                    Category = m.Category,
-                    Price = m.Price,
-                    CreatedDate = m.CreatedDate
-                });
-            return activeMaterials;
+            return materials.Where(m => !m.IsDeleted).Select(ToDto);
         }
 
         public async Task<MaterialResponseDto?> GetMaterialByIdAsync(Guid id)
         {
             var material = await _materialRepository.GetByIdAsync(id);
-            if (material == null) return null;
-
-            return new MaterialResponseDto
-            {
-                Id = material.Id,
-                Name = material.Name,
-                Category = material.Category,
-                Price = material.Price,
-                CreatedDate = material.CreatedDate
-            };
+            return material == null ? null : ToDto(material);
         }
 
         public async Task<IEnumerable<MaterialResponseDto>> GetMaterialsByCategoryAsync(MaterialCategory category)
         {
             var materials = await _materialRepository.GetByCategoryAsync(category);
-            return materials.Select(m => new MaterialResponseDto
-            {
-                Id = m.Id,
-                Name = m.Name,
-                Category = m.Category,
-                Price = m.Price,
-                CreatedDate = m.CreatedDate
-            });
+            return materials.Select(ToDto);
         }
 
         public async Task<IEnumerable<MaterialResponseDto>> GetMaterialsByNameAsync(string name)
         {
             var materials = await _materialRepository.GetByNameAsync(name);
-            return materials.Select(m => new MaterialResponseDto
-            {
-                Id = m.Id,
-                Name = m.Name,
-                Category = m.Category,
-                Price = m.Price,
-                CreatedDate = m.CreatedDate
-            });
+            return materials.Select(ToDto);
         }
 
         public async Task<MaterialResponseDto> CreateMaterialAsync(MaterialRequestDto dto)
@@ -93,14 +54,7 @@ namespace ZventsApi.Application.Services
 
             await _materialRepository.AddAsync(material);
 
-            return new MaterialResponseDto
-            {
-                Id = material.Id,
-                Name = material.Name,
-                Category = material.Category,
-                Price = material.Price,
-                CreatedDate = material.CreatedDate
-            };
+            return ToDto(material);
         }
 
         public async Task<MaterialResponseDto?> UpdateMaterialAsync(Guid id, MaterialRequestDto dto)
@@ -114,14 +68,7 @@ namespace ZventsApi.Application.Services
 
             await _materialRepository.UpdateAsync(material);
 
-            return new MaterialResponseDto
-            {
-                Id = material.Id,
-                Name = material.Name,
-                Category = material.Category,
-                Price = material.Price,
-                CreatedDate = material.CreatedDate
-            };
+            return ToDto(material);
         }
 
         public async Task<bool> SoftDeleteMaterialAsync(Guid id)
@@ -136,11 +83,23 @@ namespace ZventsApi.Application.Services
 
         public async Task<bool> DeleteMaterialAsync(Guid id)
         {
-            var material = await _materialRepository.GetByIdAsync(id);
+            var material = await _materialRepository.GetByIdAsync(id, includeDeleted: true);
             if (material == null) return false;
+
+            if (await _materialRepository.IsUsedInEventsAsync(id))
+                throw new ConflictException("O material está vinculado a eventos e não pode ser excluído definitivamente");
 
             await _materialRepository.DeleteAsync(material);
             return true;
         }
+
+        private static MaterialResponseDto ToDto(Material m) => new()
+        {
+            Id = m.Id,
+            Name = m.Name,
+            Category = m.Category,
+            Price = m.Price,
+            CreatedDate = m.CreatedDate
+        };
     }
 }

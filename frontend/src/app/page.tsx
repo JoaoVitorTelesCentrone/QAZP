@@ -6,7 +6,8 @@ import Header from './components/Header';
 import Call from './components/Call';
 import Plan from './components/Plan';
 import WhatWeDo from './components/WhatWeDo';
-import { Toaster } from 'sonner';
+import { toast } from 'sonner';
+import { SESSION_EXPIRED_PARAM } from '@/lib/apiClient';
 import Footer from './components/Footer';
 import ClipLoader from 'react-spinners/ClipLoader';
 
@@ -27,6 +28,16 @@ export default function Home() {
     checkAuth();
   }, [router]);
 
+  // Runs after the first render, when the Toaster in the root layout is already mounted.
+  useEffect(() => {
+    if (loading) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.has(SESSION_EXPIRED_PARAM)) {
+      toast.warning('Sua sessão expirou. Faça login novamente.');
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }, [loading]);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -37,7 +48,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Toaster />
       <Header />
       <Call />
       <Plan />

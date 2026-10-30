@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import dayjs, { Dayjs } from 'dayjs'
 import { message } from 'antd'
+import { apiErrorMessage } from '@/lib/apiClient'
 import { toast } from 'sonner'
-import { useAtom } from 'jotai'
 import { intl } from '@/i18n'
 import { formatCurrency } from '@/functions/functions'
-import { clientsAtom } from '@/app/atoms/clientsAtom'
+import { ClientProps } from '@/app/atoms/clientsAtom'
+import { mapClientApiToOption } from '../../create-event/mappers/createEventMapper'
 import { MaterialType } from '../../create-event/types/createEventTypes'
 import {
-  fetchClientById,
+  fetchActiveClients,
   fetchEventById,
-  fetchEventMaterials,
   fetchMaterialsByCategory,
   fetchAddressByZipCode,
   updateEvent,
@@ -48,7 +48,7 @@ export const useEditEvent = (eventId: string) => {
   const [clientName, setClientName] = useState('')
   const [totalAmount, setTotalAmount] = useState<number>()
   const [type, setType] = useState('')
-  const [clients] = useAtom(clientsAtom)
+  const [clients, setClients] = useState<ClientProps[]>([])
 
   const [selectedCategory, setSelectedCategory] = useState('')
   const [sMaterials, setSMaterials] = useState<MaterialType[]>([])
@@ -266,6 +266,14 @@ export const useEditEvent = (eventId: string) => {
       selectedMaterialPrice,
     )
 
+  // Loaded here rather than reused from the create screen's cached list, which may be
+  // empty (create was never opened) or stale.
+  useEffect(() => {
+    fetchActiveClients()
+      .then(data => setClients(data.map(mapClientApiToOption)))
+      .catch(error => console.error('Error fetching clients:', error))
+  }, [])
+
   useEffect(() => {
     const fetchEventAndClient = async () => {
       if (!eventId) {
@@ -296,16 +304,10 @@ export const useEditEvent = (eventId: string) => {
           setEstimatedAudience(formState.estimatedAudience)
           setTotalAmount(formState.totalAmount)
 
-          if (event.clientId) {
-            const client = await fetchClientById(event.clientId)
-            setClientId(client.id)
-            setClientName(client.fullName)
-          }
-
-          if (event.id) {
-            const eventMaterials = await fetchEventMaterials(event.id)
-            setMaterials(eventMaterials)
-          }
+          // Client name and materials come with the event itself, so the screen still
+          // loads when the client has been deleted since.
+          setClientName(event.clientFullName)
+          setMaterials(event.materials ?? [])
         }
       } catch (error) {
         console.error('Error fetching event or client details:', error)
@@ -388,7 +390,7 @@ export const useEditEvent = (eventId: string) => {
       message.success('Atualização feita com sucesso')
     } catch (error) {
       console.error('Error updating event:', error)
-      message.error('Erro ao atualizar evento')
+      message.error(apiErrorMessage(error) ?? 'Erro ao atualizar evento')
     } finally {
       setIsSubmitting(false)
       router.push('/events')
@@ -415,15 +417,15 @@ export const useEditEvent = (eventId: string) => {
 
   const totalAmountConverted = formatCurrency(Number(totalAmount))
 
-  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
-    const fieldErrorMap = {
-      name: { value: name, setError: setNameError },
-      estimatedAudience: { value: estimatedAudience, setError: setEstimatedAudienceError },
-      zipCode: { value: zipCode, setError: setZipCodeError },
-      addressName: { value: addressName, setError: setAddressNameError },
-      addressNumber: { value: addressNumber, setError: setAddressNumberError },
-    }
+  const fieldErrorMap = {
+    name: { value: name, setError: setNameError },
+    estimatedAudience: { value: estimatedAudience, setError: setEstimatedAudienceError },
+    zipCode: { value: zipCode, setError: setZipCodeError },
+    addressName: { value: addressName, setError: setAddressNameError },
+    addressNumber: { value: addressNumber, setError: setAddressNumberError },
+  }
 
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {

@@ -20,11 +20,12 @@ import {
 interface ClientFormProps {
   clientData: ClientDataProps | undefined
   closeModal: () => void
+  onUpdated?: () => void
 }
 
 
 
-const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
+const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal, onUpdated }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [fullName, setFullName] = useState(clientData?.fullName)
   const [documentId, setDocumentId] = useState(clientData?.documentId)
@@ -42,6 +43,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
 
   const [fullNameError, setFullNameError] = useState('')
   const [DocumentIdError, setDocumentIdError] = useState('')
+  const [phoneNumberError, setPhoneNumberError] = useState('')
   const [zipCodeError, setZipCodeError] = useState('')
   const [addressNumberError, setAddressNumberError] = useState('')
   const [addressNameError, setAddressNameError] = useState('')
@@ -158,6 +160,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
         intl.formatMessage({ id: 'update.client.success.message' }),
       )
 
+      onUpdated?.()
       closeModal()
     } catch (error) {
       handleError(error)
@@ -174,12 +177,18 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     }
 
     if (error.response) {
-      const { data } = error.response
+      const { data, status } = error.response
 
       if (data.errors?.DocumentId?.includes('Invalid DocumentId')) {
         toast.error(
           intl.formatMessage({ id: 'update.client.invalid.document' }),
         )
+      } else if (status === 409) {
+        toast.error(
+          intl.formatMessage({ id: 'update.client.document.exists' }),
+        )
+      } else if (status === 400 && data.errors) {
+        Object.values(data.errors as Record<string, string[]>).flat().forEach(message => toast.error(message))
       } else {
         showGenericError()
       }
@@ -196,6 +205,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
     const fieldsToValidate = [
       { value: addressName, errorSetter: setAddressNameError },
       { value: documentId, errorSetter: setDocumentIdError },
+      { value: phoneNumber, errorSetter: setPhoneNumberError },
       { value: zipCode, errorSetter: setZipCodeError },
       { value: fullName, errorSetter: setFullNameError },
       { value: addressNumber, errorSetter: setAddressNumberError },
@@ -226,7 +236,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
       fullName: fullName,
       documentId: removeMask(documentId || ''),
       createdDate: clientData?.createdDate,
-      email: email,
+      // Optional: omit it rather than send "", which the API's e-mail validation rejects.
+      email: email || undefined,
       zipCode: removeMask(zipCode || ''),
       addressName: addressName,
       addressComplement: addressComplement,
@@ -329,7 +340,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
               </div>
             )}
           </div>
-          <div className="w-[30%]">
+          <div className="w-[30%] relative">
             <h1 className="xl:mr-44  font-bold">
               {intl.formatMessage({
                 id: 'create.client.page.phoneNumber.field.label',
@@ -337,13 +348,29 @@ const ClientForm: React.FC<ClientFormProps> = ({ clientData, closeModal }) => {
             </h1>
             <Input
               value={phoneNumber}
-              onChange={e => setPhoneNumber(formatPhoneNumber(e.target.value))}
-              className="p-2 mb-4 border rounded w-full "
+              onChange={e => {
+                setPhoneNumber(formatPhoneNumber(e.target.value))
+                setPhoneNumberError('')
+              }}
+              className={`p-2 mb-4 border rounded w-full ${phoneNumberError ? 'border-red-500' : 'border-slate-300'}`}
               maxLength={15}
               placeholder={intl.formatMessage({
                 id: 'create.client.page.phoneNumber.field.placeholder',
               })}
             />
+            {phoneNumberError && (
+              <div
+                style={{
+                  color: 'red',
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  marginTop: -15,
+                }}
+              >
+                {phoneNumberError}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex justify-between mb-4">

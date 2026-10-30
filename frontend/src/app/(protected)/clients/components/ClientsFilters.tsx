@@ -8,9 +8,9 @@ export default function ClientsFilters({ table }: ClientsFiltersProps) {
     <div className="flex gap-24 w-full">
       <Input
         placeholder="Filtrar por nome"
-        value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+        value={(table.getColumn('fullName')?.getFilterValue() as string) ?? ''}
         onChange={(e) =>
-          table.getColumn('name')?.setFilterValue(e.target.value)
+          table.getColumn('fullName')?.setFilterValue(e.target.value)
         }
         className="max-w-sm my-10 border-primary text-center font-bold mx-auto"
       />

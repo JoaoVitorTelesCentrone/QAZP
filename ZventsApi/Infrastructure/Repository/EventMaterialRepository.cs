@@ -12,6 +12,7 @@ namespace ZventsApi.Infrastructure.Repository
         public async Task<IReadOnlyCollection<EventMaterial>> GetByEventIdAsync(Guid eventId)
         {
             return await _context.EventMaterials
+                .Include(em => em.Material)
                 .Where(em => em.EventId == eventId)
                 .ToListAsync();
         }

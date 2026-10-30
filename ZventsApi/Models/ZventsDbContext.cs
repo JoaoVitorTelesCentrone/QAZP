@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Hosting;
 
 namespace ZventsApi.Models
@@ -12,13 +13,57 @@ namespace ZventsApi.Models
         public DbSet<Material> Materials { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventMaterial> EventMaterials { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public DbSet<UserSession> UserSessions { get; set; }
+
+        // Every timestamp is stored in UTC. SQLite keeps no time zone, so values read back
+        // would be DateTimeKind.Unspecified and serialize without the trailing "Z", making the
+        // browser treat them as local time. Marking them as UTC lets the frontend convert to
+        // the user's own time zone correctly.
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=Zvents.db");
+            configurationBuilder.Properties<DateTime>().HaveConversion<UtcDateTimeConverter>();
+            configurationBuilder.Properties<DateTime?>().HaveConversion<UtcDateTimeConverter>();
         }
+
+        private class UtcDateTimeConverter() : ValueConverter<DateTime, DateTime>(
+            v => v.Kind == DateTimeKind.Local ? v.ToUniversalTime() : DateTime.SpecifyKind(v, DateTimeKind.Utc),
+            v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Uniqueness is also checked in the services, but only the database can stop two
+            // concurrent requests from both passing that check. Soft-deleted rows don't count,
+            // so a removed username/document can be registered again.
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique()
+                .HasFilter("\"IsDeleted\" = 0");
+
+            modelBuilder.Entity<Client>()
+                .HasIndex(c => c.DocumentId)
+                .IsUnique()
+                .HasFilter("\"IsDeleted\" = 0");
+
+            // Hard-deleting a client or material must not silently take events with it.
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.Client)
+                .WithMany()
+                .HasForeignKey(e => e.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserSession>()
+                .HasIndex(s => s.RefreshTokenHash)
+                .IsUnique();
+
+            modelBuilder.Entity<UserSession>()
+                .HasIndex(s => s.PreviousRefreshTokenHash);
+
+            modelBuilder.Entity<UserSession>()
+                .HasOne(s => s.User)
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<EventMaterial>()
                 .HasKey(em => new { em.EventId, em.MaterialId });
 
@@ -30,7 +75,8 @@ namespace ZventsApi.Models
             modelBuilder.Entity<EventMaterial>()
                 .HasOne(em => em.Material)
                 .WithMany(m => m.EventMaterials)
-                .HasForeignKey(em => em.MaterialId);
+                .HasForeignKey(em => em.MaterialId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

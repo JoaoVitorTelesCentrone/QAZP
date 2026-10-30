@@ -166,6 +166,18 @@ export function documentIdConverter(documentId: string) {
   }
 }
 
+// For API timestamps (always UTC, e.g. createdDate). Shows them in the viewer's own time
+// zone. Not for event start/end: those are the venue's wall-clock schedule, shown as typed.
+export function formatDateTime(isoUtc: string | undefined | null): string {
+  if (!isoUtc) return ''
+  const date = new Date(isoUtc)
+  if (Number.isNaN(date.getTime())) return ''
+  return new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  }).format(date)
+}
+
 export function formatDate(dateString: string): string {
   if (!dateString) {
     return 'Data inválida';

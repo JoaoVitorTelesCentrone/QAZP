@@ -163,6 +163,7 @@
         "create.user.confirmPassword.placeholder": "Confirme a senha",
         "create.user.required.field.error": "Este campo é obrigatório.",
         "create.user.passwords.mismatch": "As senhas são diferentes",
+        "create.user.password.min.length": "A senha deve ter no mínimo 6 caracteres",
         "create.user.modal.title": "Criar Usuário",
         "create.user.create.button": "Criar usuário"
     }

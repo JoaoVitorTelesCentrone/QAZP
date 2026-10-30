@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.EventMaterial;
 
@@ -6,6 +7,7 @@ namespace ZventsApi.Controllers
 {
     [Route("api/eventMaterial")]
     [ApiController]
+    [Authorize]
     public class EventMaterialController(IEventMaterialService service) : ControllerBase
     {
         private readonly IEventMaterialService _service = service;

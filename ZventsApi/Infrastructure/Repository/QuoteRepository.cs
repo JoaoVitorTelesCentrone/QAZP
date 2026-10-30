@@ -43,9 +43,9 @@ namespace ZventsApi.Infrastructure.Repository
                 .ToListAsync();
         }
 
-        public async Task<Quote?> GetByIdAsync(Guid id)
+        public async Task<Quote?> GetByIdAsync(Guid id, bool includeDeleted = false)
         {
-            return await _context.Quotes.FindAsync(id);
+            return await _context.Quotes.FirstOrDefaultAsync(q => q.Id == id && (includeDeleted || !q.IsDeleted));
         }
 
         public async Task AddAsync(Quote quote)

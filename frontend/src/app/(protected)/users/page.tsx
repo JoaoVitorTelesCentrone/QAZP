@@ -7,7 +7,7 @@ import { userColumns } from './columns'
 import { UsersView } from './UsersView'
 
 function UsersPage() {
-  const { users, loading } = useUsers()
+  const { users, loading, fetchUsers } = useUsers()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   const columns = useMemo(() => userColumns(), [])
@@ -20,6 +20,7 @@ function UsersPage() {
       isCreateModalOpen={isCreateModalOpen}
       onOpenCreateModal={() => setIsCreateModalOpen(true)}
       onCloseCreateModal={() => setIsCreateModalOpen(false)}
+      onUserCreated={fetchUsers}
     />
   )
 }

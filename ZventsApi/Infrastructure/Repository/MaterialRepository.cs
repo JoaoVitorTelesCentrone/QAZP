@@ -10,12 +10,15 @@ namespace ZventsApi.Infrastructure.Repository
 
         public async Task<IReadOnlyCollection<Material>> GetAllAsync()
         {
-            return await _context.Materials.ToListAsync();
+            // Newest first, so a material that was just created shows at the top of the list.
+            return await _context.Materials
+                .OrderByDescending(m => m.CreatedDate)
+                .ToListAsync();
         }
 
-        public async Task<Material?> GetByIdAsync(Guid id)
+        public async Task<Material?> GetByIdAsync(Guid id, bool includeDeleted = false)
         {
-            return await _context.Materials.FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.Materials.FirstOrDefaultAsync(m => m.Id == id && (includeDeleted || !m.IsDeleted));
         }
 
         public async Task<IReadOnlyCollection<Material>> GetByCategoryAsync(MaterialCategory category)
@@ -38,6 +41,11 @@ namespace ZventsApi.Infrastructure.Repository
         {
             _context.Materials.Update(material);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsUsedInEventsAsync(Guid materialId)
+        {
+            return await _context.EventMaterials.AnyAsync(em => em.MaterialId == materialId);
         }
 
         public async Task DeleteAsync(Material material)

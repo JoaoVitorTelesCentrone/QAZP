@@ -61,7 +61,7 @@ namespace ZventsApi.Application.Services
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            var quote = await _repository.GetByIdAsync(id);
+            var quote = await _repository.GetByIdAsync(id, includeDeleted: true);
             if (quote == null) return false;
 
             await _repository.DeleteAsync(quote);

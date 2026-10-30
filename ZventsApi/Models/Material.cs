@@ -45,7 +45,7 @@ namespace ZventsApi.Models
         public Material()
         {
             IsDeleted = false;
-            CreatedDate = DateTime.Now;
+            CreatedDate = DateTime.UtcNow;
         }
     }
 }

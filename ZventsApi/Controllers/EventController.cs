@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
 using ZventsApi.DTOs.Event;
 using ZventsApi.Models;
@@ -7,9 +8,11 @@ namespace ZventsApi.Controllers
 {
     [ApiController]
     [Route("api/event")]
-    public class EventController(IEventService service) : ControllerBase
+    [Authorize]
+    public class EventController(IEventService service, ILogger<EventController> logger) : ControllerBase
     {
         private readonly IEventService _service = service;
+        private readonly ILogger<EventController> _logger = logger;
 
         [HttpGet("active-events")]
         public async Task<ActionResult<IEnumerable<ActiveEventDto>>> GetActiveEvents()
@@ -18,7 +21,7 @@ namespace ZventsApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Event>> GetById(Guid id)
+        public async Task<ActionResult<EventDetailDto>> GetById(Guid id)
         {
             var evt = await _service.GetByIdAsync(id);
             if (evt == null) return NotFound();
@@ -26,9 +29,10 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Event>> Create(CreateEventDto dto)
+        public async Task<ActionResult<EventDetailDto>> Create(CreateEventDto dto)
         {
             var evt = await _service.CreateEventAsync(dto);
+            _logger.LogInformation("Evento criado: {EventId}", evt.Id);
             return CreatedAtAction(nameof(GetById), new { id = evt.Id }, evt);
         }
 
@@ -53,6 +57,8 @@ namespace ZventsApi.Controllers
         {
             var success = await _service.DeleteEventAsync(id);
             if (!success) return NotFound();
+
+            _logger.LogInformation("Evento excluído: {EventId}", id);
             return NoContent();
         }
     }

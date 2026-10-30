@@ -22,10 +22,11 @@ namespace ZventsApi.Infrastructure.Repository
                 .ToListAsync();
         }
 
-        public async Task<Client?> GetClientByIdAsync(Guid id)
+        // Soft-deleted clients are hidden unless the caller explicitly needs them (hard delete).
+        public async Task<Client?> GetClientByIdAsync(Guid id, bool includeDeleted = false)
         {
             _logger.LogDebug("Lógica para o cliente ({id})", id);
-            return await _context.Clients.FindAsync(id);
+            return await _context.Clients.FirstOrDefaultAsync(c => c.Id == id && (includeDeleted || !c.IsDeleted));
         }
 
         public async Task CreateClientAsync(Client client)
@@ -44,6 +45,12 @@ namespace ZventsApi.Infrastructure.Repository
         {
             _context.Clients.Remove(client);
             await _context.SaveChangesAsync();
+        }
+
+        // Counts soft-deleted events too: they still reference the client in the database.
+        public async Task<bool> HasEventsAsync(Guid clientId)
+        {
+            return await _context.Events.AnyAsync(e => e.ClientId == clientId);
         }
 
         public async Task<bool> ClientWithDocumentExistsAsync(string documentId, Guid? excludeId = null)

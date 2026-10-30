@@ -27,7 +27,7 @@ namespace ZventsApi.Models
         public Quote()
         {
             IsDeleted = false;
-            CreatedDate = DateTime.Now;
+            CreatedDate = DateTime.UtcNow;
         }
     }
 }

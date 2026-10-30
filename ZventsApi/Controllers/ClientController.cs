@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZventsApi.Application.Interfaces.Services;
+using ZventsApi.Application.Services;
 using ZventsApi.Models;
 using ZventsApi.Application.DTOs;
+using ZventsApi.DTOs.Client;
 
 
 namespace ZventsApi.Controllers
 {
     [Route("api/client")]
     [ApiController]
+    [Authorize]
     public class ClientController(IClientService clientService, ILogger<ClientController> logger) : ControllerBase
     {
         private readonly IClientService _clientService = clientService;
@@ -23,7 +27,7 @@ namespace ZventsApi.Controllers
 
             var clients = await _clientService.GetAllClientsAsync();
 
-            _logger.LogInformation("Busca finalizada. Total de clientes: {Total}", clients);
+            _logger.LogInformation("Busca finalizada. Total de clientes: {Total}", clients.Count());
 
             return Ok(clients);
         }
@@ -52,12 +56,12 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Client>> CreateClientAsync([FromBody] Client client)
+        public async Task<ActionResult<Client>> CreateClientAsync([FromBody] ClientRequestDto request)
         {
-            var createdClient = await _clientService.CreateClientAsync(client);
+            var createdClient = await _clientService.CreateClientAsync(request);
 
             if (createdClient == null)
-                return Conflict(new { message = "Client already exists" });
+                return Conflict(new { message = ClientService.DuplicateDocumentMessage });
 
             return CreatedAtAction(
                 "GetClientById",
@@ -67,9 +71,9 @@ namespace ZventsApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Client>> EditClientAsync(Guid id, Client updatedClient)
+        public async Task<ActionResult<Client>> EditClientAsync(Guid id, ClientRequestDto request)
         {
-            var client = await _clientService.EditClientAsync(id, updatedClient);
+            var client = await _clientService.EditClientAsync(id, request);
 
             if (client == null)
                 return NotFound();
