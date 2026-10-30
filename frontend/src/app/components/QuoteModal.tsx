@@ -116,26 +116,26 @@ const QuoteModal: React.FC<QuoteModalProps> = ({ isVisible, onClose }) => {
     return true;
   }
 
-  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
-    const fieldErrorMap = {
-      fullName: {
-        value: fullName,
-        setError: setFullNameError,
-      },
-      email: {
-        value: email,
-        setError: setEmailError,
-      },
-      estimatedAudience: {
-        value: estimatedAudience,
-        setError: setEstimatedAudienceError,
-      },
-      phoneNumber: {
-        value: phoneNumber,
-        setError: setPhoneNumberError,
-      },
-    }
+  const fieldErrorMap = {
+    fullName: {
+      value: fullName,
+      setError: setFullNameError,
+    },
+    email: {
+      value: email,
+      setError: setEmailError,
+    },
+    estimatedAudience: {
+      value: estimatedAudience,
+      setError: setEstimatedAudienceError,
+    },
+    phoneNumber: {
+      value: phoneNumber,
+      setError: setPhoneNumberError,
+    },
+  }
 
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {

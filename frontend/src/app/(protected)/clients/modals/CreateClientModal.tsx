@@ -77,26 +77,26 @@ const CreateClientModal: React.FC<CreateClientProps> = ({
     setPhoneNumber(formatPhoneNumber(e.target.value))
   }
 
-  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
-    const fieldErrorMap = {
-      fullName: {
-        value: fullName,
-        setError: setFullNameError,
-      },
-      documentId: {
-        value: documentId,
-        setError: setDocumentIdError,
-      },
-      zipCode: {
-        value: zipCode,
-        setError: setZipCodeError,
-      },
-      addressNumber: {
-        value: addressNumber,
-        setError: setAddressNumberError,
-      },
-    }
+  const fieldErrorMap = {
+    fullName: {
+      value: fullName,
+      setError: setFullNameError,
+    },
+    documentId: {
+      value: documentId,
+      setError: setDocumentIdError,
+    },
+    zipCode: {
+      value: zipCode,
+      setError: setZipCodeError,
+    },
+    addressNumber: {
+      value: addressNumber,
+      setError: setAddressNumberError,
+    },
+  }
 
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {

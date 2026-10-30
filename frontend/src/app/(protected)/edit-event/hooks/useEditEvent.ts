@@ -417,15 +417,15 @@ export const useEditEvent = (eventId: string) => {
 
   const totalAmountConverted = formatCurrency(Number(totalAmount))
 
-  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
-    const fieldErrorMap = {
-      name: { value: name, setError: setNameError },
-      estimatedAudience: { value: estimatedAudience, setError: setEstimatedAudienceError },
-      zipCode: { value: zipCode, setError: setZipCodeError },
-      addressName: { value: addressName, setError: setAddressNameError },
-      addressNumber: { value: addressNumber, setError: setAddressNumberError },
-    }
+  const fieldErrorMap = {
+    name: { value: name, setError: setNameError },
+    estimatedAudience: { value: estimatedAudience, setError: setEstimatedAudienceError },
+    zipCode: { value: zipCode, setError: setZipCodeError },
+    addressName: { value: addressName, setError: setAddressNameError },
+    addressNumber: { value: addressNumber, setError: setAddressNumberError },
+  }
 
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {

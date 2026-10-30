@@ -87,18 +87,18 @@ const CreateMaterialModal: React.FC<createMaterialProps> = ({
     return true
   }
 
-  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
-    const fieldErrorMap = {
-      name: {
-        value: name,
-        setError: setNameError,
-      },
-      price: {
-        value: price,
-        setError: setPriceError,
-      },
-    }
+  const fieldErrorMap = {
+    name: {
+      value: name,
+      setError: setNameError,
+    },
+    price: {
+      value: price,
+      setError: setPriceError,
+    },
+  }
 
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {

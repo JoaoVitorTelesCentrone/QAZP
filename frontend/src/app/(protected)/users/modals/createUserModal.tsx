@@ -42,26 +42,26 @@ const CreateUserModal: React.FC<createUserProps> = ({ isVisible, onClose, onCrea
     redirect('/')
   }
 
-  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
-    const fieldErrorMap = {
-      name: {
-        value: name,
-        setError: setNameError,
-      },
-      username: {
-        value: username,
-        setError: setUsernameError,
-      },
-      password: {
-        value: password,
-        setError: setPasswordError,
-      },
-      confirmedPassword: {
-        value: confirmedPassword,
-        setError: setConfirmPasswordError,
-      },
-    }
+  const fieldErrorMap = {
+    name: {
+      value: name,
+      setError: setNameError,
+    },
+    username: {
+      value: username,
+      setError: setUsernameError,
+    },
+    password: {
+      value: password,
+      setError: setPasswordError,
+    },
+    confirmedPassword: {
+      value: confirmedPassword,
+      setError: setConfirmPasswordError,
+    },
+  }
 
+  const handleBlur = (fieldName: keyof typeof fieldErrorMap) => {
     const field = fieldErrorMap[fieldName]
 
     if (!field.value) {
